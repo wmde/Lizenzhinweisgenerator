@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--<link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.8.12.smoothness/css/smoothness/jquery-ui-1.8.12.custom.css" />-->
+<script type="text/javascript" src="/magnustools/resources/js/jquery/jquery-1.10.1.min.js"></script>
+<!--<script type="text/javascript" src="../lib/jquery-ui-1.8.12.smoothness/js/jquery-ui-1.8.12.custom.min.js"></script>-->
+<script type="text/javascript" src="main.js"></script>
+<style>
+p { color:#888888; text-align:justify; }
+</style>
+</head>
+
+<body style='position:absolute;top:0px;bottom:0px;left:0px;right:0px;margin:0px;padding:2px;background-color:#EEEEEE'>
+
+<div style='width:1024px;margin:auto'>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu nisi vitae nunc scelerisque malesuada eget at neque. Nam id nisl quis dui gravida suscipit. Nam tincidunt pulvinar est, vel bibendum tellus fringilla ut.</p>
+
+<div id='suggestion' style='float:left;margin: 0px 10px 10px 10px;'>
+<div style='width:500px;height:400px;text-align:center'>
+<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Placeholder.svg/300px-Placeholder.svg.png' /><br/>
+<b>Drop image here</b>
+</div>
+</div>
+
+<p>Donec dapibus elit ut nisi dapibus non tincidunt risus pharetra. Praesent id felis fermentum lectus pretium semper sed tempor nunc. Nullam id est nulla, vitae sagittis lacus. Etiam dignissim fermentum nunc nec iaculis. Phasellus iaculis, leo vel ornare tempus, elit justo aliquet lectus, vitae consectetur arcu sapien id libero. Proin eget ipsum quis sapien interdum tincidunt auctor sit amet urna. Praesent nulla elit, rhoncus tincidunt euismod at, fringilla sit amet arcu. Pellentesque sodales pellentesque elit ut volutpat. Maecenas congue condimentum nunc, ac gravida dui dapibus sit amet. Pellentesque elit velit, mollis adipiscing feugiat sit amet, euismod quis nisi. Vestibulum euismod convallis mi vitae semper. Morbi vestibulum blandit urna eu porta. Phasellus elementum dui vitae lorem commodo id tincidunt tortor blandit.</p>
+
+<p>Praesent sem augue, ullamcorper vitae consectetur a, accumsan faucibus quam. Nunc vitae ante dolor. Duis pellentesque purus condimentum libero ornare ac consequat libero sollicitudin. Morbi porta iaculis semper. Morbi varius, odio euismod varius laoreet, justo justo lobortis dolor, non blandit tortor quam ac nulla. Vivamus et orci vel eros aliquet aliquam sed in magna. Curabitur viverra elit eu leo tristique ut feugiat mi dapibus. Morbi et libero a erat cursus fringilla quis vitae libero. Sed ultrices, turpis vel pellentesque ullamcorper, nisi dui faucibus quam, non mattis est magna at tortor. Vivamus sapien dolor, interdum quis blandit a, pellentesque ut mauris. Maecenas vulputate euismod suscipit. Quisque nec mattis lacus. Quisque vitae odio mauris. Aliquam in porta justo. Maecenas aliquet magna et leo sodales eget varius turpis egestas. Aliquam dignissim, nulla sed aliquet porta, nunc justo ultricies sapien, quis viverra neque orci non justo. In hac habitasse platea dictumst. Pellentesque non turpis felis, quis tristique risus. Quisque enim metus, viverra ac consequat eu, lobortis nec dui. Donec eu dui massa.</p>
+
+<p>Donec libero magna, imperdiet sed luctus nec, placerat eget massa. Nam lacinia hendrerit leo, eget consectetur erat porttitor vel. In a ipsum non erat suscipit iaculis. Nulla consectetur leo eu leo consequat non porttitor odio scelerisque. In ipsum leo, lobortis at semper in, tempor id urna. Phasellus et ligula tellus. Mauris varius elementum arcu a consectetur. Maecenas tempus hendrerit purus, et fermentum elit sollicitudin quis. Duis purus nisl, rutrum porttitor sodales vestibulum, viverra vel nunc.</p>
+
+
+<br style='clear:both' />
+
+<div id='options' style='margin-top:20px;border-top:5px solid black;padding-top:5px;display:none;'>
+<a href='#' onclick='$("#html").toggle();return false'>Show/hide HTML</a> |
+Thumbnail size <select id='thumbsize'>
+<option value='200'>200</option>
+<option value='300'>300</option>
+<option value='400'>400</option>
+<option value='500' selected>500</option>
+<option value='1000'>1000</option>
+</select> |
+Description <select id='desc_mode'>
+</select>
+<label><input type='checkbox' id='print_urls' checked /> Make links printable</label>
+</div>
+<div id='html' style='margin-top:10px;font-family:Courier;font-size:8pt;padding:5pt;border:2px solid #DDDDDD;display:none'></div>
+
+</div>
+
+</body>
+
+</html>
