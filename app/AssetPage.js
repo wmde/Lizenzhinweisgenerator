@@ -94,7 +94,7 @@ $.extend( AssetPage.prototype, {
 			var $clonedNode = $( node ).clone(),
 				lang = $clonedNode.attr( 'lang' );
 
-			$clonedNode.find( 'span.language' ).remove() ;
+			$clonedNode.find( 'span.language' ).remove();
 			$clonedNode.find( 'span.langlabel-' + lang ).remove();
 
 			descriptions[lang] = $clonedNode.html();
@@ -103,7 +103,7 @@ $.extend( AssetPage.prototype, {
 				// Update the default description text:
 				descriptions['*'] = descriptions[lang];
 			}
-		} ) ;
+		} );
 
 		if( descriptions['*'] === '' ) {
 			// No description at all yet, gather other attributes:

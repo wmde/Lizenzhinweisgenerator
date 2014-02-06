@@ -5,18 +5,27 @@ var doc ;
 var cats ;
 var thumbdata ;
 var print_urls ;
-var author_url = '' ;
 var asset;
+var Licence = app.Licence;
 
-var license2url = {
-	'CECILL' : 'http://www.cecill.info/licences/Licence_CeCILL_V2-en.html' ,
-	'FAL' : 'http://artlibre.org/licence/lal/en' ,
-	'GPL' : 'http://www.gnu.org/copyleft/gpl-3.0.html' ,
-	'LGPL' : 'http://www.gnu.org/licenses/lgpl.html' ,
-	'AGPL' : 'http://www.gnu.org/licenses/agpl.html' ,
-	'GFDL' : 'http://commons.wikimedia.org/wiki/Commons:GNU_Free_Documentation_License_1.2' ,
-	'OS OPENDATA' : 'http://www.ordnancesurvey.co.uk/oswebsite/opendata/licence/docs/licence.pdf'
-} ;
+var licences = [
+	new Licence( /^(PD|Public domain)\b/i, {
+		'outputTemplate': 'in the public domain'
+	} ),
+	new Licence( 'CECILL', 'http://www.cecill.info/licences/Licence_CeCILL_V2-en.html' ),
+	new Licence( 'FAL', 'http://artlibre.org/licence/lal/en' ),
+	new Licence( 'GPL', 'http://www.gnu.org/copyleft/gpl-3.0.html' ),
+	new Licence( 'LGPL', 'http://www.gnu.org/licenses/lgpl.html' ),
+	new Licence( 'AGPL', 'http://www.gnu.org/licenses/agpl.html'),
+	new Licence( 'GFDL', 'http://commons.wikimedia.org/wiki/Commons:GNU_Free_Documentation_License_1.2' ),
+	new Licence( 'OS OPENDATA', 'http://www.ordnancesurvey.co.uk/oswebsite/opendata/licence/docs/licence.pdf', {
+		'outputTemplate': 'licenced unter {{name}}'
+	} ),
+	new Licence( /^CC-([A-Z-]+)-([0-9.]+)([A-Z-]*(,.+)*){1}/i, 'http://creativecommons.org/licenses/$1/$2/$3' ),
+	new Licence( /^CC-([A-Z-]+)-([0-9.]+)/i, 'http://creativecommons.org/licenses/$1/$2' ),
+	new Licence( 'CC-PD-Mark', 'http://creativecommons.org/publicdomain/mark/1.0/' ),
+	new Licence( 'CC-Zero', 'http://creativecommons.org/publicdomain/zero/1.0/' )
+];
 
 $(document).ready ( function () {
 	jQuery.event.props.push('dataTransfer');
@@ -244,78 +253,19 @@ function updateThumbnail ( callback ) {
 	} ) ;
 }
 
-function linkCClicense ( v ) {
-	v = v.replace(/-migrated$/,'') ;
-	var ret = v ;
-	var m = v.toLowerCase().match ( /^CC-([A-Z-]+)-([0-9.]+)([A-Z-]*(,.+)*)$/i ) ;
-	if ( m ) {
-		var url = "http://creativecommons.org/licenses/" + m[1] + "/" + m[2] ;
-		if ( m[3] != '' && m[3] != '+' ) url += "/" + m[3].replace(/^-/,'') ;
-		ret = renderLinkedLicense ( v , url ) ;
-	} else if ( v == 'CC-PD-Mark' ) {
-		ret = renderLinkedLicense ( v , 'http://creativecommons.org/publicdomain/mark/1.0/' ) ;
-	} else if ( v == 'CC-Zero' ) {
-		ret = renderLinkedLicense ( v , 'https://creativecommons.org/publicdomain/zero/1.0/' ) ;
-	}
-	return ret ;
-}
-
-function linkLicense ( license ) {
-	var l = $.trim(license.toUpperCase().replace(/_/g,' ').replace(/-migrated$/,'')) ;
-	if ( undefined === license2url[l] ) return license ;
-	return renderLinkedLicense ( license , license2url[l] ) ;
-}
-
-function renderLinkedLicense ( title , url ) {
-	var ret = "<a href='" + url + "'>" + title + "</a>" ;
-	if ( print_urls ) {
-		ret += " <small>(" + url + ")</small>" ;
-	}
-	return ret ;
-}
-
 function getLicense() {
-	var ret;
-	
-	if ( undefined === ret ) {
-		$.each ( cats , function ( k , v ) {
-			if ( v.match ( /^CC-/ ) ) {
-				v = linkCClicense ( v ) ;
-				ret = "released under " + v ;
-				return false ;
+	for( var i = 0; i < cats.length; i++ ) {
+		for( var j = 0; j < licences.length; j++ ) {
+			var licence = licences[j];
+			if( licence.match( cats[i] ) ) {
+				if( licence.isAbstract() ) {
+					licence = Licence.newFromAbstract( licence, cats[i] );
+				}
+				return $( '<div/>' ).append( $( '<small/>' ).append( licence.getHtml() ) ).html();
 			}
-		} ) ;
+		}
 	}
-	
-	if ( undefined === ret ) {
-		$.each ( cats , function ( k , v ) {
-			if ( v.match ( /^PD\b/ ) || v.match ( /^Public domain\b/i ) ) {
-				ret = "in the public domain" ;
-				return false ;
-			}
-		} ) ;
-	}
-
-	if ( undefined === ret ) { // Some more
-		$.each ( cats , function ( k , v ) {
-			if ( v.match ( /^(GFDL|GPL|LGPL|AGPL|FAL|CeCILL)\b/i ) ) {
-				ret = "released under " + linkLicense ( v ) ;
-				return false ;
-			}
-		} ) ;
-	}
-	
-	if ( undefined === ret ) { // The rest
-		$.each ( ['OS OpenData'] , function ( k , v ) {
-			if ( -1 < $.inArray ( v , cats ) ) {
-				ret = "licensed under " + linkLicense ( v ) ;
-				return false ;
-			}
-		} ) ;
-	}
-	
-	if ( undefined === ret ) ret = 'Unknown license' ;
-	return ret ;
+	return 'Unknown licence';
 }
 
 function getUrlVars () {
