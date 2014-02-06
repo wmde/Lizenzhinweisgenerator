@@ -4,10 +4,9 @@ var file ;
 var doc ;
 var cats ;
 var thumbdata ;
-var result ;
-var descs ;
 var print_urls ;
 var author_url = '' ;
+var asset;
 
 var license2url = {
 	'CECILL' : 'http://www.cecill.info/licences/Licence_CeCILL_V2-en.html' ,
@@ -73,9 +72,7 @@ $(document).ready ( function () {
 function initProcess () {
 	$('#options').show() ;
 	$('#html').hide() ;
-	result = {} ;
 	thumbdata = {} ;
-	descs = {} ;
   $('div:first > p').remove();
 	$('#suggestion').html ( '<i>Constructing preview...</i>' ) ;
 }
@@ -140,107 +137,23 @@ function processFile ( file ) {
 				alert ( "Could not get license information for " + file ) ;
 				return ;
 			}
-			parseDoc () ;
+
+			var assetPage = new app.AssetPage( file.replace ( /\.[^.]+$/ , '' ), doc );
+			asset = assetPage.getAsset();
+
+			var h = '' ;
+			h += "<option value='none' selected>None</option>" ;
+			$.each ( asset.getDescriptions() , function ( lang , html ) {
+				h += "<option value='" + lang + "'>" + lang.toUpperCase() + "</option>" ;
+			} ) ;
+			$('#desc_mode').html ( h ) ;
+
+			renderSuggestion () ;
+
 		} ) ;
 		
 	}) ;
 }
-
-function parseDoc () {
-	var o = {} ;
-	o.title = parseTable('fileinfotpl_art_title') || parseTable('fileinfotpl_title') || file.replace ( /\.[^.]+$/ , '' ) ;
-	o.desc = parseTable('fileinfotpl_desc','desc') || '' ;
-	o.author = parseTable('fileinfotpl_aut','author') || '' ;
-	o.source = parseTable('fileinfotpl_src') || '' ;
-	o.attribution = $($(doc).find('.licensetpl_attr').get(0)).html() || '' ;
-
-	if ( o.desc == '' ) {
-		var t = [] ;
-		t.push ( ucFirst($.trim($($($($(doc).find('#fileinfotpl_art_medium')).parents('tr').get(0)).find('td').get(1)).text())) ) ;
-		t.push ( $.trim($($($($(doc).find('#fileinfotpl_date')).parents('tr').get(0)).find('td').get(1)).text()) ) ;
-		t.push ( $.trim($($($($(doc).find('#fileinfotpl_art_dimensions')).parents('tr').get(0)).find('td').get(1)).text()) ) ;
-		t = t.join('; ').replace(/\s+/g,' ') ;
-		o.desc = t ;
-//		if ( descs['full'] == '' ) 
-		descs['full'] = t ;
-	}
-	
-	result = o ;
-	
-	var h = '' ;
-	h += "<option value='none' selected>None</option>" ;
-	$.each ( descs , function ( lang , html ) {
-		h += "<option value='" + lang + "'>" + lang.toUpperCase() + "</option>" ;
-	} ) ;
-	$('#desc_mode').html ( h ) ;
-	
-	renderSuggestion () ;
-}
-
-
-function parseTable ( key , mode ) {
-	var t = $($(doc).find('#'+key)) ;
-	if ( t.length === 0 ) return undefined ;
-	t = $(t.parents('tr').get(0)) ;
-	if ( t.length === 0 ) return undefined ;
-	t = $(t.find('td').get(1)) ;
-	if ( t.length === 0 ) return undefined ;
-	
-	var ret = $.trim(t.text()) ;
-	if ( mode == 'author' ) {
-	
-		author_url = '' ;
-	
-		var o = $($(doc).find('#creator')) ;
-		if ( o.length > 0 ) {
-			o.find('a').each ( function ( k , v ) {
-				var href = $(v).attr('href') ;
-				if ( href.match ( /^https{0,1}:/i ) ) return ;
-				if ( href.match ( /^\/wiki\// ) ) $(v).attr('href','//commons.wikimedia.org'+href) ;
-				else $(v).replaceWith ( '<span>' + $(v).text() + '</span>' ) ;
-			} ) ;
-			return o.html() ;
-		}
-	
-		t.find('a').each ( function ( k , v ) {
-			v = $(v) ;
-			var m = (v.attr('title')||'').match ( /^User:(.+)$/i ) ;
-			if ( m ) {
-				ret = '//commons.wikimedia.org' + v.attr('href') ;
-				author_url = ret ;
-				ret = "<a href='" + author_url + "'>" + v.text() + "</a>" ;
-				return false ;
-			}
-			if ( v.hasClass ( 'extiw' ) ) {
-				author_url = v.attr('href') ;
-				ret = "<a href='" + author_url + "'>" + v.text() + "</a>" ;
-				return false ;
-			}
-			if ( t.length == 1 && v.hasClass ( 'external' ) ) {
-				author_url = v.attr('href') ;
-				ret = "<a href='" + author_url + "'>" + v.text() + "</a>" ;
-			}
-		} ) ;
-	}
-	
-	if ( mode == 'desc' ) {
-		var found = 0 ;
-		t.find('div.description').each ( function ( k , v ) {
-			found++ ;
-			v = $(v) ;
-			var lang = v.attr('lang') ;
-			v.find('span.language').remove() ;
-			v.find('span.langlabel-'+lang).remove() ;
-			descs[lang] = v.html() ;
-		} ) ;
-		if ( found == 0 ) {
-			descs['full'] = t.text() ;
-		}
-	}
-	
-	return ret ;
-}
-
 
 function renderSuggestion ( ) {
 	if ( undefined === thumbdata[thumbsize] ) {
@@ -258,26 +171,45 @@ function renderSuggestion ( ) {
 	h1 += thumbdata[thumbsize].thumburl + "'" ;
 	h1 += " border='0'/></a>" ;
 	h1 += "</div><div style='overflow:auto'>" ;
-	h1 += "<div style='text-align:center'><b>" + result.title + "</b></div>" ;
+	h1 += "<div style='text-align:center'><b>" + asset.getTitle() + "</b></div>" ;
 	
 	if ( desc_mode != 'none' ) {
-		h1 += "<div style='font-size:11pt;margin-top:3px;margin-bottom:3px'>" + descs[desc_mode] + "</div>" ;
+		h1 += "<div style='font-size:11pt;margin-top:3px;margin-bottom:3px'>" + asset.getDescription( desc_mode ) + "</div>" ;
 	}
 	
 	var license_newline ;
 	h1 += "<div>" ;
-	if ( result.attribution != '' ) {
-		h1 += result.attribution ;
+	if( asset.getAttribution() ) {
+		h1 += asset.getAttribution();
 		license_newline = true ;
-	} else if ( result.author == '' || result.author.toLowerCase() == 'unknown' ) {
-		if ( result.source != '' ) h1 += result.source ;
-		else h1 += "Unknown author" ;
-	} else {
-		h1 += "Created by " + result.author ;
-		if ( print_urls && author_url != '' ) {
-			if ( author_url.substr ( 0 , 2 ) == '//' ) author_url = 'http:' + author_url ;
-			h1 += " <small>(" + author_url + ")</small>" ;
+	} else if( asset.getAuthors().length === 0 || asset.getAuthors()[0].getName() == 'unknown' ) {
+		if( asset.getSource() ) {
+			h1 += asset.getSource();
+		} else {
+			h1 += "Unknown author";
 		}
+	} else {
+		var authors = asset.getAuthors();
+
+		h1 += 'Created by ';
+
+		$.each( authors, function( i, author ) {
+			var url = author.getUrl();
+
+			if( url ) {
+				if( url.substr( 0, 2 ) === '//' ) {
+					url = 'http:' + url ;
+				}
+
+				h1 += $( '<div/>' ).append(
+					$( '<a/>' ).attr( 'href', author.getUrl() ).text( author.getName() )
+				).html();
+
+				if( print_urls ) {
+					h1 += " <small>(" + url + ")</small>" ;
+				}
+			}
+		} );
 	}
 	var license = getLicense() ;
 	if ( license_newline ) h1 += "<br/>" + ucFirst ( license ) ;
