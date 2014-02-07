@@ -30,30 +30,27 @@ $(document).ready ( function () {
 		.bind( 'drop', function( e ) {
 			e.stopPropagation();
 			e.preventDefault();
-			
-			if ( undefined !== e.dataTransfer.items && undefined !== e.dataTransfer.items[0] && undefined !== e.dataTransfer.items[0].getAsString ) {
-				e.dataTransfer.items[0].getAsString ( processURL ) ;
-				return ;
-			}
-			
-//			console.log ( e.dataTransfer.items[0] ) ;
-			var h = e.dataTransfer.getData("text/html") ;
-//			console.log ( h ) ;
-			h = $ ( '<div>' + h + '</div>' ) ;
-			h = $( h.find('img').get(0) ) ;
-			var url = h.attr('src') ;
-			processURL ( url ) ;
+
+			app.inputHandler.getFilename( e )
+			.done( function( filename ) {
+				file = filename;
+				initProcess();
+				processFile( file );
+			} );
 		}) ;
 	
-	var params = getUrlVars() ;
-	if ( undefined !== params.url ) {
-		processURL ( params.url ) ;
-	} else if ( undefined !== params.file ) {
-		initProcess() ;
-		file = params.file ;
-		file = file.replace ( /^[A-Z][a-z]+:/ , '' ) ; // File:
-		file = file.replace ( /_/g , ' ' ) ;
-		processFile ( file ) ;
+	var params = getUrlVars();
+
+	if( params.file ) {
+		file = params.file;
+		initProcess();
+		processFile( params.file );
+	} else if( params.url ) {
+		app.inputHandler.getFilename( params.url )
+		.done( function( filename ) {
+			file = filename;
+			processFile( file );
+		} );
 	}
 } ) ;
 
@@ -63,22 +60,6 @@ function initProcess () {
 	thumbdata = {} ;
   $('div:first > p').remove();
 	$('#suggestion').html ( '<i>Constructing preview...</i>' ) ;
-}
-
-function processURL ( url ) {
-	initProcess() ;
-	var s = url ;
-	if ( s.match ( /\/thumb\// ) ) {
-		s = s.split ( '/' ) ;
-		s.pop() ;
-		file = decodeURIComponent ( s.pop() ) ;
-	} else {
-		s = s.split ( '/' ) ;
-		file = decodeURIComponent ( s.pop() ) ;
-	}
-	file = file.replace ( /^[A-Z][a-z]+:/ , '' ) ; // File:
-	file = file.replace ( /_/g , ' ' ) ;
-	processFile ( file ) ;
 }
 
 function processFile ( file ) {
