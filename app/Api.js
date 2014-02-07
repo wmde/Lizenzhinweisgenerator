@@ -1,6 +1,6 @@
 this.app = this.app || {};
 
-app.Api = ( function( $ ) {
+app.Api = ( function( $, app ) {
 'use strict';
 
 /**
@@ -24,6 +24,44 @@ $.extend( Api.prototype, {
 	 * @type {string}
 	 */
 	_url: null,
+
+	/**
+	 * Generates an Asset object for a specific filename.
+	 *
+	 * @param {string} filename
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {app.Asset}
+	 *         Rejected parameters:
+	 *         - {string} Error message
+	 */
+	getAsset: function( filename ) {
+		var self = this,
+			deferred = $.Deferred();
+
+		this.getPageContent( filename )
+		.done( function( $dom ) {
+
+			self.getCategories( filename )
+			.done( function( categories ) {
+				var assetPage = new app.AssetPage(
+					filename.replace ( /\.[^.]+$/ , '' ),
+					$dom,
+					categories
+				);
+
+				deferred.resolve( assetPage.getAsset() );
+			} )
+			.fail( function( message ) {
+				deferred.reject( message );
+			} );
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
+		} );
+
+		return deferred.promise();
+	},
 
 	/**
 	 * Retrieves the asset page content of a specific file.
@@ -173,4 +211,4 @@ $.extend( Api.prototype, {
 
 return Api;
 
-}( jQuery ) );
+}( jQuery, app ) );

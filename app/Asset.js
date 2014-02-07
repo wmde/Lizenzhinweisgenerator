@@ -5,13 +5,15 @@ app.Asset = ( function( $ ) {
 
 /**
  * Represents a Commons asset.
+ * @constructor
  *
  * @param {string} title
+ * @param {app.Licence|null} licence
  * @param {Object} [attributes]
- * @constructor
  */
-var Asset = function( title, attributes ) {
+var Asset = function( title, licence, attributes ) {
 	this._title = title;
+	this._licence = licence;
 
 	attributes = attributes || {};
 
@@ -26,6 +28,11 @@ $.extend( Asset.prototype, {
 	 * @type {string}
 	 */
 	_title: null,
+
+	/**
+	 * @type {app.Licence|null}
+	 */
+	_licence: null,
 
 	/**
 	 * @type {Object}
@@ -52,6 +59,13 @@ $.extend( Asset.prototype, {
 	 */
 	getTitle: function() {
 		return this._title;
+	},
+
+	/**
+	 * @return {app.Licence|null}
+	 */
+	getLicence: function() {
+		return this._licence;
 	},
 
 	/**

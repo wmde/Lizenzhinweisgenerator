@@ -3,20 +3,27 @@ this.app = this.app || {};
 app.AssetPage = ( function( $, app ) {
 'use strict';
 
-function toCapitalCase( string ) {
+function capitalize( string ) {
 	return string.substring( 0, 1 ).toUpperCase() + string.substring( 1 );
 }
 
 /**
  * Represents a Commons asset page.
+ * @constructor
  *
  * @param {string} title
  * @param {jQuery} $dom
- * @constructor
+ * @param {string[]} categories
+ *
+ * @throws {Error} if a required parameter is not specified.
  */
-var AssetPage = function( title, $dom ) {
+var AssetPage = function( title, $dom, categories ) {
+	if( !title || !$dom || !categories ) {
+		throw new Error( 'Unable to instantiate object' );
+	}
 	this._title = title;
 	this._$dom = $dom;
+	this._categories = categories;
 };
 
 $.extend( AssetPage.prototype, {
@@ -33,21 +40,15 @@ $.extend( AssetPage.prototype, {
 	_$dom: null,
 
 	/**
+	 * The page's categories.
+	 * @type {string[]}
+	 */
+	_categories: null,
+
+	/**
 	 * @type {Asset}
 	 */
 	_asset: null,
-
-	/**
-	 * Extracts all attributes from the DOM.
-	 */
-	scrape: function() {
-		this._asset = new app.Asset( this._scrapeTitle() || this._title, {
-			descriptions: this._scrapeDescriptions(),
-			authors: this._scrapeAuthors(),
-			source: this._scrapeSource(),
-			attribution: this._scrapeAttribution()
-		} );
-	},
 
 	/**
 	 * Returns the asset represented by the page.
@@ -56,9 +57,43 @@ $.extend( AssetPage.prototype, {
 	 */
 	getAsset: function() {
 		if( !this._asset ) {
-			this.scrape();
+			this._asset = new app.Asset(
+				this._scrapeTitle() || this._title,
+				this._detectLicence(),
+				{
+					descriptions: this._scrapeDescriptions(),
+					authors: this._scrapeAuthors(),
+					source: this._scrapeSource(),
+					attribution: this._scrapeAttribution()
+				}
+			);
 		}
 		return this._asset;
+	},
+
+	/**
+	 * Detects a licence by analyzing the page's categories and returns it. Returns "null" if no
+	 * licence is detected.
+	 *
+	 * @return {app.Licence|null}
+	 */
+	_detectLicence: function() {
+		for( var i = 0; i < this._categories.length; i++ ) {
+			var category = this._categories[i];
+
+			for( var j = 0; j < app.LICENCES.length; j++ ) {
+				var licence = app.LICENCES[j];
+
+				if( licence.match( category ) ) {
+					if( licence.isAbstract() ) {
+						licence = app.Licence.newFromAbstract( licence, category );
+					}
+					return licence;
+				}
+			}
+		}
+
+		return null;
 	},
 
 	/**
@@ -108,7 +143,7 @@ $.extend( AssetPage.prototype, {
 		if( descriptions['*'] === '' ) {
 			// No description at all yet, gather other attributes:
 			var d = [];
-			d.push( toCapitalCase(
+			d.push( capitalize(
 				this._getNextText( this._$dom.find( '#fileinfotpl_art_medium' ) )
 			) );
 			d.push( this._getNextText( this._$dom.find( '#fileinfotpl_date' ) ) );

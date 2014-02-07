@@ -5,6 +5,7 @@ app.Licence = ( function( $ ) {
 
 /**
  * Represents a licence.
+ * @constructor
  *
  * @param {string|RegExp} name The licence name. May be a regular expression to generate an
  *        "abstract" licence object that may itself be used to generate a proper licence using
@@ -13,7 +14,6 @@ app.Licence = ( function( $ ) {
  * @param {Object} [options] Default options overwrites:
  *        - {string} outputTemplate: Text template specifying the actual text output of the licence
  *          information. {{name}} is replaced with the licence name.
- * @constructor
  */
 var Licence = function( name, url, options ) {
 

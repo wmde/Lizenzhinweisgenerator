@@ -8,7 +8,7 @@ var asset;
 var Licence = app.Licence;
 var api = new app.Api( '//commons.wikimedia.org/w/api.php?callback=?' );
 
-var licences = [
+app.LICENCES = [
 	new Licence( /^(PD|Public domain)\b/i, {
 		'outputTemplate': 'in the public domain'
 	} ),
@@ -106,35 +106,23 @@ function processFile ( file ) {
 
 	location.hash = "#?file=" + file.replace ( / /g , '_' ) ;
 
-	api.getPageContent( file )
-	.done( function( $dom ) {
-		doc = $dom;
+	api.getAsset( file )
+	.done( function( a ) {
+		asset = a;
 
-		api.getCategories( file )
-		.done( function( categories ) {
-			cats = categories;
+		var h = '' ;
+		h += "<option value='none' selected>None</option>" ;
+		$.each ( asset.getDescriptions() , function ( lang , html ) {
+			h += "<option value='" + lang + "'>" + lang.toUpperCase() + "</option>" ;
+		} ) ;
+		$('#desc_mode').html ( h ) ;
 
-			var assetPage = new app.AssetPage( file.replace ( /\.[^.]+$/ , '' ), doc );
-			asset = assetPage.getAsset();
-
-			var h = '' ;
-			h += "<option value='none' selected>None</option>" ;
-			$.each ( asset.getDescriptions() , function ( lang , html ) {
-				h += "<option value='" + lang + "'>" + lang.toUpperCase() + "</option>" ;
-			} ) ;
-			$('#desc_mode').html ( h ) ;
-
-			renderSuggestion () ;
-		} )
-		.fail( function( message ) {
-			alert ( "Could not get license information for " + file ) ;
-			console.error( message );
-		} );
+		renderSuggestion () ;
 	} )
 	.fail( function( message ) {
-		alert( "Could not get file information for " + file ) ;
-		console.error( message );
+		alert( message );
 	} );
+
 }
 
 function renderSuggestion ( ) {
@@ -193,7 +181,12 @@ function renderSuggestion ( ) {
 			}
 		} );
 	}
-	var license = getLicense() ;
+	var licence = asset.getLicence();
+
+	var license = licence
+		? $( '<div/>' ).append( $( '<small/>' ).append( licence.getHtml() ) ).html()
+		: 'Unknown licence';
+
 	if ( license_newline ) h1 += "<br/>" + ucFirst ( license ) ;
 	else h1 += "; " + license ;
 	h1 += "</div>" ;
@@ -218,21 +211,6 @@ function updateThumbnail ( callback ) {
 	.fail( function( message ) {
 		console.error( message );
 	} );
-}
-
-function getLicense() {
-	for( var i = 0; i < cats.length; i++ ) {
-		for( var j = 0; j < licences.length; j++ ) {
-			var licence = licences[j];
-			if( licence.match( cats[i] ) ) {
-				if( licence.isAbstract() ) {
-					licence = Licence.newFromAbstract( licence, cats[i] );
-				}
-				return $( '<div/>' ).append( $( '<small/>' ).append( licence.getHtml() ) ).html();
-			}
-		}
-	}
-	return 'Unknown licence';
 }
 
 function getUrlVars () {
