@@ -1,5 +1,4 @@
 var thumbsize = 500 ;
-var api_url = '//commons.wikimedia.org/w/api.php?callback=?' ;
 var file ;
 var doc ;
 var cats ;
@@ -7,6 +6,7 @@ var thumbdata ;
 var print_urls ;
 var asset;
 var Licence = app.Licence;
+var api = new app.Api( '//commons.wikimedia.org/w/api.php?callback=?' );
 
 var licences = [
 	new Licence( /^(PD|Public domain)\b/i, {
@@ -16,10 +16,10 @@ var licences = [
 	new Licence( 'FAL', 'http://artlibre.org/licence/lal/en' ),
 	new Licence( 'GPL', 'http://www.gnu.org/copyleft/gpl-3.0.html' ),
 	new Licence( 'LGPL', 'http://www.gnu.org/licenses/lgpl.html' ),
-	new Licence( 'AGPL', 'http://www.gnu.org/licenses/agpl.html'),
+	new Licence( 'AGPL', 'http://www.gnu.org/licenses/agpl.html' ),
 	new Licence( 'GFDL', 'http://commons.wikimedia.org/wiki/Commons:GNU_Free_Documentation_License_1.2' ),
 	new Licence( 'OS OPENDATA', 'http://www.ordnancesurvey.co.uk/oswebsite/opendata/licence/docs/licence.pdf', {
-		'outputTemplate': 'licenced unter {{name}}'
+		'outputTemplate': 'licenced under {{name}}'
 	} ),
 	new Licence( /^CC-([A-Z-]+)-([0-9.]+)([A-Z-]*(,.+)*){1}/i, 'http://creativecommons.org/licenses/$1/$2/$3' ),
 	new Licence( /^CC-([A-Z-]+)-([0-9.]+)/i, 'http://creativecommons.org/licenses/$1/$2' ),
@@ -106,46 +106,13 @@ function processFile ( file ) {
 
 	location.hash = "#?file=" + file.replace ( / /g , '_' ) ;
 
-	$.getJSON ( api_url , {
-		action : 'query' ,
-		prop : 'revisions' ,
-		titles : 'File:' + file ,
-		rvprop : 'content' ,
-		rvparse : 1 ,
-		format : 'json'
-	} , function ( d ) {
-		doc = undefined ;
-		if ( undefined !== d.query && undefined !== d.query.pages ) {
-			$.each ( d.query.pages , function ( k1 , v1 ) {
-				if ( k1 == -1 ) return ;
-				doc = $('<div>' + v1.revisions[0]['*'] + '</div>' ) ;
+	api.getPageContent( file )
+	.done( function( $dom ) {
+		doc = $dom;
 
-			} ) ;
-		}
-		
-		if ( undefined === 'doc' ) {
-			alert ( "Could not get file information for " + file ) ;
-			return ;
-		}
-		
-		$.getJSON ( api_url , {
-			action : 'query' ,
-			prop : 'categories' ,
-			cllimit : 500 ,
-			titles : 'File:' + file ,
-			format : 'json'
-		} , function ( d ) {
-			cats = [] ;
-			if ( undefined !== d.query && undefined !== d.query.pages ) {
-				$.each ( d.query.pages , function ( k1 , v1 ) {
-					$.each ( v1.categories , function ( k2 , v2 ) {
-						cats.push ( v2.title.replace ( /^[^:]+:/ , '' ) ) ;
-					} ) ;
-				} ) ;
-			} else {
-				alert ( "Could not get license information for " + file ) ;
-				return ;
-			}
+		api.getCategories( file )
+		.done( function( categories ) {
+			cats = categories;
 
 			var assetPage = new app.AssetPage( file.replace ( /\.[^.]+$/ , '' ), doc );
 			asset = assetPage.getAsset();
@@ -158,10 +125,16 @@ function processFile ( file ) {
 			$('#desc_mode').html ( h ) ;
 
 			renderSuggestion () ;
-
-		} ) ;
-		
-	}) ;
+		} )
+		.fail( function( message ) {
+			alert ( "Could not get license information for " + file ) ;
+			console.error( message );
+		} );
+	} )
+	.fail( function( message ) {
+		alert( "Could not get file information for " + file ) ;
+		console.error( message );
+	} );
 }
 
 function renderSuggestion ( ) {
@@ -237,20 +210,14 @@ function renderSuggestion ( ) {
 }
 
 function updateThumbnail ( callback ) {
-	$.getJSON ( api_url , {
-		action : 'query' ,
-		prop : 'imageinfo' ,
-		titles : 'File:' + file ,
-		iiprop : 'url' ,
-		iiurlwidth : thumbsize ,
-		iiurlheight : thumbsize ,
-		format : 'json'
-	} , function ( d ) {
-		$.each ( d.query.pages , function ( k , v ) {
-			thumbdata[thumbsize] = v.imageinfo[0] ;
-			callback() ;
-		} ) ;
-	} ) ;
+	api.getImageInfo( file, thumbsize )
+	.done( function( imageInfo ) {
+		thumbdata[thumbsize] = imageInfo;
+		callback() ;
+	} )
+	.fail( function( message ) {
+		console.error( message );
+	} );
 }
 
 function getLicense() {
