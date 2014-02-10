@@ -44,11 +44,7 @@ $.extend( Api.prototype, {
 
 			self.getCategories( filename )
 			.done( function( categories ) {
-				var assetPage = new app.AssetPage(
-					filename.replace ( /\.[^.]+$/ , '' ),
-					$dom,
-					categories
-				);
+				var assetPage = new app.AssetPage( filename, $dom, categories, self );
 
 				deferred.resolve( assetPage.getAsset() );
 			} )

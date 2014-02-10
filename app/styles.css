@@ -1,0 +1,33 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Helvetica Neue", "Helvetica", "Nimbus Sans L", "Arial", "Liberation Sans", sans-serif;
+}
+
+.container {
+	text-align: center;
+	margin: 0 auto;
+}
+
+.app-frontpage {
+	text-align: center;
+}
+
+.app-frontpage {
+	margin-top: 200px;
+}
+
+.app-frontpage * {
+	display: block;
+	margin: 0 auto;
+}
+
+.app-frontpage input {
+	padding: 4pt;
+	border: 1px solid lightgrey;
+	width: 400px;
+}
+
+.app-frontpage button {
+	margin-top: 6pt;
+}

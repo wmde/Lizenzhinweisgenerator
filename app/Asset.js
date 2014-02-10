@@ -7,13 +7,23 @@ app.Asset = ( function( $ ) {
  * Represents a Commons asset.
  * @constructor
  *
+ * @param {string} filename
  * @param {string} title
  * @param {app.Licence|null} licence
+ * @param {app.Api} api
  * @param {Object} [attributes]
+ *
+ * @throws {Error} if a required parameter is not defined.
  */
-var Asset = function( title, licence, attributes ) {
+var Asset = function( filename, title, licence, api, attributes ) {
+	if( !filename || !title || !licence || !api ) {
+		throw new Error( 'No proper initialization parameters specified' );
+	}
+
+	this._filename = filename;
 	this._title = title;
 	this._licence = licence;
+	this._api = api;
 
 	attributes = attributes || {};
 
@@ -21,9 +31,16 @@ var Asset = function( title, licence, attributes ) {
 	this._authors = attributes.authors || null;
 	this._source = attributes.source || null;
 	this._attribution = attributes.attribution || null;
+
+	this._imageInfo = {};
 };
 
 $.extend( Asset.prototype, {
+	/**
+	 * @type {string}
+	 */
+	_filename: null,
+
 	/**
 	 * @type {string}
 	 */
@@ -35,24 +52,41 @@ $.extend( Asset.prototype, {
 	_licence: null,
 
 	/**
-	 * @type {Object}
+	 * @type {app.Api}
+	 */
+	_api: null,
+
+	/**
+	 * @type {Object|null}
 	 */
 	_descriptions: null,
 
 	/**
-	 * @type {app.Author[]}
+	 * @type {app.Author[]|null}
 	 */
 	_authors: null,
 
 	/**
-	 * @type {string}
+	 * @type {string|null}
 	 */
 	_source: null,
 
 	/**
-	 * @type {string}
+	 * @type {string|null}
 	 */
 	_attribution: null,
+
+	/**
+	 * @type {Object}
+	 */
+	_imageInfo: null,
+
+	/**
+	 * @return {string}
+	 */
+	getFilename: function() {
+		return this._filename;
+	},
 
 	/**
 	 * @return {string}
@@ -112,6 +146,36 @@ $.extend( Asset.prototype, {
 	 */
 	getAttribution: function() {
 		return this._attribution;
+	},
+
+	/**
+	 * Retrieves the asset's image information.
+	 *
+	 * @param {number} imageSize
+	 * @return {Object} jQuery Promise
+	 *         Resolve parameters:
+	 *         - {Object} Image information received from the API.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
+	 */
+	getImageInfo: function( imageSize ) {
+		var self = this,
+			deferred = $.Deferred();
+
+		if( this._imageInfo[imageSize] ) {
+			deferred.resolve( this._imageInfo[imageSize] );
+		} else {
+			this._api.getImageInfo( this._filename, imageSize )
+			.done( function( imageInfo ) {
+				self._imageInfo[imageSize] = imageInfo;
+				deferred.resolve( imageInfo );
+			} )
+			.fail( function( message ) {
+				deferred.reject( 'message' );
+			} );
+		}
+
+		return deferred.promise();
 	}
 
 } );

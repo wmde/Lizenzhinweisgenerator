@@ -11,27 +11,29 @@ function capitalize( string ) {
  * Represents a Commons asset page.
  * @constructor
  *
- * @param {string} title
+ * @param {string} filename
  * @param {jQuery} $dom
  * @param {string[]} categories
+ * @param {app.Api} api
  *
  * @throws {Error} if a required parameter is not specified.
  */
-var AssetPage = function( title, $dom, categories ) {
-	if( !title || !$dom || !categories ) {
+var AssetPage = function( filename, $dom, categories, api ) {
+	if( !filename || !$dom || !categories || !api ) {
 		throw new Error( 'Unable to instantiate object' );
 	}
-	this._title = title;
+	this._filename = filename;
 	this._$dom = $dom;
 	this._categories = categories;
+	this._api = api;
 };
 
 $.extend( AssetPage.prototype, {
 	/**
-	 * The page's title.
+	 * The page's filename.
 	 * @type {string}
 	 */
-	_title: null,
+	_filename: null,
 
 	/**
 	 * The page content DOM.
@@ -46,6 +48,11 @@ $.extend( AssetPage.prototype, {
 	_categories: null,
 
 	/**
+	 * @type {app.Api}
+	 */
+	_api: null,
+
+	/**
 	 * @type {Asset}
 	 */
 	_asset: null,
@@ -58,8 +65,10 @@ $.extend( AssetPage.prototype, {
 	getAsset: function() {
 		if( !this._asset ) {
 			this._asset = new app.Asset(
-				this._scrapeTitle() || this._title,
+				this._filename,
+				this._scrapeTitle() || this._filename.replace ( /\.[^.]+$/ , '' ),
 				this._detectLicence(),
+				this._api,
 				{
 					descriptions: this._scrapeDescriptions(),
 					authors: this._scrapeAuthors(),
