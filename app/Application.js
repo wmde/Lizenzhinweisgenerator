@@ -113,14 +113,72 @@ $.extend( Application.prototype, {
 	 * Renders the application page.
 	 */
 	_renderApplicationPage: function() {
+		var self = this;
+
+		this._$node.empty();
+
+		this._$node.empty()
+		.append( $( '<div/>' ).addClass( 'app-frameset' )
+			.append( $( '<div/>' ).addClass( 'app-preview' ) )
+			.append( $( '<div/>' ).addClass( 'app-options' ) )
+			.append( $( '<div/>' ).addClass( 'app-questionnaire' ) )
+		);
+
+		this.updatePreview().done( function() {
+			self._$node.find( '.app-options' ).append(
+				self._renderInput( 'imageSize' )
+			);
+		} );
+	},
+
+	/**
+	 * Renders an input element.
+	 *
+	 * @param {string} optionName
+	 * @return {jQuery}
+	 */
+	_renderInput: function( optionName ) {
 		var self = this,
-			$preview;
+			$container = $( '<span/>' );
 
-		this._$node.empty().append( $( '<div/>' ).addClass( 'preview' ) );
+		if( optionName === 'imageSize' ) {
+			var $label = $( '<label for="app-"' + optionName + '/>' ).text( 'Bildgröße: ' ),
+				$select = $( '<select/>' ),
+				values = [200, 300, 400, 500, 1000],
+				selected = 500;
 
-		this._asset.getImageInfo( this._options.imageSize )
+			for( var i = 0; i < values.length; i++ ) {
+				var $option = $( '<option/>' ).attr( 'value', values[i] ).text( values[i] );
+				if( values[i] === selected ) {
+					$option.prop( 'selected', true );
+				}
+				$select.append( $option );
+			}
+
+			$select.on( 'change', function() {
+				self._options.imageSize = $select.val();
+				self.updatePreview();
+			} );
+
+			$container
+			.append( $label )
+			.append( $select );
+		}
+
+		return $container;
+	},
+
+	/**
+	 * Updates the preview.
+	 *
+	 * @return {Object} jQuery Promise
+	 */
+	updatePreview: function() {
+		var self = this;
+
+		return this._asset.getImageInfo( this._options.imageSize )
 		.done( function( imageInfo ) {
-			self._$node.find( '.preview' ).replaceWith( self._renderPreview( imageInfo ) );
+			self._$node.find( '.app-preview' ).replaceWith( self._renderPreview( imageInfo ) );
 		} );
 	},
 
@@ -131,10 +189,10 @@ $.extend( Application.prototype, {
 	 * @return {jQuery}
 	 */
 	_renderPreview: function( imageInfo ) {
-		return $( '<div/>' ).addClass( 'preview' ).append(
-			$( '<div/>' ).addClass( 'preview-frame' )
+		return $( '<div/>' ).addClass( 'app-preview' ).append(
+			$( '<div/>' ).addClass( 'app-preview-frame' )
 			.append(
-				$( '<div/>' ).addClass( 'preview-image' ).append(
+				$( '<div/>' ).addClass( 'app-preview-image' ).append(
 					$( '<a/>' ).attr( 'href', imageInfo.descriptionurl ).append(
 						$( '<img/>' )
 						.attr( 'border', '0' )

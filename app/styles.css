@@ -31,3 +31,18 @@ body {
 .app-frontpage button {
 	margin-top: 6pt;
 }
+
+.app-frameset {
+	display: table-row;
+	width: 100%;
+}
+
+.app-preview {
+	display: table-cell;
+	width: 100%;
+}
+
+.app-options {
+	display: table-cell;
+	white-space: nowrap;
+}
