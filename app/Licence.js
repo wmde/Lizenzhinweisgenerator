@@ -7,15 +7,24 @@ app.Licence = ( function( $ ) {
  * Represents a licence.
  * @constructor
  *
- * @param {string|RegExp} name The licence name. May be a regular expression to generate an
- *        "abstract" licence object that may itself be used to generate a proper licence using
- *        Licence.newFromAbstract().
+ * @param {string} id A licence id to be used as internal identifier. For consistency, is should
+ *        match the template name on Commons.
+ * @param {string|RegExp} name The licence name how it should be displayed. May be a regular
+ *        expression to generate an "abstract" licence object that may itself be used to generate a
+ *        proper licence using Licence.newFromAbstract().
  * @param {string|Object} [url] The url to the licence.
  * @param {Object} [options] Default options overwrites:
  *        - {string} outputTemplate: Text template specifying the actual text output of the licence
  *          information. {{name}} is replaced with the licence name.
+ *
+ * @throws {Error} if no proper parameters are specified.
  */
-var Licence = function( name, url, options ) {
+var Licence = function( id, name, url, options ) {
+	if( !id ) {
+		throw new Error( 'Internal id needs to be specified' );
+	}
+
+	this._id = id;
 
 	if( $.isPlainObject( url ) ) {
 		options = url;
@@ -37,6 +46,12 @@ var Licence = function( name, url, options ) {
 };
 
 $.extend( Licence.prototype, {
+	/**
+	 * Identifier for internal use.
+	 * @type {string}
+	 */
+	_id: null,
+
 	/**
 	 * @type {Object}
 	 */
@@ -74,6 +89,13 @@ $.extend( Licence.prototype, {
 	 */
 	match: function( string ) {
 		return this._regExp.test( string );
+	},
+
+	/**
+	 * @return {string}
+	 */
+	getId: function() {
+		return this._id;
 	},
 
 	/**
