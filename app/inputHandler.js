@@ -82,10 +82,11 @@ $.extend( InputHandler.prototype, {
 	 *         - {string} Error message
 	 */
 	_extractFilename: function( url ) {
-		var segments = url.split( '/' ),
-			filename = ( segments[segments.length - 1] === 'thumb' )
-				? segments[segments.length - 3]
-				: segments[segments.length - 2];
+		var segments = url.split( '/' );
+
+		var filename = ( $.inArray( 'thumb', segments ) !== -1 )
+			? segments[segments.length - 2]
+			: segments[segments.length - 1];
 
 		filename = decodeURIComponent( filename );
 
