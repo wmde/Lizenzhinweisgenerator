@@ -1,7 +1,7 @@
-this.app = this.app || {};
-
-app.Questionnaire = ( function( $, app ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery', 'Asset'], function( $, Asset ) {
 
 /**
  * Represents a questionnaire's logic.
@@ -10,12 +10,12 @@ app.Questionnaire = ( function( $, app ) {
  * @constructor
  *
  * @param {jQuery} $node
- * @param {app.Asset} asset
+ * @param {Asset} asset
  *
  * @throws {Error} on incorrect parameters.
  */
 var Questionnaire = function( $node, asset ) {
-	if( !( $node instanceof $ ) || !( asset instanceof app.Asset ) ) {
+	if( !( $node instanceof $ ) || !( asset instanceof Asset ) ) {
 		throw new Error( 'No proper parameters specified' );
 	}
 
@@ -32,7 +32,7 @@ $.extend( Questionnaire.prototype, {
 
 	/**
 	 * Asset the questionnaire shall handle.
-	 * @type {app.Asset}
+	 * @type {Asset}
 	 */
 	_asset: null,
 
@@ -343,4 +343,6 @@ $.extend( Questionnaire.prototype, {
 
 return Questionnaire;
 
-}( jQuery, app ) );
+} );
+
+}( define ) );

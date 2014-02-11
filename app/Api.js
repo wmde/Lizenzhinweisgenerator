@@ -1,7 +1,7 @@
-this.app = this.app || {};
-
-app.Api = ( function( $, app ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery', 'AssetPage'], function( $, AssetPage ) {
 
 /**
  * Commons API Handler.
@@ -31,7 +31,7 @@ $.extend( Api.prototype, {
 	 * @param {string} filename
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {app.Asset}
+	 *         - {Asset}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
@@ -44,7 +44,7 @@ $.extend( Api.prototype, {
 
 			self.getCategories( filename )
 			.done( function( categories ) {
-				var assetPage = new app.AssetPage( filename, $dom, categories, self );
+				var assetPage = new AssetPage( filename, $dom, categories, self );
 
 				deferred.resolve( assetPage.getAsset() );
 			} )
@@ -207,4 +207,6 @@ $.extend( Api.prototype, {
 
 return Api;
 
-}( jQuery, app ) );
+} );
+
+}( define ) );

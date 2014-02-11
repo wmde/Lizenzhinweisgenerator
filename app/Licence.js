@@ -1,7 +1,7 @@
-this.app = this.app || {};
-
-app.Licence = ( function( $ ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery'], function( $ ) {
 
 /**
  * Represents a licence.
@@ -173,9 +173,9 @@ $.extend( Licence.prototype, {
 /**
  * Instantiates a Licence object from an abstract Licence using a specified text string.
  *
- * @param {app.Licence} abstractLicence
+ * @param {Licence} abstractLicence
  * @param {string} rawText
- * @return {app.Licence}
+ * @return {Licence}
  */
 Licence.newFromAbstract = function( abstractLicence, rawText ) {
 	var url = rawText.replace( abstractLicence.getRegExp(), abstractLicence.getUrl() );
@@ -184,4 +184,6 @@ Licence.newFromAbstract = function( abstractLicence, rawText ) {
 
 return Licence;
 
-}( jQuery ) );
+} );
+
+}( define ) );

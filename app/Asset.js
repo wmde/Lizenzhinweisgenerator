@@ -1,7 +1,7 @@
-this.app = this.app || {};
-
-app.Asset = ( function( $ ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery'], function( $ ) {
 
 /**
  * Represents a Commons asset.
@@ -9,8 +9,8 @@ app.Asset = ( function( $ ) {
  *
  * @param {string} filename
  * @param {string} title
- * @param {app.Licence|null} licence
- * @param {app.Api} api
+ * @param {Licence|null} licence
+ * @param {Api} api
  * @param {Object} [attributes]
  *
  * @throws {Error} if a required parameter is not defined.
@@ -47,12 +47,12 @@ $.extend( Asset.prototype, {
 	_title: null,
 
 	/**
-	 * @type {app.Licence|null}
+	 * @type {Licence|null}
 	 */
 	_licence: null,
 
 	/**
-	 * @type {app.Api}
+	 * @type {Api}
 	 */
 	_api: null,
 
@@ -62,7 +62,7 @@ $.extend( Asset.prototype, {
 	_descriptions: null,
 
 	/**
-	 * @type {app.Author[]|null}
+	 * @type {Author[]|null}
 	 */
 	_authors: null,
 
@@ -96,7 +96,7 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
-	 * @return {app.Licence|null}
+	 * @return {Licence|null}
 	 */
 	getLicence: function() {
 		return this._licence;
@@ -182,4 +182,6 @@ $.extend( Asset.prototype, {
 
 return Asset;
 
-}( jQuery ) );
+} );
+
+}( define ) );

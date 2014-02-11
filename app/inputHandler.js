@@ -1,7 +1,7 @@
-this.app = this.app || {};
-
-app.inputHandler = new ( function( $ ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery'], function( $ ) {
 
 	/**
 	 * Returns a filename by analyzing input.
@@ -99,6 +99,8 @@ $.extend( InputHandler.prototype, {
 	}
 } );
 
-return InputHandler;
+return new InputHandler();
 
-}( jQuery ) );
+} );
+
+}( define ) );

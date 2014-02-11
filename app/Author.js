@@ -1,7 +1,7 @@
-this.app = this.app || {};
-
-app.Author = ( function( $ ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery'], function( $ ) {
 
 /**
  * Represents a Commons author.
@@ -44,4 +44,6 @@ $.extend( Author.prototype, {
 
 return Author;
 
-}( jQuery ) );
+} );
+
+}( define ) );

@@ -1,15 +1,26 @@
-( function( $, app ) {
+( function( require ) {
 'use strict';
 
-$.event.props.push('dataTransfer');
-
-$( document ).ready( function () {
-	var application = new app.Application(
-		$( '#application' ),
-		new app.Api( '//commons.wikimedia.org/w/api.php?callback=?' )
-	);
-
-	application.start();
+require.config( {
+	paths: {
+		jquery: '../lib/jquery/jquery-1.11.0.min'
+	}
 } );
 
-}( jQuery, app ) );
+
+require( ['jquery', 'Application', 'Api'], function( $, Application, Api ) {
+
+	$.event.props.push('dataTransfer');
+
+	$( document ).ready( function () {
+		var application = new Application(
+			$( '#application' ),
+			new Api( '//commons.wikimedia.org/w/api.php?callback=?' )
+		);
+
+		application.start();
+	} );
+
+} );
+
+}( require ) );

@@ -1,14 +1,14 @@
-this.app = this.app || {};
-
-app.Application = ( function( $, app ) {
+( function( define ) {
 'use strict';
+
+define( ['jquery', 'inputHandler', 'Questionnaire' ], function( $, inputHandler, Questionnaire ) {
 
 /**
  * Application renderer.
  * @constructor
  *
  * @param {jQuery} $initNode
- * @param {app.Api} api
+ * @param {Api} api
  * @param {Object} [options]
  *
  * @throws {Error} if a required parameter is not defined.
@@ -33,7 +33,7 @@ $.extend( Application.prototype, {
 	_$node: null,
 
 	/**
-	 * @type {app.Api}
+	 * @type {Api}
 	 */
 	_api: null,
 
@@ -44,7 +44,7 @@ $.extend( Application.prototype, {
 
 	/**
 	 * The asset currently handled by the application.
-	 * @type {app.Asset|null}
+	 * @type {Asset|null}
 	 */
 	_asset: null,
 
@@ -55,7 +55,7 @@ $.extend( Application.prototype, {
 	_imageInfo: null,
 
 	/**
-	 * @type {app.Questionnaire}
+	 * @type {Questionnaire}
 	 */
 	_questionnaire: null,
 
@@ -74,7 +74,7 @@ $.extend( Application.prototype, {
 	_evaluateInput: function( input ) {
 		var self = this;
 
-		app.inputHandler.getFilename( input )
+		inputHandler.getFilename( input )
 		.done( function( filename ) {
 			self._api.getAsset( filename )
 			.done( function( asset ) {
@@ -147,7 +147,7 @@ $.extend( Application.prototype, {
 	 */
 	_renderQuestionnaire: function() {
 		var $questionnaire = this._$node.find( '.app-questionnaire' ).empty();
-		this._questionnaire = new app.Questionnaire( $questionnaire, this._asset );
+		this._questionnaire = new Questionnaire( $questionnaire, this._asset );
 		this._questionnaire.start();
 	},
 
@@ -294,4 +294,6 @@ $.extend( Application.prototype, {
 
 return Application;
 
-}( jQuery, app ) );
+} );
+
+}( define ) );

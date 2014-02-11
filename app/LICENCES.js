@@ -1,12 +1,12 @@
-app.LICENCES = ( function( app ) {
+( function( define ) {
 'use strict';
 
-var Licence = app.Licence;
+define( ['Licence'], function( Licence ) {
 
 /**
  * Array of licences. The licence will be detected by order: If an asset features multiple licences,
  * only the first one featured in this list will be detected.
- * @type {app.Licence[]}
+ * @type {Licence[]}
  */
 return [
 	new Licence( 'PD', 'ohne Urheberrechtsschutz', /^(PD|Public domain)\b/i ),
@@ -33,4 +33,6 @@ return [
 //	new Licence( /^CC-([A-Z-]+)-([0-9.]+)/i, 'http://creativecommons.org/licenses/$1/$2' ),
 ];
 
-}( app ) );
+} );
+
+}( define ) );

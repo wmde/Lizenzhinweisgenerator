@@ -1,7 +1,9 @@
-this.app = this.app || {};
-
-app.AssetPage = ( function( $, app ) {
+( function( define ) {
 'use strict';
+
+define(
+	['jquery', 'Asset', 'LICENCES', 'Licence', 'Author'],
+	function( $, Asset, LICENCES, Licence, Author ) {
 
 function capitalize( string ) {
 	return string.substring( 0, 1 ).toUpperCase() + string.substring( 1 );
@@ -14,7 +16,7 @@ function capitalize( string ) {
  * @param {string} filename
  * @param {jQuery} $dom
  * @param {string[]} categories
- * @param {app.Api} api
+ * @param {Api} api
  *
  * @throws {Error} if a required parameter is not specified.
  */
@@ -48,7 +50,7 @@ $.extend( AssetPage.prototype, {
 	_categories: null,
 
 	/**
-	 * @type {app.Api}
+	 * @type {Api}
 	 */
 	_api: null,
 
@@ -64,7 +66,7 @@ $.extend( AssetPage.prototype, {
 	 */
 	getAsset: function() {
 		if( !this._asset ) {
-			this._asset = new app.Asset(
+			this._asset = new Asset(
 				this._filename,
 				this._scrapeTitle() || this._filename.replace ( /\.[^.]+$/ , '' ),
 				this._detectLicence(),
@@ -84,18 +86,18 @@ $.extend( AssetPage.prototype, {
 	 * Detects a licence by analyzing the page's categories and returns it. Returns "null" if no
 	 * licence is detected.
 	 *
-	 * @return {app.Licence|null}
+	 * @return {Licence|null}
 	 */
 	_detectLicence: function() {
 		for( var i = 0; i < this._categories.length; i++ ) {
 			var category = this._categories[i];
 
-			for( var j = 0; j < app.LICENCES.length; j++ ) {
-				var licence = app.LICENCES[j];
+			for( var j = 0; j < LICENCES.length; j++ ) {
+				var licence = LICENCES[j];
 
 				if( licence.match( category ) ) {
 					if( licence.isAbstract() ) {
-						licence = app.Licence.newFromAbstract( licence, category );
+						licence = Licence.newFromAbstract( licence, category );
 					}
 					return licence;
 				}
@@ -166,7 +168,7 @@ $.extend( AssetPage.prototype, {
 	/**
 	 * Extracts the author(s) from the DOM.
 	 *
-	 * @return {app.Author[]}
+	 * @return {Author[]}
 	 */
 	_scrapeAuthors: function() {
 		var creator = this._scrapeCreator();
@@ -186,7 +188,7 @@ $.extend( AssetPage.prototype, {
 				? '//commons.wikimedia.org' + $a.attr( 'href' )
 				: $a.attr( 'href' );
 
-			authors.push( new app.Author( $a.text(), url ) );
+			authors.push( new Author( $a.text(), url ) );
 		} );
 
 		return authors;
@@ -195,7 +197,7 @@ $.extend( AssetPage.prototype, {
 	/**
 	 * Extracts the creator from the DOM.
 	 *
-	 * @return {app.Author[]|null}
+	 * @return {Author[]|null}
 	 */
 	_scrapeCreator: function() {
 		var $creator = this._$dom.find( '#creator' );
@@ -207,7 +209,7 @@ $.extend( AssetPage.prototype, {
 		var $a = $creator.find( 'a' );
 
 		if( $a.length === 0 ) {
-			return [new app.Author( $creator.text() )];
+			return [new Author( $creator.text() )];
 		}
 
 		var href = $a.attr( 'href' ),
@@ -219,7 +221,7 @@ $.extend( AssetPage.prototype, {
 			url = href;
 		}
 
-		return [new app.Author( $a.text(), url )];
+		return [new Author( $a.text(), url )];
 	},
 
 	/**
@@ -254,4 +256,6 @@ $.extend( AssetPage.prototype, {
 
 return AssetPage;
 
-}( jQuery, app ) );
+} );
+
+}( define ) );
