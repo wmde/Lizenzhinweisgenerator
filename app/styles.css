@@ -5,7 +5,6 @@ body {
 }
 
 .container {
-	text-align: center;
 	margin: 0 auto;
 }
 
@@ -33,16 +32,44 @@ body {
 }
 
 .app-frameset {
-	display: table-row;
+	border-collapse: collapse;
+	display: table;
 	width: 100%;
+}
+
+.app-preview-container {
+	border-bottom: 1px dotted lightgrey;
+	display: table-row;
 }
 
 .app-preview {
 	display: table-cell;
-	width: 100%;
+	text-align: center;
 }
 
 .app-options {
 	display: table-cell;
 	white-space: nowrap;
+}
+
+.app-questionnaire {
+	font-size: 14pt;
+	display: table-row;
+}
+
+.app-questionnaire > div {
+	padding: 12pt;
+}
+
+.app-questionnaire .question {
+	font-weight: bold;
+}
+
+.app-questionnaire .answers li {
+	cursor: pointer;
+	color: darkblue;
+}
+
+.app-questionnaire .answers li:hover {
+	text-decoration: underline;
 }

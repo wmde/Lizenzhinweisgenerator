@@ -55,6 +55,11 @@ $.extend( Application.prototype, {
 	_imageInfo: null,
 
 	/**
+	 * @type {app.Questionnaire}
+	 */
+	_questionnaire: null,
+
+	/**
 	 * Starts the application.
 	 */
 	start: function() {
@@ -118,9 +123,13 @@ $.extend( Application.prototype, {
 		this._$node.empty();
 
 		this._$node.empty()
-		.append( $( '<div/>' ).addClass( 'app-frameset' )
-			.append( $( '<div/>' ).addClass( 'app-preview' ) )
-			.append( $( '<div/>' ).addClass( 'app-options' ) )
+		.append(
+			$( '<div/>' ).addClass( 'app-frameset' )
+			.append(
+				$( '<div/>' ).addClass( 'app-preview-container' )
+				.append( $( '<div/>' ).addClass( 'app-preview' ) )
+				.append( $( '<div/>' ).addClass( 'app-options' ) )
+			)
 			.append( $( '<div/>' ).addClass( 'app-questionnaire' ) )
 		);
 
@@ -129,6 +138,17 @@ $.extend( Application.prototype, {
 				self._renderInput( 'imageSize' )
 			);
 		} );
+
+		this._renderQuestionnaire();
+	},
+
+	/**
+	 * Renders and starts the questionnaire.
+	 */
+	_renderQuestionnaire: function() {
+		var $questionnaire = this._$node.find( '.app-questionnaire' ).empty();
+		this._questionnaire = new app.Questionnaire( $questionnaire, this._asset );
+		this._questionnaire.start();
 	},
 
 	/**

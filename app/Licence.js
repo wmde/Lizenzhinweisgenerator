@@ -12,32 +12,49 @@ app.Licence = ( function( $ ) {
  * @param {string|RegExp} name The licence name how it should be displayed. May be a regular
  *        expression to generate an "abstract" licence object that may itself be used to generate a
  *        proper licence using Licence.newFromAbstract().
+ * @param {RegExp|string|Object} [regExp] Regular expression used for detecting the licence
+ *        analyzing the asset's Commons categories. If omitted, the name will be used for exact
+ *        matching.
  * @param {string|Object} [url] The url to the licence.
  * @param {Object} [options] Default options overwrites:
  *        - {string} outputTemplate: Text template specifying the actual text output of the licence
- *          information. {{name}} is replaced with the licence name.
+ *          information. {{name}} is replaced with the licence name
  *
  * @throws {Error} if no proper parameters are specified.
+ * @throws {Error} when trying to instantiate an "abstract" licence with an additional regExp.
  */
-var Licence = function( id, name, url, options ) {
+var Licence = function( id, name, regExp, url, options ) {
 	if( !id ) {
 		throw new Error( 'Internal id needs to be specified' );
 	}
 
 	this._id = id;
 
-	if( $.isPlainObject( url ) ) {
+	if( $.isPlainObject( regExp ) ) {
+		options = regExp;
+		url = options;
+		options = undefined;
+	} else if( $.isPlainObject( url ) ) {
 		options = url;
 		url = undefined;
+	}
+
+	if( name instanceof RegExp && regExp instanceof RegExp ) {
+		throw new Error( 'Trying to instantiate an abstract licence with an exact matching' );
 	}
 
 	if( name instanceof RegExp ) {
 		this._regExp = name;
 	} else if( typeof name === 'string' ) {
 		this._name = name;
-		this._regExp = new RegExp( '/^' + name + '\b/i' );
 	} else {
 		throw new Error( 'Name needs to be specified' );
+	}
+
+	if( regExp instanceof RegExp ) {
+		this._regExp = regExp;
+	} else {
+		this._regExp = new RegExp( '/^' + name + '$/i' );
 	}
 
 	this._url = url || null;
