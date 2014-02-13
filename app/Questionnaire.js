@@ -66,6 +66,12 @@ $.extend( Questionnaire.prototype, {
 	_loggedAnswers: null,
 
 	/**
+	 * Caches the navigation path.
+	 * @type {string[]}
+	 */
+	_navigationCache: null,
+
+	/**
 	 * Starts the questionnaire.
 	 */
 	start: function() {
@@ -75,6 +81,8 @@ $.extend( Questionnaire.prototype, {
 				'1': '(bearbeitet)'
 			}
 		};
+
+		this._navigationCache = [];
 
 		var licenceId = this._asset.getLicence().getId();
 
@@ -374,6 +382,13 @@ $.extend( Questionnaire.prototype, {
 	 * @param {string|Function} page
 	 */
 	_goTo: function( page ) {
+		var navigationPathPosition = $.inArray( page, this._navigationCache );
+		if( navigationPathPosition !== -1 ) {
+			// Navigating backwards.
+			this._navigationCache.splice( navigationPathPosition );
+		}
+
+		var self = this;
 		if( $.isFunction( page ) ) {
 			page.apply( this );
 		} else {
@@ -382,7 +397,30 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Renders one or more pages.
+	 * Generates the "back" button.
+	 *
+	 * @param {string} page
+	 * @return {jQuery}
+	 */
+	_generateBackButton: function( page ) {
+		var self = this,
+			$backButton = $( '<div/>' )
+			.addClass( 'back' )
+			.append( $( '<a/>' ).addClass( 'button' ) );
+
+		if( this._navigationCache.length < 2 ) {
+			$backButton.addClass( 'disabled' );
+		} else {
+			$backButton.on( 'click', function( event ) {
+				self._goTo( self._navigationCache[self._navigationCache.length - 2] );
+			} );
+		}
+
+		return $backButton;
+	},
+
+	/**
+	 * Renders a page.
 	 *
 	 * @param {string} page
 	 */
@@ -393,6 +431,8 @@ $.extend( Questionnaire.prototype, {
 
 		this._fetchPages( page )
 		.done( function( $content ) {
+			self._navigationCache.push( page );
+			self._$node.append( self._generateBackButton( page ) );
 			self._$node.append( $content );
 		} )
 		.fail( function( message ) {
@@ -427,7 +467,7 @@ $.extend( Questionnaire.prototype, {
 
 					$.get( './templates/' + page + '.html' )
 					.done( function( html ) {
-						var $content = $( '<div class="page-' + page + '" />' )
+						var $content = $( '<div class="page page-' + page + '" />' )
 							.data( 'questionnaire-page', page )
 							.html( html );
 

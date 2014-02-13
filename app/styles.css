@@ -52,6 +52,29 @@ body {
 	width: 100%;
 }
 
+.app-questionnaire .page {
+	display: table-cell;
+}
+
+.app-questionnaire .back {
+	display: table-cell;
+	padding-right: 40px;
+	vertical-align: middle;
+}
+
+.app-questionnaire .back .button {
+	border-top: 40px solid transparent;
+	border-bottom: 40px solid transparent;
+	border-right: 30px solid black;
+	display: block;
+	height: 0;
+	width: 0;
+}
+
+.app-questionnaire .back.disabled .button {
+	border-right-color: lightgrey;
+}
+
 .app-questionnaire .question {
 	font-weight: bold;
 }
