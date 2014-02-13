@@ -17,15 +17,15 @@ return [
 //	new Licence( 'AGPL', 'AGPL', 'http://www.gnu.org/licenses/agpl.html' ),
 //	new Licence( 'GDFL', 'GFDL', 'http://commons.wikimedia.org/wiki/Commons:GNU_Free_Documentation_License_1.2' ),
 
-	new Licence( 'cc-zero', 'CC0 1.0', 'http://creativecommons.org/publicdomain/zero/1.0/' ),
+	new Licence( 'cc-zero', 'CC0 1.0', 'http://creativecommons.org/publicdomain/zero/1.0/legalcode/' ),
 
-	new Licence( 'cc-by-2.0-de', 'CC BY 2.0 DE', 'http://creativecommons.org/licenses/by/2.0/de/' ),
-	new Licence( 'cc-by-3.0-de', 'CC BY 3.0 DE', 'http://creativecommons.org/licenses/by/3.0/de/' ),
-	new Licence( 'cc-by-3.0', 'CC BY 3.0', 'http://creativecommons.org/licenses/by/3.0/' ),
+	new Licence( 'cc-by-2.0-de', 'CC BY 2.0 DE', 'http://creativecommons.org/licenses/by/2.0/de/legalcode/' ),
+	new Licence( 'cc-by-3.0-de', 'CC BY 3.0 DE', 'http://creativecommons.org/licenses/by/3.0/de/legalcode/' ),
+	new Licence( 'cc-by-3.0', 'CC BY 3.0', /^CC-BY-3.0(-migrated)*$/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
 
-	new Licence( 'cc-by-sa-2.0-de', 'CC BY-SA 2.0 DE', 'http://creativecommons.org/licenses/by-sa/2.0/de/' ),
-	new Licence( 'cc-by-sa-3.0-de', 'CC BY-SA 3.0 DE', 'http://creativecommons.org/licenses/by-sa/3.0/de/'),
-	new Licence( 'cc-by-sa-3.0', 'CC BY-SA 3.0', /^CC-BY-SA-3.0(-migrated)*$/i, 'http://creativecommons.org/licenses/by-sa/3.0/' ),
+	new Licence( 'cc-by-sa-2.0-de', 'CC BY-SA 2.0 DE', 'http://creativecommons.org/licenses/by-sa/2.0/de/legalcode/' ),
+	new Licence( 'cc-by-sa-3.0-de', 'CC BY-SA 3.0 DE', 'http://creativecommons.org/licenses/by-sa/3.0/de/legalcode/'),
+	new Licence( 'cc-by-sa-3.0', 'CC BY-SA 3.0', /^CC-BY-SA-3.0(-migrated)*$/i, 'http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ),
 
 	new Licence( 'CC*', /^CC-([A-Z-]+)-([0-9.]+)[A-Z-]*(,.+)*/i, 'http://creativecommons.org/licenses/' )
 

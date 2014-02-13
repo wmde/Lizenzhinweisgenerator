@@ -3,6 +3,20 @@
 
 define( ['jquery', 'Asset'], function( $, Asset ) {
 
+var CC2_LICENCES = [
+	'cc-by-2.0-de',
+	'cc-by-sa-2.0-de'
+];
+
+var CC3_LICENCES = [
+	'cc-by-3.0-de',
+	'cc-by-3.0',
+	'cc-by-sa-3.0-de',
+	'cc-by-sa-3.0'
+];
+
+var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
+
 /**
  * Represents a questionnaire's logic.
  * The page names/numbers and the corresponding logic are based on the questionnaire "Webtool für
@@ -11,6 +25,11 @@ define( ['jquery', 'Asset'], function( $, Asset ) {
  *
  * @param {jQuery} $node
  * @param {Asset} asset
+ *
+ * @event update Triggered whenever the attribution is updated (basically, whenever a new answer is
+ *        selected).
+ *        (1) {jQuery.Event}
+ *        (2) {jQuery} Attribution
  *
  * @throws {Error} on incorrect parameters.
  */
@@ -60,96 +79,159 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Evaluates the answers, generates and renders the result.
+	 * Returns the result id or "undefined" if unable to return a result according to the answers
+	 * selected.
+	 *
+	 * @return {string|undefined}
+	 */
+	_getResultId: function() {
+		var resultId,
+			la = this._loggedAnswers,
+			onlineUse = la['3'] === 1,
+			collectionUse = la['7'] === 1,
+			fullLicence = la['8'] === 1,
+			edited = la['12a'] === 2,
+			editor = la['13'];
+
+		if( $.inArray( this._asset.getLicence().getId(), CC_LICENCES ) !== -1 ) {
+			// Default attribution:
+			resultId = '2';
+
+			if( onlineUse && !collectionUse && !edited ) {
+				resultId = '1';
+			} else if( !onlineUse && !collectionUse && !fullLicence && !edited ) {
+				resultId = '2';
+			} else if( !onlineUse && !collectionUse && fullLicence && !edited ) {
+				resultId = '3';
+			} else if( onlineUse && collectionUse && !edited ) {
+				resultId = '4a';
+			} else if( !onlineUse && collectionUse && !fullLicence && !edited ) {
+				resultId = '4b';
+			} else if( !onlineUse && collectionUse && fullLicence && !edited ) {
+				resultId = '4c';
+			} else if( onlineUse && !collectionUse && edited ) {
+				resultId = '5';
+			} else if( !onlineUse && !collectionUse && !fullLicence && edited ) {
+				resultId = '6';
+			} else if( !onlineUse && !collectionUse && fullLicence && edited ) {
+				resultId = '7';
+			} else if( onlineUse && collectionUse && edited ) {
+				resultId = '8a';
+			} else if( !onlineUse && collectionUse && !fullLicence && edited ) {
+				resultId = '8b';
+			} else if( !onlineUse && collectionUse && fullLicence && edited ) {
+				resultId = '8c';
+			}
+
+			if( edited && !editor ) {
+				resultId = undefined;
+			}
+		}
+
+		return resultId;
+	},
+
+	/**
+	 * Returns the use case which may either be "html" or "print" with the latter one acting as
+	 * fall-back.
+	 *
+	 * @return {string}
+	 */
+	_getUseCase: function() {
+		return this._loggedAnswers['3'] === 1 ? 'html' : 'print';
+	},
+
+	/**
+	 * Exits the questionnaire.
+	 *
+	 * @triggers update
+	 * @triggers exit
+	 */
+	exit: function() {
+		this._$node.empty();
+		this._$node.trigger( 'update', [this.generateAttribution(), this.generateSupplement()] );
+		this._$node.trigger( 'exit' );
+	},
+
+	/**
+	 * Generates the attribution supplement containing notes and restrictions.
 	 *
 	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {jQuery|undefined} Attribution or undefined if unable to generate an attribution.
+	 *         @see Questionnaire._fetchPages
 	 */
-	evaluate: function() {
-		var self = this,
-			deferred = $.Deferred(),
-			la = this._loggedAnswers,
-			cc2Licences = [
-				'cc-by-2.0-de',
-				'cc-by-sa-2.0-de'
-			],
-			cc3Licences = [
-				'cc-by-3.0-de',
-				'cc-by-3.0',
-				'cc-by-sa-3.0-de',
-				'cc-by-sa-3.0'
-			],
-			ccLicences = $.merge( $.merge( [], cc2Licences ), cc3Licences );
-
-		var useCase = la['3'] === 1 ? 'html' : 'print',
+	generateSupplement: function() {
+		var resultId = this._getResultId(),
 			licenceId = this._asset.getLicence().getId(),
-			resultId,
-			template,
 			pages = [];
 
-		if( $.inArray( licenceId, ccLicences ) !== -1 ) {
-
-			if( la['7'] === 2 && la['12a'] === 1 ) {
-				resultId = 1;
-			}
-
-			if( la['7'] === 2 && la['12a'] === 1 ) {
-				resultId = 2;
-			}
-
-		}
-
-		if( resultId === 1 || resultId === 2 ) {
-			template = '{{author}}, {{title}}, {{licence}}';
-		}
-
-
-		if( resultId === undefined ) {
-			this._render( 'r-unsupported' )
-			.done( function() {
-				deferred.resolve();
-			} )
-			.fail( function( message ) {
-				console.error( message );
-			} );
-
-			return deferred.promise();
-		}
-
-		if( $.inArray( resultId, [1, 2] ) !== -1 ) {
-			if( $.inArray( licenceId, cc2Licences ) !== -1 ) {
+		if( $.inArray( resultId, ['1', '2', '5', '6'] ) !== -1 ) {
+			if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
 				pages.push( 'r-restrictions-2' );
 			} else {
 				pages.push( 'r-restrictions' );
 			}
 		}
 
-		pages.push( 'r-note-' + useCase );
+		pages.push( 'r-note-' + this._getUseCase() );
 
-		this._render( pages )
-		.done( function() {
-			deferred.resolve( self._generateAttribution( template, useCase ) );
-		} )
-		.fail( function( message ) {
-			console.error( message );
-		} );
-
-		return deferred.promise();
+		return this._fetchPages( pages );
 	},
 
 	/**
-	 * Generates an attribution tag line.
+	 * Generates an attribution tag line from the current set of answers.
 	 *
-	 * @param {string} template
-	 * @param {string} useCase "html" or "plain"
 	 * @return {jQuery}
 	 */
-	_generateAttribution: function( template, useCase ) {
-		var deferred = $.Deferred();
+	generateAttribution: function() {
+		var resultId = this._getResultId(),
+			$author = this._generateAttributionAuthor(),
+			$title = this._generateAttributionTitle(),
+			$licence = this._generateAttributionLicence(),
+			$editor = this._generateAttributionEditor(),
+			$attribution = $( '<div/>' ).addClass( 'attribution' );
 
+		if( resultId === '1' || resultId === '2' || resultId === '4a' || resultId === '4b' ) {
+			$attribution
+			.append( $author )
+			.append( document.createTextNode( ', ' ) )
+			.append( $title )
+			.append( document.createTextNode( ', ' ) )
+			.append( $licence );
+		} else if( resultId === '3' || resultId === '4c' ) {
+			$attribution
+			.append( $author )
+			.append( document.createTextNode( ', ' ) )
+			.append( $title )
+			.append( document.createTextNode( ', ' ) )
+			.append( this._asset.getLicence().getName() )
+		} else if( resultId === '5' || resultId === '6' ) {
+			$attribution
+			.append( $author )
+			.append( document.createTextNode( ', ' ) )
+			.append( $title )
+			.append( $editor )
+			.append( document.createTextNode( ', ' ) )
+			.append( $licence );
+		} else if( resultId === '7' ) {
+			$attribution
+			.append( $author )
+			.append( document.createTextNode( ', ' ) )
+			.append( $title )
+			.append( document.createTextNode( ', ' ) )
+			.append( $editor );
+		}
+
+		return $attribution;
+	},
+
+	/**
+	 * Generates the author(s) DOM to be used in the tag line.
+	 *
+	 * @return {jQuery}
+	 */
+	_generateAttributionAuthor: function() {
 		var authors = this._asset.getAuthors(),
-			$authors = $( '<span/>' ).addClass( 'authors' );
+			$authors = $( '<span/>' ).addClass( 'author' );
 
 		for( var i = 0; i < authors.length; i++ ) {
 			var author = authors[i];
@@ -163,28 +245,61 @@ $.extend( Questionnaire.prototype, {
 				continue;
 			}
 
-			if( useCase === 'html' ) {
-				$authors.append(
-					$( '<a/>' ).attr( 'href', author.getUrl() ).text( author.getName() )
-				);
+			var authorUrl = author.getUrl();
+			if( authorUrl.substr( 0, 2 ) === '//' ) {
+				authorUrl = 'http:' + authorUrl;
+			}
+
+			if( this._getUseCase() === 'html' ) {
+				$authors.append( $( '<a/>' ).attr( 'href', authorUrl ).text( author.getName() ) );
 			} else {
 				$authors
-				.append( document.createTextNode( author.getName() ) )
-				.append( document.createTextNode( ' (' + author.getUrl() + ')' ) );
+					.append( document.createTextNode( author.getName() ) )
+					.append( document.createTextNode( ' (' + authorUrl + ')' ) );
 			}
 		}
 
+		return $authors;
+	},
+
+	/**
+	 * Generates the licence DOM to be used in the tag line.
+	 *
+	 * @return {jQuery}
+	 */
+	_generateAttributionLicence: function() {
 		var licence = this._asset.getLicence();
 
-		var $licence = ( useCase === 'html' )
-			? $( '<a/>' ).attr( 'href', licence.getUrl() ).text( licence.getName() )
+		return ( this._getUseCase() === 'html' )
+			? $( '<a/>' ).addClass( 'licence' )
+				.attr( 'href', licence.getUrl() ).text( licence.getName() )
 			: $( '<span/>' ).addClass( 'licence' ).text( licence.getUrl() );
+	},
 
-		template = template.replace( /{{title}}/, this._asset.getTitle() );
-		template = template.replace( /{{author}}/, $( '<div/>' ).append( $authors ).html() );
-		template = template.replace( /{{licence}}/, $( '<div/>' ).append( $licence ).html() );
+	/**
+	 * Generates the asset title DOM to be used in the tag line.
+	 *
+	 * @return {jQuery}
+	 */
+	_generateAttributionTitle: function() {
+		return $( '<span/>' ).addClass( 'title' ).text( '„' + this._asset.getTitle() + '“' );
+	},
 
-		return $( '<span/>' ).addClass( 'attribution' ).html( template );
+	/**
+	 * Generates the editor DOM to be use in the tag line. If no editor is specified, an empty
+	 * jQuery object will be returned.
+	 *
+	 * @return {jQuery}
+	 */
+	_generateAttributionEditor: function() {
+		var editor = this._loggedAnswers['13'],
+			$editor = $();
+
+		if( editor ) {
+			$editor = $( '<span/>' ).addClass( 'editor' ).text( editor );
+		}
+
+		return $editor;
 	},
 
 	/**
@@ -196,85 +311,174 @@ $.extend( Questionnaire.prototype, {
 		if( $.isFunction( page ) ) {
 			page.apply( this );
 		} else {
-			this._render( page )
-			.fail( function( message ) {
-				console.error( message );
-			} );
+			this._render( page );
 		}
 	},
 
 	/**
 	 * Renders one or more pages.
 	 *
+	 * @param {string} page
+	 */
+	_render: function( page ) {
+		var self = this;
+
+		this._$node.empty();
+
+		this._fetchPages( page )
+		.done( function( $content ) {
+			self._$node.append( $content );
+		} )
+		.fail( function( message ) {
+			console.error( message );
+		} );
+	},
+
+	/**
+	 * Fetches the DOM structure(s) of one ore more template pages by id(s).
+	 *
 	 * @param {string|string[]} pages
 	 * @return {Object} jQuery Promise
-	 *         No resolved parameters.
-	 *         Rejected parameters:
+	 *         Resolved parameters:
+	 *         - {jQuery} jQuery wrapped DOM node(s) of the requested page(s).
+	 *         Rejected parameters
 	 *         - {string} Error message.
 	 */
-	_render: function( pages ) {
-		var deferred = $.Deferred(),
-			self = this;
+	_fetchPages: function( pages ) {
+		var self = this,
+			deferred = $.Deferred(),
+			promises = [],
+			$pages = $();
 
 		if( typeof pages === 'string' ) {
 			pages = [pages];
 		}
 
-		this._$node.empty();
-
-		deferred.resolve();
-
 		for( var i = 0; i < pages.length; i++ ) {
 			var page = pages[i];
-			deferred.then( function() {
-				self._getTemplate( page )
-				.done( function( $content ) {
-					self._$node.append( $content );
-					self._applyLogic( page );
+			deferred.then( function( $pages ) {
+				var d = $.Deferred();
+
+				$.get( './templates/' + page + '.html' )
+				.done( function( html ) {
+					var $content = $( '<div class="page-' + page + '" />' ).html( html );
+					$content = self._applyGenerics( $content );
+					$pages = $pages.add( self._applyLogic( $content, page ) );
+					d.resolve( $pages );
+				} )
+				.fail( function() {
+					d.reject( 'Unable to retrieve page ' + page );
 				} );
+
+				promises.push( d.promise() );
+
+				return d.promise();
 			} );
 		}
 
-		return deferred;
+		deferred.resolve( $pages );
+
+		return promises[promises.length - 1];
 	},
 
 	/**
-	 * Retrieves a questionnaire template by name.
+	 * Applies generic HTML and functionality to a template's DOM.
 	 *
-	 * @param {string} name
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {jQuery} Template
-	 *         Rejected parameters:
-	 *         - {string} Error message
+	 * @param {jQuery} $template
+	 * @return {jQuery}
 	 */
-	_getTemplate: function( name ) {
-		var deferred = $.Deferred();
+	_applyGenerics: function( $template ) {
+		var self = this;
 
-		$.get( './templates/' + name + '.html' )
-		.done( function( html ) {
-			deferred.resolve( $( '<div class="page-' + name + '" />' ).html( html ) );
+		$template.find( 'ul.answers li' )
+		.prepend( $( '<span/>' ).addClass( 'checkbox' ).html( '&nbsp;' ) )
+		.on( 'mouseover', function( event ) {
+			var $checkbox = $( event.target ).find( '.checkbox' );
+			self._startCheckboxAnimation( $checkbox );
 		} )
-		.fail( function() {
-			deferred.reject( 'Unable to retrieve template ' + name );
+		.on( 'mouseout', function( event ) {
+			var $checkbox = $( event.target ).find( '.checkbox' );
+			self._stopCheckboxAnimation( $checkbox );
 		} );
 
-		return deferred.promise();
+		return $template;
 	},
 
 	/**
-	 * Applies logic of a specific page.
+	 * Starts a checkbox ticking animation.
 	 *
-	 * @param {string} p Page
+	 * @param {jQuery} $checkbox
 	 */
-	_applyLogic: function( p ) {
+	_startCheckboxAnimation: function( $checkbox ) {
+		var deferred = $.Deferred(),
+			promise = deferred.promise();
+
+		$checkbox.data( 'app-animation', deferred );
+
+		var queue = [];
+		for( var i = -1; i >= -4; i-- ) {
+			( function( offsetFactor ) {
+				queue.push( function() {
+					$checkbox.css( 'backgroundPosition', offsetFactor * 20 + 'px 0' );
+				} );
+			}( i ) );
+		}
+
+		function next() {
+			if( promise.state() === 'resolved' ) {
+				$checkbox.css( 'backgroundPosition', '0 0' );
+				queue = [];
+			}
+
+			if( queue.length === 0 ) {
+				return;
+			}
+
+			queue.shift()();
+
+			setTimeout( function() {
+				next();
+			}, 25 );
+		}
+
+		next();
+	},
+
+	/**
+	 * Stops a checkbox ticking animation.
+	 *
+	 * @param {jQuery} $checkbox
+	 */
+	_stopCheckboxAnimation: function( $checkbox ) {
+		var deferred = $checkbox.data( 'app-animation' );
+
+		if( !deferred ) {
+			return;
+		}
+
+		deferred.resolve();
+
+		deferred.promise().done( function() {
+			$checkbox.css( 'backgroundPosition', '0 0' );
+			$checkbox.removeData( 'app-animation' );
+		} );
+	},
+
+	/**
+	 * Applies logic of a specific page to a node.
+	 *
+	 * @param {jQuery} $node
+	 * @param {string} p Page
+	 * @return {jQuery}
+	 */
+	_applyLogic: function( $node, p ) {
 		var self = this;
 
 		if( p === '3' ) {
-			this._applyLogAndGoTo( p, 1, '7' );
-			this._applyLogAndGoTo( p, 2, '7' );
+			$node = this._applyLogAndGoTo( $node, p, 1, '7' );
+			$node = this._applyLogAndGoTo( $node, p, 2, '7' );
 
-			this._$node.find( '.page-3 .a3' ).on( 'click', function() {
+			$node.find( '.a3' ).on( 'click', function() {
 				self._log( p, 3 );
 				if(
 					self._asset.getLicence().getId() === 'cc-by-2.0-de'
@@ -286,31 +490,33 @@ $.extend( Questionnaire.prototype, {
 				}
 			} );
 
-			this._applyLogAndGoTo( p, 4, '5' );
-			this._applyLogAndGoTo( p, 5, '6' );
+			$node = this._applyLogAndGoTo( $node, p, 4, '5' );
+			$node = this._applyLogAndGoTo( $node, p, 5, '6' );
 		} else if( p === '5') {
-			this._applyLogAndGoTo( p, 1, '3' );
-			this._applyLogAndGoTo( p, 2, '5a' )
+			$node = this._applyLogAndGoTo( $node, p, 1, '3' );
+			$node = this._applyLogAndGoTo( $node, p, 2, '5a' )
 		} else if( p === '7' ) {
 			var goTo = this._loggedAnswers['3'] === 2 ? '8' : '12a';
-			this._applyLogAndGoTo( p, 1, goTo );
-			this._applyLogAndGoTo( p, 2, goTo );
+			$node = this._applyLogAndGoTo( $node, p, 1, goTo );
+			$node = this._applyLogAndGoTo( $node, p, 2, goTo );
 		} else if( p === '8' ) {
-			this._applyLogAndGoTo( p, 1, '12a' );
-			this._applyLogAndGoTo( p, 2, '12a' );
+			$node = this._applyLogAndGoTo( $node, p, 1, '12a' );
+			$node = this._applyLogAndGoTo( $node, p, 2, '12a' );
 		} else if( p === '12a' ) {
-			this._applyLogAndGoTo( p, 1, this.evaluate );
-			this._applyLogAndGoTo( p, 2, '12b' );
+			$node = this._applyLogAndGoTo( $node, p, 1, this.exit );
+			$node = this._applyLogAndGoTo( $node, p, 2, '12b' );
 		} else if( p === '12b' ) {
-			this._applyLogAndGoTo( p, 1, '13' );
-			this._applyLogAndGoTo( p, 2, '12c' );
+			$node = this._applyLogAndGoTo( $node, p, 1, '13' );
+			$node = this._applyLogAndGoTo( $node, p, 2, '12c' );
 		} else if( p === '13' ) {
-			this._$node.find( 'a.a1' ).on( 'click', function() {
+			$node.find( 'a.a1' ).on( 'click', function() {
 				var value = $.trim( $( 'input.a1' ).val() );
 				self._log( '13', value );
-				self._goTo( self.evaluate );
+				self._goTo( self.exit );
 			} );
 		}
+
+		return $node;
 	},
 
 	/**
@@ -318,25 +524,31 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @param {string} page
 	 * @param {number|string} answer
+	 *
+	 * @triggers update
 	 */
 	_log: function( page, answer ) {
 		this._loggedAnswers[page] = answer;
+		this._$node.trigger( 'update', [this.generateAttribution(), this.generateSupplement()] );
 	},
 
 	/**
 	 * Short-cut that logs an answer and triggers going to some page.
 	 *
+	 * @param {jQuery} $node
 	 * @param {string} currentPage
 	 * @param {number|string} answer
 	 * @param {string|Function} toPage
 	 */
-	_applyLogAndGoTo: function( currentPage, answer, toPage ) {
+	_applyLogAndGoTo: function( $node, currentPage, answer, toPage ) {
 		var self = this;
 
-		this._$node.find( '.page-' + currentPage + ' .a' + answer ).on( 'click', function() {
+		$node.find( '.a' + answer ).on( 'click', function() {
 			self._log( currentPage, answer );
 			self._goTo( toPage );
 		} );
+
+		return $node;
 	}
 
 } );
