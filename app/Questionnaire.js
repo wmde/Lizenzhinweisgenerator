@@ -157,32 +157,79 @@ $.extend( Questionnaire.prototype, {
 	 * Generates the attribution supplement containing notes and restrictions.
 	 *
 	 * @return {Object} jQuery Promise
-	 *         @see Questionnaire._fetchPages
+	 *         Resolved parameters:
+	 *         - {jQuery} List of jQuery wrapped DOM nodes.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
 	 */
 	generateSupplement: function() {
-		var resultId = this._getResultId(),
+		var self = this,
+			deferred = $.Deferred(),
+			resultId = this._getResultId(),
 			licenceId = this._asset.getLicence().getId(),
 			pages = [];
 
 		pages.push( 'r-note-' + this._getUseCase() );
 
-		if( $.inArray( resultId, ['1', '2', '5', '6'] ) !== -1 ) {
-			if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
-				pages.push( 'r-restrictions-2' );
-			} else {
-				pages.push( 'r-restrictions' );
-			}
+		if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
+			pages.push( 'r-restrictions-cc2' );
+		} else {
+			pages.push( 'r-restrictions' );
 		}
 
-		return this._fetchPages( pages );
+		if( resultId === '3' || resultId === '7' ) {
+			pages.push( 'r-note-fullLicence' );
+			this._fetchPages( pages )
+			.done( function( $nodes ) {
+				self._asset.getLicence().getLegalCode()
+				.done( function( $licence ) {
+					$nodes = $nodes.add( $licence );
+					deferred.resolve( $nodes );
+				} )
+				.fail( function( message ) {
+					deferred.reject( message );
+				} );
+			} )
+			.fail( function( message ) {
+				deferred.reject( message );
+			} );
+		} else if(
+			$.inArray( '4', resultId.split( '' ) ) !== -1
+			|| $.inArray( '8', resultId.split( '' ) ) !== -1
+		) {
+			pages.push( 'r-note-collection' );
+			this._fetchPages( pages )
+			.done( function( $nodes ) {
+				$nodes = $nodes.add( self.generateAttribution( { licenceOnly: true } ) );
+				deferred.resolve( $nodes );
+			} )
+			.fail( function( message ) {
+				deferred.fail( message );
+			} );
+		} else {
+			this._fetchPages( pages )
+			.done( function( $nodes ) {
+				deferred.resolve( $nodes );
+			} )
+			.fail( function( message ) {
+				deferred.reject( message );
+			} );
+		}
+
+		return deferred.promise();
 	},
 
 	/**
 	 * Generates an attribution tag line from the current set of answers.
 	 *
+	 * @param {Object} [options]
 	 * @return {jQuery}
 	 */
-	generateAttribution: function() {
+	generateAttribution: function( options ) {
+		options = $.extend( {
+			licenceOnly: false
+		}, options );
+
 		var resultId = this._getResultId(),
 			$author = this._generateAttributionAuthor(),
 			$title = this._generateAttributionTitle(),
@@ -190,7 +237,9 @@ $.extend( Questionnaire.prototype, {
 			$editor = this._generateAttributionEditor(),
 			$attribution = $( '<div/>' ).addClass( 'attribution' );
 
-		if( resultId === '1' || resultId === '2' || resultId === '4a' || resultId === '4b' ) {
+		if( options.licenceOnly ) {
+			return $attribution.append( $licence );
+		} else if( resultId === '1' || resultId === '2' || resultId === '4a' || resultId === '4b' ) {
 			$attribution
 			.append( $author )
 			.append( document.createTextNode( ', ' ) )
