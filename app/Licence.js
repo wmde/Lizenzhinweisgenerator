@@ -8,7 +8,8 @@ define( ['jquery'], function( $ ) {
  * @constructor
  *
  * @param {string} id A licence id to be used as internal identifier. For consistency, is should
- *        match the template name on Commons.
+ *        match the template name on Commons. In addition, the HTML file in the "licences" folder
+ *        containing the licence's legal code should be named with the id.
  * @param {string|RegExp} name The licence name how it should be displayed. May be a regular
  *        expression to generate an "abstract" licence object that may itself be used to generate a
  *        proper licence using Licence.newFromAbstract().
@@ -137,35 +138,31 @@ $.extend( Licence.prototype, {
 	},
 
 	/**
-	 * Generates the plain text licence information.
+	 * Retrieves the licence text of a specific licence.
 	 *
-	 * @return {string}
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {jQuery} Licence text.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
 	 */
-	getText: function() {
-		if( this.isAbstract() ) {
-			throw new Error( 'Cannot generate output text of an abstract licence' );
-		}
+	getLegalCode: function() {
+		var self = this,
+			deferred = $.Deferred();
 
-		return this._options.outputTemplate.replace( /{{name}}/, this._name );
-	},
+		$.get( './licences/' + this._id + '.html' )
+		.done( function( html ) {
+			var $licence = $( '<div/>' )
+			.addClass( 'licence-text' )
+			.addClass( 'licence-' + self.getName() )
+			.html( html );
+			deferred.resolve( $licence );
+		} )
+		.fail( function() {
+			deferred.reject( 'Failed retrieving licence text' );
+		} );
 
-	/**
-	 * Generates the HTML licence information.
-	 *
-	 * @return {string}
-	 */
-	getHtml: function() {
-		if( this.isAbstract() ) {
-			throw new Error( 'Cannot generate output html of an abstract licence' );
-		}
-
-		return !this._url
-			? this.getText()
-			: this._options.outputTemplate.replace( /{{name}}/,
-				$( '<div/>' ).append(
-					$( '<a/>' ).attr( 'href', this._url ).text( this._name )
-				).html()
-			);
+		return deferred.promise();
 	}
 
 } );
