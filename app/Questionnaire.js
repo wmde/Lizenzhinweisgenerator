@@ -164,6 +164,8 @@ $.extend( Questionnaire.prototype, {
 			licenceId = this._asset.getLicence().getId(),
 			pages = [];
 
+		pages.push( 'r-note-' + this._getUseCase() );
+
 		if( $.inArray( resultId, ['1', '2', '5', '6'] ) !== -1 ) {
 			if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
 				pages.push( 'r-restrictions-2' );
@@ -171,8 +173,6 @@ $.extend( Questionnaire.prototype, {
 				pages.push( 'r-restrictions' );
 			}
 		}
-
-		pages.push( 'r-note-' + this._getUseCase() );
 
 		return this._fetchPages( pages );
 	},
@@ -355,25 +355,26 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		for( var i = 0; i < pages.length; i++ ) {
-			var page = pages[i];
-			deferred.then( function( $pages ) {
-				var d = $.Deferred();
+			( function( page ) {
+				deferred.then( function() {
+					var d = $.Deferred();
 
-				$.get( './templates/' + page + '.html' )
-				.done( function( html ) {
-					var $content = $( '<div class="page-' + page + '" />' ).html( html );
-					$content = self._applyGenerics( $content );
-					$pages = $pages.add( self._applyLogic( $content, page ) );
-					d.resolve( $pages );
-				} )
-				.fail( function() {
-					d.reject( 'Unable to retrieve page ' + page );
+					$.get( './templates/' + page + '.html' )
+					.done( function( html ) {
+						var $content = $( '<div class="page-' + page + '" />' ).html( html );
+						$content = self._applyGenerics( $content );
+						$pages = $pages.add( self._applyLogic( $content, page ) );
+						d.resolve( $pages );
+					} )
+					.fail( function() {
+						d.reject( 'Unable to retrieve page ' + page );
+					} );
+
+					promises.push( d.promise() );
+
+					return d.promise();
 				} );
-
-				promises.push( d.promise() );
-
-				return d.promise();
-			} );
+			}( pages[i] ) );
 		}
 
 		deferred.resolve( $pages );

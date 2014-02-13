@@ -130,8 +130,12 @@ $.extend( Application.prototype, {
 
 		this._questionnaire = this._renderQuestionnaire();
 
-		this._$node.find( '.app-questionnaire' ).on( 'update', function( event, $attribution ) {
-			self.updatePreview( $attribution ).done();
+		this._$node.find( '.app-questionnaire' ).on( 'update', function(
+			event,
+			$attribution,
+			supplementPromise
+		) {
+			self.updatePreview( $attribution, supplementPromise ).done();
 		} );
 
 		self._$node.find( '.app-options' ).append(
@@ -140,7 +144,10 @@ $.extend( Application.prototype, {
 
 		this._questionnaire.start();
 		// Evaluate to get the default attribution:
-		self.updatePreview( self._questionnaire.generateAttribution() );
+		self.updatePreview(
+			self._questionnaire.generateAttribution(),
+			self._questionnaire.generateSupplement()
+		);
 	},
 
 	/**
@@ -177,7 +184,10 @@ $.extend( Application.prototype, {
 
 			$select.on( 'change', function() {
 				self._options.imageSize = $select.val();
-				self.updatePreview( self._questionnaire.generateAttribution() );
+				self.updatePreview(
+					self._questionnaire.generateAttribution(),
+					self._questionnaire.generateSupplement()
+				);
 			} );
 
 			$container
@@ -192,10 +202,10 @@ $.extend( Application.prototype, {
 	 * Updates the preview.
 	 *
 	 * @param {jQuery} $attribution
-	 * @param {jQuery} $supplement
+	 * @param {Object} supplementPromise
 	 * @return {Object} jQuery Promise
 	 */
-	updatePreview: function( $attribution, $supplement ) {
+	updatePreview: function( $attribution, supplementPromise ) {
 		var self = this;
 
 		return this._asset.getImageInfo( this._options.imageSize )
@@ -213,9 +223,11 @@ $.extend( Application.prototype, {
 				);
 			} );
 
-			$preview.append(
-				$( '<div/>' ).addClass( 'app-preview-supplement' ).append( $supplement )
-			);
+			supplementPromise.done( function( $supplement ) {
+				$preview.append(
+					$( '<div/>' ).addClass( 'app-preview-supplement' ).append( $supplement )
+				);
+			} );
 		} );
 	},
 
