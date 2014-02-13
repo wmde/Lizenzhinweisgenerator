@@ -1,11 +1,16 @@
+html {
+	height: 100%;
+}
+
 body {
 	margin: 0;
 	padding: 0;
+	height: 100%;
 	font-family: "Helvetica Neue", "Helvetica", "Nimbus Sans L", "Arial", "Liberation Sans", sans-serif;
 }
 
-.container {
-	margin: 0 auto;
+.application {
+	height: 100%;
 }
 
 .app-frontpage {
@@ -34,42 +39,69 @@ body {
 .app-frameset {
 	border-collapse: collapse;
 	display: table;
+	height: 100%;
 	width: 100%;
 }
 
-.app-preview-container {
-	border-bottom: 1px dotted lightgrey;
-	display: table-row;
-}
-
-.app-preview {
-	display: table-cell;
-	text-align: center;
-}
-
-.app-options {
-	display: table-cell;
-	white-space: nowrap;
-}
-
 .app-questionnaire {
-	font-size: 14pt;
-	display: table-row;
-}
-
-.app-questionnaire > div {
+	background-color: rgba( 245, 245, 245, 0.9 );
+	font-size: 13pt;
 	padding: 12pt;
+	position: fixed;
+	top: 15%;
+	width: 100%;
 }
 
 .app-questionnaire .question {
 	font-weight: bold;
 }
 
-.app-questionnaire .answers li {
-	cursor: pointer;
+.app-questionnaire ul.answers {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.app-questionnaire .answers li,
+.app-questionnaire a {
 	color: darkblue;
+	cursor: pointer;
 }
 
 .app-questionnaire .answers li:hover {
 	text-decoration: underline;
+}
+
+.app-questionnaire .answers li .checkbox {
+	background: url(../gfx/checkbox.png) no-repeat;
+	display: inline-block;
+	height: 20px;
+	margin-bottom: -4px;
+	overflow: hidden;
+	width: 20px;
+}
+
+
+.app-preview {
+	height: 100%;
+	text-align: center;
+}
+
+.app-preview > div {
+	clear: both;
+}
+
+.app-preview-spacer {
+	float:left;
+	height: 50%;
+	margin-bottom: 0; /* will be adjusted according to the preview's actual content */
+}
+
+
+.app-options {
+	background: lightgrey;
+	bottom: 0;
+	position: fixed;
+	width: 100%;
+	white-space: nowrap;
 }

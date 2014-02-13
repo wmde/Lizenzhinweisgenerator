@@ -120,26 +120,27 @@ $.extend( Application.prototype, {
 	_renderApplicationPage: function() {
 		var self = this;
 
-		this._$node.empty();
-
 		this._$node.empty()
 		.append(
 			$( '<div/>' ).addClass( 'app-frameset' )
-			.append(
-				$( '<div/>' ).addClass( 'app-preview-container' )
-				.append( $( '<div/>' ).addClass( 'app-preview' ) )
-				.append( $( '<div/>' ).addClass( 'app-options' ) )
-			)
 			.append( $( '<div/>' ).addClass( 'app-questionnaire' ) )
+			.append( $( '<div/>' ).addClass( 'app-preview' ) )
+			.append( $( '<div/>' ).addClass( 'app-options' ) )
 		);
 
-		this.updatePreview().done( function() {
-			self._$node.find( '.app-options' ).append(
-				self._renderInput( 'imageSize' )
-			);
+		this._questionnaire = this._renderQuestionnaire();
+
+		this._$node.find( '.app-questionnaire' ).on( 'update', function( event, $attribution ) {
+			self.updatePreview( $attribution ).done();
 		} );
 
-		this._renderQuestionnaire();
+		self._$node.find( '.app-options' ).append(
+			self._renderInput( 'imageSize' )
+		);
+
+		this._questionnaire.start();
+		// Evaluate to get the default attribution:
+		self.updatePreview( self._questionnaire.generateAttribution() );
 	},
 
 	/**
@@ -147,8 +148,7 @@ $.extend( Application.prototype, {
 	 */
 	_renderQuestionnaire: function() {
 		var $questionnaire = this._$node.find( '.app-questionnaire' ).empty();
-		this._questionnaire = new Questionnaire( $questionnaire, this._asset );
-		this._questionnaire.start();
+		return new Questionnaire( $questionnaire, this._asset );
 	},
 
 	/**
@@ -177,7 +177,7 @@ $.extend( Application.prototype, {
 
 			$select.on( 'change', function() {
 				self._options.imageSize = $select.val();
-				self.updatePreview();
+				self.updatePreview( self._questionnaire.generateAttribution() );
 			} );
 
 			$container
@@ -191,14 +191,31 @@ $.extend( Application.prototype, {
 	/**
 	 * Updates the preview.
 	 *
+	 * @param {jQuery} $attribution
+	 * @param {jQuery} $supplement
 	 * @return {Object} jQuery Promise
 	 */
-	updatePreview: function() {
+	updatePreview: function( $attribution, $supplement ) {
 		var self = this;
 
 		return this._asset.getImageInfo( this._options.imageSize )
 		.done( function( imageInfo ) {
 			self._$node.find( '.app-preview' ).replaceWith( self._renderPreview( imageInfo ) );
+
+			var $preview = self._$node.find( '.app-preview' );
+
+			$preview.find( '.app-preview-frame' ).append( $attribution );
+
+			$preview.find( 'img' ).on( 'load', function() {
+				$preview.find( '.app-preview-spacer' ).css(
+					'marginBottom',
+					-1 * parseInt( $preview.find( '.app-preview-frame' ).height() / 2, 10 )
+				);
+			} );
+
+			$preview.append(
+				$( '<div/>' ).addClass( 'app-preview-supplement' ).append( $supplement )
+			);
 		} );
 	},
 
@@ -209,85 +226,20 @@ $.extend( Application.prototype, {
 	 * @return {jQuery}
 	 */
 	_renderPreview: function( imageInfo ) {
-		return $( '<div/>' ).addClass( 'app-preview' ).append(
-			$( '<div/>' ).addClass( 'app-preview-frame' )
+		return $( '<div/>' ).addClass( 'app-preview' )
+			.append( $( '<div/>' ).addClass( 'app-preview-spacer' ) )
 			.append(
-				$( '<div/>' ).addClass( 'app-preview-image' ).append(
-					$( '<a/>' ).attr( 'href', imageInfo.descriptionurl ).append(
-						$( '<img/>' )
-						.attr( 'border', '0' )
-						.attr( 'src', imageInfo.thumburl )
+				$( '<div/>' ).addClass( 'app-preview-frame' )
+				.append(
+					$( '<div/>' ).addClass( 'app-preview-image' ).append(
+						$( '<a/>' ).attr( 'href', imageInfo.descriptionurl ).append(
+							$( '<img/>' )
+							.attr( 'border', '0' )
+							.attr( 'src', imageInfo.thumburl )
+						)
 					)
 				)
-			)
-			.append(
-				$( '<div/>' ).addClass( 'attribution' )
-				.append(
-					$( '<div/>' ).addClass( 'attribution-title' ).text( this._asset.getTitle() )
-				)
-				.append( this._renderAttribution().addClass( 'attribution-text' ) )
-			)
-		);
-	},
-
-	/**
-	 * Renders the attribution text.
-	 *
-	 * @return {jQuery}
-	 */
-	_renderAttribution: function() {
-		var $attribution = $( '<div/>' );
-
-		var hasAuthors = this._asset.getAuthors().length > 0
-			&& this._asset.getAuthors()[0].getName() !== 'unknown';
-
-		if( this._asset.getAttribution() ) {
-			$attribution.append( $( '<div/>' ).text( this._asset.getAttribution() ) );
-		} else if( !hasAuthors ) {
-			$attribution.append( $( '<span/>' ).text(
-				this._asset.getSource() ? this._asset.getSource() : 'Unbekannter Urheber'
-			) );
-		} else {
-			var authors = this._asset.getAuthors(),
-				$authors = $( '<span/>' );
-
-			$authors.text( 'Urheber: ');
-
-			$.each( authors, function( i, author ) {
-				var url = author.getUrl();
-
-				if( i > 0 ) {
-					$authors.append( document.createTextNode( ', ' ) );
-				}
-
-				if( !url ) {
-					$authors.append( document.createTextNode( author.getName() ) );
-					return true;
-				}
-
-				if( url.substr( 0, 2 ) === '//' ) {
-					url = 'http:' + url ;
-				}
-
-				$authors.append(
-					$( '<a/>' ).attr( 'href', author.getUrl() ).text( author.getName() )
-				);
-			} );
-
-			$attribution.append( $authors );
-		}
-
-		var licence = this._asset.getLicence();
-
-		$attribution
-		.append( '; ')
-		.append(
-			licence
-			? $( '<span/>' ).append( $( '<span class="licence"/>' ).html( licence.getHtml() ) )
-			: $( '<span/>' ).text( 'Unknown licence' )
-		);
-
-		return $attribution;
+			);
 	}
 
 } );
