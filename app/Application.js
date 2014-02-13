@@ -121,22 +121,10 @@ $.extend( Application.prototype, {
 		var self = this;
 
 		this._$node.empty()
-		.append(
-			$( '<div/>' ).addClass( 'app-frameset' )
-			.append( $( '<div/>' ).addClass( 'app-questionnaire' ) )
-			.append( $( '<div/>' ).addClass( 'app-preview' ) )
-			.append( $( '<div/>' ).addClass( 'app-options' ) )
-		);
+		.append( $( '<div/>' ).addClass( 'app-preview' ) )
+		.append( $( '<div/>' ).addClass( 'app-options' ) );
 
 		this._questionnaire = this._renderQuestionnaire();
-
-		this._$node.find( '.app-questionnaire' ).on( 'update', function(
-			event,
-			$attribution,
-			supplementPromise
-		) {
-			self.updatePreview( $attribution, supplementPromise ).done();
-		} );
 
 		self._$node.find( '.app-options' ).append(
 			self._renderInput( 'imageSize' )
@@ -154,7 +142,24 @@ $.extend( Application.prototype, {
 	 * Renders and starts the questionnaire.
 	 */
 	_renderQuestionnaire: function() {
-		var $questionnaire = this._$node.find( '.app-questionnaire' ).empty();
+		var self = this;
+
+		// Remove any pre-existing node:
+		this._$node.find( '.app-questionnaire' ).remove();
+
+		var $questionnaire = $( '<div/>' ).addClass( 'app-questionnaire' ).prependTo( this._$node );
+
+		$questionnaire.on( 'update', function(
+			event,
+			$attribution,
+			supplementPromise
+		) {
+			self.updatePreview( $attribution, supplementPromise ).done();
+		} )
+		.on( 'exit', function( event ) {
+			$questionnaire.remove();
+		} );
+
 		return new Questionnaire( $questionnaire, this._asset );
 	},
 
@@ -184,10 +189,12 @@ $.extend( Application.prototype, {
 
 			$select.on( 'change', function() {
 				self._options.imageSize = $select.val();
-				self.updatePreview(
-					self._questionnaire.generateAttribution(),
-					self._questionnaire.generateSupplement()
-				);
+				if( self._questionnaire ) {
+					self.updatePreview(
+						self._questionnaire.generateAttribution(),
+						self._questionnaire.generateSupplement()
+					);
+				}
 			} );
 
 			$container

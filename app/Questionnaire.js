@@ -30,6 +30,10 @@ var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
  *        selected).
  *        (1) {jQuery.Event}
  *        (2) {jQuery} Attribution
+ *        (3) {Object} jQuery Promise (see generateSupplement() for parameters)
+ *
+ * @event exit Triggered when the questionnaire is completed.
+ *        (1) {jQuery.Event}
  *
  * @throws {Error} on incorrect parameters.
  */
