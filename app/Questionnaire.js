@@ -69,7 +69,12 @@ $.extend( Questionnaire.prototype, {
 	 * Starts the questionnaire.
 	 */
 	start: function() {
-		this._loggedAnswers = {};
+		// Initialize with default values:
+		this._loggedAnswers = {
+			'13': {
+				'1': '(bearbeitet)'
+			}
+		};
 
 		var licenceId = this._asset.getLicence().getId();
 
@@ -83,6 +88,18 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
+	 * Returns a logged answers or "false" if the specific answer has not yet been given.
+	 *
+	 * @param {string} page
+	 * @param {number} answerId
+	 * @return {string|boolean}
+	 */
+	_getAnswer: function( page, answerId ) {
+		var pageAnswers = this._loggedAnswers[page];
+		return ( pageAnswers && pageAnswers[answerId] ) ? pageAnswers[answerId] : false;
+	},
+
+	/**
 	 * Returns the result id or "undefined" if unable to return a result according to the answers
 	 * selected.
 	 *
@@ -90,12 +107,10 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_getResultId: function() {
 		var resultId,
-			la = this._loggedAnswers,
-			onlineUse = la['3'] === 1,
-			collectionUse = la['7'] === 1,
-			fullLicence = la['8'] === 1,
-			edited = la['12a'] === 2,
-			editor = la['13'];
+			onlineUse = this._getAnswer( '3', 1 ),
+			collectionUse = this._getAnswer( '7', 1 ),
+			fullLicence = this._getAnswer( '8', 1 ),
+			edited = this._getAnswer( '12a', 2 );
 
 		if( $.inArray( this._asset.getLicence().getId(), CC_LICENCES ) !== -1 ) {
 			// Default attribution:
@@ -127,9 +142,6 @@ $.extend( Questionnaire.prototype, {
 				resultId = '8c';
 			}
 
-			if( edited && !editor ) {
-				resultId = undefined;
-			}
 		}
 
 		return resultId;
@@ -142,7 +154,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {string}
 	 */
 	_getUseCase: function() {
-		return this._loggedAnswers['3'] === 1 ? 'html' : 'print';
+		return this._getAnswer( '3', 1 ) ? 'html' : 'print';
 	},
 
 	/**
@@ -262,6 +274,7 @@ $.extend( Questionnaire.prototype, {
 			.append( $author )
 			.append( document.createTextNode( ', ' ) )
 			.append( $title )
+			.append( document.createTextNode( ' ' ) )
 			.append( $editor )
 			.append( document.createTextNode( ', ' ) )
 			.append( $licence );
@@ -345,7 +358,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {jQuery}
 	 */
 	_generateAttributionEditor: function() {
-		var editor = this._loggedAnswers['13'],
+		var editor = this._getAnswer( '13', 1 ),
 			$editor = $();
 
 		if( editor ) {
@@ -414,9 +427,14 @@ $.extend( Questionnaire.prototype, {
 
 					$.get( './templates/' + page + '.html' )
 					.done( function( html ) {
-						var $content = $( '<div class="page-' + page + '" />' ).html( html );
+						var $content = $( '<div class="page-' + page + '" />' )
+							.data( 'questionnaire-page', page )
+							.html( html );
+
 						$content = self._applyGenerics( $content );
-						$pages = $pages.add( self._applyLogic( $content, page ) );
+						$content = self._applyValuesToInputElements( $content );
+						$pages = $pages.add( self._applyLogic( $content ) );
+
 						d.resolve( $pages );
 					} )
 					.fail( function() {
@@ -436,15 +454,15 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Applies generic HTML and functionality to a template's DOM.
+	 * Applies generic HTML and functionality to a page's DOM.
 	 *
-	 * @param {jQuery} $template
+	 * @param {jQuery} $page
 	 * @return {jQuery}
 	 */
-	_applyGenerics: function( $template ) {
+	_applyGenerics: function( $page ) {
 		var self = this;
 
-		$template.find( 'ul.answers li' )
+		$page.find( 'ul.answers li' )
 		.prepend( $( '<span/>' ).addClass( 'checkbox' ).html( '&nbsp;' ) )
 		.on( 'mouseover', function( event ) {
 			var $checkbox = $( event.target ).find( '.checkbox' );
@@ -455,7 +473,34 @@ $.extend( Questionnaire.prototype, {
 			self._stopCheckboxAnimation( $checkbox );
 		} );
 
-		return $template;
+		return $page;
+	},
+
+	/**
+	 * Applies default or existing answers to input elements.
+	 *
+	 * @param {jQuery} $page
+	 */
+	_applyValuesToInputElements: function( $page ) {
+		var self = this,
+			page = $page.data( 'questionnaire-page' );
+
+		$page.find( 'input' ).each( function() {
+			var $input = $( this ),
+				classes = $input.attr( 'class' ).split( ' ' );
+
+			for( var i = 0; i < classes.length; i++ ) {
+				if( /^a[0-9]{1}$/.test( classes[i] ) ) {
+					var answerId = classes[i].split( 'a' )[1];
+					if( self._loggedAnswers[page] && self._loggedAnswers[page][answerId] ) {
+						$input.val( self._loggedAnswers[page][answerId] );
+					}
+				}
+			}
+
+		} );
+
+		return $page;
 	},
 
 	/**
@@ -521,18 +566,18 @@ $.extend( Questionnaire.prototype, {
 	/**
 	 * Applies logic of a specific page to a node.
 	 *
-	 * @param {jQuery} $node
-	 * @param {string} p Page
+	 * @param {jQuery} $page
 	 * @return {jQuery}
 	 */
-	_applyLogic: function( $node, p ) {
-		var self = this;
+	_applyLogic: function( $page ) {
+		var self = this,
+			p = $page.data( 'questionnaire-page' );
 
 		if( p === '3' ) {
-			$node = this._applyLogAndGoTo( $node, p, 1, '7' );
-			$node = this._applyLogAndGoTo( $node, p, 2, '7' );
+			$page = this._applyLogAndGoTo( $page, p, 1, '7' );
+			$page = this._applyLogAndGoTo( $page, p, 2, '7' );
 
-			$node.find( '.a3' ).on( 'click', function() {
+			$page.find( '.a3' ).on( 'click', function() {
 				self._log( p, 3 );
 				if(
 					self._asset.getLicence().getId() === 'cc-by-2.0-de'
@@ -544,33 +589,33 @@ $.extend( Questionnaire.prototype, {
 				}
 			} );
 
-			$node = this._applyLogAndGoTo( $node, p, 4, '5' );
-			$node = this._applyLogAndGoTo( $node, p, 5, '6' );
+			$page = this._applyLogAndGoTo( $page, p, 4, '5' );
+			$page = this._applyLogAndGoTo( $page, p, 5, '6' );
 		} else if( p === '5') {
-			$node = this._applyLogAndGoTo( $node, p, 1, '3' );
-			$node = this._applyLogAndGoTo( $node, p, 2, '5a' )
+			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
+			$page = this._applyLogAndGoTo( $page, p, 2, '5a' )
 		} else if( p === '7' ) {
-			var goTo = this._loggedAnswers['3'] === 2 ? '8' : '12a';
-			$node = this._applyLogAndGoTo( $node, p, 1, goTo );
-			$node = this._applyLogAndGoTo( $node, p, 2, goTo );
+			var goTo = this._getAnswer( '3', 2 ) ? '8' : '12a';
+			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
+			$page = this._applyLogAndGoTo( $page, p, 2, goTo );
 		} else if( p === '8' ) {
-			$node = this._applyLogAndGoTo( $node, p, 1, '12a' );
-			$node = this._applyLogAndGoTo( $node, p, 2, '12a' );
+			$page = this._applyLogAndGoTo( $page, p, 1, '12a' );
+			$page = this._applyLogAndGoTo( $page, p, 2, '12a' );
 		} else if( p === '12a' ) {
-			$node = this._applyLogAndGoTo( $node, p, 1, this.exit );
-			$node = this._applyLogAndGoTo( $node, p, 2, '12b' );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.exit );
+			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
 		} else if( p === '12b' ) {
-			$node = this._applyLogAndGoTo( $node, p, 1, '13' );
-			$node = this._applyLogAndGoTo( $node, p, 2, '12c' );
+			$page = this._applyLogAndGoTo( $page, p, 1, '13' );
+			$page = this._applyLogAndGoTo( $page, p, 2, '12c' );
 		} else if( p === '13' ) {
-			$node.find( 'a.a1' ).on( 'click', function() {
+			$page.find( 'a.a1' ).on( 'click', function() {
 				var value = $.trim( $( 'input.a1' ).val() );
-				self._log( '13', value );
+				self._log( '13', 1, value );
 				self._goTo( self.exit );
 			} );
 		}
 
-		return $node;
+		return $page;
 	},
 
 	/**
@@ -578,31 +623,35 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @param {string} page
 	 * @param {number|string} answer
+	 * @param {string} [value] If omitted, boolean "true" is logged for the answer.
 	 *
 	 * @triggers update
 	 */
-	_log: function( page, answer ) {
-		this._loggedAnswers[page] = answer;
+	_log: function( page, answer, value ) {
+		if( !this._loggedAnswers[page] ) {
+			this._loggedAnswers[page] = {};
+		}
+		this._loggedAnswers[page][answer] = ( value ) ? value : true;
 		this._$node.trigger( 'update', [this.generateAttribution(), this.generateSupplement()] );
 	},
 
 	/**
 	 * Short-cut that logs an answer and triggers going to some page.
 	 *
-	 * @param {jQuery} $node
+	 * @param {jQuery} $page
 	 * @param {string} currentPage
 	 * @param {number|string} answer
 	 * @param {string|Function} toPage
 	 */
-	_applyLogAndGoTo: function( $node, currentPage, answer, toPage ) {
+	_applyLogAndGoTo: function( $page, currentPage, answer, toPage ) {
 		var self = this;
 
-		$node.find( '.a' + answer ).on( 'click', function() {
+		$page.find( '.a' + answer ).on( 'click', function() {
 			self._log( currentPage, answer );
 			self._goTo( toPage );
 		} );
 
-		return $node;
+		return $page;
 	}
 
 } );
