@@ -136,7 +136,7 @@ $.extend( Application.prototype, {
 
 		// Evaluate to get the default attribution:
 		self.updatePreview(
-			self._questionnaire.generateAttribution(),
+			self._questionnaire.getAttributionGenerator(),
 			self._questionnaire.generateSupplement()
 		);
 	},
@@ -154,10 +154,10 @@ $.extend( Application.prototype, {
 
 		$questionnaire.on( 'update', function(
 			event,
-			$attribution,
+			attributionGenerator,
 			supplementPromise
 		) {
-			self.updatePreview( $attribution, supplementPromise ).done();
+			self.updatePreview( attributionGenerator, supplementPromise ).done();
 		} )
 		.on( 'exit', function( event ) {
 			$questionnaire.remove();
@@ -179,7 +179,7 @@ $.extend( Application.prototype, {
 		optionsContainer.render();
 		$( optionsContainer ).on( 'update', function() {
 			self.updatePreview(
-				self._questionnaire.generateAttribution(),
+				self._questionnaire.getAttributionGenerator(),
 				self._questionnaire.generateSupplement()
 			);
 		} );
@@ -190,11 +190,11 @@ $.extend( Application.prototype, {
 	/**
 	 * Updates the preview.
 	 *
-	 * @param {jQuery} $attribution
+	 * @param {AttributionGenerator} attributionGenerator
 	 * @param {Object} supplementPromise
 	 * @return {Object} jQuery Promise
 	 */
-	updatePreview: function( $attribution, supplementPromise ) {
+	updatePreview: function( attributionGenerator, supplementPromise ) {
 		var self = this;
 
 		return this._asset.getImageInfo( this._optionsContainer.getOption( 'imageSize' ) )
@@ -203,7 +203,7 @@ $.extend( Application.prototype, {
 
 			var $preview = self._$node.find( '.app-preview' );
 
-			$preview.find( '.app-preview-frame' ).append( $attribution );
+			$preview.find( '.app-preview-frame' ).append( attributionGenerator.generate() );
 
 			$preview.find( 'img' ).on( 'load', function() {
 				$preview.find( '.app-preview-spacer' ).css(

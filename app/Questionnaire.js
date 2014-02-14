@@ -29,7 +29,8 @@ var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
  * @event update Triggered whenever the attribution is updated (basically, whenever a new answer is
  *        selected).
  *        (1) {jQuery.Event}
- *        (2) {jQuery} Attribution
+ *        (2) {AttributionGenerator} Attribution generator instantiated at the current stage of the
+ *            questionnaire.
  *        (3) {Object} jQuery Promise (see generateSupplement() for parameters)
  *
  * @event exit Triggered when the questionnaire is completed.
@@ -174,7 +175,10 @@ $.extend( Questionnaire.prototype, {
 	 */
 	exit: function() {
 		this._$node.empty();
-		this._$node.trigger( 'update', [this.generateAttribution(), this.generateSupplement()] );
+		this._$node.trigger(
+			'update',
+			[this.getAttributionGenerator(), this.generateSupplement()]
+		);
 		this._$node.trigger( 'exit' );
 	},
 
@@ -225,7 +229,9 @@ $.extend( Questionnaire.prototype, {
 			pages.push( 'r-note-collection' );
 			this._fetchPages( pages )
 			.done( function( $nodes ) {
-				$nodes = $nodes.add( self.generateAttribution( { licenceOnly: true } ) );
+				$nodes = $nodes.add(
+					self.getAttributionGenerator( { licenceOnly: true } ).generate()
+				);
 				deferred.resolve( $nodes );
 			} )
 			.fail( function( message ) {
@@ -245,22 +251,22 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Generates an attribution tag line from the current set of answers.
+	 * Instantiates an AttributionGenerator object.
 	 *
 	 * @param {Object} [options]
-	 * @return {jQuery}
+	 * @return {AttributionGenerator}
 	 */
-	generateAttribution: function( options ) {
+	getAttributionGenerator: function( options ) {
 		var resultId = this._getResultId();
 
-		var attribution = new AttributionGenerator( this._asset, {
+		options = $.extend( {
 			editor: this._getAnswer( '13', 1 ) || null,
 			licenceOnly: options ? options.licenceOnly : false,
 			licenceLink: !( resultId === '3' || resultId === '4c' ),
 			useCase: this._getUseCase()
-		} );
+		}, options );
 
-		return attribution.generate();
+		return new AttributionGenerator( this._asset, options );
 	},
 
 	/**
@@ -318,7 +324,7 @@ $.extend( Questionnaire.prototype, {
 				self._goTo( self._navigationCache[self._navigationCache.length - 2].page );
 				self._$node.trigger(
 					'update',
-					[self.generateAttribution(), self.generateSupplement()]
+					[self.getAttributionGenerator(), self.generateSupplement()]
 				);
 			} );
 		}
@@ -582,7 +588,10 @@ $.extend( Questionnaire.prototype, {
 			this._loggedAnswers[page] = {};
 		}
 		this._loggedAnswers[page][answer] = ( value ) ? value : true;
-		this._$node.trigger( 'update', [this.generateAttribution(), this.generateSupplement()] );
+		this._$node.trigger(
+			'update',
+			[this.getAttributionGenerator(), this.generateSupplement()]
+		);
 	},
 
 	/**
