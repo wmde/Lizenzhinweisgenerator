@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'Asset'], function( $, Asset ) {
+define( ['jquery', 'Asset', 'AttributionGenerator'], function( $, Asset, AttributionGenerator ) {
 
 var CC2_LICENCES = [
 	'cc-by-2.0-de',
@@ -251,130 +251,16 @@ $.extend( Questionnaire.prototype, {
 	 * @return {jQuery}
 	 */
 	generateAttribution: function( options ) {
-		options = $.extend( {
-			licenceOnly: false
-		}, options );
+		var resultId = this._getResultId();
 
-		var resultId = this._getResultId(),
-			$author = this._generateAttributionAuthor(),
-			$title = this._generateAttributionTitle(),
-			$licence = this._generateAttributionLicence(),
-			$editor = this._generateAttributionEditor(),
-			$attribution = $( '<div/>' ).addClass( 'attribution' );
+		var attribution = new AttributionGenerator( this._asset, {
+			editor: this._getAnswer( '13', 1 ) || null,
+			licenceOnly: options ? options.licenceOnly : false,
+			licenceLink: !( resultId === '3' || resultId === '4c' ),
+			useCase: this._getUseCase()
+		} );
 
-		if( options.licenceOnly ) {
-			return $attribution.append( $licence );
-		} else if( resultId === '1' || resultId === '2' || resultId === '4a' || resultId === '4b' ) {
-			$attribution
-			.append( $author )
-			.append( document.createTextNode( ', ' ) )
-			.append( $title )
-			.append( document.createTextNode( ', ' ) )
-			.append( $licence );
-		} else if( resultId === '3' || resultId === '4c' ) {
-			$attribution
-			.append( $author )
-			.append( document.createTextNode( ', ' ) )
-			.append( $title )
-			.append( document.createTextNode( ', ' ) )
-			.append( this._asset.getLicence().getName() )
-		} else if( resultId === '5' || resultId === '6' ) {
-			$attribution
-			.append( $author )
-			.append( document.createTextNode( ', ' ) )
-			.append( $title )
-			.append( document.createTextNode( ' ' ) )
-			.append( $editor )
-			.append( document.createTextNode( ', ' ) )
-			.append( $licence );
-		} else if( resultId === '7' ) {
-			$attribution
-			.append( $author )
-			.append( document.createTextNode( ', ' ) )
-			.append( $title )
-			.append( document.createTextNode( ', ' ) )
-			.append( $editor );
-		}
-
-		return $attribution;
-	},
-
-	/**
-	 * Generates the author(s) DOM to be used in the tag line.
-	 *
-	 * @return {jQuery}
-	 */
-	_generateAttributionAuthor: function() {
-		var authors = this._asset.getAuthors(),
-			$authors = $( '<span/>' ).addClass( 'author' );
-
-		for( var i = 0; i < authors.length; i++ ) {
-			var author = authors[i];
-
-			if( i > 0 ) {
-				$authors.append( document.createTextNode( ', ' ) );
-			}
-
-			if( !author.getUrl() ) {
-				$authors.append( document.createTextNode( author.getName() ) );
-				continue;
-			}
-
-			var authorUrl = author.getUrl();
-			if( authorUrl.substr( 0, 2 ) === '//' ) {
-				authorUrl = 'http:' + authorUrl;
-			}
-
-			if( this._getUseCase() === 'html' ) {
-				$authors.append( $( '<a/>' ).attr( 'href', authorUrl ).text( author.getName() ) );
-			} else {
-				$authors
-					.append( document.createTextNode( author.getName() ) )
-					.append( document.createTextNode( ' (' + authorUrl + ')' ) );
-			}
-		}
-
-		return $authors;
-	},
-
-	/**
-	 * Generates the licence DOM to be used in the tag line.
-	 *
-	 * @return {jQuery}
-	 */
-	_generateAttributionLicence: function() {
-		var licence = this._asset.getLicence();
-
-		return ( this._getUseCase() === 'html' )
-			? $( '<a/>' ).addClass( 'licence' )
-				.attr( 'href', licence.getUrl() ).text( licence.getName() )
-			: $( '<span/>' ).addClass( 'licence' ).text( licence.getUrl() );
-	},
-
-	/**
-	 * Generates the asset title DOM to be used in the tag line.
-	 *
-	 * @return {jQuery}
-	 */
-	_generateAttributionTitle: function() {
-		return $( '<span/>' ).addClass( 'title' ).text( '„' + this._asset.getTitle() + '“' );
-	},
-
-	/**
-	 * Generates the editor DOM to be use in the tag line. If no editor is specified, an empty
-	 * jQuery object will be returned.
-	 *
-	 * @return {jQuery}
-	 */
-	_generateAttributionEditor: function() {
-		var editor = this._getAnswer( '13', 1 ),
-			$editor = $();
-
-		if( editor ) {
-			$editor = $( '<span/>' ).addClass( 'editor' ).text( editor );
-		}
-
-		return $editor;
+		return attribution.generate();
 	},
 
 	/**
