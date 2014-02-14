@@ -1,7 +1,9 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'inputHandler', 'Questionnaire' ], function( $, inputHandler, Questionnaire ) {
+define(
+	['jquery', 'inputHandler', 'Questionnaire', 'OptionsContainer' ],
+	function( $, inputHandler, Questionnaire, OptionsContainer ) {
 
 /**
  * Application renderer.
@@ -58,6 +60,11 @@ $.extend( Application.prototype, {
 	 * @type {Questionnaire}
 	 */
 	_questionnaire: null,
+
+	/**
+	 * @type {OptionsContainer}
+	 */
+	_optionsContainer: null,
 
 	/**
 	 * Starts the application.
@@ -120,17 +127,13 @@ $.extend( Application.prototype, {
 	_renderApplicationPage: function() {
 		var self = this;
 
-		this._$node.empty()
-		.append( $( '<div/>' ).addClass( 'app-preview' ) )
-		.append( $( '<div/>' ).addClass( 'app-options' ) );
+		this._$node.empty().append( $( '<div/>' ).addClass( 'app-preview' ) );
 
 		this._questionnaire = this._renderQuestionnaire();
 
-		self._$node.find( '.app-options' ).append(
-			self._renderInput( 'imageSize' )
-		);
-
 		this._questionnaire.start();
+		this._optionsContainer = this._renderOptionsContainer();
+
 		// Evaluate to get the default attribution:
 		self.updatePreview(
 			self._questionnaire.generateAttribution(),
@@ -164,45 +167,24 @@ $.extend( Application.prototype, {
 	},
 
 	/**
-	 * Renders an input element.
-	 *
-	 * @param {string} optionName
-	 * @return {jQuery}
+	 * Renders the options container and attaches corresponding events.
 	 */
-	_renderInput: function( optionName ) {
+	_renderOptionsContainer: function() {
+		this._$node.find( '.app-options' ).remove();
+
 		var self = this,
-			$container = $( '<span/>' );
+			$optionsContainer = $( '<div/>' ).addClass( 'app-options' ).appendTo( this._$node ),
+			optionsContainer = new OptionsContainer( $optionsContainer );
 
-		if( optionName === 'imageSize' ) {
-			var $label = $( '<label for="app-"' + optionName + '/>' ).text( 'Bildgröße: ' ),
-				$select = $( '<select/>' ),
-				values = [200, 300, 400, 500, 1000],
-				selected = 500;
+		optionsContainer.render();
+		$( optionsContainer ).on( 'update', function() {
+			self.updatePreview(
+				self._questionnaire.generateAttribution(),
+				self._questionnaire.generateSupplement()
+			);
+		} );
 
-			for( var i = 0; i < values.length; i++ ) {
-				var $option = $( '<option/>' ).attr( 'value', values[i] ).text( values[i] );
-				if( values[i] === selected ) {
-					$option.prop( 'selected', true );
-				}
-				$select.append( $option );
-			}
-
-			$select.on( 'change', function() {
-				self._options.imageSize = $select.val();
-				if( self._questionnaire ) {
-					self.updatePreview(
-						self._questionnaire.generateAttribution(),
-						self._questionnaire.generateSupplement()
-					);
-				}
-			} );
-
-			$container
-			.append( $label )
-			.append( $select );
-		}
-
-		return $container;
+		return optionsContainer;
 	},
 
 	/**
@@ -215,7 +197,7 @@ $.extend( Application.prototype, {
 	updatePreview: function( $attribution, supplementPromise ) {
 		var self = this;
 
-		return this._asset.getImageInfo( this._options.imageSize )
+		return this._asset.getImageInfo( this._optionsContainer.getOption( 'imageSize' ) )
 		.done( function( imageInfo ) {
 			self._$node.find( '.app-preview' ).replaceWith( self._renderPreview( imageInfo ) );
 

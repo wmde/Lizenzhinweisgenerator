@@ -5,6 +5,7 @@ define( ['jquery'], function( $ ) {
 
 /**
  * Generator for attribution texts.
+ * @constructor
  *
  * @option {string|null} editor
  *         Editor of the asset.
@@ -24,7 +25,6 @@ define( ['jquery'], function( $ ) {
  *
  * @param {Asset} asset
  * @param {Object} [options]
- * @constructor
  */
 var AttributionGenerator = function( asset, options ) {
 	this._asset = asset;

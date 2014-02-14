@@ -73,6 +73,7 @@ body {
 }
 
 .app-questionnaire .back.disabled .button {
+	cursor: default;
 	border-right-color: lightgrey;
 }
 

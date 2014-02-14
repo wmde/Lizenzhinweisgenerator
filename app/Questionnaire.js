@@ -303,10 +303,9 @@ $.extend( Questionnaire.prototype, {
 	/**
 	 * Generates the "back" button.
 	 *
-	 * @param {string} page
 	 * @return {jQuery}
 	 */
-	_generateBackButton: function( page ) {
+	_generateBackButton: function() {
 		var self = this,
 			$backButton = $( '<div/>' )
 			.addClass( 'back' )
