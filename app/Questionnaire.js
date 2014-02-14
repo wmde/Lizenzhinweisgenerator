@@ -158,7 +158,7 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @return {string}
 	 */
-	_getUseCase: function() {
+	getUseCase: function() {
 		return this._getAnswer( '3', 1 ) ? 'html' : 'print';
 	},
 
@@ -193,7 +193,7 @@ $.extend( Questionnaire.prototype, {
 			licenceId = this._asset.getLicence().getId(),
 			pages = [];
 
-		pages.push( 'r-note-' + this._getUseCase() );
+		pages.push( 'r-note-' + this.getUseCase() );
 
 		if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
 			pages.push( 'r-restrictions-cc2' );
@@ -267,7 +267,7 @@ $.extend( Questionnaire.prototype, {
 			editor: editor,
 			licenceOnly: options ? options.licenceOnly : false,
 			licenceLink: !( resultId === '3' || resultId === '4c' ),
-			useCase: this._getUseCase()
+			useCase: this.getUseCase()
 		}, options );
 
 		return new AttributionGenerator( this._asset, options );

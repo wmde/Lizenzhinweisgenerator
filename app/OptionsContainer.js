@@ -6,14 +6,6 @@ define( ['jquery' ], function( $ ) {
 // Order of option inputs (all possible options should be listed by option key):
 var ORDER = ['imageSize', 'originalFileLink', 'rawText', 'htmlCode'];
 
-// These options will be rendered always:
-var defaultOptions = {
-	'imageSize': true,
-	'originalFileLink': true,
-	'rawText': true,
-	'htmlCode': true
-};
-
 /**
  * Visual container for input elements that act as options.
  * @constructor
@@ -55,11 +47,15 @@ $.extend( OptionsContainer.prototype, {
 	/**
 	 * Renders the bar according to the submitted option keys.
 	 *
-	 * @param {Object} keys
+	 * @param {Object} [keys]
 	 * @return {jQuery}
 	 */
 	render: function( keys ) {
-		this._keys = keys = $.extend( defaultOptions, keys || {} );
+		this._keys = keys = $.extend( {
+			'imageSize': true,
+			'originalFileLink': true,
+			'rawText': true
+		}, keys || {} );
 
 		this._$node.empty();
 
