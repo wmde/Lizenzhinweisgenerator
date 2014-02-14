@@ -41,13 +41,24 @@ $.extend( OptionsContainer.prototype, {
 	_asset: null,
 
 	/**
+	 * @type {AttributionGenerator|null}
+	 */
+	_attributionGenerator: null,
+
+	/**
+	 * Options that shall be rendered currently. (It may not be possible to always render all
+	 * options.)
+	 */
+	_keys: null,
+
+	/**
 	 * Renders the bar according to the submitted option keys.
 	 *
 	 * @param {Object} keys
 	 * @return {jQuery}
 	 */
 	render: function( keys ) {
-		keys = $.extend( defaultOptions, keys || {} );
+		this._keys = keys = $.extend( defaultOptions, keys || {} );
 
 		this._$node.empty();
 
@@ -56,6 +67,10 @@ $.extend( OptionsContainer.prototype, {
 				this._$node.append( this._renderInput( ORDER[i] ) );
 			}
 		}
+	},
+
+	update: function() {
+		this.render( this._keys );
 	},
 
 	/**
@@ -67,6 +82,14 @@ $.extend( OptionsContainer.prototype, {
 	getOption: function( key ) {
 		return this._$node.find( '.app-optionscontainer-option-' + key )
 			.find( 'input, select' ).val();
+	},
+
+	/**
+	 * @param {AttributionGenerator} attributionGenerator
+	 */
+	setAttributionGenerator: function( attributionGenerator ) {
+		this._attributionGenerator = attributionGenerator;
+		this.update();
 	},
 
 	/**
@@ -82,9 +105,58 @@ $.extend( OptionsContainer.prototype, {
 			$node = this._renderFullResolutionLink();
 		} else if( key === 'imageSize' ) {
 			$node = this._renderImageSize( key );
+		} else if( key === 'rawText' ) {
+			$node = this._renderRawText();
 		}
 
 		return $node.addClass( 'app-optionscontainer-option-' + key );
+	},
+
+	/**
+	 * @return {jQuery}
+	 */
+	_renderRawText: function() {
+		var self = this;
+
+		if( !this._attributionGenerator ) {
+			return $();
+		}
+
+		var $a = $( '<a/>' ).text( 'Lizenzverweis ohne Formatierung' );
+
+		$a.on( 'click', function( event ) {
+			var $underlayContent = $( '<textarea/>' ).val(
+				self._attributionGenerator.generate( 'raw' )
+			);
+
+			self._showUnderlay( $underlayContent, $( event.target ) );
+		} );
+
+		return $a;
+	},
+
+	/**
+	 * Shows an underlay.
+	 *
+	 * @param {jQuery} $content
+	 * @param {jQuery} $anchor Node the underlay shall be positioned to.
+	 */
+	_showUnderlay: function( $content, $anchor ) {
+		var $underlay = $( '.optionscontainer-underlay' );
+
+		if( $underlay.length === 0 ) {
+			$underlay = $( '<div/>' ).addClass( 'optionscontainer-underlay' );
+			$underlay.appendTo( this._$node );
+		}
+
+		$underlay.empty()
+		.append( $content )
+		.append(
+			$('<a/>' ).text( 'schließen' )
+				.on( 'click', function( event ) {
+					$underlay.remove();
+				} )
+		);
 	},
 
 	/**
@@ -111,8 +183,10 @@ $.extend( OptionsContainer.prototype, {
 	_renderImageSize: function( key ) {
 		var self = this,
 			$container = $( '<span/>' ),
-			$label = $( '<label/>' ).attr( 'for', 'app-' + key ).text( 'Bildgröße: ' ),
-			$select = $( '<select/>' ).attr( 'id', 'app-' + key ),
+			$label = $( '<label/>' )
+				.attr( 'for', 'optionscontainer-option-imagesize-input' )
+				.text( 'Bildgröße: ' ),
+			$select = $( '<select/>' ).attr( 'id', 'optionscontainer-option-imagesize-input' ),
 			values = [200, 300, 400, 500, 1000],
 			selected = 500;
 

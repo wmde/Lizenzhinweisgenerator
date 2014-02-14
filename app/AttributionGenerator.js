@@ -51,14 +51,20 @@ $.extend( AttributionGenerator.prototype, {
 	/**
 	 * Generates an attribution tag line from the current set of answers.
 	 *
+	 * @param {string} [mode] May be "raw" to not apply any styles or DOM structure at all or
+	 *        "inline" to apply inline styles instead of using css classes. If the parameter is
+	 *        omitted, css classes will be applied to style the output.
 	 * @return {jQuery}
 	 */
-	generate: function() {
-		var $attribution = $( '<div/>' ).addClass( 'attribution' ),
-			$licence = this._generateLicence();
+	generate: function( mode ) {
+		mode = mode || 'default';
+
+		var useCase = mode === 'raw' ? 'text' : this._options.useCase,
+			$attribution = $( '<div/>' ).addClass( 'attribution' ),
+			$licence = this._generateLicence( useCase );
 
 		if( !this._options.licenceOnly ) {
-			var $author = this._generateAuthor(),
+			var $author = this._generateAuthor( useCase ),
 				$title = this._generateTitle(),
 				$editor = this._generateEditor();
 
@@ -82,15 +88,16 @@ $.extend( AttributionGenerator.prototype, {
 			$attribution.append( $licence );
 		}
 
-		return $attribution;
+		return mode === 'raw' ? $attribution.text() : $attribution;
 	},
 
 	/**
 	 * Generates the author(s) DOM to be used in the tag line.
 	 *
+	 * @param {string} useCase
 	 * @return {jQuery}
 	 */
-	_generateAuthor: function() {
+	_generateAuthor: function( useCase ) {
 		var authors = this._asset.getAuthors(),
 			$authors = $( '<span/>' ).addClass( 'author' );
 
@@ -111,7 +118,7 @@ $.extend( AttributionGenerator.prototype, {
 				authorUrl = 'http:' + authorUrl;
 			}
 
-			if( this._options.useCase === 'html' ) {
+			if( useCase === 'html' ) {
 				$authors.append( $( '<a/>' ).attr( 'href', authorUrl ).text( author.getName() ) );
 			} else {
 				$authors
@@ -126,12 +133,13 @@ $.extend( AttributionGenerator.prototype, {
 	/**
 	 * Generates the licence DOM to be used in the tag line.
 	 *
+	 * @param {string} useCase
 	 * @return {jQuery}
 	 */
-	_generateLicence: function() {
+	_generateLicence: function( useCase ) {
 		var licence = this._asset.getLicence();
 
-		return ( this._options.useCase === 'html' )
+		return ( useCase === 'html' )
 			? $( '<a/>' ).addClass( 'licence' )
 				.attr( 'href', licence.getUrl() ).text( licence.getName() )
 			: $( '<span/>' ).addClass( 'licence' ).text( licence.getUrl() );

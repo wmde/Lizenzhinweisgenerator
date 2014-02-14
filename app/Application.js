@@ -138,7 +138,11 @@ $.extend( Application.prototype, {
 		self.updatePreview(
 			self._questionnaire.getAttributionGenerator(),
 			self._questionnaire.generateSupplement()
-		);
+		).done( function() {
+			self._optionsContainer.setAttributionGenerator(
+				self._questionnaire.getAttributionGenerator()
+			);
+		} );
 	},
 
 	/**
@@ -152,12 +156,10 @@ $.extend( Application.prototype, {
 
 		var $questionnaire = $( '<div/>' ).addClass( 'app-questionnaire' ).prependTo( this._$node );
 
-		$questionnaire.on( 'update', function(
-			event,
-			attributionGenerator,
-			supplementPromise
-		) {
-			self.updatePreview( attributionGenerator, supplementPromise ).done();
+		$questionnaire.on( 'update', function( event, attributionGenerator, supplementPromise ) {
+			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
+				self._optionsContainer.setAttributionGenerator( attributionGenerator );
+			} );
 		} )
 		.on( 'exit', function( event ) {
 			$questionnaire.remove();
@@ -181,7 +183,11 @@ $.extend( Application.prototype, {
 			self.updatePreview(
 				self._questionnaire.getAttributionGenerator(),
 				self._questionnaire.generateSupplement()
-			);
+			).done( function() {
+				self._optionsContainer.setAttributionGenerator(
+					self._questionnaire.getAttributionGenerator()
+				);
+			} );
 		} );
 
 		return optionsContainer;

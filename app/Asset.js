@@ -171,7 +171,7 @@ $.extend( Asset.prototype, {
 				deferred.resolve( imageInfo );
 			} )
 			.fail( function( message ) {
-				deferred.reject( 'message' );
+				deferred.reject( message );
 			} );
 		}
 
