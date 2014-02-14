@@ -66,8 +66,9 @@ $.extend( Questionnaire.prototype, {
 	_loggedAnswers: null,
 
 	/**
-	 * Caches the navigation path.
-	 * @type {string[]}
+	 * Caches the navigation path and a copy of the loggedAnswers object for resetting when
+	 * navigating backwards.
+	 * @type {Object[]}
 	 */
 	_navigationCache: null,
 
@@ -96,7 +97,7 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Returns a logged answers or "false" if the specific answer has not yet been given.
+	 * Returns a logged answer or "false" if the specific answer has not yet been given.
 	 *
 	 * @param {string} page
 	 * @param {number} answerId
@@ -377,18 +378,35 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
+	 * Returns the position of a page in the navigation cache or -1 if the page is not cached.
+	 *
+	 * @param {string} page
+	 * @return {number}
+	 */
+	_getNavigationPosition: function( page ) {
+		for( var i = 0; i < this._navigationCache.length; i++ ) {
+			if( this._navigationCache[i].page === page ) {
+				return i;
+			}
+		}
+		return -1;
+	},
+
+	/**
 	 * Move the questionnaire to a specific page or triggers a function.
 	 *
 	 * @param {string|Function} page
 	 */
 	_goTo: function( page ) {
-		var navigationPathPosition = $.inArray( page, this._navigationCache );
+		var navigationPathPosition = this._getNavigationPosition( page );
 		if( navigationPathPosition !== -1 ) {
 			// Navigating backwards.
 			this._navigationCache.splice( navigationPathPosition );
+			this._loggedAnswers = this._navigationCache[navigationPathPosition - 1]
+				? this._navigationCache[navigationPathPosition - 1].loggedAnswers
+				: {};
 		}
 
-		var self = this;
 		if( $.isFunction( page ) ) {
 			page.apply( this );
 		} else {
@@ -412,7 +430,11 @@ $.extend( Questionnaire.prototype, {
 			$backButton.addClass( 'disabled' );
 		} else {
 			$backButton.on( 'click', function( event ) {
-				self._goTo( self._navigationCache[self._navigationCache.length - 2] );
+				self._goTo( self._navigationCache[self._navigationCache.length - 2].page );
+				self._$node.trigger(
+					'update',
+					[self.generateAttribution(), self.generateSupplement()]
+				);
 			} );
 		}
 
@@ -431,7 +453,10 @@ $.extend( Questionnaire.prototype, {
 
 		this._fetchPages( page )
 		.done( function( $content ) {
-			self._navigationCache.push( page );
+			self._navigationCache.push( {
+				page: page,
+				loggedAnswers: $.extend( {}, self._loggedAnswers )
+			} );
 			self._$node.append( self._generateBackButton( page ) );
 			self._$node.append( $content );
 		} )

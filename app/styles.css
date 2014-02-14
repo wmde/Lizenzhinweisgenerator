@@ -54,6 +54,7 @@ body {
 
 .app-questionnaire .page {
 	display: table-cell;
+	padding-right: 300px;
 }
 
 .app-questionnaire .back {
@@ -120,6 +121,16 @@ body {
 	margin-bottom: 0; /* will be adjusted according to the preview's actual content */
 }
 
+.app-preview-supplement {
+	background: rgba(233,233,233,0.4);
+	font-size: 10pt;
+	padding: 12pt 12pt 24pt 12pt;
+	position: absolute;
+	right: 0;
+	text-align: left;
+	top: 0;
+	width: 300px;
+}
 
 .app-options {
 	background: lightgrey;
