@@ -174,7 +174,7 @@ $.extend( Application.prototype, {
 
 		var self = this,
 			$optionsContainer = $( '<div/>' ).addClass( 'app-options' ).appendTo( this._$node ),
-			optionsContainer = new OptionsContainer( $optionsContainer );
+			optionsContainer = new OptionsContainer( $optionsContainer, this._asset );
 
 		optionsContainer.render();
 		$( optionsContainer ).on( 'update', function() {

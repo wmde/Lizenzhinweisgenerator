@@ -4,12 +4,12 @@
 define( ['jquery' ], function( $ ) {
 
 // Order of option inputs (all possible options should be listed by option key):
-var ORDER = ['imageSize', 'fullResolutionLink', 'rawText', 'htmlCode'];
+var ORDER = ['imageSize', 'originalFileLink', 'rawText', 'htmlCode'];
 
 // These options will be rendered always:
 var defaultOptions = {
 	'imageSize': true,
-	'fullResolutionLink': true,
+	'originalFileLink': true,
 	'rawText': true
 };
 
@@ -22,9 +22,11 @@ var defaultOptions = {
  *        (1) {jQuery.Event}
  *
  * @param {jQuery} $node
+ * @param {Asset} asset
  */
-var OptionsContainer = function( $node ) {
+var OptionsContainer = function( $node, asset ) {
 	this._$node = $node;
+	this._asset = asset;
 };
 
 $.extend( OptionsContainer.prototype, {
@@ -32,6 +34,11 @@ $.extend( OptionsContainer.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
+
+	/**
+	 * @type {Asset}
+	 */
+	_asset: null,
 
 	/**
 	 * Renders the bar according to the submitted option keys.
@@ -71,11 +78,30 @@ $.extend( OptionsContainer.prototype, {
 	_renderInput: function( key ) {
 		var $node = $();
 
-		if( key === 'imageSize' ) {
+		if( key === 'originalFileLink' ) {
+			$node = this._renderFullResolutionLink();
+		} else if( key === 'imageSize' ) {
 			$node = this._renderImageSize( key );
 		}
 
 		return $node.addClass( 'app-optionscontainer-option-' + key );
+	},
+
+	/**
+	 * @return {*}
+	 */
+	_renderFullResolutionLink: function() {
+		var $node = $( '<a/>' );
+
+		this._asset.getImageInfo( this.getOption( 'imageSize' ) )
+		.done( function( imageInfo ) {
+			$node.attr( 'href', imageInfo.url ).text( 'Originaldatei aufrufen' );
+		} )
+		.fail( function() {
+			$node.replaceWith( $() );
+		} );
+
+		return $node;
 	},
 
 	/**
