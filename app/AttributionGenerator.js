@@ -88,7 +88,56 @@ $.extend( AttributionGenerator.prototype, {
 			$attribution.append( $licence );
 		}
 
+		if( mode === 'inline' ) {
+			return this._convertToInlineStyles( $attribution ).html();
+		}
+
 		return mode === 'raw' ? $attribution.text() : $attribution;
+	},
+
+	/**
+	 * Converts the styles applied via css classes to inline styles.
+	 *
+	 * @param {jQuery} $attribution
+	 * @return {jQuery}
+	 */
+	_convertToInlineStyles: function( $attribution ) {
+		var cssRules = [];
+
+		for( var i = 0; i < document.styleSheets.length; i++ ) {
+			$.merge( cssRules, document.styleSheets[i].cssRules );
+		}
+
+		$attribution.find( '*' ).each( function() {
+			var classAttr = $( this ).attr( 'class' );
+			if( !classAttr ) {
+				return true;
+			}
+
+			var classes = classAttr.split( ' ' ),
+				cssText = '';
+
+			for( var i = 0; i < classes.length; i++ ) {
+				for( var j = 0; j < cssRules.length; j++ ) {
+					var cssRule = cssRules[j],
+						selectorText = cssRule.selectorText,
+						isAttributionStyle = selectorText.indexOf( '.attribution' ) !== -1,
+						hasClass = selectorText.indexOf( '.' + classes[i] ) !== -1;
+
+					if( isAttributionStyle && hasClass ) {
+						cssText += cssRule.cssText.replace( /^([^{]+)\{([^}]+)\}$/, '$2' );
+					}
+				}
+			}
+
+			if( cssText !== '' ) {
+				this.style.cssText = cssText;
+			}
+
+			$( this ).removeAttr( 'class' );
+		} );
+
+		return $attribution;
 	},
 
 	/**

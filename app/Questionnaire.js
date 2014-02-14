@@ -77,12 +77,7 @@ $.extend( Questionnaire.prototype, {
 	 * Starts the questionnaire.
 	 */
 	start: function() {
-		// Initialize with default values:
-		this._loggedAnswers = {
-			'13': {
-				'1': '(bearbeitet)'
-			}
-		};
+		this._loggedAnswers = {};
 
 		this._navigationCache = [];
 
@@ -257,10 +252,19 @@ $.extend( Questionnaire.prototype, {
 	 * @return {AttributionGenerator}
 	 */
 	getAttributionGenerator: function( options ) {
-		var resultId = this._getResultId();
+		var resultId = this._getResultId(),
+			editor = null;
+
+		if( this._getAnswer( '12a', 2 ) ) {
+			editor = '(bearbeitet)'
+		}
+		if( this._getAnswer( '13', 1 ) ) {
+			editor = this._getAnswer( '13', 1 );
+		}
+
 
 		options = $.extend( {
-			editor: this._getAnswer( '13', 1 ) || null,
+			editor: editor,
 			licenceOnly: options ? options.licenceOnly : false,
 			licenceLink: !( resultId === '3' || resultId === '4c' ),
 			useCase: this._getUseCase()

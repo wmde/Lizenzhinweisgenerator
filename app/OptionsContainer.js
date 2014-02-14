@@ -10,7 +10,8 @@ var ORDER = ['imageSize', 'originalFileLink', 'rawText', 'htmlCode'];
 var defaultOptions = {
 	'imageSize': true,
 	'originalFileLink': true,
-	'rawText': true
+	'rawText': true,
+	'htmlCode': true
 };
 
 /**
@@ -107,9 +108,34 @@ $.extend( OptionsContainer.prototype, {
 			$node = this._renderImageSize( key );
 		} else if( key === 'rawText' ) {
 			$node = this._renderRawText();
+		} else if( key === 'htmlCode' ) {
+			$node = this._renderHtmlCode();
 		}
 
 		return $node.addClass( 'app-optionscontainer-option-' + key );
+	},
+
+	/**
+	 * @return {jQuery}
+	 */
+	_renderHtmlCode: function() {
+		var self = this;
+
+		if( !this._attributionGenerator ) {
+			return $();
+		}
+
+		var $a = $( '<a/>' ).text( 'HTML-Quelltext' );
+
+		$a.on( 'click', function( event ) {
+			var $underlayContent = $( '<textarea/>' ).val(
+				self._attributionGenerator.generate( 'inline' )
+			);
+
+			self._showUnderlay( $underlayContent, $( event.target ) );
+		} );
+
+		return $a;
 	},
 
 	/**
