@@ -77,7 +77,7 @@ $.extend( OptionsContainer.prototype, {
 	 * @return {*}
 	 */
 	getOption: function( key ) {
-		return this._$node.find( '.app-optionscontainer-option-' + key )
+		return this._$node.find( '.optionscontainer-option-' + key )
 			.find( 'input, select' ).val();
 	},
 
@@ -108,7 +108,8 @@ $.extend( OptionsContainer.prototype, {
 			$node = this._renderHtmlCode();
 		}
 
-		return $node.addClass( 'app-optionscontainer-option-' + key );
+		return $( '<div/>' ).addClass( 'optionscontainer-option' )
+			.append( $node.addClass( 'optionscontainer-option-' + key ) );
 	},
 
 	/**
@@ -121,7 +122,7 @@ $.extend( OptionsContainer.prototype, {
 			return $();
 		}
 
-		var $a = $( '<a/>' ).text( 'HTML-Quelltext' );
+		var $a = $( '<a/>' ).addClass( 'button' ).text( 'HTML-Quelltext' );
 
 		$a.on( 'click', function( event ) {
 			var $underlayContent = $( '<textarea/>' ).val(
@@ -144,7 +145,7 @@ $.extend( OptionsContainer.prototype, {
 			return $();
 		}
 
-		var $a = $( '<a/>' ).text( 'Lizenzverweis ohne Formatierung' );
+		var $a = $( '<a/>' ).addClass( 'button' ).text( 'Lizenzverweis ohne Formatierung' );
 
 		$a.on( 'click', function( event ) {
 			var $underlayContent = $( '<textarea/>' ).val(
@@ -164,20 +165,21 @@ $.extend( OptionsContainer.prototype, {
 	 * @param {jQuery} $anchor Node the underlay shall be positioned to.
 	 */
 	_showUnderlay: function( $content, $anchor ) {
-		var $underlay = $( '.optionscontainer-underlay' );
+		var $underlay = $( '.option-underlay' );
 
 		if( $underlay.length === 0 ) {
-			$underlay = $( '<div/>' ).addClass( 'optionscontainer-underlay' );
+			$underlay = $( '<div/>' ).addClass( 'option-underlay' );
 			$underlay.appendTo( this._$node );
 		}
 
 		$underlay.empty()
 		.append( $content )
 		.append(
-			$('<a/>' ).text( 'schließen' )
-				.on( 'click', function( event ) {
-					$underlay.remove();
-				} )
+			$('<a/>' )
+			.text( 'schließen' )
+			.on( 'click', function( event ) {
+				$underlay.remove();
+			} )
 		);
 	},
 
@@ -185,7 +187,7 @@ $.extend( OptionsContainer.prototype, {
 	 * @return {*}
 	 */
 	_renderFullResolutionLink: function() {
-		var $node = $( '<a/>' );
+		var $node = $( '<a/>' ).addClass( 'button' );
 
 		this._asset.getImageInfo( this.getOption( 'imageSize' ) )
 		.done( function( imageInfo ) {
@@ -199,16 +201,15 @@ $.extend( OptionsContainer.prototype, {
 	},
 
 	/**
-	 * @param {string} key
 	 * @return {jQuery}
 	 */
-	_renderImageSize: function( key ) {
+	_renderImageSize: function() {
 		var self = this,
-			$container = $( '<span/>' ),
+			$container = $( '<span/>' ).addClass( 'button' ),
 			$label = $( '<label/>' )
-				.attr( 'for', 'optionscontainer-option-imagesize-input' )
+				.attr( 'for', 'option-imageSize-input' )
 				.text( 'Bildgröße: ' ),
-			$select = $( '<select/>' ).attr( 'id', 'optionscontainer-option-imagesize-input' ),
+			$select = $( '<select/>' ).attr( 'id', 'option-imageSize-input' ),
 			values = [200, 300, 400, 500, 1000],
 			selected = 500;
 

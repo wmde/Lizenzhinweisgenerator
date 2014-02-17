@@ -319,7 +319,7 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			$backButton = $( '<div/>' )
 			.addClass( 'back' )
-			.append( $( '<a/>' ).addClass( 'button' ) );
+			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		if( this._navigationCache.length < 2 ) {
 			$backButton.addClass( 'disabled' );

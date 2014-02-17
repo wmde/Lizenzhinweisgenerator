@@ -89,7 +89,7 @@ $.extend( AttributionGenerator.prototype, {
 		}
 
 		if( mode === 'inline' ) {
-			return this._convertToInlineStyles( $attribution ).html();
+			return this._convertToInlineStyles( $attribution );
 		}
 
 		return mode === 'raw' ? $attribution.text() : $attribution;

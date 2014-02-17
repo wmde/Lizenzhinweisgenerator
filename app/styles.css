@@ -45,37 +45,45 @@ body {
 
 .app-questionnaire {
 	background-color: rgba( 245, 245, 245, 0.9 );
+	background: linear-gradient(160deg, rgba(245,245,245,1) 0%,rgba(245,245,245,0.9) 50%, rgba(245,245,245,0.4) 80%);
 	font-size: 13pt;
 	padding: 12pt;
 	position: fixed;
 	top: 15%;
 	width: 100%;
+	box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 .app-questionnaire .page {
 	display: table-cell;
-	padding-right: 300px;
+	padding-right: 348px; /* supplement's outer width plus some addition padding */
 }
 
 .app-questionnaire .back {
 	display: table-cell;
+	padding-left: 20px;
 	padding-right: 40px;
 	vertical-align: middle;
 }
 
 .app-questionnaire .back .button {
-	border-top: 40px solid transparent;
-	border-bottom: 40px solid transparent;
-	border-right: 30px solid black;
-	display: block;
-	height: 0;
-	width: 0;
+	display: inline-block;
+	-webkit-transform: scaleY(2.5);
+	color: #3b679e;
+	font-size: 45pt;
 }
 
-.app-questionnaire .back.disabled .button {
-	cursor: default;
-	border-right-color: lightgrey;
+.app-questionnaire .back .button:hover {
+	background: transparent;
+	color: #2b88d9;
 }
+
+.app-questionnaire .back.disabled .button,
+.app-questionnaire .back.disabled .button:hover {
+	cursor: default;
+	color: rgba(0,0,0,0.1);
+}
+
 
 .app-questionnaire .question {
 	font-weight: bold;
@@ -89,7 +97,7 @@ body {
 
 .app-questionnaire .answers li,
 .app-questionnaire a {
-	color: darkblue;
+	color: #3b679e;
 	cursor: pointer;
 }
 
@@ -123,9 +131,11 @@ body {
 }
 
 .app-preview-supplement {
-	background: rgba(233,233,233,0.4);
+	background: rgba(245,245,245,1);
+	border-left: 1px solid lightgrey;
+	box-shadow: 0 0 8px rgba(0,0,0,0.1);
 	font-size: 10pt;
-	padding: 12pt 12pt 24pt 12pt;
+	padding: 16px 16px 24pt 16px;
 	position: absolute;
 	right: 0;
 	text-align: left;
@@ -134,9 +144,47 @@ body {
 }
 
 .app-options {
-	background: lightgrey;
 	bottom: 0;
+	color: white;
+	display: table;
+	font-size: 10pt;
 	position: fixed;
 	width: 100%;
 	white-space: nowrap;
+	box-shadow: -1px -1px 10px rgba(0,0,0,0.3);
+	background: linear-gradient(to bottom, #3b679e 0%,#2b88d9 100%);
+}
+
+.app-options select {
+	margin: 0;
+}
+
+.app-options > * {
+	display: table-cell;
+	text-align: center;
+}
+
+.app-options .button {
+	cursor: pointer;
+	display: inline-block;
+	border: 1px solid rgba(59,103,158,0.3);
+	padding: 4px 8px;
+	margin: 5pt;
+	color: #FFFFFF;
+	background: linear-gradient(to bottom, #3b679e 0%,#2b88d9 100%);
+}
+
+.app-options .button:hover {
+	border: 1px solid rgba(255,255,255,0.5);
+}
+
+.app-options a.button {
+	text-decoration: none;
+}
+
+.app-options .button:active .button.active {
+	border: 1px solid rgba(59,103,158,0.5);
+	box-shadow: inset 1px 1px 1px rgba(0,0,0,0.3);
+	background: transparent;
+	padding: 5px 7px 3px 9px;
 }
