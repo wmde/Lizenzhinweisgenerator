@@ -29,11 +29,15 @@ $.extend( RawText.prototype, Option.prototype, {
 		var $a = $( '<a/>' ).addClass( 'button' ).text( 'Lizenzverweis ohne Formatierung' );
 
 		$a.on( 'click', function( event ) {
-			var $underlayContent = $( '<textarea/>' ).val(
-				self._attributionGenerator.generate( 'raw' )
-			);
+			var $target = $( event.target );
 
-			self._showUnderlay( $underlayContent, $( event.target ) );
+			if( !self._$underlay ) {
+				var $underlayContent = $( '<textarea rows="6" cols="40"/>' )
+					.prop( 'readonly', true )
+					.val( self._attributionGenerator.generate( 'raw' ) );
+				self._createUnderlay( $underlayContent, $target );
+			}
+			self.toggleUnderlay( $target );
 		} );
 
 		return $a;

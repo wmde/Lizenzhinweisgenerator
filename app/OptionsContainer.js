@@ -88,8 +88,9 @@ $.extend( OptionsContainer.prototype, {
 				this._$node.append(
 					$( '<div/>' )
 					.addClass( 'optionscontainer-option' )
-					.addClass( 'optionscontainer-option-' + this._options[i].id ) )
-					.append( this._options[i].instance.render() );
+					.addClass( 'optionscontainer-option-' + this._options[i].id )
+					.append( this._options[i].instance.render() )
+				);
 			}
 		}
 	},

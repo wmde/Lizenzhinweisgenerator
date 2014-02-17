@@ -23,30 +23,36 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 		var $a = $( '<a/>' ).addClass( 'button' ).text( 'HTML-Quelltext' );
 
 		$a.on( 'click', function( event ) {
-			var $textArea = $( '<textarea/>' ).val(
-				self._attributionGenerator.generate( 'inline' ).html()
-			);
+			var $target = $( event.target );
 
-			var $useInlineStyles = $( '<input/>' )
-				.attr( 'id', 'option-htmlCode-styles' )
-				.attr( 'type', 'checkbox' )
-				.prop( 'checked', true );
+			if( !self._$underlay ) {
+				var $textArea = $( '<textarea rows="6" cols="40"/>' )
+					.prop( 'readonly', true )
+					.val( self._attributionGenerator.generate( 'inline' ).html() );
 
-			$useInlineStyles.on( 'click', function() {
-				$textArea.val( self._attributionGenerator.generate(
-					$useInlineStyles.prop( 'checked' ) ? 'inline' : undefined
-				).html() );
-			} );
+				var $useInlineStyles = $( '<input/>' )
+					.attr( 'id', 'option-htmlCode-styles' )
+					.attr( 'type', 'checkbox' )
+					.prop( 'checked', true );
 
-			var $underlayContent = $textArea
-				.add( $useInlineStyles )
-				.add(
-					$( '<label/>' )
-					.attr( 'for', 'option-htmlCode-styles' )
-					.text( 'Inline-Styles verwenden' )
-				);
+				$useInlineStyles.on( 'click', function() {
+					$textArea.val( self._attributionGenerator.generate(
+						$useInlineStyles.prop( 'checked' ) ? 'inline' : undefined
+					).html() );
+				} );
 
-			self._showUnderlay( $underlayContent, $( event.target ) );
+				var $underlayContent = $textArea
+					.add( $useInlineStyles )
+					.add(
+						$( '<label/>' )
+						.attr( 'for', 'option-htmlCode-styles' )
+						.text( 'Inline-Styles verwenden' )
+					);
+
+				self._createUnderlay( $underlayContent, $target );
+			}
+
+			self.toggleUnderlay( $target );
 		} );
 
 		return $a;

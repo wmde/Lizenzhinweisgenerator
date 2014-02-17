@@ -154,6 +154,7 @@ body {
 	white-space: nowrap;
 	box-shadow: -1px -1px 10px rgba(0,0,0,0.3);
 	background: linear-gradient(to bottom, #3b679e 0%,#2b88d9 100%);
+	z-index: 1;
 }
 
 .app-options select {
@@ -183,9 +184,30 @@ body {
 	text-decoration: none;
 }
 
-.app-options .button:active .button.active {
+.app-options .button:active, .app-options .button.active {
 	border: 1px solid rgba(59,103,158,0.5);
 	box-shadow: inset 1px 1px 1px rgba(0,0,0,0.3);
 	background: transparent;
 	padding: 5px 7px 3px 9px;
+}
+
+.option-underlay {
+	background: #2b88d9;
+	background: linear-gradient(190deg, #3b679e 0%,#2b88d9 40%);
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: #FFFFFF;
+	font-size: 10pt;
+	display: none;
+	padding: 8px 8px 24px 8px;
+	position: fixed;
+}
+
+.option-underlay textarea {
+	float: left;
+}
+
+.option-underlay input {
+	clear: both;
+	float: left;
 }

@@ -31,6 +31,11 @@ $.extend( Option.prototype, {
 	_attributionGenerator: null,
 
 	/**
+	 * @type {jQuery|null}
+	 */
+	_$underlay: null,
+
+	/**
 	 * Renders the option's input element.
 	 *
 	 * @return {jQuery}
@@ -71,34 +76,46 @@ $.extend( Option.prototype, {
 	},
 
 	/**
+	 * Toggles the underlay's visibility.
+	 *
+	 * @param {jQuery} $target
+	 */
+	toggleUnderlay: function( $target ) {
+		if( !this._$underlay ) {
+			return;
+		}
+
+		var $button = $target.closest( '.button' );
+
+		if( this._$underlay.is( ':visible' ) ){
+			this._$underlay.hide();
+			$button.removeClass( 'active' );
+		} else {
+			this._$underlay.css( 'top', '0' );
+			this._$underlay.css( 'left', '0' );
+
+			this._$underlay.offset( {
+				top: $button.offset().top - this._$underlay.outerHeight(),
+				left: $button.offset().left + $button.width() / 2 - this._$underlay.outerWidth() / 2
+			} );
+
+			this._$underlay.show();
+			$button.addClass( 'active' );
+		}
+	},
+
+	/**
 	 * Shows an underlay.
 	 *
 	 * @param {jQuery} $content
-	 * @param {jQuery} $anchor Node the underlay shall be positioned to.
+	 * @param {jQuery} $target Node the underlay shall be positioned to.
 	 */
-	_showUnderlay: function( $content, $anchor ) {
-		var $underlay = $( '.option-underlay' );
-
-		if( $underlay.length === 0 ) {
-			$underlay = $( '<div/>' ).addClass( 'option-underlay' );
-			$underlay.appendTo( 'body' );
+	_createUnderlay: function( $content ) {
+		if( !this._$underlay ) {
+			this._$underlay = $( '<div/>' ).addClass( 'option-underlay' ).appendTo( 'body' );
 		}
 
-		$underlay.empty()
-		.append( $content )
-		.append(
-			$('<a/>' )
-			.text( 'schließen' )
-			.on( 'click', function( event ) {
-				$underlay.remove();
-			} )
-		);
-
-		$underlay.css(
-			'left',
-			( $anchor.position().left + $anchor.width() / 2 - $underlay.width() / 2 ) + 'px'
-		);
-		$underlay.css( 'top', ( $anchor.position().top - $underlay.height() ) + 'px' );
+		this._$underlay.empty().append( $content );
 	}
 
 } );
