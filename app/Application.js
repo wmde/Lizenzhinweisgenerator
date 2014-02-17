@@ -160,8 +160,8 @@ $.extend( Application.prototype, {
 			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
 				self._optionsContainer.setAttributionGenerator( attributionGenerator );
 				var optionKeys = ( self._questionnaire.getUseCase() === 'html' )
-					? { 'htmlCode': true }
-					: {};
+					? ['htmlCode']
+					: [];
 				self._optionsContainer.render( optionKeys );
 			} );
 		} )
@@ -207,7 +207,7 @@ $.extend( Application.prototype, {
 	updatePreview: function( attributionGenerator, supplementPromise ) {
 		var self = this;
 
-		return this._asset.getImageInfo( this._optionsContainer.getOption( 'imageSize' ) )
+		return this._asset.getImageInfo( this._optionsContainer.getOption( 'imageSize' ).value() )
 		.done( function( imageInfo ) {
 			self._$node.find( '.app-preview' ).replaceWith( self._renderPreview( imageInfo ) );
 

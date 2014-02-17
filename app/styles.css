@@ -132,6 +132,7 @@ body {
 
 .app-preview-supplement {
 	background: rgba(245,245,245,1);
+	border-bottom: 1px solid lightgrey;
 	border-left: 1px solid lightgrey;
 	box-shadow: 0 0 8px rgba(0,0,0,0.1);
 	font-size: 10pt;

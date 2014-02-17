@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery'], function( $ ) {
+define( ['jquery', 'OptionsContainer'], function( $, OptionsContainer ) {
 
 /**
  * Generator for attribution texts.
@@ -47,6 +47,41 @@ $.extend( AttributionGenerator.prototype, {
 	 * @type {Object}
 	 */
 	_options: null,
+
+	/**
+	 * @return {Asset}
+	 */
+	getAsset: function() {
+		return this._asset;
+	},
+
+	/**
+	 * @return {Object}
+	 */
+	getOptions: function() {
+		return this._options;
+	},
+
+	/**
+	 * Checks whether another AttributionGenerator instance equals this one.
+	 *
+	 * @param {AttributionGenerator} attributionGenerator
+	 * @return {boolean}
+	 */
+	equals: function( attributionGenerator ) {
+		if( !( attributionGenerator instanceof AttributionGenerator ) ) {
+			return false;
+		}
+
+		if( attributionGenerator.getAsset().getFilename() !== this._asset.getFilename() ) {
+			return false;
+		}
+
+		var jsonOptions = JSON.stringify( this._options ),
+			otherJsonOptions = JSON.stringify( attributionGenerator.getOptions() );
+
+		return jsonOptions === otherJsonOptions;
+	},
 
 	/**
 	 * Generates an attribution tag line from the current set of answers.

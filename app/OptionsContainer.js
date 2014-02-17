@@ -1,235 +1,128 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery' ], function( $ ) {
-
-// Order of option inputs (all possible options should be listed by option key):
-var ORDER = ['imageSize', 'originalFileLink', 'rawText', 'htmlCode'];
+define( [
+	'jquery',
+	'options/OriginalFileLink',
+	'options/HtmlCode',
+	'options/ImageSize',
+	'options/RawText'
+], function( $, OriginalFileLink, HtmlCode, ImageSize, RawText ) {
 
 /**
  * Visual container for input elements that act as options.
  * @constructor
  *
  * @event update
- *        Triggered whenever an option's value is changed.
+ *        Triggered whenever one option's value is changed.
  *        (1) {jQuery.Event}
  *
  * @param {jQuery} $node
  * @param {Asset} asset
+ * @param {string[]} defaultOptions
  */
-var OptionsContainer = function( $node, asset ) {
+var OptionsContainer = function( $node, asset, defaultOptions ) {
+	var self = this;
+
 	this._$node = $node;
-	this._asset = asset;
+	this._defaultOptions = defaultOptions || [
+		'imageSize',
+		'originalFileLink',
+		'rawText'
+	];
+	this._currentOptions = this._defaultOptions;
+
+	this._options = [
+		{ id: 'imageSize', instance: new ImageSize( asset ) },
+		{ id: 'originalFileLink', instance: new OriginalFileLink( asset ) },
+		{ id: 'rawText', instance: new RawText( asset ) },
+		{ id: 'htmlCode', instance: new HtmlCode( asset ) }
+	];
+
+	for( var i = 0; i < this._options.length; i++ ) {
+		$( this._options[i].instance ).on( 'update', function() {
+			$( self ).trigger( 'update' );
+		} )
+	}
 };
 
 $.extend( OptionsContainer.prototype, {
 	/**
+	 * Node of the OptionsContainer, node the Options are appended to.
 	 * @type {jQuery}
 	 */
 	_$node: null,
 
 	/**
-	 * @type {Asset}
+	 * List of ids of options that should be rendered by default.
+	 * @type {string[]}
 	 */
-	_asset: null,
+	_defaultOptions: null,
 
 	/**
-	 * @type {AttributionGenerator|null}
+	 * Definition of the options that should be rendered.
+	 * @type {Object[]}
 	 */
-	_attributionGenerator: null,
+	_options: null,
 
 	/**
 	 * Options that shall be rendered currently. (It may not be possible to always render all
 	 * options.)
+	 * @type {string[]}
 	 */
-	_keys: null,
+	_currentOptions: null,
 
 	/**
-	 * Renders the bar according to the submitted option keys.
+	 * Renders the bar according to the submitted option ids.
 	 *
-	 * @param {Object} [keys]
+	 * @param {Object} [ids]
 	 * @return {jQuery}
 	 */
-	render: function( keys ) {
-		this._keys = keys = $.extend( {
-			'imageSize': true,
-			'originalFileLink': true,
-			'rawText': true
-		}, keys || {} );
+	render: function( ids ) {
+		this._currentOptions = $.merge( $.merge( [], this._defaultOptions ), ids || [] );
 
 		this._$node.empty();
 
-		for( var i = 0; i < ORDER.length; i++ ) {
-			if( keys[ORDER[i]] ) {
-				this._$node.append( this._renderInput( ORDER[i] ) );
+		for( var i = 0; i < this._options.length; i++ ) {
+			if( $.inArray( this._options[i].id, this._currentOptions ) !== -1 ) {
+				this._$node.append(
+					$( '<div/>' )
+					.addClass( 'optionscontainer-option' )
+					.addClass( 'optionscontainer-option-' + this._options[i].id ) )
+					.append( this._options[i].instance.render() );
 			}
 		}
 	},
 
+	/**
+	 * Re-renders the options.
+	 */
 	update: function() {
-		this.render( this._keys );
+		this.render( this._currentOptions );
 	},
 
 	/**
-	 * Gets an option's value.
+	 * Returns a specific option.
 	 *
-	 * @param {string} key
-	 * @return {*}
+	 * @param {string|null} id
+	 * @return {Option}
 	 */
-	getOption: function( key ) {
-		return this._$node.find( '.optionscontainer-option-' + key )
-			.find( 'input, select' ).val();
+	getOption: function( id ) {
+		for( var i = 0; i < this._options.length; i++ ) {
+			if( id === this._options[i]['id'] ) {
+				return this._options[i]['instance'];
+			}
+		}
+		return null;
 	},
 
 	/**
 	 * @param {AttributionGenerator} attributionGenerator
 	 */
 	setAttributionGenerator: function( attributionGenerator ) {
-		this._attributionGenerator = attributionGenerator;
-		this.update();
-	},
-
-	/**
-	 * Renders a specific option's input element.
-	 *
-	 * @param {string} key
-	 * @return {jQuery}
-	 */
-	_renderInput: function( key ) {
-		var $node = $();
-
-		if( key === 'originalFileLink' ) {
-			$node = this._renderFullResolutionLink();
-		} else if( key === 'imageSize' ) {
-			$node = this._renderImageSize( key );
-		} else if( key === 'rawText' ) {
-			$node = this._renderRawText();
-		} else if( key === 'htmlCode' ) {
-			$node = this._renderHtmlCode();
+		for( var i = 0; i < this._options.length; i++ ) {
+			this._options[i].instance.setAttributionGenerator( attributionGenerator );
 		}
-
-		return $( '<div/>' ).addClass( 'optionscontainer-option' )
-			.append( $node.addClass( 'optionscontainer-option-' + key ) );
-	},
-
-	/**
-	 * @return {jQuery}
-	 */
-	_renderHtmlCode: function() {
-		var self = this;
-
-		if( !this._attributionGenerator ) {
-			return $();
-		}
-
-		var $a = $( '<a/>' ).addClass( 'button' ).text( 'HTML-Quelltext' );
-
-		$a.on( 'click', function( event ) {
-			var $underlayContent = $( '<textarea/>' ).val(
-				self._attributionGenerator.generate( 'inline' )
-			);
-
-			self._showUnderlay( $underlayContent, $( event.target ) );
-		} );
-
-		return $a;
-	},
-
-	/**
-	 * @return {jQuery}
-	 */
-	_renderRawText: function() {
-		var self = this;
-
-		if( !this._attributionGenerator ) {
-			return $();
-		}
-
-		var $a = $( '<a/>' ).addClass( 'button' ).text( 'Lizenzverweis ohne Formatierung' );
-
-		$a.on( 'click', function( event ) {
-			var $underlayContent = $( '<textarea/>' ).val(
-				self._attributionGenerator.generate( 'raw' )
-			);
-
-			self._showUnderlay( $underlayContent, $( event.target ) );
-		} );
-
-		return $a;
-	},
-
-	/**
-	 * Shows an underlay.
-	 *
-	 * @param {jQuery} $content
-	 * @param {jQuery} $anchor Node the underlay shall be positioned to.
-	 */
-	_showUnderlay: function( $content, $anchor ) {
-		var $underlay = $( '.option-underlay' );
-
-		if( $underlay.length === 0 ) {
-			$underlay = $( '<div/>' ).addClass( 'option-underlay' );
-			$underlay.appendTo( this._$node );
-		}
-
-		$underlay.empty()
-		.append( $content )
-		.append(
-			$('<a/>' )
-			.text( 'schließen' )
-			.on( 'click', function( event ) {
-				$underlay.remove();
-			} )
-		);
-	},
-
-	/**
-	 * @return {*}
-	 */
-	_renderFullResolutionLink: function() {
-		var $node = $( '<a/>' ).addClass( 'button' );
-
-		this._asset.getImageInfo( this.getOption( 'imageSize' ) )
-		.done( function( imageInfo ) {
-			$node.attr( 'href', imageInfo.url ).text( 'Originaldatei aufrufen' );
-		} )
-		.fail( function() {
-			$node.replaceWith( $() );
-		} );
-
-		return $node;
-	},
-
-	/**
-	 * @return {jQuery}
-	 */
-	_renderImageSize: function() {
-		var self = this,
-			$container = $( '<span/>' ).addClass( 'button' ),
-			$label = $( '<label/>' )
-				.attr( 'for', 'option-imageSize-input' )
-				.text( 'Bildgröße: ' ),
-			$select = $( '<select/>' ).attr( 'id', 'option-imageSize-input' ),
-			values = [200, 300, 400, 500, 1000],
-			selected = 500;
-
-		for( var i = 0; i < values.length; i++ ) {
-			var $option = $( '<option/>' ).attr( 'value', values[i] ).text( values[i] );
-			if( values[i] === selected ) {
-				$option.prop( 'selected', true );
-			}
-			$select.append( $option );
-		}
-
-		$select.on( 'change', function() {
-			$( self ).trigger( 'update' );
-		} );
-
-		$container
-		.append( $label )
-		.append( $select );
-
-		return $container;
 	}
 
 } );

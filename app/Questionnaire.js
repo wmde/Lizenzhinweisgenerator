@@ -74,6 +74,11 @@ $.extend( Questionnaire.prototype, {
 	_navigationCache: null,
 
 	/**
+	 * @type {AttributionGenerator|null}
+	 */
+	_attributionGenerator: null,
+
+	/**
 	 * Starts the questionnaire.
 	 */
 	start: function() {
@@ -262,7 +267,6 @@ $.extend( Questionnaire.prototype, {
 			editor = this._getAnswer( '13', 1 );
 		}
 
-
 		options = $.extend( {
 			editor: editor,
 			licenceOnly: options ? options.licenceOnly : false,
@@ -270,7 +274,15 @@ $.extend( Questionnaire.prototype, {
 			useCase: this.getUseCase()
 		}, options );
 
-		return new AttributionGenerator( this._asset, options );
+		var attributionGenerator = new AttributionGenerator( this._asset, options );
+
+		// Return cached attribution generator for allowing external objects to check whether a
+		// change actually has occurred.
+		if( !attributionGenerator.equals( this._attributionGenerator ) ) {
+			this._attributionGenerator = attributionGenerator;
+		}
+
+		return this._attributionGenerator;
 	},
 
 	/**
