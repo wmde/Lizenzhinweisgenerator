@@ -22,40 +22,50 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 
 		var $a = $( '<a/>' ).addClass( 'button' ).text( 'HTML-Quelltext' );
 
-		$a.on( 'click', function( event ) {
+		$a
+		.on( 'click', function( event ) {
 			var $target = $( event.target );
 
 			if( !self._$underlay ) {
-				var $textArea = $( '<textarea rows="6" cols="40"/>' )
-					.prop( 'readonly', true )
-					.val( self._attributionGenerator.generate( 'inline' ).html() );
-
-				var $useInlineStyles = $( '<input/>' )
-					.attr( 'id', 'option-htmlCode-styles' )
-					.attr( 'type', 'checkbox' )
-					.prop( 'checked', true );
-
-				$useInlineStyles.on( 'click', function() {
-					$textArea.val( self._attributionGenerator.generate(
-						$useInlineStyles.prop( 'checked' ) ? 'inline' : undefined
-					).html() );
-				} );
-
-				var $underlayContent = $textArea
-					.add( $useInlineStyles )
-					.add(
-						$( '<label/>' )
-						.attr( 'for', 'option-htmlCode-styles' )
-						.text( 'Inline-Styles verwenden' )
-					);
-
-				self._createUnderlay( $underlayContent, $target );
+				self._createUnderlay( self._createUnderlayContent() );
 			}
 
 			self.toggleUnderlay( $target );
 		} );
 
 		return $a;
+	},
+
+	/**
+	 * Creates the option's underlay content.
+	 *
+	 * @return {jQuery}
+	 */
+	_createUnderlayContent: function() {
+		var self = this;
+
+		var $textArea = $( '<textarea rows="6" cols="40"/>' )
+			.prop( 'readonly', true )
+			.val( self._attributionGenerator.generate( 'inline' ).html() );
+
+		var $useInlineStyles = $( '<input/>' )
+			.attr( 'id', 'option-htmlCode-styles' )
+			.attr( 'type', 'checkbox' )
+			.prop( 'checked', true );
+
+		$useInlineStyles.on( 'click', function() {
+			$textArea.val( self._attributionGenerator.generate(
+				$useInlineStyles.prop( 'checked' ) ? 'inline' : undefined
+			).html() );
+		} );
+
+		return $textArea
+			.add( $useInlineStyles )
+			.add(
+				$( '<label/>' )
+				.attr( 'for', 'option-htmlCode-styles' )
+				.text( 'Inline-Styles verwenden' )
+			);
 	}
 
 } );

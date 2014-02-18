@@ -32,15 +32,25 @@ $.extend( RawText.prototype, Option.prototype, {
 			var $target = $( event.target );
 
 			if( !self._$underlay ) {
-				var $underlayContent = $( '<textarea rows="6" cols="40"/>' )
-					.prop( 'readonly', true )
-					.val( self._attributionGenerator.generate( 'raw' ) );
-				self._createUnderlay( $underlayContent, $target );
+				self._createUnderlay( self._createUnderlayContent() );
 			}
 			self.toggleUnderlay( $target );
 		} );
 
 		return $a;
+	},
+
+	/**
+	 * Creates the option's underlay content.
+	 *
+	 * @return {jQuery}
+	 */
+	_createUnderlayContent: function() {
+		var self = this;
+
+		return $( '<textarea rows="6" cols="40"/>' )
+			.prop( 'readonly', true )
+			.val( self._attributionGenerator.generate( 'raw' ) );
 	}
 
 } );

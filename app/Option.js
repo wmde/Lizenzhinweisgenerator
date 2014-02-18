@@ -108,7 +108,6 @@ $.extend( Option.prototype, {
 	 * Shows an underlay.
 	 *
 	 * @param {jQuery} $content
-	 * @param {jQuery} $target Node the underlay shall be positioned to.
 	 */
 	_createUnderlay: function( $content ) {
 		if( !this._$underlay ) {
