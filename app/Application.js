@@ -99,14 +99,50 @@ $.extend( Application.prototype, {
 
 		this._$node.empty();
 
-		var $frontPage = $( '<div/>' ).addClass( 'app-frontpage' )
+		var $frontPage = $( '<div/>' ).addClass( 'frontpage' )
+			.append( $( '<h1/>' ).text( 'Lizenzverweisgenerator' ) )
 			.append(
-				$( '<input type="text"/>' )
-				.attr( 'placeholder', 'Internetadresse des Bildes' )
+				$( '<div/>' ).addClass( 'container-input' )
+				.append(
+					$( '<input type="text"/>' ).attr(
+						'placeholder',
+						'Internetadresse des Bildes auf Wikimedia Commons'
+					)
+				)
 			)
 			.append( $( '<button/>' ).text( 'Lizenztext erzeugen' ) );
 
 		this._$node.append( $frontPage );
+
+		$.get( './templates/frontpage-help.html' )
+		.done( function( html ) {
+			var $helpIcon = $( '<a/>' ).addClass( 'icon-help' ).text( '?' ),
+				$helpContent = $( '<div/>' ).addClass( 'help-content' ).html( html );
+
+			$frontPage.find( '.container-input' )
+			.append( $helpIcon )
+			.append( $helpContent );
+
+			$helpIcon
+			.on( 'click', function() {
+				if( $helpContent.is( ':visible' ) ) {
+					$helpContent.hide();
+					$helpIcon.removeClass( 'active' );
+				} else {
+					$helpContent.show();
+
+					$helpContent.css( 'top', '0' );
+					$helpContent.css( 'left', '0' );
+
+					$helpContent.offset( {
+						top: $helpIcon.offset().top + $helpIcon.height() + 6,
+						left: $helpIcon.offset().left
+					} );
+					$helpIcon.addClass( 'active' );
+				}
+			} );
+
+		} );
 
 		$frontPage.find( 'input' )
 		.on( 'dragenter dragover', false )
