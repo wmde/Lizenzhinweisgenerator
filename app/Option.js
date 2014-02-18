@@ -77,44 +77,41 @@ $.extend( Option.prototype, {
 
 	/**
 	 * Toggles the underlay's visibility.
-	 *
-	 * @param {jQuery} $target
 	 */
-	toggleUnderlay: function( $target ) {
+	toggleUnderlay: function() {
 		if( !this._$underlay ) {
 			return;
 		}
 
-		var $button = $target.closest( '.button' );
-
 		if( this._$underlay.is( ':visible' ) ){
 			this._$underlay.hide();
-			$button.removeClass( 'active' );
 		} else {
-			this._$underlay.css( 'top', '0' );
-			this._$underlay.css( 'left', '0' );
-
-			this._$underlay.offset( {
-				top: $button.offset().top - this._$underlay.outerHeight(),
-				left: $button.offset().left + $button.width() / 2 - this._$underlay.outerWidth() / 2
-			} );
-
 			this._$underlay.show();
-			$button.addClass( 'active' );
 		}
+
+		$( this ).trigger( 'toggleunderlay', [this._$underlay] );
 	},
 
 	/**
 	 * Shows an underlay.
 	 *
 	 * @param {jQuery} $content
+	 * @param {jQuery} $anchor
 	 */
-	_createUnderlay: function( $content ) {
-		if( !this._$underlay ) {
-			this._$underlay = $( '<div/>' ).addClass( 'option-underlay' ).appendTo( 'body' );
-		}
+	_createUnderlay: function( $content, $anchor ) {
+		var self = this;
 
-		this._$underlay.empty().append( $content );
+		this._$underlay = $( '<div/>' )
+			.addClass( 'option-underlay' )
+			.data( 'anchor', $anchor )
+			.append( $content )
+			.appendTo( 'body' );
+
+		$( window ).on( 'resize', function() {
+			if( self._$underlay.is( ':visible' ) ) {
+				$( self ).trigger( 'updateunderlay', [self._$underlay] );
+			}
+		} );
 	}
 
 } );

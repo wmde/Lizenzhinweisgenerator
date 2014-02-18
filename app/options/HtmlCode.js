@@ -24,13 +24,11 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 
 		$a
 		.on( 'click', function( event ) {
-			var $target = $( event.target );
-
 			if( !self._$underlay ) {
-				self._createUnderlay( self._createUnderlayContent() );
+				self._createUnderlay( self._createUnderlayContent(), $( event.target ) );
 			}
 
-			self.toggleUnderlay( $target );
+			self.toggleUnderlay();
 		} );
 
 		return $a;

@@ -29,12 +29,10 @@ $.extend( RawText.prototype, Option.prototype, {
 		var $a = $( '<a/>' ).addClass( 'button' ).text( 'Lizenzverweis ohne Formatierung' );
 
 		$a.on( 'click', function( event ) {
-			var $target = $( event.target );
-
 			if( !self._$underlay ) {
-				self._createUnderlay( self._createUnderlayContent() );
+				self._createUnderlay( self._createUnderlayContent(), $( event.target ) );
 			}
-			self.toggleUnderlay( $target );
+			self.toggleUnderlay();
 		} );
 
 		return $a;

@@ -150,6 +150,7 @@ body {
 	display: table;
 	font-size: 10pt;
 	position: fixed;
+	table-layout: fixed;
 	width: 100%;
 	white-space: nowrap;
 	box-shadow: -1px -1px 10px rgba(0,0,0,0.3);
@@ -204,7 +205,12 @@ body {
 }
 
 .option-underlay textarea {
+	border: 0;
 	float: left;
+	padding: 0;
+	margin: 0;
+	resize: none;
+	width: 100%;
 }
 
 .option-underlay input {

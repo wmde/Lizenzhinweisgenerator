@@ -40,9 +40,27 @@ var OptionsContainer = function( $node, asset, defaultOptions ) {
 	];
 
 	for( var i = 0; i < this._options.length; i++ ) {
-		$( this._options[i].instance ).on( 'update', function() {
+		$( this._options[i].instance )
+		.on( 'update', function() {
 			$( self ).trigger( 'update' );
 		} )
+		.on( 'toggleunderlay updateunderlay', function( event, $underlay ) {
+			var $button = $underlay.data( 'anchor' ).closest( '.button' ),
+				$container = $button.closest( '.optionscontainer-option' ),
+				padding = $underlay.outerWidth() - $underlay.width();
+
+			$button[ $underlay.is( ':visible' ) ? 'addClass' : 'removeClass' ]( 'active' );
+
+			$underlay.width( $container.width() - 10 - padding );
+
+			$underlay.css( 'top', '0' );
+			$underlay.css( 'left', '0' );
+
+			$underlay.offset( {
+				top: $container.offset().top - $underlay.outerHeight(),
+				left: $container.offset().left + $container.width() / 2 - $underlay.outerWidth() / 2
+			} );
+		} );
 	}
 };
 
