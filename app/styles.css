@@ -117,7 +117,7 @@ body {
 
 .app-preview {
 	height: 100%;
-	text-align: center;
+	text-align: left;
 }
 
 .app-preview > div {
@@ -128,6 +128,12 @@ body {
 	float:left;
 	height: 50%;
 	margin-bottom: 0; /* will be adjusted according to the preview's actual content */
+}
+
+.app-preview-frame {
+	border: 1px solid black;
+	margin: 0 auto;
+	padding: 10px;
 }
 
 .app-preview-supplement {

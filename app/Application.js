@@ -240,13 +240,11 @@ $.extend( Application.prototype, {
 		return $( '<div/>' ).addClass( 'app-preview' )
 			.append( $( '<div/>' ).addClass( 'app-preview-spacer' ) )
 			.append(
-				$( '<div/>' ).addClass( 'app-preview-frame' )
+				$( '<div/>' ).addClass( 'app-preview-frame' ).width( imageInfo.thumbwidth )
 				.append(
 					$( '<div/>' ).addClass( 'app-preview-image' ).append(
 						$( '<a/>' ).attr( 'href', imageInfo.descriptionurl ).append(
-							$( '<img/>' )
-							.attr( 'border', '0' )
-							.attr( 'src', imageInfo.thumburl )
+							$( '<img/>' ).attr( 'border', '0' ).attr( 'src', imageInfo.thumburl )
 						)
 					)
 				)

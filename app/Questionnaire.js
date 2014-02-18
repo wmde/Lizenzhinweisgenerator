@@ -198,6 +198,9 @@ $.extend( Questionnaire.prototype, {
 			licenceId = this._asset.getLicence().getId(),
 			pages = [];
 
+		var $supplement = $( '<h2/>' )
+			.text( 'Anmerkungen und Hinweise' );
+
 		pages.push( 'r-note-' + this.getUseCase() );
 
 		if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
@@ -213,7 +216,7 @@ $.extend( Questionnaire.prototype, {
 				self._asset.getLicence().getLegalCode()
 				.done( function( $licence ) {
 					$nodes = $nodes.add( $licence );
-					deferred.resolve( $nodes );
+					deferred.resolve( $supplement.add( $nodes ) );
 				} )
 				.fail( function( message ) {
 					deferred.reject( message );
@@ -232,7 +235,7 @@ $.extend( Questionnaire.prototype, {
 				$nodes = $nodes.add(
 					self.getAttributionGenerator( { licenceOnly: true } ).generate()
 				);
-				deferred.resolve( $nodes );
+				deferred.resolve( supplement.add( $nodes ) );
 			} )
 			.fail( function( message ) {
 				deferred.fail( message );
@@ -240,7 +243,7 @@ $.extend( Questionnaire.prototype, {
 		} else {
 			this._fetchPages( pages )
 			.done( function( $nodes ) {
-				deferred.resolve( $nodes );
+				deferred.resolve( $supplement.add( $nodes ) );
 			} )
 			.fail( function( message ) {
 				deferred.reject( message );
