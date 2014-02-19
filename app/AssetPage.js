@@ -68,7 +68,7 @@ $.extend( AssetPage.prototype, {
 		if( !this._asset ) {
 			this._asset = new Asset(
 				this._filename,
-				this._scrapeTitle() || this._filename.replace ( /\.[^.]+$/ , '' ),
+				this._filename.replace( /\.[^.]+$/ , '' ).replace( /_/g, ' '),
 				this._detectLicence(),
 				this._api,
 				{
@@ -105,21 +105,6 @@ $.extend( AssetPage.prototype, {
 		}
 
 		return null;
-	},
-
-	/**
-	 * Extracts the title from the DOM.
-	 *
-	 * @return {string}
-	 */
-	_scrapeTitle: function() {
-		var $td = this._$dom.find( '#fileinfotpl_art_title' );
-
-		if( $td.length === 0 ) {
-			$td = this._$dom.find( '#fileinfotpl_title' );
-		}
-
-		return this._getNextText( $td );
 	},
 
 	/**
@@ -197,24 +182,6 @@ $.extend( AssetPage.prototype, {
 	},
 
 	/**
-	 * Removes edge nodes if they contain white space.
-	 *
-	 * @param {jQuery} $nodes
-	 * @return {jQuery}
-	 */
-	_trimNodeList: function( $nodes ) {
-		if( $.trim( $nodes.eq( 0 ).text() ) === '' ) {
-			$nodes = $nodes.not( $nodes.eq( 0 ) );
-		}
-
-		if( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
-			$nodes = $nodes.not( $nodes.eq( $nodes.length - 1 ) );
-		}
-
-		return $nodes;
-	},
-
-	/**
 	 * Sanitizes every link node with the specified jQuery wrapped nodes.
 	 *
 	 * @param {jQuery} $nodes
@@ -235,6 +202,8 @@ $.extend( AssetPage.prototype, {
 					);
 				} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
 					href = 'http://commons.wikimedia.org' + href;
+				} else if( href.indexOf( '//' ) === 0 ) {
+					href = 'http:' + href;
 				}
 
 				$node.attr( 'href', href );
@@ -244,6 +213,24 @@ $.extend( AssetPage.prototype, {
 		} );
 
 		return $clonedNodes;
+	},
+
+	/**
+	 * Removes edge nodes if they contain white space.
+	 *
+	 * @param {jQuery} $nodes
+	 * @return {jQuery}
+	 */
+	_trimNodeList: function( $nodes ) {
+		if( $.trim( $nodes.eq( 0 ).text() ) === '' ) {
+			$nodes = $nodes.not( $nodes.eq( 0 ) );
+		}
+
+		if( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
+			$nodes = $nodes.not( $nodes.eq( $nodes.length - 1 ) );
+		}
+
+		return $nodes;
 	},
 
 	/**
