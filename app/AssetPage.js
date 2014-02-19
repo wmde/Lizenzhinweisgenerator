@@ -178,23 +178,7 @@ $.extend( AssetPage.prototype, {
 			return authors;
 		}
 
-		var $author = $();
-
-		$td.contents().each( function() {
-			var $node = $( this );
-			if( this.nodeName === 'A' ) {
-				var href = $node.attr( 'href' );
-				if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
-					href = href.replace( /^\/w\/index\.php\?title\=([^&]+).*$/, 'http://commons.wikimedia.org/wiki/$1' );
-				} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
-					href = 'http://commons.wikimedia.org' + href;
-				}
-				$node.attr( 'href', href );
-				$node.removeAttr( 'class' );
-				$node.removeAttr( 'title' );
-			}
-			$author = $author.add( $node );
-		} );
+		var $author = this._sanitizeUrls( $td.contents() );
 
 		// Remove "talk" link:
 		$author.each( function( i ) {
@@ -207,15 +191,59 @@ $.extend( AssetPage.prototype, {
 			}
 		} );
 
-		if( $.trim( $author.eq( 0 ).text() ) === '' ) {
-			$author = $author.not( $author.eq( 0 ) );
-		}
-
-		if( $.trim( $author.eq( $author.length - 1 ).text() ) === '' ) {
-			$author = $author.not( $author.eq( $author.length - 1 ) );
-		}
+		$author = this._trimNodeList( $author );
 
 		return [new Author( $author )];
+	},
+
+	/**
+	 * Removes edge nodes if they contain white space.
+	 *
+	 * @param {jQuery} $nodes
+	 * @return {jQuery}
+	 */
+	_trimNodeList: function( $nodes ) {
+		if( $.trim( $nodes.eq( 0 ).text() ) === '' ) {
+			$nodes = $nodes.not( $nodes.eq( 0 ) );
+		}
+
+		if( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
+			$nodes = $nodes.not( $nodes.eq( $nodes.length - 1 ) );
+		}
+
+		return $nodes;
+	},
+
+	/**
+	 * Sanitizes every link node with the specified jQuery wrapped nodes.
+	 *
+	 * @param {jQuery} $nodes
+	 * @return {jQuery}
+	 */
+	_sanitizeUrls: function( $nodes ) {
+		var $clonedNodes = $nodes.clone();
+
+		$clonedNodes.each( function() {
+			var $node = $( this );
+
+			if( $node.get( 0 ).nodeName === 'A' ) {
+				var href = $node.attr( 'href' );
+				if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
+					href = href.replace(
+						/^\/w\/index\.php\?title\=([^&]+).*$/,
+						'http://commons.wikimedia.org/wiki/$1'
+					);
+				} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
+					href = 'http://commons.wikimedia.org' + href;
+				}
+
+				$node.attr( 'href', href );
+				$node.removeAttr( 'class' );
+				$node.removeAttr( 'title' );
+			}
+		} );
+
+		return $clonedNodes;
 	},
 
 	/**
@@ -230,10 +258,18 @@ $.extend( AssetPage.prototype, {
 	/**
 	 * Extracts the attribution notice from the DOM.
 	 *
-	 * @return {string}
+	 * @return {jQuery|null}
 	 */
 	_scrapeAttribution: function() {
-		return $.trim( this._$dom.find( '.licensetpl_attr' ).first().html() );
+		var $attribution = this._$dom.find( '.licensetpl_attr' ).first();
+
+		if( $attribution.length === 0 ) {
+			return null;
+		}
+
+		var $clonedAttribution = $attribution.contents().clone();
+
+		return this._trimNodeList( this._sanitizeUrls( $clonedAttribution ) );
 	},
 
 	/**

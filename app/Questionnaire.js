@@ -235,7 +235,7 @@ $.extend( Questionnaire.prototype, {
 				$nodes = $nodes.add(
 					self.getAttributionGenerator( { licenceOnly: true } ).generate()
 				);
-				deferred.resolve( supplement.add( $nodes ) );
+				deferred.resolve( $supplement.add( $nodes ) );
 			} )
 			.fail( function( message ) {
 				deferred.fail( message );
