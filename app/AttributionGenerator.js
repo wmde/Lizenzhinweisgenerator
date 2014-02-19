@@ -104,7 +104,16 @@ $.extend( AttributionGenerator.prototype, {
 				$editor = this._generateEditor();
 
 			$attribution
-			.append( $author )
+			.append( $author );
+
+			if( useCase === 'print' ) {
+				$attribution
+				.append( document.createTextNode( ' (' ) )
+				.append( document.createTextNode( this._asset.getUrl() ) )
+				.append( document.createTextNode( ')' ) );
+			}
+
+			$attribution
 			.append( document.createTextNode( ', ' ) )
 			.append( $title );
 
@@ -192,23 +201,7 @@ $.extend( AttributionGenerator.prototype, {
 				$authors.append( document.createTextNode( ', ' ) );
 			}
 
-			if( !author.getUrl() ) {
-				$authors.append( document.createTextNode( author.getName() ) );
-				continue;
-			}
-
-			var authorUrl = author.getUrl();
-			if( authorUrl.substr( 0, 2 ) === '//' ) {
-				authorUrl = 'http:' + authorUrl;
-			}
-
-			if( useCase === 'html' ) {
-				$authors.append( $( '<a/>' ).attr( 'href', authorUrl ).text( author.getName() ) );
-			} else {
-				$authors
-					.append( document.createTextNode( author.getName() ) )
-					.append( document.createTextNode( ' (' + authorUrl + ')' ) );
-			}
+			$authors.append( useCase === 'html' ? author.getHtml() : author.getText() );
 		}
 
 		return $authors;

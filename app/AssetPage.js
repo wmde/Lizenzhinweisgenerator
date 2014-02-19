@@ -171,57 +171,51 @@ $.extend( AssetPage.prototype, {
 	 * @return {Author[]}
 	 */
 	_scrapeAuthors: function() {
-		var creator = this._scrapeCreator();
-
-		if( creator ) {
-			return [creator];
-		}
-
 		var $td = this._$dom.find( '#fileinfotpl_aut' ).next(),
 			authors = [];
 
-		$td.find( 'a' ).each( function() {
-			var $a = $( this ),
-				isUser = ( $a.attr( 'title' ) || '' ).match( /^User:(.+)$/i );
+		if( $td.length === 0 ) {
+			return authors;
+		}
 
-			var url = isUser
-				? '//commons.wikimedia.org' + $a.attr( 'href' )
-				: $a.attr( 'href' );
+		var $author = $();
 
-			authors.push( new Author( $a.text(), url ) );
+		$td.contents().each( function() {
+			var $node = $( this );
+			if( this.nodeName === 'A' ) {
+				var href = $node.attr( 'href' );
+				if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
+					href = href.replace( /^\/w\/index\.php\?title\=([^&]+).*$/, 'http://commons.wikimedia.org/wiki/$1' );
+				} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
+					href = 'http://commons.wikimedia.org' + href;
+				}
+				$node.attr( 'href', href );
+				$node.removeAttr( 'class' );
+				$node.removeAttr( 'title' );
+			}
+			$author = $author.add( $node );
 		} );
 
-		return authors;
-	},
+		// Remove "talk" link:
+		$author.each( function( i ) {
+			var $node = $( this );
+			if( this.nodeName === 'A' && $node.text() === 'talk' ) {
+				$author = $author
+					.not( $author.eq( i + 1 ) )
+					.not( $node )
+					.not( $author.eq( i - 1 ) );
+			}
+		} );
 
-	/**
-	 * Extracts the creator from the DOM.
-	 *
-	 * @return {Author[]|null}
-	 */
-	_scrapeCreator: function() {
-		var $creator = this._$dom.find( '#creator' );
-
-		if( $creator.length === 0 ) {
-			return null;
+		if( $.trim( $author.eq( 0 ).text() ) === '' ) {
+			$author = $author.not( $author.eq( 0 ) );
 		}
 
-		var $a = $creator.find( 'a' );
-
-		if( $a.length === 0 ) {
-			return [new Author( $creator.text() )];
+		if( $.trim( $author.eq( $author.length - 1 ).text() ) === '' ) {
+			$author = $author.not( $author.eq( $author.length - 1 ) );
 		}
 
-		var href = $a.attr( 'href' ),
-			url;
-
-		if ( href.match( /^\/wiki\// ) ) {
-			url = '//commons.wikimedia.org' + href;
-		} else if( !href.match( /^https{0,1}:/i ) ) {
-			url = href;
-		}
-
-		return [new Author( $a.text(), url )];
+		return [new Author( $author )];
 	},
 
 	/**

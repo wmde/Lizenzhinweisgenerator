@@ -6,38 +6,31 @@ define( ['jquery'], function( $ ) {
 /**
  * Represents a Commons author.
  *
- * @param {string} name
- * @param {string} [url]
+ * @param {jQuery} $author
  * @constructor
  */
-var Author = function( name, url ) {
-	this._name = name;
-	this._url = url || null;
+var Author = function( $author ) {
+	this._$author = $author;
 };
 
 $.extend( Author.prototype, {
 	/**
-	 * @type {string}
+	 * @type {jQuery}
 	 */
-	_name: null,
+	_$author: null,
 
 	/**
-	 * @type {string}
+	 * @return {jQuery}
 	 */
-	_url: null,
-
-	/**
-	 * @return {string}
-	 */
-	getName: function() {
-		return this._name;
+	getHtml: function() {
+		return this._$author;
 	},
 
 	/**
 	 * @return {string}
 	 */
-	getUrl: function() {
-		return this._url;
+	getText: function() {
+		return this._$author.text();
 	}
 
 } );

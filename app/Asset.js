@@ -30,7 +30,7 @@ var Asset = function( filename, title, licence, api, attributes ) {
 	this._descriptions = attributes.descriptions || null;
 	this._authors = attributes.authors || null;
 	this._source = attributes.source || null;
-	this._attribution = attributes.attribution || null;
+	this._$attribution = attributes.attribution || null;
 
 	this._imageInfo = {};
 };
@@ -72,9 +72,9 @@ $.extend( Asset.prototype, {
 	_source: null,
 
 	/**
-	 * @type {string|null}
+	 * @type {jQuery|null}
 	 */
-	_attribution: null,
+	_$attribution: null,
 
 	/**
 	 * @type {Object}
@@ -86,6 +86,14 @@ $.extend( Asset.prototype, {
 	 */
 	getFilename: function() {
 		return this._filename;
+	},
+
+	/**
+	 * Returns the asset's URL.
+	 * @return {string}
+	 */
+	getUrl: function() {
+		return 'http://commons.wikimedia.org/wiki/File:' + this._filename;
 	},
 
 	/**
@@ -122,7 +130,7 @@ $.extend( Asset.prototype, {
 
 	/**
 	 * @param {options} [options]
-	 * @return {string[]|string}
+	 * @return {Author[]|string}
 	 */
 	getAuthors: function( options ) {
 		options = options || {};
@@ -142,10 +150,10 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
-	 * @return {string}
+	 * @return {jQuery}
 	 */
 	getAttribution: function() {
-		return this._attribution;
+		return this._$attribution;
 	},
 
 	/**
