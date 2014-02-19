@@ -91,6 +91,16 @@ $.extend( Application.prototype, {
 		.done( function( filename ) {
 			self._api.getAsset( filename )
 			.done( function( asset ) {
+				if( !asset.getLicence() ) {
+					self._$node.find( '.error' )
+					.text( 'Leider konnte die Lizenz des verwiesenen Bildes nicht ermittelt werden '
+						+ 'oder wird von dieser Anwendung nicht unterstützt.'
+					)
+					.slideDown( 'fast' );
+
+					return;
+				}
+
 				self._asset = asset;
 				self._renderApplicationPage();
 			} );
@@ -127,7 +137,8 @@ $.extend( Application.prototype, {
 
 			$frontPage.find( '.container-input' )
 			.append( $helpIcon )
-			.append( $helpContent );
+			.append( $helpContent )
+			.append( $( '<div/>' ).addClass( 'error' ) );
 
 			$helpIcon
 			.on( 'click', function() {

@@ -70,3 +70,11 @@
 .frontpage button {
 	margin-top: 6pt;
 }
+
+.frontpage .error {
+	color: white;
+	display: none;
+	font-size: 10pt;
+	font-weight: bold;
+	margin-top: 8pt;
+}
