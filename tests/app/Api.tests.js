@@ -68,6 +68,33 @@
 				licenceId: 'cc-by-3.0',
 				attribution: null,
 				title: 'Gerardus t\' Hooft at Harvard'
+			},
+			'1950_Yankees.jpg': {
+				authors: [new Author( $( document.createTextNode( 'jcasabona' ) ) )],
+				// Unsupported CC licence CC-BY-1.0:
+				licenceId: null,
+				attribution: null,
+				title: '1950 Yankees'
+			},
+			'NatMonumFengegKapell.jpg': {
+				authors: [new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() ) ],
+				// Unsupported licence derivative CC-BY-3.0-LU:
+				licenceId: null,
+				attribution: null,
+				title: 'NatMonumFengegKapell'
+			},
+			'"Граничар" - Туховища.JPG': {
+				authors: [new Author( $( document.createTextNode( 'Ерол Шукриев' ) ) )],
+				licenceId: 'cc-by-3.0',
+				attribution: null,
+				title: '"Граничар" - Туховища'
+			},
+			'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg': {
+				authors: [],
+				// Completely unsupported licence:
+				licenceId: null,
+				attribution: null,
+				title: '03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007'
 			}
 		};
 
@@ -122,11 +149,19 @@
 
 					} );
 
-					assert.equal(
-						asset.getLicence().getId(),
-						testCases[filename].licenceId,
-						'Licence "' + asset.getLicence().getId() + '" matches.'
-					);
+					if( asset.getLicence() === null ) {
+						assert.strictEqual(
+							asset.getLicence(),
+							testCases[filename].licenceId,
+							'No supported licence.'
+						);
+					} else {
+						assert.equal(
+							asset.getLicence().getId(),
+							testCases[filename].licenceId,
+							'Licence "' + asset.getLicence().getId() + '" matches.'
+						);
+					}
 
 					assert.equal(
 						getHtmlText( asset.getAttribution() ),

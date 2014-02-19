@@ -16,7 +16,7 @@ define( ['jquery'], function( $ ) {
  * @throws {Error} if a required parameter is not defined.
  */
 var Asset = function( filename, title, licence, api, attributes ) {
-	if( !filename || !title || !licence || !api ) {
+	if( !filename || !title || ( !licence && licence !== null ) || !api ) {
 		throw new Error( 'No proper initialization parameters specified' );
 	}
 
