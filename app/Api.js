@@ -77,7 +77,13 @@ $.extend( Api.prototype, {
 			rvparse: 1
 		} )
 		.done( function( page ) {
-			if( !page.revisions || page.revisions.length === 0 || !page.revisions[0]['*'] ) {
+			if( page.missing !== undefined ) {
+				deferred.reject( 'Unable to locate the specified file' );
+				return;
+			} else if( page.invalid !== undefined ) {
+				deferred.reject( 'Invalid input' );
+				return;
+			} else if( !page.revisions || page.revisions.length === 0 || !page.revisions[0]['*'] ) {
 				deferred.reject( 'Unable to resolve revisions' );
 				return;
 			}

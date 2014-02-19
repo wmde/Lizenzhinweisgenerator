@@ -36,7 +36,9 @@ $.extend( InputHandler.prototype, {
 		} else if( typeof input === 'string' ) {
 			deferred.resolve( this._extractFilename( input ) );
 		} else {
-			throw new Error( 'Cannot handle "' + input + '"' );
+			deferred.reject( 'Cannot handle input' );
+			console.error( 'Cannot handle input:' );
+			console.error( input );
 		}
 
 		return deferred.promise();
@@ -66,6 +68,10 @@ $.extend( InputHandler.prototype, {
 		} else {
 			var img = event.dataTransfer.getData( 'text/html' );
 			deferred.resolve( $( '<div/>' ).html( img ).find( 'img' ).attr( 'src' ) );
+		}
+
+		if( deferred.state() === 'pending' ) {
+			deferred.reject( 'Unable to retrieve URL from event' );
 		}
 
 		return deferred.promise();

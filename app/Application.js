@@ -91,22 +91,38 @@ $.extend( Application.prototype, {
 		.done( function( filename ) {
 			self._api.getAsset( filename )
 			.done( function( asset ) {
-				self._$node.find( 'input' ).removeClass( 'loading' );
-
 				if( !asset.getLicence() ) {
-					self._$node.find( '.error' )
-					.text( 'Leider konnte die Lizenz des verwiesenen Bildes nicht ermittelt werden '
-						+ 'oder wird von dieser Anwendung nicht unterstützt.'
-					)
-					.stop()
-					.slideDown( 'fast' );
-
+					self._displayError( 'Leider konnte die Lizenz des verwiesenen Bildes nicht '
+						+ 'ermittelt werden oder wird von dieser Anwendung nicht unterstützt.' );
 					return;
 				}
 
 				self._asset = asset;
 				self._renderApplicationPage();
+			} )
+			.fail( function( message ) {
+				self._displayError( message );
+			} )
+			.always( function() {
+				self._$node.find( 'input' ).removeClass( 'loading' );
 			} );
+		} )
+		.fail( function( message ) {
+			self._displayError( message );
+			self._$node.find( 'input' ).removeClass( 'loading' );
+		} );
+	},
+
+	/**
+	 * Displays an error on the front-page.
+	 *
+	 * @param {string} message
+	 */
+	_displayError: function( message ) {
+		var $error = this._$node.find( '.error' );
+
+		$error.stop().slideUp( 'fast', function() {
+			$error.text( message ).slideDown( 'fast' );
 		} );
 	},
 
