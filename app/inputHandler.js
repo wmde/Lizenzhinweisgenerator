@@ -99,7 +99,7 @@ $.extend( InputHandler.prototype, {
 	}
 } );
 
-return new InputHandler();
+return InputHandler;
 
 } );
 

@@ -16,7 +16,10 @@
 
 		require.config( config );
 
-		require( ['qunit', 'tests/app/Api.tests'], function() {
+		require( [
+			'tests/app/Api.tests',
+			'tests/app/InputHandler.tests'
+		], function() {
 			QUnit.load();
 			QUnit.start();
 		} );

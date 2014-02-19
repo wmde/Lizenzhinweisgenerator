@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	['jquery', 'inputHandler', 'Questionnaire', 'OptionsContainer' ],
-	function( $, inputHandler, Questionnaire, OptionsContainer ) {
+	['jquery', 'InputHandler', 'Questionnaire', 'OptionsContainer' ],
+	function( $, InputHandler, Questionnaire, OptionsContainer ) {
 
 /**
  * Application renderer.
@@ -22,6 +22,7 @@ var Application = function( $initNode, api, options ) {
 
 	this._$node = $initNode;
 	this._api = api;
+	this._inputHandler = new InputHandler();
 
 	this._options = $.extend( {
 		'imageSize': 500
@@ -38,6 +39,11 @@ $.extend( Application.prototype, {
 	 * @type {Api}
 	 */
 	_api: null,
+
+	/**
+	 * @type {InputHandler}
+	 */
+	_inputHandler: null,
 
 	/**
 	 * @type {Object}
@@ -81,7 +87,7 @@ $.extend( Application.prototype, {
 	_evaluateInput: function( input ) {
 		var self = this;
 
-		inputHandler.getFilename( input )
+		this._inputHandler.getFilename( input )
 		.done( function( filename ) {
 			self._api.getAsset( filename )
 			.done( function( asset ) {
