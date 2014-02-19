@@ -91,11 +91,14 @@ $.extend( Application.prototype, {
 		.done( function( filename ) {
 			self._api.getAsset( filename )
 			.done( function( asset ) {
+				self._$node.find( 'input' ).removeClass( 'loading' );
+
 				if( !asset.getLicence() ) {
 					self._$node.find( '.error' )
 					.text( 'Leider konnte die Lizenz des verwiesenen Bildes nicht ermittelt werden '
 						+ 'oder wird von dieser Anwendung nicht unterstützt.'
 					)
+					.stop()
 					.slideDown( 'fast' );
 
 					return;
@@ -170,6 +173,11 @@ $.extend( Application.prototype, {
 
 		$frontPage.find( 'button' )
 		.on( 'click', function() {
+			$frontPage.find( '.error' )
+			.stop()
+			.slideUp( 'fast' );
+
+			$frontPage.find( 'input' ).addClass( 'loading' );
 			self._evaluateInput( $frontPage.find( 'input' ).val() );
 		} );
 	},

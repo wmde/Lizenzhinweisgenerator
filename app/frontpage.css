@@ -30,6 +30,10 @@
 	width: 500px;
 }
 
+.frontpage input.loading {
+	background: url(../gfx/ajax-spinner.gif) no-repeat white 99%;
+}
+
 .frontpage .icon-help {
 	border: 2px solid rgba(255,255,255,0.9);
 	color: white;
