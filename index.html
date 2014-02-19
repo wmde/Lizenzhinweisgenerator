@@ -2,11 +2,32 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<script data-main="app/main.js" src="lib/require/require.js"></script>
-		<link href="./app/AttributionGenerator.css" rel="stylesheet" media="screen">
-		<link href="./app/frontpage.css" rel="stylesheet" media="screen">
-		<link href="./app/styles.css" rel="stylesheet" media="screen">
+		<script src="config.js"></script>
+		<script src="lib/require/require.js"></script>
+		<link href="app/AttributionGenerator.css" rel="stylesheet" media="screen">
+		<link href="app/frontpage.css" rel="stylesheet" media="screen">
+		<link href="app/styles.css" rel="stylesheet" media="screen">
 	</head>
+	<script>
+		( function( require, config ) {
+			require.config( config );
+
+			require( ['jquery', 'Application', 'Api'], function( $, Application, Api ) {
+
+				$.event.props.push('dataTransfer');
+
+				$( document ).ready( function () {
+					var application = new Application(
+							$( '#application' ),
+							new Api( '//commons.wikimedia.org/w/api.php?callback=?' )
+					);
+
+					application.start();
+				} );
+
+			} );
+		}( require, app.config ) );
+	</script>
 	<body>
 		<div id="application" class="application">wird geladen...</div>
 	</body>

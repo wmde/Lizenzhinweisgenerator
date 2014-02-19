@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>QUnit tests</title>
+	<link rel="stylesheet" href="../lib/qunit/qunit-1.14.0.css">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script src="../lib/require/require.js"></script>
+<script src="../config.js"></script>
+<script>
+	( function( require, config ) {
+		config.baseUrl = '../app';
+
+		require.config( config );
+
+		require( ['qunit', 'tests/app/Api.tests'], function() {
+			QUnit.load();
+			QUnit.start();
+		} );
+	}( require, app.config ) );
+</script>
+
+</body>
+</html>
