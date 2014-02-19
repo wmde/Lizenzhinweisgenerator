@@ -21,13 +21,13 @@ return [
 
 	new Licence( 'cc-by-2.0-de', 'CC BY 2.0 DE', 'http://creativecommons.org/licenses/by/2.0/de/legalcode/' ),
 	new Licence( 'cc-by-3.0-de', 'CC BY 3.0 DE', 'http://creativecommons.org/licenses/by/3.0/de/legalcode/' ),
-	new Licence( 'cc-by-3.0', 'CC BY 3.0', /^CC-BY-3.0(-migrated)*$/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
+	new Licence( 'cc-by-3.0', 'CC BY 3.0', /^CC-BY-3.0(-migrated)?/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
 
 	new Licence( 'cc-by-sa-2.0-de', 'CC BY-SA 2.0 DE', 'http://creativecommons.org/licenses/by-sa/2.0/de/legalcode/' ),
 	new Licence( 'cc-by-sa-3.0-de', 'CC BY-SA 3.0 DE', 'http://creativecommons.org/licenses/by-sa/3.0/de/legalcode/'),
-	new Licence( 'cc-by-sa-3.0', 'CC BY-SA 3.0', /^CC-BY-SA-3.0(-migrated)*$/i, 'http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ),
+	new Licence( 'cc-by-sa-3.0', 'CC BY-SA 3.0', /^CC-BY-SA-3.0(-migrated)?/i, 'http://creativecommons.org/licenses/by-sa/3.0/legalcode/' )
 
-	new Licence( 'CC*', /^CC-([A-Z-]+)-([0-9.]+)[A-Z-]*(,.+)*/i, 'http://creativecommons.org/licenses/' )
+//	new Licence( 'CC*', /^CC-([A-Z-]+)-([0-9.]+)[A-Z-]*(,.+)*/i, 'http://creativecommons.org/licenses/' )
 
 //	new Licence( /^CC-([A-Z-]+)-([0-9.]+)([A-Z-]*(,.+)*){1}/i, 'http://creativecommons.org/licenses/$1/$2/$3' ),
 //	new Licence( /^CC-([A-Z-]+)-([0-9.]+)/i, 'http://creativecommons.org/licenses/$1/$2' ),

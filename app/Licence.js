@@ -55,7 +55,7 @@ var Licence = function( id, name, regExp, url, options ) {
 	if( regExp instanceof RegExp ) {
 		this._regExp = regExp;
 	} else {
-		this._regExp = new RegExp( '/^' + name + '$/i' );
+		this._regExp = new RegExp( '^' + id, 'i' );
 	}
 
 	this._url = url || null;
