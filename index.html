@@ -12,14 +12,19 @@
 		( function( require, config ) {
 			require.config( config );
 
-			require( ['jquery', 'Application', 'Api'], function( $, Application, Api ) {
+			require( [
+				'jquery', 'Application', 'Api', 'LicenceStore', 'LICENCES'
+			], function( $, Application, Api, LicenceStore, LICENCES ) {
 
 				$.event.props.push('dataTransfer');
 
 				$( document ).ready( function () {
 					var application = new Application(
 							$( '#application' ),
-							new Api( '//commons.wikimedia.org/w/api.php?callback=?' )
+							new Api(
+								'//commons.wikimedia.org/w/api.php?callback=?',
+								new LicenceStore( LICENCES )
+							)
 					);
 
 					application.start();

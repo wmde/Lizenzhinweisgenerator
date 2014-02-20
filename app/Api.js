@@ -8,14 +8,16 @@ define( ['jquery', 'AssetPage'], function( $, AssetPage ) {
  * @constructor
  *
  * @param {string} url
+ * @param {LicenceStore} licenceStore
  *
- * @throws {Error} if the API url parameter is omitted.
+ * @throws {Error} if a required parameter is omitted.
  */
-var Api = function( url ) {
-	if( !url ) {
-		throw new Error( 'API URL needs to be specified' );
+var Api = function( url, licenceStore ) {
+	if( !url || !licenceStore ) {
+		throw new Error( 'A required parameter has been omitted' );
 	}
 	this._url = url;
+	this._licenceStore = licenceStore;
 };
 
 $.extend( Api.prototype, {
@@ -24,6 +26,18 @@ $.extend( Api.prototype, {
 	 * @type {string}
 	 */
 	_url: null,
+
+	/**
+	 * @param {LicenceStore|null} filename
+	 */
+	_licenceStore: null,
+
+	/**
+	 * @return {LicenceStore|null}
+	 */
+	getLicenceStore: function() {
+		return this._licenceStore;
+	},
 
 	/**
 	 * Generates an Asset object for a specific filename.

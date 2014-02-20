@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	['jquery', 'Asset', 'LICENCES', 'Licence', 'Author'],
-	function( $, Asset, LICENCES, Licence, Author ) {
+	['jquery', 'Asset', 'Author'],
+	function( $, Asset, Author ) {
 
 function capitalize( string ) {
 	return string.substring( 0, 1 ).toUpperCase() + string.substring( 1 );
@@ -78,7 +78,7 @@ $.extend( AssetPage.prototype, {
 				this._filename,
 				this._filename.replace( /\.[^.]+$/ , '' ).replace( /_/g, ' '),
 				this._mediaType,
-				this._detectLicence(),
+				this._api.getLicenceStore().detectLicence( this._categories ),
 				this._api,
 				{
 					descriptions: this._scrapeDescriptions(),
@@ -89,31 +89,6 @@ $.extend( AssetPage.prototype, {
 			);
 		}
 		return this._asset;
-	},
-
-	/**
-	 * Detects a licence by analyzing the page's categories and returns it. Returns "null" if no
-	 * licence is detected.
-	 *
-	 * @return {Licence|null}
-	 */
-	_detectLicence: function() {
-		for( var i = 0; i < this._categories.length; i++ ) {
-			var category = this._categories[i];
-
-			for( var j = 0; j < LICENCES.length; j++ ) {
-				var licence = LICENCES[j];
-
-				if( licence.match( category ) ) {
-					if( licence.isAbstract() ) {
-						licence = Licence.newFromAbstract( licence, category );
-					}
-					return licence;
-				}
-			}
-		}
-
-		return null;
 	},
 
 	/**
