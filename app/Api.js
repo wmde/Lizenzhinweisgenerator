@@ -39,18 +39,26 @@ $.extend( Api.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-		this.getPageContent( filename )
-		.done( function( $dom ) {
+		this._getMediaType( filename )
+		.done( function( mediaType ) {
 
-			self.getCategories( filename )
-			.done( function( categories ) {
-				var assetPage = new AssetPage( filename, $dom, categories, self );
+			self.getPageContent( filename )
+			.done( function( $dom ) {
 
-				deferred.resolve( assetPage.getAsset() );
+				self.getCategories( filename )
+				.done( function( categories ) {
+					var assetPage = new AssetPage( filename, mediaType, $dom, categories, self );
+
+					deferred.resolve( assetPage.getAsset() );
+				} )
+				.fail( function( message ) {
+					deferred.reject( message );
+				} );
 			} )
 			.fail( function( message ) {
 				deferred.reject( message );
 			} );
+
 		} )
 		.fail( function( message ) {
 			deferred.reject( message );
@@ -70,20 +78,21 @@ $.extend( Api.prototype, {
 	 *         - {string} Error message
 	 */
 	getPageContent: function( filename ) {
-		var deferred = $.Deferred();
+		var self = this,
+			deferred = $.Deferred();
 
 		this._query( filename, 'revisions', {
 			rvprop: 'content',
 			rvparse: 1
 		} )
 		.done( function( page ) {
-			if( page.missing !== undefined ) {
-				deferred.reject( 'Unable to locate the specified file' );
+			var error = self._checkPageResponse( page );
+			if( error ) {
+				deferred.reject( error );
 				return;
-			} else if( page.invalid !== undefined ) {
-				deferred.reject( 'Invalid input' );
-				return;
-			} else if( !page.revisions || page.revisions.length === 0 || !page.revisions[0]['*'] ) {
+			}
+
+			if( !page.revisions || page.revisions.length === 0 || !page.revisions[0]['*'] ) {
 				deferred.reject( 'Unable to resolve revisions' );
 				return;
 			}
@@ -143,7 +152,8 @@ $.extend( Api.prototype, {
 	 *         - {string} Error message
 	 */
 	getImageInfo: function( filename, size ) {
-		var deferred = $.Deferred();
+		var self = this,
+			deferred = $.Deferred();
 
 		this._query( filename, 'imageinfo', {
 			iiprop: 'url',
@@ -151,6 +161,12 @@ $.extend( Api.prototype, {
 			iiurlheight: size
 		} )
 		.done( function( page ) {
+			var error = self._checkPageResponse( page );
+			if( error ) {
+				deferred.reject( error );
+				return;
+			}
+
 			if( !page.imageinfo || page.imageinfo.length === 0 ) {
 				deferred.reject( 'No image information returned' );
 			}
@@ -161,6 +177,63 @@ $.extend( Api.prototype, {
 		} );
 
 		return deferred.promise();
+	},
+
+	/**
+	 * Retrieves a file's media type.
+	 *
+	 * @param {string} filename
+	 * @return {Object} jQuery Promise:
+	 *         Resolved parameters:
+	 *         - {string} The file's media type.
+	 *         Rejected parameters:
+	 *         - {string} Error message
+	 */
+	_getMediaType: function( filename ) {
+		var self = this,
+			deferred = $.Deferred();
+
+		this._query( filename, 'imageinfo', {
+			iiprop: 'mediatype'
+		} )
+		.done( function( page ) {
+			var error = self._checkPageResponse( page );
+			if( error ) {
+				deferred.reject( error );
+				return;
+			}
+
+			for( var i = 0; i < page.imageinfo.length; i++ ) {
+				var mediaType = page.imageinfo[i].mediatype;
+				if( mediaType ) {
+					deferred.resolve( mediaType.toLowerCase() );
+					return;
+				}
+			}
+
+			deferred.reject( 'Unable to resolve media type' );
+
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
+		} );
+
+		return deferred;
+	},
+
+	/**
+	 * Performs basic page response checks.
+	 *
+	 * @param {Object} page
+	 * @return {string|null}
+	 */
+	_checkPageResponse: function( page ) {
+		if( page.missing !== undefined ) {
+			return 'Unable to locate the specified file';
+		} else if( page.invalid !== undefined ) {
+			return 'Invalid input';
+		}
+		return null;
 	},
 
 	/**

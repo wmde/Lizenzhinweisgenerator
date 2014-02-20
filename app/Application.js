@@ -97,6 +97,12 @@ $.extend( Application.prototype, {
 					return;
 				}
 
+				if( asset.getMediaType() !== 'bitmap' && asset.getMediaType() !== 'drawing' ) {
+					self._displayError( 'Der Datentyp der angegebenen Datei wird von dieser '
+						+ 'Applikation momentan leider nicht unterstützt.' );
+					return;
+				}
+
 				self._asset = asset;
 				self._renderApplicationPage();
 			} )

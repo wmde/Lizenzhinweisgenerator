@@ -95,6 +95,27 @@
 				licenceId: null,
 				attribution: null,
 				title: '03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007'
+			},
+			// Video:
+			'The_Little_Princess_(1939)_full.ogv': {
+				authors: [new Author( $( document.createTextNode( 'Walter Lang/20th Century Fox' ) ) )],
+				licenceId: 'PD',
+				attribution: null,
+				title: 'The Little Princess (1939) full'
+			},
+			// Audio:
+			'05 Air from Suite in C minor.ogg': {
+				authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Bdegazio">Bdegazio</a>' ) )],
+				licenceId: 'cc-by-sa-3.0',
+				attribution: null,
+				title: '05 Air from Suite in C minor'
+			},
+			// Office:
+			'Cox_and_box.pdf': {
+				authors: [new Author( $( document.createTextNode( 'F C Burnand' ) ) )],
+				licenceId: 'PD',
+				attribution: null,
+				title: 'Cox and box'
 			}
 		};
 
@@ -187,7 +208,9 @@
 		QUnit.test( 'getAsset() error handling', function( assert ) {
 			var negativeTestCases = [
 				'string that is not supposed to be the name of an existing image',
-				'{invalid input}'
+				'{invalid input}',
+				// Not in "File:" namespace:
+				'TimedText:Elephants_Dream.ogg.ca.srt'
 			];
 
 			for( var i = 0; i < negativeTestCases.length; i++ ) {
@@ -202,10 +225,10 @@
 							false,
 							'Unexpected result: "' + parsedFilename + '".'
 						);
-					} ).fail( function() {
+					} ).fail( function( message ) {
 						assert.ok(
 							true,
-							'Rejected input "' + input + '".'
+							'Rejected input "' + input + '" with error message "' + message + '".'
 						);
 					} )
 					.always( function() {

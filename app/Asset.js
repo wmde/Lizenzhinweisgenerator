@@ -9,19 +9,21 @@ define( ['jquery'], function( $ ) {
  *
  * @param {string} filename
  * @param {string} title
+ * @param {string} mediaType
  * @param {Licence|null} licence
  * @param {Api} api
  * @param {Object} [attributes]
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Asset = function( filename, title, licence, api, attributes ) {
-	if( !filename || !title || ( !licence && licence !== null ) || !api ) {
+var Asset = function( filename, title, mediaType, licence, api, attributes ) {
+	if( !filename || !title || !mediaType || ( !licence && licence !== null ) || !api ) {
 		throw new Error( 'No proper initialization parameters specified' );
 	}
 
 	this._filename = filename;
 	this._title = title;
+	this._mediaType = mediaType;
 	this._licence = licence;
 	this._api = api;
 
@@ -45,6 +47,11 @@ $.extend( Asset.prototype, {
 	 * @type {string}
 	 */
 	_title: null,
+
+	/**
+	 * @type {string}
+	 */
+	_mediaType: null,
 
 	/**
 	 * @type {Licence|null}
@@ -101,6 +108,13 @@ $.extend( Asset.prototype, {
 	 */
 	getTitle: function() {
 		return this._title;
+	},
+
+	/**
+	 * @return {string}
+	 */
+	getMediaType: function() {
+		return this._mediaType;
 	},
 
 	/**
