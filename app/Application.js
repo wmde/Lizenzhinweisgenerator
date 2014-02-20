@@ -173,7 +173,7 @@ $.extend( Application.prototype, {
 		$questionnaire.on( 'update', function( event, attributionGenerator, supplementPromise ) {
 			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
 				self._optionsContainer.setAttributionGenerator( attributionGenerator );
-				var optionKeys = ( self._questionnaire.getUseCase() === 'html' )
+				var optionKeys = ( attributionGenerator.getOptions().useCase === 'html' )
 					? ['htmlCode']
 					: [];
 				self._optionsContainer.render( optionKeys );

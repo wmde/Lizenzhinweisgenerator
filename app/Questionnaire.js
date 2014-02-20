@@ -163,7 +163,7 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @return {string}
 	 */
-	getUseCase: function() {
+	_getUseCase: function() {
 		return this._getAnswer( '3', 1 ) ? 'html' : 'print';
 	},
 
@@ -201,7 +201,7 @@ $.extend( Questionnaire.prototype, {
 		var $supplement = $( '<h2/>' )
 			.text( 'Anmerkungen und Hinweise' );
 
-		pages.push( 'r-note-' + this.getUseCase() );
+		pages.push( 'r-note-' + this._getUseCase() );
 
 		if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
 			pages.push( 'r-restrictions-cc2' );
@@ -274,7 +274,7 @@ $.extend( Questionnaire.prototype, {
 			editor: editor,
 			licenceOnly: options ? options.licenceOnly : false,
 			licenceLink: !( resultId === '3' || resultId === '4c' ),
-			useCase: this.getUseCase()
+			useCase: this._getUseCase()
 		}, options );
 
 		var attributionGenerator = new AttributionGenerator( this._asset, options );
@@ -382,7 +382,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {jQuery} jQuery wrapped DOM node(s) of the requested page(s).
-	 *         Rejected parameters
+	 *         Rejected parameters:
 	 *         - {string} Error message.
 	 */
 	_fetchPages: function( pages ) {
