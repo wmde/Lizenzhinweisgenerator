@@ -127,7 +127,7 @@
 
 					assert.equal(
 						asset.getTitle(),
-						testCases[filename].title,
+						testCase.title,
 						'Title "' + asset.getTitle() + '" matches.'
 					);
 
@@ -135,7 +135,7 @@
 
 						assert.equal(
 							author.getText(),
-							testCases[filename].authors[i].getText(),
+							testCase.authors[i].getText(),
 							'"' + filename + '": Author text "' + author.getText() + '" matches.'
 						);
 
@@ -143,7 +143,7 @@
 
 						assert.equal(
 							authorHtml,
-							getHtmlText( testCases[filename].authors[i].getHtml() ),
+							getHtmlText( testCase.authors[i].getHtml() ),
 							'"' + filename + '": Author html "' + authorHtml + '" matches.'
 						);
 
@@ -152,20 +152,20 @@
 					if( asset.getLicence() === null ) {
 						assert.strictEqual(
 							asset.getLicence(),
-							testCases[filename].licenceId,
+							testCase.licenceId,
 							'No supported licence.'
 						);
 					} else {
 						assert.equal(
 							asset.getLicence().getId(),
-							testCases[filename].licenceId,
+							testCase.licenceId,
 							'Licence "' + asset.getLicence().getId() + '" matches.'
 						);
 					}
 
 					assert.equal(
 						getHtmlText( asset.getAttribution() ),
-						getHtmlText( testCases[filename].attribution ),
+						getHtmlText( testCase.attribution ),
 						'Dedicated attribution of "' + filename + '" matches.'
 					);
 
@@ -183,6 +183,38 @@
 			} );
 
 		} );
+
+		QUnit.test( 'getAsset() error handling', function( assert ) {
+			var negativeTestCases = [
+				'string that is not supposed to be the name of an existing image',
+				'{invalid input}'
+			];
+
+			for( var i = 0; i < negativeTestCases.length; i++ ) {
+				var input = negativeTestCases[i];
+
+				QUnit.stop();
+
+				( function( input ) {
+					api.getAsset( input )
+					.done( function( parsedFilename ) {
+						assert.ok(
+							false,
+							'Unexpected result: "' + parsedFilename + '".'
+						);
+					} ).fail( function() {
+						assert.ok(
+							true,
+							'Rejected input "' + input + '".'
+						);
+					} )
+					.always( function() {
+						QUnit.start();
+					} );
+				}( input ) );
+			}
+		} );
+
 	} );
 
 }( define ) );
