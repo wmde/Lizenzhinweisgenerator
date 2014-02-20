@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	['jquery', 'InputHandler', 'Questionnaire', 'OptionsContainer' ],
-	function( $, InputHandler, Questionnaire, OptionsContainer ) {
+	['jquery', 'FrontPage', 'Questionnaire', 'OptionsContainer' ],
+	function( $, FrontPage, Questionnaire, OptionsContainer ) {
 
 /**
  * Application renderer.
@@ -22,7 +22,6 @@ var Application = function( $initNode, api, options ) {
 
 	this._$node = $initNode;
 	this._api = api;
-	this._inputHandler = new InputHandler();
 
 	this._options = $.extend( {
 		'imageSize': 500
@@ -39,11 +38,6 @@ $.extend( Application.prototype, {
 	 * @type {Api}
 	 */
 	_api: null,
-
-	/**
-	 * @type {InputHandler}
-	 */
-	_inputHandler: null,
 
 	/**
 	 * @type {Object}
@@ -63,6 +57,11 @@ $.extend( Application.prototype, {
 	_imageInfo: null,
 
 	/**
+	 * @type {FrontPage|null}
+	 */
+	_frontPage: null,
+
+	/**
 	 * @type {Questionnaire}
 	 */
 	_questionnaire: null,
@@ -76,45 +75,49 @@ $.extend( Application.prototype, {
 	 * Starts the application.
 	 */
 	start: function() {
-		this._renderFrontPage();
+		var self = this;
+		this._frontPage = new FrontPage( this._$node );
+
+		$( this._frontPage )
+		.on( 'input', function( event, filename ) {
+			self._processFilename( filename );
+		} )
+		.on( 'error', function( event, message ) {
+			self._displayError( message );
+		} );
+
+		this._frontPage.render();
 	},
 
 	/**
-	 * Evaluate any input and updates the page rendering accordingly.
+	 * Processes a filename and updates the page rendering accordingly.
 	 *
-	 * @param {string|jQuery.Event} input
+	 * @param {string} filename
 	 */
-	_evaluateInput: function( input ) {
+	_processFilename: function( filename ) {
 		var self = this;
 
-		this._inputHandler.getFilename( input )
-		.done( function( filename ) {
-			self._api.getAsset( filename )
-			.done( function( asset ) {
-				if( !asset.getLicence() ) {
-					self._displayError( 'Leider konnte die Lizenz des verwiesenen Bildes nicht '
-						+ 'ermittelt werden oder wird von dieser Anwendung nicht unterstützt.' );
-					return;
-				}
+		self._api.getAsset( filename )
+		.done( function( asset ) {
+			if( !asset.getLicence() ) {
+				self._displayError( 'Leider konnte die Lizenz des verwiesenen Bildes nicht '
+					+ 'ermittelt werden oder wird von dieser Anwendung nicht unterstützt.' );
+				return;
+			}
 
-				if( asset.getMediaType() !== 'bitmap' && asset.getMediaType() !== 'drawing' ) {
-					self._displayError( 'Der Datentyp der angegebenen Datei wird von dieser '
-						+ 'Applikation momentan leider nicht unterstützt.' );
-					return;
-				}
+			if( asset.getMediaType() !== 'bitmap' && asset.getMediaType() !== 'drawing' ) {
+				self._displayError( 'Der Datentyp der angegebenen Datei wird von dieser '
+					+ 'Applikation momentan leider nicht unterstützt.' );
+				return;
+			}
 
-				self._asset = asset;
-				self._renderApplicationPage();
-			} )
-			.fail( function( message ) {
-				self._displayError( message );
-			} )
-			.always( function() {
-				self._$node.find( 'input' ).removeClass( 'loading' );
-			} );
+			self._asset = asset;
+			self._renderApplicationPage();
 		} )
 		.fail( function( message ) {
 			self._displayError( message );
+		} )
+		.always( function() {
 			self._$node.find( 'input' ).removeClass( 'loading' );
 		} );
 	},
@@ -129,78 +132,6 @@ $.extend( Application.prototype, {
 
 		$error.stop().slideUp( 'fast', function() {
 			$error.text( message ).slideDown( 'fast' );
-		} );
-	},
-
-	/**
-	 * Renders the application's front page.
-	 */
-	_renderFrontPage: function() {
-		var self = this;
-
-		this._$node.empty();
-
-		var $frontPage = $( '<div/>' ).addClass( 'frontpage' )
-			.append( $( '<h1/>' ).text( 'Lizenzverweisgenerator' ) )
-			.append(
-				$( '<div/>' ).addClass( 'container-input' )
-				.append(
-					$( '<input type="text"/>' ).attr(
-						'placeholder',
-						'Internetadresse des Bildes auf Wikimedia Commons'
-					)
-				)
-			)
-			.append( $( '<button/>' ).text( 'Lizenztext erzeugen' ) );
-
-		this._$node.append( $frontPage );
-
-		$.get( './templates/frontpage-help.html' )
-		.done( function( html ) {
-			var $helpIcon = $( '<a/>' ).addClass( 'icon-help' ).text( '?' ),
-				$helpContent = $( '<div/>' ).addClass( 'help-content' ).html( html );
-
-			$frontPage.find( '.container-input' )
-			.append( $helpIcon )
-			.append( $helpContent )
-			.append( $( '<div/>' ).addClass( 'error' ) );
-
-			$helpIcon
-			.on( 'click', function() {
-				if( $helpContent.is( ':visible' ) ) {
-					$helpContent.hide();
-					$helpIcon.removeClass( 'active' );
-				} else {
-					$helpContent.show();
-
-					$helpContent.css( 'top', '0' );
-					$helpContent.css( 'left', '0' );
-
-					$helpContent.offset( {
-						top: $helpIcon.offset().top + $helpIcon.height() + 6,
-						left: $helpIcon.offset().left
-					} );
-					$helpIcon.addClass( 'active' );
-				}
-			} );
-
-		} );
-
-		$frontPage.find( 'input' )
-		.on( 'dragenter dragover', false )
-		.on( 'drop', function( event ) {
-			event.preventDefault();
-			self._evaluateInput( event );
-		} );
-
-		$frontPage.find( 'button' )
-		.on( 'click', function() {
-			$frontPage.find( '.error' )
-			.stop()
-			.slideUp( 'fast' );
-
-			$frontPage.find( 'input' ).addClass( 'loading' );
-			self._evaluateInput( $frontPage.find( 'input' ).val() );
 		} );
 	},
 
