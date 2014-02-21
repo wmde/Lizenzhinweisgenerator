@@ -197,11 +197,7 @@ $.extend( Questionnaire.prototype, {
 
 		this._fetchPages( page )
 		.done( function( $content ) {
-			self._navigationCache.push( {
-				page: page,
-				loggedAnswers: $.extend( {}, self._loggedAnswers )
-			} );
-			self._$node.append( self._generateBackButton( page ) );
+			self._$node.append( self._generateBackButton() );
 			self._$node.append( $content );
 			deferred.resolve();
 		} )
@@ -270,9 +266,7 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		this._$node.empty();
-		$( this )
-		.trigger( 'update', [this.getAttributionGenerator(), this.generateSupplement()] )
-		.trigger( 'exit' );
+		$( this ).trigger( 'exit' );
 	},
 
 	/**
@@ -399,11 +393,11 @@ $.extend( Questionnaire.prototype, {
 			.addClass( 'back' )
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
-		if( this._navigationCache.length < 2 ) {
+		if( this._navigationCache.length === 0 ) {
 			$backButton.addClass( 'disabled' );
 		} else {
 			$backButton.on( 'click', function( event ) {
-				self._goTo( self._navigationCache[self._navigationCache.length - 2].page );
+				self._goTo( self._navigationCache[self._navigationCache.length - 1].page );
 				$( self ).trigger(
 					'update',
 					[self.getAttributionGenerator(), self.generateSupplement()]
@@ -656,6 +650,12 @@ $.extend( Questionnaire.prototype, {
 			this._loggedAnswers[page] = {};
 		}
 		this._loggedAnswers[page][answer] = ( value ) ? value : true;
+
+		this._navigationCache.push( {
+			page: page,
+			loggedAnswers: $.extend( {}, this._loggedAnswers )
+		} );
+
 		$( this ).trigger( 'update', [this.getAttributionGenerator(), this.generateSupplement()] );
 	},
 

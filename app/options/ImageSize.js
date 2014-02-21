@@ -24,21 +24,22 @@ $.extend( ImageSize.prototype, Option.prototype, {
 			$container = $( '<span/>' ).addClass( 'button' ),
 			$label = $( '<label/>' )
 				.attr( 'for', 'option-imageSize-input' )
-				.text( 'Bildgröße: ' ),
+				.text( 'Maximale Bildbreite/-höhe: ' ),
 			values = [200, 300, 400, 500, 1000],
 			selected = 500;
 
 		this._$select = $( '<select/>' ).attr( 'id', 'option-imageSize-input' );
 
 		for( var i = 0; i < values.length; i++ ) {
-			var $option = $( '<option/>' ).attr( 'value', values[i] ).text( values[i] );
+			var $option = $( '<option/>' ).attr( 'value', values[i] ).text( values[i] + ' Pixel' );
 			if( values[i] === selected ) {
 				$option.prop( 'selected', true );
 			}
 			this._$select.append( $option );
 		}
 
-		this._$select.on( 'change', function() {
+		this._$select
+		.on( 'change', function() {
 			$( self ).trigger( 'update' );
 		} );
 

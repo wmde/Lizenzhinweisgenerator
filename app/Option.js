@@ -112,6 +112,13 @@ $.extend( Option.prototype, {
 				$( self ).trigger( 'updateunderlay', [self._$underlay] );
 			}
 		} );
+	},
+
+	_destroyUnderlay: function() {
+		if( this._$underlay ) {
+			this._$underlay.remove();
+			this._$underlay = null;
+		}
 	}
 
 } );

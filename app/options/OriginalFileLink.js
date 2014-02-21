@@ -23,6 +23,14 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 
 		this._$a = $( '<a/>' ).addClass( 'button' );
 
+		this._$a
+		.on( 'mousedown', function() {
+			self._$a.addClass( 'active' );
+		} )
+		.on( 'mouseup', function() {
+			self._$a.removeClass( 'active' );
+		} );
+
 		this._asset.getImageInfo( '500' )
 		.done( function( imageInfo ) {
 			self._$a.attr( 'href', imageInfo.url ).text( 'Originaldatei aufrufen' );

@@ -53,6 +53,7 @@ var OptionsContainer = function( $node, asset, defaultOptions ) {
 
 			$underlay.width( $container.width() - 10 - padding );
 
+			$underlay.css( 'width', 'auto' );
 			$underlay.css( 'top', '0' );
 			$underlay.css( 'left', '0' );
 
@@ -93,31 +94,48 @@ $.extend( OptionsContainer.prototype, {
 	/**
 	 * Renders the bar according to the submitted option ids.
 	 *
-	 * @param {Object} [ids]
+	 * @param {string[]} [ids]
+	 * @param {Object} [initialValues]
 	 * @return {jQuery}
 	 */
-	render: function( ids ) {
+	render: function( ids, initialValues ) {
 		this._currentOptions = $.merge( $.merge( [], this._defaultOptions ), ids || [] );
 
 		this._$node.empty();
 
 		for( var i = 0; i < this._options.length; i++ ) {
-			if( $.inArray( this._options[i].id, this._currentOptions ) !== -1 ) {
+			var id = this._options[i].id;
+
+			if( $.inArray( id, this._currentOptions ) !== -1 ) {
 				this._$node.append(
 					$( '<div/>' )
 					.addClass( 'optionscontainer-option' )
-					.addClass( 'optionscontainer-option-' + this._options[i].id )
+					.addClass( 'optionscontainer-option-' + id )
 					.append( this._options[i].instance.render() )
 				);
+				if( initialValues && initialValues[id] ) {
+					this._options[i].instance.value( initialValues[id] );
+				}
 			}
 		}
 	},
 
 	/**
-	 * Re-renders the options.
+	 * Re-renders all options that are supposed to be displayed.
 	 */
-	update: function() {
+	_reRender: function() {
+		var values = {},
+			i;
+
+		for( i = 0; i < this._options.length; i++ ) {
+			values[this._options[i].id] = this._options[i].instance.value();
+		}
+
 		this.render( this._currentOptions );
+
+		for( i = 0; i < this._options.length; i++ ) {
+			this._options[i].instance.value( values[this._options[i].id] );
+		}
 	},
 
 	/**
@@ -142,6 +160,7 @@ $.extend( OptionsContainer.prototype, {
 		for( var i = 0; i < this._options.length; i++ ) {
 			this._options[i].instance.setAttributionGenerator( attributionGenerator );
 		}
+		this._reRender();
 	}
 
 } );

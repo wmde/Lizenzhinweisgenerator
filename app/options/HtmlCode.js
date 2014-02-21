@@ -20,15 +20,24 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 			return $();
 		}
 
+		this._destroyUnderlay();
+
 		var $a = $( '<a/>' ).addClass( 'button' ).text( 'HTML-Quelltext' );
 
 		$a
+		.on( 'mousedown', function() {
+			$a.addClass( 'active' );
+		} )
 		.on( 'click', function( event ) {
 			if( !self._$underlay ) {
 				self._createUnderlay( self._createUnderlayContent(), $( event.target ) );
 			}
 
 			self.toggleUnderlay();
+
+			if( !self._$underlay.is( ':visible' ) ) {
+				$a.removeClass( 'active' );
+			}
 		} );
 
 		return $a;
@@ -64,6 +73,13 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 				.attr( 'for', 'option-htmlCode-styles' )
 				.text( 'Inline-Styles verwenden' )
 			);
+	},
+
+	/**
+	 * @see Option.value
+	 */
+	value: function( value ) {
+		return undefined;
 	}
 
 } );

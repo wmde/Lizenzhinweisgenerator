@@ -168,7 +168,7 @@ body {
 	text-decoration: none;
 }
 
-.app-options .button:active, .app-options .button.active {
+.app-options .button.active {
 	border: 1px solid rgba(59,103,158,0.5);
 	box-shadow: inset 1px 1px 1px rgba(0,0,0,0.3);
 	background: transparent;

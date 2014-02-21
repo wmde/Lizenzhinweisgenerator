@@ -144,9 +144,9 @@ $.extend( Application.prototype, {
 		this._$node.empty().append( $( '<div/>' ).addClass( 'app-preview' ) );
 
 		this._questionnaire = this._renderQuestionnaire();
-		this._questionnaire.start();
-
-		this._optionsContainer = this._renderOptionsContainer();
+		this._questionnaire.start().done( function() {
+			self._optionsContainer = self._renderOptionsContainer();
+		} );
 
 		// Evaluate to get the default attribution:
 		self.updatePreview(
@@ -175,10 +175,12 @@ $.extend( Application.prototype, {
 		.on( 'update', function( event, attributionGenerator, supplementPromise ) {
 			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
 				self._optionsContainer.setAttributionGenerator( attributionGenerator );
-				var optionKeys = ( attributionGenerator.getOptions().useCase === 'html' )
+
+				var optionKeys = ( attributionGenerator.getOptions().format === 'html' )
 					? ['htmlCode']
 					: [];
-				self._optionsContainer.render( optionKeys );
+
+				self._optionsContainer.render( optionKeys, self._options );
 			} );
 		} )
 		.on( 'exit', function() {
@@ -223,7 +225,11 @@ $.extend( Application.prototype, {
 	updatePreview: function( attributionGenerator, supplementPromise ) {
 		var self = this;
 
-		return this._asset.getImageInfo( this._optionsContainer.getOption( 'imageSize' ).value() )
+		this._options.imageSize = this._optionsContainer
+			? this._optionsContainer.getOption( 'imageSize' ).value()
+			: this._options.imageSize;
+
+		return this._asset.getImageInfo( this._options.imageSize )
 		.done( function( imageInfo ) {
 			self._$node.find( '.app-preview' ).replaceWith( self._renderPreview( imageInfo ) );
 

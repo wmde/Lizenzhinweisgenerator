@@ -11,12 +11,6 @@ $.extend( RawText.prototype, Option.prototype, {
 	constructor: RawText,
 
 	/**
-	 * This option's input element.
-	 * @type {jQuery}
-	 */
-	_$select: null,
-
-	/**
 	 * @see Option.render
 	 */
 	render: function() {
@@ -26,13 +20,24 @@ $.extend( RawText.prototype, Option.prototype, {
 			return $();
 		}
 
+		this._destroyUnderlay();
+
 		var $a = $( '<a/>' ).addClass( 'button' ).text( 'Lizenzverweis ohne Formatierung' );
 
-		$a.on( 'click', function( event ) {
+		$a
+		.on( 'mousedown', function() {
+			$a.addClass( 'active' );
+		} )
+		.on( 'click', function( event ) {
 			if( !self._$underlay ) {
 				self._createUnderlay( self._createUnderlayContent(), $( event.target ) );
 			}
+
 			self.toggleUnderlay();
+
+			if( !self._$underlay.is( ':visible' ) ) {
+				$a.removeClass( 'active' );
+			}
 		} );
 
 		return $a;
@@ -49,6 +54,13 @@ $.extend( RawText.prototype, Option.prototype, {
 		return $( '<textarea rows="6" cols="40"/>' )
 			.prop( 'readonly', true )
 			.val( self._attributionGenerator.generate( 'raw' ) );
+	},
+
+	/**
+	 * @see Option.value
+	 */
+	value: function( value ) {
+		return undefined;
 	}
 
 } );
