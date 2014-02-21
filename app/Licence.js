@@ -140,17 +140,21 @@ $.extend( Licence.prototype, {
 	/**
 	 * Retrieves the licence text of a specific licence.
 	 *
+	 * @param {string} [baseUrl]
+	 *        Default: '.'
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {jQuery} Licence text.
 	 *         Rejected parameters:
 	 *         - {string} Error message.
 	 */
-	getLegalCode: function() {
+	getLegalCode: function( baseUrl ) {
 		var self = this,
 			deferred = $.Deferred();
 
-		$.get( './licences/' + this._id + '.html' )
+		baseUrl = baseUrl || '.';
+
+		$.get( baseUrl + '/licences/' + this._id + '.html' )
 		.done( function( html ) {
 			var $licence = $( '<div/>' )
 			.addClass( 'licence-text' )

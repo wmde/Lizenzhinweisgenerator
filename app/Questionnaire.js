@@ -25,6 +25,8 @@ var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
  *
  * @param {jQuery} $node
  * @param {Asset} asset
+ * @param {string} [baseUrl]
+ *        Default: '.'
  *
  * @event update Triggered whenever the attribution is updated (basically, whenever a new answer is
  *        selected).
@@ -38,13 +40,15 @@ var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
  *
  * @throws {Error} on incorrect parameters.
  */
-var Questionnaire = function( $node, asset ) {
+var Questionnaire = function( $node, asset, baseUrl ) {
 	if( !( $node instanceof $ ) || !( asset instanceof Asset ) ) {
 		throw new Error( 'No proper parameters specified' );
 	}
 
 	this._$node = $node;
 	this._asset = asset;
+
+	this._baseUrl = baseUrl || '.';
 };
 
 $.extend( Questionnaire.prototype, {
@@ -59,6 +63,13 @@ $.extend( Questionnaire.prototype, {
 	 * @type {Asset}
 	 */
 	_asset: null,
+
+	/**
+	 * Base url where to look for the "templates" and "licences" folder containing the HTML page
+	 * templates / licence legal codes.
+	 * @type {string}
+	 */
+	_baseUrl: null,
 
 	/**
 	 * Selected answers indexed by page numbers.
@@ -217,7 +228,7 @@ $.extend( Questionnaire.prototype, {
 			pages.push( 'r-note-fullLicence' );
 			this._fetchPages( pages )
 			.done( function( $nodes ) {
-				self._asset.getLicence().getLegalCode()
+				self._asset.getLicence().getLegalCode( self._baseUrl )
 				.done( function( $licence ) {
 					$nodes = $nodes.add( $licence );
 					deferred.resolve( $supplement.add( $nodes ) );
@@ -406,7 +417,7 @@ $.extend( Questionnaire.prototype, {
 				deferred.then( function() {
 					var d = $.Deferred();
 
-					$.get( './templates/' + page + '.html' )
+					$.get( self._baseUrl + '/templates/' + page + '.html' )
 					.done( function( html ) {
 						var $content = $( '<div class="page page-' + page + '" />' )
 							.data( 'questionnaire-page', page )
