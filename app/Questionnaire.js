@@ -214,6 +214,37 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
+	 * Returns a result object containing processable attributes of the evaluated current answer
+	 * set.
+	 *
+	 * @return {Object}
+	 */
+	_getResult: function() {
+		var useCase = false;
+
+		if( this._getAnswer( '3', 1 ) ) {
+			useCase = 'online';
+		} else if( this._getAnswer( '3', 2 ) ) {
+			useCase = 'print';
+		} else if( this._getAnswer( '3', 3 ) ) {
+			useCase = 'private';
+		} else if( this._getAnswer( '3', 4 ) ) {
+			useCase = 'exceptional';
+		} else if( this._getAnswer( '3', 5 ) ) {
+			useCase = 'other';
+		}
+
+		return {
+			useCase: useCase,
+			format: this._getAnswer( '3', 1 ) ? 'html' : 'text',
+			collectionUse: this._getAnswer( '7', 1 ),
+			fullLicence: this._getAnswer( '8', 1 ),
+			edited: this._getAnswer( '12a', 2 ),
+			editor: this._getAnswer( '13', 1 )
+		};
+	},
+
+	/**
 	 * Returns a logged answer or "false" if the specific answer has not yet been given.
 	 *
 	 * @param {string} page
@@ -223,64 +254,6 @@ $.extend( Questionnaire.prototype, {
 	_getAnswer: function( page, answerId ) {
 		var pageAnswers = this._loggedAnswers[page];
 		return ( pageAnswers && pageAnswers[answerId] ) ? pageAnswers[answerId] : false;
-	},
-
-	/**
-	 * Returns the result id or "undefined" if unable to return a result according to the answers
-	 * selected.
-	 *
-	 * @return {string|undefined}
-	 */
-	_getResultId: function() {
-		var resultId,
-			onlineUse = this._getAnswer( '3', 1 ),
-			collectionUse = this._getAnswer( '7', 1 ),
-			fullLicence = this._getAnswer( '8', 1 ),
-			edited = this._getAnswer( '12a', 2 );
-
-		if( $.inArray( this._asset.getLicence().getId(), CC_LICENCES ) !== -1 ) {
-			// Default attribution:
-			resultId = '2';
-
-			if( onlineUse && !collectionUse && !edited ) {
-				resultId = '1';
-			} else if( !onlineUse && !collectionUse && !fullLicence && !edited ) {
-				resultId = '2';
-			} else if( !onlineUse && !collectionUse && fullLicence && !edited ) {
-				resultId = '3';
-			} else if( onlineUse && collectionUse && !edited ) {
-				resultId = '4a';
-			} else if( !onlineUse && collectionUse && !fullLicence && !edited ) {
-				resultId = '4b';
-			} else if( !onlineUse && collectionUse && fullLicence && !edited ) {
-				resultId = '4c';
-			} else if( onlineUse && !collectionUse && edited ) {
-				resultId = '5';
-			} else if( !onlineUse && !collectionUse && !fullLicence && edited ) {
-				resultId = '6';
-			} else if( !onlineUse && !collectionUse && fullLicence && edited ) {
-				resultId = '7';
-			} else if( onlineUse && collectionUse && edited ) {
-				resultId = '8a';
-			} else if( !onlineUse && collectionUse && !fullLicence && edited ) {
-				resultId = '8b';
-			} else if( !onlineUse && collectionUse && fullLicence && edited ) {
-				resultId = '8c';
-			}
-
-		}
-
-		return resultId;
-	},
-
-	/**
-	 * Returns the use case which may either be "html" or "print" with the latter one acting as
-	 * fall-back.
-	 *
-	 * @return {string}
-	 */
-	_getUseCase: function() {
-		return this._getAnswer( '3', 1 ) ? 'html' : 'print';
 	},
 
 	/**
@@ -314,61 +287,66 @@ $.extend( Questionnaire.prototype, {
 	generateSupplement: function() {
 		var self = this,
 			deferred = $.Deferred(),
-			resultId = this._getResultId(),
+			result = this._getResult(),
 			licenceId = this._asset.getLicence().getId(),
 			pages = [];
+
+		if( result.useCase === 'other' ) {
+			deferred.resolve( $() );
+			return deferred.promise();
+		}
 
 		var $supplement = $( '<h2/>' )
 			.text( 'Anmerkungen und Hinweise' );
 
-		pages.push( 'r-note-' + this._getUseCase() );
-
-		if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
-			pages.push( 'r-restrictions-cc2' );
+		if( result.useCase === 'private' ) {
+			pages.push( 'r-note-privateUse' );
+		} else if( licenceId === 'cc-zero' ) {
+			pages.push( 'r-note-cc0' );
+		} else if( licenceId === 'PD' ) {
+			pages.push( 'r-note-pd' );
 		} else {
-			pages.push( 'r-restrictions' );
+			pages.push( 'r-note-' + result.format );
+
+			if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
+				pages.push( 'r-restrictions-cc2' );
+			} else {
+				pages.push( 'r-restrictions' );
+			}
 		}
 
-		if( resultId === '3' || resultId === '7' ) {
+		if( result.collectionUse ) {
+			pages.push( 'r-note-collection' );
+		}
+
+		if( result.fullLicence ) {
 			pages.push( 'r-note-fullLicence' );
-			this._fetchPages( pages )
-			.done( function( $nodes ) {
+		}
+
+		this._fetchPages( pages )
+		.done( function( $nodes ) {
+			if( result.collectionUse ) {
+				$nodes.filter( '.page-r-note-collection' ).append(
+					self.getAttributionGenerator( { licenceOnly: true } ).generate()
+				);
+			}
+
+			if( result.fullLicence ) {
 				self._asset.getLicence().getLegalCode( self._baseUrl )
 				.done( function( $licence ) {
-					$nodes = $nodes.add( $licence );
+					$nodes.filter( '.page-r-note-fullLicence' ).append( $licence );
 					deferred.resolve( $supplement.add( $nodes ) );
 				} )
 				.fail( function( message ) {
 					deferred.reject( message );
 				} );
-			} )
-			.fail( function( message ) {
-				deferred.reject( message );
-			} );
-		} else if(
-			$.inArray( '4', resultId.split( '' ) ) !== -1
-			|| $.inArray( '8', resultId.split( '' ) ) !== -1
-		) {
-			pages.push( 'r-note-collection' );
-			this._fetchPages( pages )
-			.done( function( $nodes ) {
-				$nodes = $nodes.add(
-					self.getAttributionGenerator( { licenceOnly: true } ).generate()
-				);
+			} else {
 				deferred.resolve( $supplement.add( $nodes ) );
-			} )
-			.fail( function( message ) {
-				deferred.fail( message );
-			} );
-		} else {
-			this._fetchPages( pages )
-			.done( function( $nodes ) {
-				deferred.resolve( $supplement.add( $nodes ) );
-			} )
-			.fail( function( message ) {
-				deferred.reject( message );
-			} );
-		}
+			}
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
+		} );
 
 		return deferred.promise();
 	},
@@ -380,21 +358,21 @@ $.extend( Questionnaire.prototype, {
 	 * @return {AttributionGenerator}
 	 */
 	getAttributionGenerator: function( options ) {
-		var resultId = this._getResultId(),
+		var result = this._getResult(),
 			editor = null;
 
-		if( this._getAnswer( '12a', 2 ) ) {
+		if( result.edited ) {
 			editor = '(bearbeitet)'
 		}
-		if( this._getAnswer( '13', 1 ) ) {
-			editor = this._getAnswer( '13', 1 );
+		if( result.editor ) {
+			editor = result.editor;
 		}
 
 		options = $.extend( {
 			editor: editor,
 			licenceOnly: options ? options.licenceOnly : false,
-			licenceLink: !( resultId === '3' || resultId === '4c' ),
-			useCase: this._getUseCase()
+			licenceLink: !result.fullLicence,
+			format: result.format
 		}, options );
 
 		var attributionGenerator = new AttributionGenerator( this._asset, options );
@@ -641,7 +619,7 @@ $.extend( Questionnaire.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '5a' )
 		} else if( p === '7' ) {
-			var goTo = this._getAnswer( '3', 2 ) ? '8' : '12a';
+			var goTo = this._getResult().useCase === 'print' ? '8' : '12a';
 			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
 			$page = this._applyLogAndGoTo( $page, p, 2, goTo );
 		} else if( p === '8' ) {

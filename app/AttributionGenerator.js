@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'OptionsContainer'], function( $, OptionsContainer ) {
+define( ['jquery'], function( $ ) {
 
 /**
  * Generator for attribution texts.
@@ -19,9 +19,9 @@ define( ['jquery', 'OptionsContainer'], function( $, OptionsContainer ) {
  *         Whether to show the link / link the licence to the licence's legal code.
  *         Default: true
  *
- * @option {string} useCase
- *         May either be "print" or "html".
- *         Default: 'print'
+ * @option {string} format
+ *         May either be "text" or "html".
+ *         Default: 'text'
  *
  * @param {Asset} asset
  * @param {Object} [options]
@@ -33,7 +33,7 @@ var AttributionGenerator = function( asset, options ) {
 		editor: null,
 		licenceOnly: false,
 		licenceLink: true,
-		useCase: 'print'
+		format: 'text'
 	}, options );
 };
 
@@ -94,19 +94,19 @@ $.extend( AttributionGenerator.prototype, {
 	generate: function( mode ) {
 		mode = mode || 'default';
 
-		var useCase = mode === 'raw' ? 'text' : this._options.useCase,
+		var format = mode === 'raw' ? 'text' : this._options.format,
 			$attribution = $( '<div/>' ).addClass( 'attribution' ),
-			$licence = this._generateLicence( useCase );
+			$licence = this._generateLicence( format );
 
 		if( !this._options.licenceOnly ) {
-			var $author = this._generateAuthor( useCase ),
+			var $author = this._generateAuthor( format ),
 				$title = this._generateTitle(),
 				$editor = this._generateEditor();
 
 			$attribution
 			.append( $author );
 
-			if( useCase === 'print' ) {
+			if( format === 'text' ) {
 				$attribution
 				.append( document.createTextNode( ' (' ) )
 				.append( document.createTextNode( this._asset.getUrl() ) )
@@ -187,10 +187,10 @@ $.extend( AttributionGenerator.prototype, {
 	/**
 	 * Generates the author(s) DOM to be used in the tag line.
 	 *
-	 * @param {string} useCase
+	 * @param {string} format
 	 * @return {jQuery}
 	 */
-	_generateAuthor: function( useCase ) {
+	_generateAuthor: function( format ) {
 		var authors = this._asset.getAuthors(),
 			$authors = $( '<span/>' ).addClass( 'author' );
 
@@ -201,7 +201,7 @@ $.extend( AttributionGenerator.prototype, {
 				$authors.append( document.createTextNode( ', ' ) );
 			}
 
-			$authors.append( useCase === 'html' ? author.getHtml() : author.getText() );
+			$authors.append( format === 'html' ? author.getHtml() : author.getText() );
 		}
 
 		return $authors;
@@ -210,13 +210,13 @@ $.extend( AttributionGenerator.prototype, {
 	/**
 	 * Generates the licence DOM to be used in the tag line.
 	 *
-	 * @param {string} useCase
+	 * @param {string} format
 	 * @return {jQuery}
 	 */
-	_generateLicence: function( useCase ) {
+	_generateLicence: function( format ) {
 		var licence = this._asset.getLicence();
 
-		return ( useCase === 'html' )
+		return ( format === 'html' )
 			? $( '<a/>' ).addClass( 'licence' )
 				.attr( 'href', licence.getUrl() ).text( licence.getName() )
 			: $( '<span/>' ).addClass( 'licence' ).text( licence.getUrl() );
