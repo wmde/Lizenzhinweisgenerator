@@ -1,10 +1,238 @@
 ( function( define ) {
 
 define(
-	['qunit', 'jquery', 'Questionnaire', 'tests/assets'],
-	function( QUnit, $, Questionnaire, testAssets ) {
+	['qunit', 'jquery', 'Questionnaire', 'AttributionGenerator', 'tests/assets'],
+	function( QUnit, $, Questionnaire, AttributionGenerator, testAssets ) {
 
 QUnit.module( 'Questionnaire' );
+
+/**
+ * Object containing the test cases for the Questionnaire constructur. The "la" sub-object is used
+ * to overwrite the Questionnaire's _loggedAnswers object.
+ * @type {Object}
+ */
+var testSets = {
+	'Helene Fischer 2010.jpg': [ {
+		la: {}, // Assertion #1
+		templates: ['r-note-text', 'r-restrictions']
+	},
+	// 1st level:
+	{
+		la: { '3': { 1: true } },
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { format: 'html' }
+	}, {
+		la: { '3': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions']
+	}, {
+		la: { '3': { 3: true } }, // exit
+		templates: ['r-note-privateUse']
+	}, {
+		la: { '3': { 4: true } },
+		templates: ['r-note-text', 'r-restrictions']
+	}, {
+		la: { '3': { 5: true } }, // exit
+		templates: []
+	},
+	// 2nd level:
+	{
+		la: { '3': { 1: true }, '7': { 1: true } },
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true } },
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { format: 'html' }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
+	}, { // #10
+		la: { '3': { 2: true }, '7': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions']
+	}, {
+		la: { '3': { 4: true }, '5': { 1: true } }, // restart
+		templates: ['r-note-text', 'r-restrictions']
+	}, {
+		la: { '3': { 4: true }, '5': { 2: true } }, //exit
+		templates: ['r-note-text', 'r-restrictions']
+	},
+	// 3rd level:
+	{
+		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 1: true } }, // exit
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true } },
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 1: true } }, // exit
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true } },
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { licenceLink: false }
+	}, { // #20
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions']
+	},
+	// 4th level:
+	{
+		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit (unsupported)
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit (unsupported)
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
+		templates: [ 'r-note-html', 'r-restrictions' ],
+		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 1: true } }, // exit
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
+	}, { // #30
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 1: true } }, // exit
+		templates: ['r-note-text', 'r-restrictions']
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true } },
+		templates: ['r-note-text', 'r-restrictions'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	},
+	// 5th level:
+	{
+		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
+		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: 'Editor', format: 'html' }
+	}, {
+		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
+		templates: ['r-note-html', 'r-restrictions'],
+		attrGenOpt: { editor: 'Editor', format: 'html' }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	}, { // #40
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
+		templates: ['r-note-text', 'r-restrictions'],
+			attrGenOpt: { editor: '(bearbeitet)' }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
+		templates: ['r-note-text', 'r-restrictions'],
+		attrGenOpt: { editor: '(bearbeitet)' }
+	},
+	// 6th level:
+	{
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		attrGenOpt: { editor: 'Editor', licenceLink: false }
+	}, { // #50
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
+		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		attrGenOpt: { editor: 'Editor', licenceLink: false }
+	}, {
+		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
+		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		attrGenOpt: { editor: 'Editor' }
+	}, {
+		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
+		templates: ['r-note-text', 'r-restrictions'],
+		attrGenOpt: { editor: 'Editor' }
+	} ],
+	'Wien Karlsplatz3.jpg': [ {
+		la: {},
+		templates: ['r-note-text', 'r-restrictions-cc2']
+	} ],
+	'LRO_Tycho_Central_Peak.jpg': [ {
+		la: {},
+		templates: ['r-note-pd']
+	} ],
+	'Statue Andrrea Palladio Vicenza.jpg': [ {
+		la: {},
+		templates: ['r-note-cc0']
+	} ]
+};
 
 QUnit.test( 'start()', function( assert ) {
 	var questionnaire;
@@ -94,196 +322,6 @@ QUnit.test( 'exit()', function( assert ) {
 } );
 
 QUnit.test( 'generateSupplement()', function( assert ) {
-
-	/**
-	 * Object containing the expected templates to be used in the supplement. "la" sub-object
-	 * is used to overwrite the Questionnaire's _loggedAnswers object.
-	 * @type {Object}
-	 */
-	var expectedTemplates = {
-		'Helene Fischer 2010.jpg': [ {
-			la: {}, // Assertion #1
-			templates: ['r-note-text', 'r-restrictions']
-		},
-		// 1st level:
-		{
-			la: { '3': { 1: true } },
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 3: true } }, // exit
-			templates: ['r-note-privateUse']
-		}, {
-			la: { '3': { 4: true } },
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 5: true } }, // exit
-			templates: []
-		},
-		// 2nd level:
-		{
-			la: { '3': { 1: true }, '7': { 1: true } },
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true } },
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, { // #10
-			la: { '3': { 2: true }, '7': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 4: true }, '5': { 1: true } }, // restart
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 4: true }, '5': { 2: true } }, //exit
-			templates: ['r-note-text', 'r-restrictions']
-		},
-		// 3rd level:
-		{
-			la: { '3': { 1: true }, '7': { 1: true }, '12a': { 1: true } }, // exit
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true } },
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true }, '12a': { 1: true } }, // exit
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true } },
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, { // #20
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions']
-		},
-		// 4th level:
-		{
-			la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit (unsupported)
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit (unsupported)
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
-			templates: [ 'r-note-html', 'r-restrictions' ]
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 1: true } }, // exit
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, { // #30
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 1: true } }, // exit
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true } },
-			templates: ['r-note-text', 'r-restrictions']
-		},
-		// 5th level:
-		{
-			la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-			templates: ['r-note-html', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-			templates: ['r-note-html', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, { // #40
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-			templates: ['r-note-text', 'r-restrictions']
-		},
-		// 6th level:
-		{
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence']
-		}, { // #50
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-			templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence']
-		}, {
-			la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-			templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
-		}, {
-			la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-			templates: ['r-note-text', 'r-restrictions']
-		} ],
-		'Wien Karlsplatz3.jpg': [ {
-			la: {},
-			templates: ['r-note-text', 'r-restrictions-cc2']
-		} ],
-		'LRO_Tycho_Central_Peak.jpg': [ {
-			la: {},
-			templates: ['r-note-pd']
-		} ],
-		'Statue Andrrea Palladio Vicenza.jpg': [ {
-			la: {},
-			templates: ['r-note-cc0']
-		} ]
-	};
-
 	var testStack = [];
 
 	function assertProperTemplateUsage( testAsset, testCase ) {
@@ -354,7 +392,7 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 		return deferred.promise();
 	}
 
-	$.each( expectedTemplates, function( filename, testCases ) {
+	$.each( testSets, function( filename, testCases ) {
 		var testAsset = testAssets[filename];
 
 		for( var i = 0; i < testCases.length; i++ ) {
@@ -363,6 +401,98 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 			( function( testStack, testAsset, testCase ) {
 				testStack.push( function() {
 					return assertProperTemplateUsage( testAsset, testCase );
+				} );
+			}( testStack, testAsset, testCase ) );
+
+		}
+	} );
+
+	function resolveStack( stack ) {
+		if( stack.length === 0 ) {
+			QUnit.start();
+			return;
+		}
+		stack.shift()().done( function() {
+			resolveStack( stack );
+		} );
+	}
+
+	QUnit.stop();
+	resolveStack( testStack );
+} );
+
+QUnit.test( 'getAttributionGenerator()', function( assert ) {
+
+	// Validate default AttributionGenerator options since test case definitions assume these to
+	// have particular values:
+	$.each( testSets, function( filename ) {
+		var defaultOptions = {
+			editor: null,
+			format: 'text',
+			licenceOnly: false,
+			licenceLink: true
+		};
+
+		var attributionGenerator = new AttributionGenerator( testAssets[filename] ),
+			mismatch = false;
+
+		$.each( attributionGenerator.getOptions(), function( k, v ) {
+			if( defaultOptions[k] !== v ) {
+				mismatch = true;
+				return false;
+			}
+		} );
+
+		if( mismatch ) {
+			throw new Error( 'Default options mismatch' );
+		}
+
+		return false;
+	} );
+
+	var testStack = [];
+
+	function assertProperAttributionGenerator( testAsset, testCase ) {
+		var deferred = $.Deferred();
+
+		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' );
+
+		questionnaire.start().done( function() {
+			questionnaire._loggedAnswers = testCase.la;
+
+			assert.ok(
+				questionnaire.getAttributionGenerator().equals(
+					new AttributionGenerator( testAsset, testCase.attrGenOpt )
+				),
+				'(' + testAsset.getTitle() + ') Validated AttributionGenerator.'
+			);
+
+		} )
+		.fail( function( message ) {
+			assert.ok(
+				false,
+				'(' + testAsset.getTitle() + ') Failed starting questionnaire with error "'
+					+ message + '".'
+			);
+
+			deferred.resolve();
+		} )
+		.always( function() {
+			deferred.resolve()
+		} );
+
+		return deferred.promise();
+	}
+
+	$.each( testSets, function( filename, testCases ) {
+		var testAsset = testAssets[filename];
+
+		for( var i = 0; i < testCases.length; i++ ) {
+			var testCase = testCases[i];
+
+			( function( testStack, testAsset, testCase ) {
+				testStack.push( function() {
+					return assertProperAttributionGenerator( testAsset, testCase );
 				} );
 			}( testStack, testAsset, testCase ) );
 

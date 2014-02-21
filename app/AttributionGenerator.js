@@ -11,6 +11,10 @@ define( ['jquery'], function( $ ) {
  *         Editor of the asset.
  *         Default: null
  *
+ * @option {string} format
+ *         May either be "text" or "html".
+ *         Default: 'text'
+ *
  * @option {boolean} licenceOnly
  *         Whether to only display the licence without author, title and other attributions.
  *         Default: false
@@ -18,10 +22,6 @@ define( ['jquery'], function( $ ) {
  * @option {boolean} licenceLink
  *         Whether to show the link / link the licence to the licence's legal code.
  *         Default: true
- *
- * @option {string} format
- *         May either be "text" or "html".
- *         Default: 'text'
  *
  * @param {Asset} asset
  * @param {Object} [options]
@@ -31,9 +31,9 @@ var AttributionGenerator = function( asset, options ) {
 
 	this._options = $.extend( {
 		editor: null,
+		format: 'text',
 		licenceOnly: false,
-		licenceLink: true,
-		format: 'text'
+		licenceLink: true
 	}, options );
 };
 
@@ -77,10 +77,17 @@ $.extend( AttributionGenerator.prototype, {
 			return false;
 		}
 
-		var jsonOptions = JSON.stringify( this._options ),
-			otherJsonOptions = JSON.stringify( attributionGenerator.getOptions() );
+		var otherOptions = attributionGenerator.getOptions(),
+			mismatch = false;
 
-		return jsonOptions === otherJsonOptions;
+		$.each( this._options, function( k, v ) {
+			if( otherOptions[k] !== v ) {
+				mismatch = true;
+				return false;
+			}
+		} );
+
+		return !mismatch;
 	},
 
 	/**
