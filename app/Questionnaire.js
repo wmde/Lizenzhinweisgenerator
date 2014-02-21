@@ -39,10 +39,15 @@ var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
  *        (1) {jQuery.Event}
  *
  * @throws {Error} on incorrect parameters.
+ * @throws {Error} if asset does not feature a proper licence.
  */
 var Questionnaire = function( $node, asset, baseUrl ) {
 	if( !( $node instanceof $ ) || !( asset instanceof Asset ) ) {
 		throw new Error( 'No proper parameters specified' );
+	}
+
+	if( !asset.getLicence() ) {
+		throw new Error( 'Asset does not feature a proper licence' );
 	}
 
 	this._$node = $node;
