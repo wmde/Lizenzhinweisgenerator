@@ -458,35 +458,45 @@ $.extend( Questionnaire.prototype, {
 
 		for( var i = 0; i < pages.length; i++ ) {
 			( function( page ) {
-				deferred.then( function() {
-					var d = $.Deferred();
+				var d = $.Deferred();
 
+				deferred.then( function() {
 					$.get( self._baseUrl + '/templates/' + page + '.html' )
 					.done( function( html ) {
 						var $content = $( '<div class="page page-' + page + '" />' )
 							.data( 'questionnaire-page', page )
 							.html( html );
 
-						$content = self._applyGenerics( $content );
-						$content = self._applyValuesToInputElements( $content );
-						$pages = $pages.add( self._applyLogic( $content ) );
-
+						$pages = $pages.add( self._applyFunctionality( $content ) );
 						d.resolve( $pages );
 					} )
 					.fail( function() {
 						d.reject( 'Unable to retrieve page ' + page );
 					} );
 
-					promises.push( d.promise() );
-
 					return d.promise();
 				} );
+
+				promises.push( d.promise() );
 			}( pages[i] ) );
 		}
 
 		deferred.resolve( $pages );
 
 		return promises[promises.length - 1];
+	},
+
+	/**
+	 * Applies functionality to a page's DOM.
+	 *
+	 * @param {jQuery} $page
+	 * @return {jQuery}
+	 */
+	_applyFunctionality: function( $page ) {
+		$page = this._applyGenerics( $page );
+		$page = this._applyValuesToInputElements( $page );
+		$page = this._applyLogic( $page );
+		return $page;
 	},
 
 	/**
