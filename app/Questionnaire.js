@@ -112,7 +112,7 @@ $.extend( Questionnaire.prototype, {
 			page = '3';
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
-			page = '14';
+			page = this.exit;
 		} else if( licenceId === 'CC' ) {
 			page = '15';
 		}
