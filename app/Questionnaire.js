@@ -172,14 +172,18 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @triggers update
 	 * @triggers exit
+	 *
+	 * @throws {Error} if questionnaire has not yet been started.
 	 */
 	exit: function() {
+		if( this._navigationCache === null ) {
+			throw new Error( 'Trying to exit questionnaire although it hast not been started' );
+		}
+
 		this._$node.empty();
-		this._$node.trigger(
-			'update',
-			[this.getAttributionGenerator(), this.generateSupplement()]
-		);
-		this._$node.trigger( 'exit' );
+		$( this )
+		.trigger( 'update', [this.getAttributionGenerator(), this.generateSupplement()] )
+		.trigger( 'exit' );
 	},
 
 	/**
@@ -329,6 +333,8 @@ $.extend( Questionnaire.prototype, {
 	 * Generates the "back" button.
 	 *
 	 * @return {jQuery}
+	 *
+	 * @triggers update
 	 */
 	_generateBackButton: function() {
 		var self = this,
@@ -341,7 +347,7 @@ $.extend( Questionnaire.prototype, {
 		} else {
 			$backButton.on( 'click', function( event ) {
 				self._goTo( self._navigationCache[self._navigationCache.length - 2].page );
-				self._$node.trigger(
+				$( self ).trigger(
 					'update',
 					[self.getAttributionGenerator(), self.generateSupplement()]
 				);
@@ -607,10 +613,7 @@ $.extend( Questionnaire.prototype, {
 			this._loggedAnswers[page] = {};
 		}
 		this._loggedAnswers[page][answer] = ( value ) ? value : true;
-		this._$node.trigger(
-			'update',
-			[this.getAttributionGenerator(), this.generateSupplement()]
-		);
+		$( this ).trigger( 'update', [this.getAttributionGenerator(), this.generateSupplement()] );
 	},
 
 	/**

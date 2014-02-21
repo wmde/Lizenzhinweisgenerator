@@ -144,8 +144,8 @@ $.extend( Application.prototype, {
 		this._$node.empty().append( $( '<div/>' ).addClass( 'app-preview' ) );
 
 		this._questionnaire = this._renderQuestionnaire();
-
 		this._questionnaire.start();
+
 		this._optionsContainer = this._renderOptionsContainer();
 
 		// Evaluate to get the default attribution:
@@ -168,9 +168,11 @@ $.extend( Application.prototype, {
 		// Remove any pre-existing node:
 		this._$node.find( '.app-questionnaire' ).remove();
 
-		var $questionnaire = $( '<div/>' ).addClass( 'app-questionnaire' ).prependTo( this._$node );
+		var $questionnaire = $( '<div/>' ).addClass( 'app-questionnaire' ).prependTo( this._$node ),
+			questionnaire = new Questionnaire( $questionnaire, this._asset );
 
-		$questionnaire.on( 'update', function( event, attributionGenerator, supplementPromise ) {
+		$( questionnaire )
+		.on( 'update', function( event, attributionGenerator, supplementPromise ) {
 			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
 				self._optionsContainer.setAttributionGenerator( attributionGenerator );
 				var optionKeys = ( attributionGenerator.getOptions().useCase === 'html' )
@@ -183,7 +185,7 @@ $.extend( Application.prototype, {
 			$questionnaire.remove();
 		} );
 
-		return new Questionnaire( $questionnaire, this._asset );
+		return questionnaire;
 	},
 
 	/**
