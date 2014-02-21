@@ -20,7 +20,8 @@ define( ['jquery'], function( $ ) {
  *         Default: false
  *
  * @option {boolean} licenceLink
- *         Whether to show the link / link the licence to the licence's legal code.
+ *         Whether to show the link / link the licence to the licence's legal code. Instead of a
+ *         link, the plain licence name will be shown in any case.
  *         Default: true
  *
  * @param {Asset} asset
@@ -91,23 +92,30 @@ $.extend( AttributionGenerator.prototype, {
 	},
 
 	/**
-	 * Generates an attribution tag line from the current set of answers.
+	 * Generates an attribution tag line from the current set of answers. Returns "null" if the
+	 * asset's licence does not require a tag line.
 	 *
 	 * @param {string} [mode] May be "raw" to not apply any styles or DOM structure at all or
 	 *        "inline" to apply inline styles instead of using css classes. If the parameter is
 	 *        omitted, css classes will be applied to style the output.
-	 * @return {jQuery}
+	 * @return {jQuery|null}
 	 */
 	generate: function( mode ) {
+		var licenceId = this._asset.getLicence().getId();
+
+		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
+			return null;
+		}
+
 		mode = mode || 'default';
 
 		var format = mode === 'raw' ? 'text' : this._options.format,
 			$attribution = $( '<div/>' ).addClass( 'attribution' ),
-			$licence = this._generateLicence( format );
+			$licence = this._generateLicence( format, this._options.licenceLink );
 
 		if( !this._options.licenceOnly ) {
 			var $author = this._generateAuthor( format ),
-				$title = this._generateTitle(),
+				$title = this._generateTitle( format ),
 				$editor = this._generateEditor();
 
 			$attribution
@@ -115,9 +123,12 @@ $.extend( AttributionGenerator.prototype, {
 
 			if( format === 'text' ) {
 				$attribution
-				.append( document.createTextNode( ' (' ) )
-				.append( document.createTextNode( this._asset.getUrl() ) )
-				.append( document.createTextNode( ')' ) );
+				.append( document.createTextNode( ' ' ) )
+				.append( $( '<span/>' ).addClass( 'attribution-url' )
+					.append( document.createTextNode( '(' ) )
+					.append( document.createTextNode( this._asset.getUrl() ) )
+					.append( document.createTextNode( ')' ) )
+				);
 			}
 
 			$attribution
@@ -133,11 +144,7 @@ $.extend( AttributionGenerator.prototype, {
 			$attribution.append( document.createTextNode( ', ' ) );
 		}
 
-		if( this._options.licenceLink === false ) {
-			$attribution.append( document.createTextNode ( this._asset.getLicence() ) ) ;
-		} else {
-			$attribution.append( $licence );
-		}
+		$attribution.append( $licence );
 
 		if( mode === 'inline' ) {
 			return this._convertToInlineStyles( $attribution );
@@ -199,7 +206,7 @@ $.extend( AttributionGenerator.prototype, {
 	 */
 	_generateAuthor: function( format ) {
 		var authors = this._asset.getAuthors(),
-			$authors = $( '<span/>' ).addClass( 'author' );
+			$authors = $( '<span/>' ).addClass( 'attribution-author' );
 
 		for( var i = 0; i < authors.length; i++ ) {
 			var author = authors[i];
@@ -218,15 +225,26 @@ $.extend( AttributionGenerator.prototype, {
 	 * Generates the licence DOM to be used in the tag line.
 	 *
 	 * @param {string} format
+	 * @param {boolean} licenceLink
 	 * @return {jQuery}
 	 */
-	_generateLicence: function( format ) {
-		var licence = this._asset.getLicence();
+	_generateLicence: function( format, licenceLink ) {
+		var licence = this._asset.getLicence(),
+			$licence = $( '<span/>' ).addClass( 'attribution-licence' );
 
-		return ( format === 'html' )
-			? $( '<a/>' ).addClass( 'licence' )
-				.attr( 'href', licence.getUrl() ).text( licence.getName() )
-			: $( '<span/>' ).addClass( 'licence' ).text( licence.getUrl() );
+		if( !licenceLink ) {
+			return $licence.text( licence.getName() );
+		}
+
+		if( format === 'html' ) {
+			$licence.append(
+				$( '<a/>' ).attr( 'href', licence.getUrl() ).text( licence.getName() )
+			);
+		} else {
+			$licence.text( licence.getUrl() );
+		}
+
+		return $licence;
 	},
 
 	/**
@@ -234,8 +252,17 @@ $.extend( AttributionGenerator.prototype, {
 	 *
 	 * @return {jQuery}
 	 */
-	_generateTitle: function() {
-		return $( '<span/>' ).addClass( 'title' ).text( '„' + this._asset.getTitle() + '“' );
+	_generateTitle: function( format ) {
+		var title = '„' + this._asset.getTitle() + '“',
+		$title = $( '<span/>' ).addClass( 'attribution-title' );
+
+		if( format === 'html' ) {
+			$title.append( $( '<a/>' ).attr( 'href', this._asset.getUrl() ).text( title ) )
+		} else {
+			$title.text( title );
+		}
+
+		return $title;
 	},
 
 	/**
@@ -249,7 +276,7 @@ $.extend( AttributionGenerator.prototype, {
 			$editor = $();
 
 		if( editor ) {
-			$editor = $( '<span/>' ).addClass( 'editor' ).text( editor );
+			$editor = $( '<span/>' ).addClass( 'attribution-editor' ).text( editor );
 		}
 
 		return $editor;
