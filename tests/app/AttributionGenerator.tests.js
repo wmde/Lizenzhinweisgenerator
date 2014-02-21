@@ -6,7 +6,7 @@ define(
 
 QUnit.module( 'AttributionGenerator' );
 
-var testCases = {
+var testCasesDefinitions = {
 	'LRO_Tycho_Central_Peak.jpg': [{
 		expected: {
 			raw: null,
@@ -72,9 +72,48 @@ var testCases = {
 	}]
 };
 
+QUnit.test( 'equals()', function( assert ) {
+
+	$.each( testCasesDefinitions, function( filename, testCases ) {
+		var asset = testAssets[filename];
+
+		$.each( testCases, function( i, testCase ) {
+			var options = $.extend( {}, testCase.options || {} ),
+				attributionGenerator = new AttributionGenerator( asset, options );
+
+			$.each( testCasesDefinitions, function( filename2, testCases2 ) {
+				var asset2 = testAssets[filename2];
+
+				$.each( testCases2, function( j, testCase2 ) {
+					var options2 = $.extend( {}, testCase2.options || {} ),
+						attributionGenerator2 = new AttributionGenerator( asset2, options2 );
+
+					if( filename === filename2 && i === j ) {
+						assert.ok(
+							attributionGenerator.equals( attributionGenerator2 ),
+							'(' + asset.getTitle() + ' #' + i + '), (' + asset2.getTitle() + ' #'
+								+ j + ') AttributionGenerators match.'
+						);
+					} else {
+						assert.ok(
+							!attributionGenerator.equals( attributionGenerator2 ),
+							'(' + asset.getTitle() + ' #' + i + '), (' + asset2.getTitle() + ' #'
+								+ j + ') AttributionGenerator mismatch.'
+						);
+					}
+				} );
+
+			} );
+
+		} );
+
+	} );
+
+} );
+
 QUnit.test( 'generate()', function( assert ) {
 
-	$.each( testCases, function( filename, testCases ) {
+	$.each( testCasesDefinitions, function( filename, testCases ) {
 		var asset = testAssets[filename];
 
 		$.each( testCases, function( i, testCase ) {
