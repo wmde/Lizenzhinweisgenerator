@@ -96,21 +96,121 @@ $.extend( Questionnaire.prototype, {
 
 	/**
 	 * Starts the questionnaire.
+	 *
+	 * @return {Object} jQuery Promise
+	 *         No resolved parameters.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
 	 */
 	start: function() {
 		this._loggedAnswers = {};
 
 		this._navigationCache = [];
 
-		var licenceId = this._asset.getLicence().getId();
+		var deferred = $.Deferred(),
+			licenceId = this._asset.getLicence().getId(),
+			page = '3';
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
-			this._goTo( '14' );
+			page = '14';
 		} else if( licenceId === 'CC' ) {
-			this._goTo( '15' );
-		} else {
-			this._goTo( '3' );
+			page = '15';
 		}
+
+		this._goTo( page )
+		.done( function() {
+			deferred.resolve();
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
+		} );
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Move the questionnaire to a specific page or triggers a function.
+	 *
+	 * @param {string|Function} page
+	 * @return {Object} jQuery Promise
+	 *         No resolved parameters.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
+	 */
+	_goTo: function( page ) {
+		var navigationPathPosition = this._getNavigationPosition( page ),
+			deferred = $.Deferred();
+
+		if( navigationPathPosition !== -1 ) {
+			// Navigating backwards.
+			this._navigationCache.splice( navigationPathPosition );
+			this._loggedAnswers = this._navigationCache[navigationPathPosition - 1]
+				? this._navigationCache[navigationPathPosition - 1].loggedAnswers
+				: {};
+		}
+
+		if( $.isFunction( page ) ) {
+			page.apply( this );
+			deferred.resolve();
+		} else {
+			this._render( page )
+			.done( function() {
+				deferred.resolve();
+			} )
+			.fail( function( message ) {
+				deferred.reject( message );
+			} );
+		}
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Returns the position of a page in the navigation cache or -1 if the page is not cached.
+	 *
+	 * @param {string} page
+	 * @return {number}
+	 */
+	_getNavigationPosition: function( page ) {
+		for( var i = 0; i < this._navigationCache.length; i++ ) {
+			if( this._navigationCache[i].page === page ) {
+				return i;
+			}
+		}
+		return -1;
+	},
+
+	/**
+	 * Renders a page.
+	 *
+	 * @param {string} page
+	 * @return {Object} jQuery Promise
+	 *         No resolved parameters.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
+	 */
+	_render: function( page ) {
+		var self = this,
+			deferred = $.Deferred();
+
+		this._$node.empty();
+
+		this._fetchPages( page )
+		.done( function( $content ) {
+			self._navigationCache.push( {
+				page: page,
+				loggedAnswers: $.extend( {}, self._loggedAnswers )
+			} );
+			self._$node.append( self._generateBackButton( page ) );
+			self._$node.append( $content );
+			deferred.resolve();
+		} )
+		.fail( function( message ) {
+			console.error( message );
+			deferred.reject( message );
+		} );
+
+		return deferred.promise();
 	},
 
 	/**
@@ -309,43 +409,6 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Returns the position of a page in the navigation cache or -1 if the page is not cached.
-	 *
-	 * @param {string} page
-	 * @return {number}
-	 */
-	_getNavigationPosition: function( page ) {
-		for( var i = 0; i < this._navigationCache.length; i++ ) {
-			if( this._navigationCache[i].page === page ) {
-				return i;
-			}
-		}
-		return -1;
-	},
-
-	/**
-	 * Move the questionnaire to a specific page or triggers a function.
-	 *
-	 * @param {string|Function} page
-	 */
-	_goTo: function( page ) {
-		var navigationPathPosition = this._getNavigationPosition( page );
-		if( navigationPathPosition !== -1 ) {
-			// Navigating backwards.
-			this._navigationCache.splice( navigationPathPosition );
-			this._loggedAnswers = this._navigationCache[navigationPathPosition - 1]
-				? this._navigationCache[navigationPathPosition - 1].loggedAnswers
-				: {};
-		}
-
-		if( $.isFunction( page ) ) {
-			page.apply( this );
-		} else {
-			this._render( page );
-		}
-	},
-
-	/**
 	 * Generates the "back" button.
 	 *
 	 * @return {jQuery}
@@ -371,30 +434,6 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		return $backButton;
-	},
-
-	/**
-	 * Renders a page.
-	 *
-	 * @param {string} page
-	 */
-	_render: function( page ) {
-		var self = this;
-
-		this._$node.empty();
-
-		this._fetchPages( page )
-		.done( function( $content ) {
-			self._navigationCache.push( {
-				page: page,
-				loggedAnswers: $.extend( {}, self._loggedAnswers )
-			} );
-			self._$node.append( self._generateBackButton( page ) );
-			self._$node.append( $content );
-		} )
-		.fail( function( message ) {
-			console.error( message );
-		} );
 	},
 
 	/**
