@@ -33,7 +33,16 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 
 		this._asset.getImageInfo( '500' )
 		.done( function( imageInfo ) {
-			self._$a.attr( 'href', imageInfo.url ).text( 'Originaldatei aufrufen' );
+			if( self._$a.get( 0 ).download !== undefined ) {
+				self._$a.attr( 'href', imageInfo.url ).text( 'Originaldatei herunterladen' );
+				self._$a.attr( 'download', self._asset.getFilename() );
+			} else {
+				self._$a.attr( 'href', imageInfo.url ).text( 'Originaldatei aufrufen' );
+				self._$a.on( 'click', function( event ) {
+					event.preventDefault();
+					window.open( imageInfo.url, '_blank' );
+				} );
+			}
 		} )
 		.fail( function() {
 			self._$a.replaceWith( $() );
