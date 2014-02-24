@@ -107,7 +107,7 @@ body {
 	margin-bottom: 0; /* will be adjusted according to the preview's actual content */
 }
 
-.app-preview-frame {
+.attributed-image-frame {
 	border: 1px solid black;
 	margin: 0 auto;
 	padding: 10px;

@@ -235,12 +235,12 @@ $.extend( Application.prototype, {
 
 			var $preview = self._$node.find( '.app-preview' );
 
-			$preview.find( '.app-preview-frame' ).append( attributionGenerator.generate() );
+			$preview.find( '.attributed-image-frame' ).append( attributionGenerator.generate() );
 
 			$preview.find( 'img' ).on( 'load', function() {
 				$preview.find( '.app-preview-spacer' ).css(
 					'marginBottom',
-					-1 * parseInt( $preview.find( '.app-preview-frame' ).height() / 2, 10 )
+					-1 * parseInt( $preview.find( '.attributed-image-frame' ).height() / 2, 10 )
 				);
 			} );
 
@@ -253,6 +253,26 @@ $.extend( Application.prototype, {
 	},
 
 	/**
+	 * Returns the DOM of the attributed image without the attribution.
+	 *
+	 * @param {Object} imageInfo
+	 * @return {jQuery}
+	 */
+	_attributedImageHtml: function( imageInfo ) {
+		var html = ''
+			+ '<div class="attributed-image-frame"><div class="attributed-image">'
+			+ '<a href="' + imageInfo.descriptionurl + '">'
+			+ '<img border="0" src="' + imageInfo.thumburl + '"/>'
+			+ '</a>'
+			+ '</div></div>';
+
+		var $attributedImageFrame = $( html );
+		$attributedImageFrame.width( imageInfo.thumbwidth );
+
+		return $attributedImageFrame;
+	},
+
+	/**
 	 * Renders the preview.
 	 *
 	 * @param {Object} imageInfo
@@ -261,16 +281,7 @@ $.extend( Application.prototype, {
 	_renderPreview: function( imageInfo ) {
 		return $( '<div/>' ).addClass( 'app-preview' )
 			.append( $( '<div/>' ).addClass( 'app-preview-spacer' ) )
-			.append(
-				$( '<div/>' ).addClass( 'app-preview-frame' ).width( imageInfo.thumbwidth )
-				.append(
-					$( '<div/>' ).addClass( 'app-preview-image' ).append(
-						$( '<a/>' ).attr( 'href', imageInfo.descriptionurl ).append(
-							$( '<img/>' ).attr( 'border', '0' ).attr( 'src', imageInfo.thumburl )
-						)
-					)
-				)
-			);
+			.append( this._attributedImageHtml( imageInfo ) );
 	}
 
 } );
