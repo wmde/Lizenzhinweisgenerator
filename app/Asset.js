@@ -157,6 +157,13 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
+	 * @param {Author[]} authors
+	 */
+	setAuthors: function( authors ) {
+		this._authors = authors;
+	},
+
+	/**
 	 * @return {string}
 	 */
 	getSource: function() {

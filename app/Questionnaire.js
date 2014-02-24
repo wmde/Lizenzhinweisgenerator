@@ -1,21 +1,13 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'Asset', 'AttributionGenerator'], function( $, Asset, AttributionGenerator ) {
+define( ['jquery', 'Asset', 'AttributionGenerator', 'Author'],
+	function( $, Asset, AttributionGenerator, Author ) {
 
 var CC2_LICENCES = [
 	'cc-by-2.0-de',
 	'cc-by-sa-2.0-de'
 ];
-
-var CC3_LICENCES = [
-	'cc-by-3.0-de',
-	'cc-by-3.0',
-	'cc-by-sa-3.0-de',
-	'cc-by-sa-3.0'
-];
-
-var CC_LICENCES = $.merge( $.merge( [], CC2_LICENCES ), CC3_LICENCES );
 
 /**
  * Represents a questionnaire's logic.
@@ -115,6 +107,8 @@ $.extend( Questionnaire.prototype, {
 			page = this.exit;
 		} else if( licenceId === 'CC' ) {
 			page = '15';
+		} else if( this._asset.getAuthors().length === 0 ) {
+			page = '9';
 		}
 
 		this._goTo( page )
@@ -397,11 +391,13 @@ $.extend( Questionnaire.prototype, {
 			$backButton.addClass( 'disabled' );
 		} else {
 			$backButton.on( 'click', function( event ) {
-				self._goTo( self._navigationCache[self._navigationCache.length - 1].page );
-				$( self ).trigger(
-					'update',
-					[self.getAttributionGenerator(), self.generateSupplement()]
-				);
+				self._goTo( self._navigationCache[self._navigationCache.length - 1].page )
+				.done( function() {
+					$( self ).trigger(
+						'update',
+						[self.getAttributionGenerator(), self.generateSupplement()]
+					);
+				} );
 			} );
 		}
 
@@ -619,6 +615,19 @@ $.extend( Questionnaire.prototype, {
 		} else if( p === '8' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '12a' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12a' );
+		} else if( p === '9' ) {
+			$page.find( 'a.a1' ).on( 'click', function() {
+				var value = $.trim( $( 'input.a1' ).val() );
+				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
+				self._log( '9', 1, value );
+				self._goTo( '3' );
+			} );
+			$page.find( '.a2' ).on( 'click', function() {
+				var value = 'unbekannt';
+				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
+				self._log( '9', 2, value );
+				self._goTo( '3' );
+			} );
 		} else if( p === '12a' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, this.exit );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
