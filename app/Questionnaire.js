@@ -597,9 +597,9 @@ $.extend( Questionnaire.prototype, {
 					self._asset.getLicence().getId() === 'cc-by-2.0-de'
 					|| self._asset.getLicence().getId() === 'cc-by-sa-2.0-de'
 				) {
-					self._goTo( '7' );
+					self._goToAndUpdate( '7' );
 				} else {
-					self._goTo( '4' );
+					self._goToAndUpdate( '4' );
 				}
 			} );
 
@@ -620,13 +620,13 @@ $.extend( Questionnaire.prototype, {
 				var value = $.trim( $( 'input.a1' ).val() );
 				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
 				self._log( '9', 1, value );
-				self._goTo( '3' );
+				self._goToAndUpdate( '3' );
 			} );
 			$page.find( '.a2' ).on( 'click', function() {
 				var value = 'unbekannt';
 				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
 				self._log( '9', 2, value );
-				self._goTo( '3' );
+				self._goToAndUpdate( '3' );
 			} );
 		} else if( p === '12a' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, this.exit );
@@ -638,7 +638,7 @@ $.extend( Questionnaire.prototype, {
 			$page.find( 'a.a1' ).on( 'click', function() {
 				var value = $.trim( $( 'input.a1' ).val() );
 				self._log( '13', 1, value );
-				self._goTo( self.exit );
+				self._goToAndUpdate( self.exit );
 			} );
 		}
 
@@ -664,8 +664,6 @@ $.extend( Questionnaire.prototype, {
 			page: page,
 			loggedAnswers: $.extend( {}, this._loggedAnswers )
 		} );
-
-		$( this ).trigger( 'update', [this.getAttributionGenerator(), this.generateSupplement()] );
 	},
 
 	/**
@@ -681,10 +679,29 @@ $.extend( Questionnaire.prototype, {
 
 		$page.find( '.a' + answer ).on( 'click', function() {
 			self._log( currentPage, answer );
-			self._goTo( toPage );
+			self._goToAndUpdate( toPage );
 		} );
 
 		return $page;
+	},
+
+	/**
+	 * Triggers going to a page and issues an "update" event after rendering the page.
+	 *
+	 * @param {string|Function} toPage
+	 *
+	 * @trigger update
+	 */
+	_goToAndUpdate: function( toPage ) {
+		var self = this;
+
+		this._goTo( toPage )
+		.done( function() {
+			$( self ).trigger(
+				'update',
+				[self.getAttributionGenerator(), self.generateSupplement()]
+			);
+		} );
 	}
 
 } );
