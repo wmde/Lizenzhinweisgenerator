@@ -23,7 +23,7 @@ $.extend( Author.prototype, {
 	 * @return {jQuery}
 	 */
 	getHtml: function() {
-		return this._$author;
+		return this._$author.clone();
 	},
 
 	/**

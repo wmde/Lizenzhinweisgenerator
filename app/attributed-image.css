@@ -1,0 +1,26 @@
+/**
+ * This file contains all rules that are directly applied to the attributed image and the
+ * attribution itself.
+ * Most important, the css of this file is used for the text output of the HTML code when requesting
+ * inline CSS styles. Therefore, no global css assignments should be assumed. Instead, all css that
+ * should be applied to the attribution and the image should be listed here.
+ * To prevent conflicts, each rule should start with the uppermost DOM node's class
+ * (.attribution-image-frame) which is hard-coded in the HtmlCode option. In addition, it is best
+ * practice that each definition points to exactly one node in order to avoid applying inline styles
+ * multiple times.
+ */
+
+.attributed-image-frame {
+	border: 1px solid black;
+	font-family: "Helvetica Neue", "Helvetica", "Nimbus Sans L", "Arial", "Liberation Sans", sans-serif;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+.attributed-image-frame .attribution {
+	font-size: 10pt;
+}
+
+.attributed-image-frame .attribution .attribution-title {
+	font-weight: bold;
+}

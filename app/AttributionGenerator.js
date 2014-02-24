@@ -95,21 +95,18 @@ $.extend( AttributionGenerator.prototype, {
 	 * Generates an attribution tag line from the current set of answers. Returns "null" if the
 	 * asset's licence does not require a tag line.
 	 *
-	 * @param {string} [mode] May be "raw" to not apply any styles or DOM structure at all or
-	 *        "inline" to apply inline styles instead of using css classes. If the parameter is
-	 *        omitted, css classes will be applied to style the output.
+	 * @param {boolean} [raw] If "true", no styles and no DOM structure at all is applied to the
+	 *        licence text.
 	 * @return {jQuery|null}
 	 */
-	generate: function( mode ) {
+	generate: function( raw ) {
 		var licenceId = this._asset.getLicence().getId();
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			return null;
 		}
 
-		mode = mode || 'default';
-
-		var format = mode === 'raw' ? 'text' : this._options.format,
+		var format = raw ? 'text' : this._options.format,
 			$attribution = $( '<div/>' ).addClass( 'attribution' ),
 			$licence = this._generateLicence( format, this._options.licenceLink );
 
@@ -146,56 +143,7 @@ $.extend( AttributionGenerator.prototype, {
 
 		$attribution.append( $licence );
 
-		if( mode === 'inline' ) {
-			return this._convertToInlineStyles( $attribution );
-		}
-
-		return mode === 'raw' ? $attribution.text() : $attribution;
-	},
-
-	/**
-	 * Converts the styles applied via css classes to inline styles.
-	 *
-	 * @param {jQuery} $attribution
-	 * @return {jQuery}
-	 */
-	_convertToInlineStyles: function( $attribution ) {
-		var cssRules = [];
-
-		for( var i = 0; i < document.styleSheets.length; i++ ) {
-			$.merge( cssRules, document.styleSheets[i].cssRules );
-		}
-
-		$attribution.find( '*' ).each( function() {
-			var classAttr = $( this ).attr( 'class' );
-			if( !classAttr ) {
-				return true;
-			}
-
-			var classes = classAttr.split( ' ' ),
-				cssText = '';
-
-			for( var i = 0; i < classes.length; i++ ) {
-				for( var j = 0; j < cssRules.length; j++ ) {
-					var cssRule = cssRules[j],
-						selectorText = cssRule.selectorText,
-						isAttributionStyle = selectorText.indexOf( '.attribution' ) !== -1,
-						hasClass = selectorText.indexOf( '.' + classes[i] ) !== -1;
-
-					if( isAttributionStyle && hasClass ) {
-						cssText += cssRule.cssText.replace( /^([^{]+)\{([^}]+)\}$/, '$2' );
-					}
-				}
-			}
-
-			if( cssText !== '' ) {
-				this.style.cssText = cssText;
-			}
-
-			$( this ).removeAttr( 'class' );
-		} );
-
-		return $attribution;
+		return raw ? $attribution.text() : $attribution;
 	},
 
 	/**

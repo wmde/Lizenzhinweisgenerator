@@ -53,7 +53,7 @@ $.extend( RawText.prototype, Option.prototype, {
 
 		return $( '<textarea rows="6" cols="40"/>' )
 			.prop( 'readonly', true )
-			.val( self._attributionGenerator.generate( 'raw' ) );
+			.val( self._attributionGenerator.generate( true ) );
 	},
 
 	/**

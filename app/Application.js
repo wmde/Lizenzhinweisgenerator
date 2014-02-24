@@ -205,10 +205,14 @@ $.extend( Application.prototype, {
 			self.updatePreview(
 				self._questionnaire.getAttributionGenerator(),
 				self._questionnaire.generateSupplement()
-			).done( function() {
+			)
+			.done( function( $attributedImageFrame ) {
 				self._optionsContainer.setAttributionGenerator(
 					self._questionnaire.getAttributionGenerator()
 				);
+
+				self._optionsContainer.getOption( 'htmlCode' )
+					.setImageHtml( $attributedImageFrame.clone() );
 			} );
 		} );
 
@@ -221,17 +225,26 @@ $.extend( Application.prototype, {
 	 * @param {AttributionGenerator} attributionGenerator
 	 * @param {Object} supplementPromise
 	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {jQuery} Attributed image DOM.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
 	 */
 	updatePreview: function( attributionGenerator, supplementPromise ) {
-		var self = this;
+		var self = this,
+			deferred = new $.Deferred();
 
 		this._options.imageSize = this._optionsContainer
 			? this._optionsContainer.getOption( 'imageSize' ).value()
 			: this._options.imageSize;
 
-		return this._asset.getImageInfo( this._options.imageSize )
+		this._asset.getImageInfo( this._options.imageSize )
 		.done( function( imageInfo ) {
-			self._$node.find( '.app-preview' ).replaceWith( self._renderPreview( imageInfo ) );
+			var $attributedImageFrame = self._attributedImageHtml( imageInfo );
+
+			self._$node.find( '.app-preview' ).replaceWith(
+				self._renderPreview( $attributedImageFrame )
+			);
 
 			var $preview = self._$node.find( '.app-preview' );
 
@@ -249,7 +262,14 @@ $.extend( Application.prototype, {
 					$( '<div/>' ).addClass( 'app-preview-supplement' ).append( $supplement )
 				);
 			} );
+
+			deferred.resolve( $attributedImageFrame );
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
 		} );
+
+		return deferred.promise();
 	},
 
 	/**
@@ -275,13 +295,13 @@ $.extend( Application.prototype, {
 	/**
 	 * Renders the preview.
 	 *
-	 * @param {Object} imageInfo
+	 * @param {jQuery} $attributedImageHtml
 	 * @return {jQuery}
 	 */
-	_renderPreview: function( imageInfo ) {
+	_renderPreview: function( $attributedImageHtml ) {
 		return $( '<div/>' ).addClass( 'app-preview' )
 			.append( $( '<div/>' ).addClass( 'app-preview-spacer' ) )
-			.append( this._attributedImageHtml( imageInfo ) );
+			.append( $attributedImageHtml );
 	}
 
 } );
