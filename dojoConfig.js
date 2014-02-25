@@ -10,6 +10,9 @@ dojoConfig = {
 			name: 'app'
 		},
 		{
+			name: 'templates'
+		},
+		{
 			name: 'tests'
 		}
 	]

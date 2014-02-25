@@ -2,8 +2,14 @@
 'use strict';
 
 define(
-	['jquery', 'app/InputHandler', 'dojo/i18n!./nls/FrontPage' ],
-	function( $, InputHandler, messages ) {
+	[
+		'jquery',
+		'app/InputHandler',
+		'dojo/i18n!./nls/FrontPage',
+		'dojo/_base/config',
+		'templates/registry'
+	],
+	function( $, InputHandler, messages, config, templateRegistry ) {
 
 /**
  * Front-page renderer.
@@ -90,7 +96,7 @@ $.extend( FrontPage.prototype, {
 	 * @param {jQuery} $parentNode
 	 */
 	_renderHelp: function( $parentNode ) {
-		$.get( './templates/frontpage-help.html' )
+		$.get( config.baseUrl + templateRegistry.getDir( config.locale ) + 'frontpage-help.html' )
 		.done( function( html ) {
 			var $helpIcon = $( '<a/>' ).addClass( 'icon-help' ).text( '?' ),
 				$helpContent = $( '<div/>' ).addClass( 'help-content' ).html( html );
