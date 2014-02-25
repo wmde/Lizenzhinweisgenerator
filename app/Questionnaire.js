@@ -1,8 +1,14 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'app/Asset', 'app/AttributionGenerator', 'app/Author'],
-	function( $, Asset, AttributionGenerator, Author ) {
+define( [
+	'jquery',
+	'app/Asset',
+	'app/AttributionGenerator',
+	'app/Author',
+	'dojo/i18n!./nls/Questionnaire'
+],
+	function( $, Asset, AttributionGenerator, Author, messages ) {
 
 var CC2_LICENCES = [
 	'cc-by-2.0-de',
@@ -285,7 +291,7 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		var $supplement = $( '<h2/>' )
-			.text( 'Anmerkungen und Hinweise' );
+			.text( messages['notes and advice'] );
 
 		if( result.useCase === 'private' ) {
 			pages.push( 'r-note-privateUse' );
@@ -350,7 +356,7 @@ $.extend( Questionnaire.prototype, {
 			editor = null;
 
 		if( result.edited ) {
-			editor = '(bearbeitet)'
+			editor = messages['(edited)'];
 		}
 		if( result.editor ) {
 			editor = result.editor;

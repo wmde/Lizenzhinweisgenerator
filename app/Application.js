@@ -2,8 +2,14 @@
 'use strict';
 
 define(
-	['jquery', 'app/FrontPage', 'app/Questionnaire', 'app/OptionsContainer' ],
-	function( $, FrontPage, Questionnaire, OptionsContainer ) {
+	[
+		'jquery',
+		'app/FrontPage',
+		'app/Questionnaire',
+		'app/OptionsContainer',
+		'dojo/i18n!./nls/Application'
+	],
+	function( $, FrontPage, Questionnaire, OptionsContainer, messages ) {
 
 /**
  * Application renderer.
@@ -100,14 +106,12 @@ $.extend( Application.prototype, {
 		self._api.getAsset( filename )
 		.done( function( asset ) {
 			if( !asset.getLicence() ) {
-				self._displayError( 'Leider konnte die Lizenz des verwiesenen Bildes nicht '
-					+ 'ermittelt werden oder wird von dieser Anwendung nicht unterstützt.' );
+				self._displayError( messages['error: unable to detect licence'] );
 				return;
 			}
 
 			if( asset.getMediaType() !== 'bitmap' && asset.getMediaType() !== 'drawing' ) {
-				self._displayError( 'Der Datentyp der angegebenen Datei wird von dieser '
-					+ 'Applikation momentan leider nicht unterstützt.' );
+				self._displayError( messages['error: unsupported data type'] );
 				return;
 			}
 

@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'app/Option' ], function( $, Option ) {
+define( ['jquery', 'app/Option', 'dojo/i18n!./nls/HtmlCode'], function( $, Option, messages ) {
 
 function HtmlCode() {
 	Option.apply( this, arguments );
@@ -27,7 +27,7 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 
 		this._destroyUnderlay();
 
-		var $a = $( '<a/>' ).addClass( 'button' ).text( 'HTML-Quelltext' );
+		var $a = $( '<a/>' ).addClass( 'button' ).text( messages['html code'] );
 
 		$a
 		.on( 'mousedown', function() {
@@ -109,7 +109,7 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 			.add(
 				$( '<label/>' )
 				.attr( 'for', 'option-htmlCode-styles' )
-				.text( 'Inline-Styles verwenden' )
+				.text( messages['use inline styles'] )
 			);
 	},
 

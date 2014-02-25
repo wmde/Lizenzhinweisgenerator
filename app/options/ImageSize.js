@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'app/Option' ], function( $, Option ) {
+define( ['jquery', 'app/Option', 'dojo/i18n!./nls/ImageSize'], function( $, Option, messages ) {
 
 function ImageSize() {
 	Option.apply( this, arguments );
@@ -24,7 +24,7 @@ $.extend( ImageSize.prototype, Option.prototype, {
 			$container = $( '<span/>' ).addClass( 'button' ),
 			$label = $( '<label/>' )
 				.attr( 'for', 'option-imageSize-input' )
-				.text( 'Maximale Bildbreite/-höhe: ' ),
+				.text( messages['maximum image width/height:'] + ' ' ),
 			values = [200, 300, 400, 500, 1000],
 			selected = 500;
 
