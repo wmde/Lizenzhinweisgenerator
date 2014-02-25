@@ -1,6 +1,6 @@
 ( function( define ) {
 
-define( ['qunit', 'InputHandler'], function( QUnit, InputHandler ) {
+define( ['app/InputHandler'], function( InputHandler ) {
 
 	QUnit.module( 'InputHandler' );
 

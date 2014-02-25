@@ -1,8 +1,8 @@
-( function( define ) {
+( function( define, QUnit ) {
 
 define(
-	['qunit', 'jquery', 'Questionnaire', 'AttributionGenerator', 'tests/assets'],
-	function( QUnit, $, Questionnaire, AttributionGenerator, testAssets ) {
+	['jquery', 'app/Questionnaire', 'app/AttributionGenerator', 'tests/assets'],
+	function( $, Questionnaire, AttributionGenerator, testAssets ) {
 
 QUnit.module( 'Questionnaire' );
 
@@ -515,4 +515,4 @@ QUnit.test( 'getAttributionGenerator()', function( assert ) {
 
 } );
 
-}( define ) );
+}( define, QUnit ) );

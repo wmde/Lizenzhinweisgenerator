@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'AssetPage'], function( $, AssetPage ) {
+define( ['jquery', 'app/AssetPage'], function( $, AssetPage ) {
 
 /**
  * Commons API Handler.

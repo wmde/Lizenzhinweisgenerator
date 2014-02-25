@@ -174,7 +174,7 @@ $.extend( Asset.prototype, {
 	 * @return {jQuery}
 	 */
 	getAttribution: function() {
-		return this._$attribution;
+		return this._$attribution ? this._$attribution.clone() : null;
 	},
 
 	/**

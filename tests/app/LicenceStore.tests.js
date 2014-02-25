@@ -1,6 +1,6 @@
 ( function( define ) {
 
-define( ['qunit', 'LicenceStore', 'Licence'], function( QUnit, LicenceStore, Licence ) {
+define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 
 	QUnit.module( 'LicenceStore' );
 

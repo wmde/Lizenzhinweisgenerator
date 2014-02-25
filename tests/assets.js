@@ -1,7 +1,7 @@
 ( function( define ) {
 
 define(
-	['jquery', 'Api', 'LicenceStore', 'LICENCES', 'Asset', 'Author'],
+	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/Asset', 'app/Author'],
 	function( $, Api, LicenceStore, LICENCES, Asset, Author ) {
 
 var api = new Api(

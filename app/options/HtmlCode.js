@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'Option' ], function( $, Option ) {
+define( ['jquery', 'app/Option' ], function( $, Option ) {
 
 function HtmlCode() {
 	Option.apply( this, arguments );

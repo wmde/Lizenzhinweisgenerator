@@ -1,8 +1,8 @@
 ( function( define ) {
 
 define(
-	['qunit', 'jquery', 'AttributionGenerator', 'tests/assets'],
-	function( QUnit, $, AttributionGenerator, testAssets ) {
+	['jquery', 'app/AttributionGenerator', 'tests/assets'],
+	function( $, AttributionGenerator, testAssets ) {
 
 QUnit.module( 'AttributionGenerator' );
 

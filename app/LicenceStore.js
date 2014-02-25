@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['Licence'], function( Licence ) {
+define( ['app/Licence'], function( Licence ) {
 
 /**
  * Licence store storing an ordered list of licences.

@@ -2,21 +2,20 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<script src="config.js"></script>
-		<script src="lib/require/require.js"></script>
+		<script src="dojoConfig.js"></script>
+		<script src="lib/dojo/dojo.js"></script>
 		<link href="app/attributed-image.css" rel="stylesheet" media="screen">
 		<link href="app/frontpage.css" rel="stylesheet" media="screen">
 		<link href="app/styles.css" rel="stylesheet" media="screen">
 	</head>
 	<script>
-		( function( require, config ) {
-			require.config( config );
+		( function( require ) {
 
 			require( [
-				'jquery', 'Application', 'Api', 'LicenceStore', 'LICENCES'
+				'jquery', 'app/Application', 'app/Api', 'app/LicenceStore', 'app/LICENCES'
 			], function( $, Application, Api, LicenceStore, LICENCES ) {
 
-				$.event.props.push('dataTransfer');
+				$.event.props.push( 'dataTransfer' );
 
 				$( document ).ready( function () {
 					var application = new Application(
@@ -31,7 +30,7 @@
 				} );
 
 			} );
-		}( require, app.config ) );
+		}( require ) );
 	</script>
 	<body>
 		<div id="application" class="application">wird geladen...</div>

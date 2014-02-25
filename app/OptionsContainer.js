@@ -3,10 +3,10 @@
 
 define( [
 	'jquery',
-	'options/OriginalFileLink',
-	'options/HtmlCode',
-	'options/ImageSize',
-	'options/RawText'
+	'app/options/OriginalFileLink',
+	'app/options/HtmlCode',
+	'app/options/ImageSize',
+	'app/options/RawText'
 ], function( $, OriginalFileLink, HtmlCode, ImageSize, RawText ) {
 
 /**

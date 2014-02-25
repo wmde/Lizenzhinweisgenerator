@@ -2,7 +2,7 @@
 'use strict';
 
 define(
-	['jquery', 'FrontPage', 'Questionnaire', 'OptionsContainer' ],
+	['jquery', 'app/FrontPage', 'app/Questionnaire', 'app/OptionsContainer' ],
 	function( $, FrontPage, Questionnaire, OptionsContainer ) {
 
 /**

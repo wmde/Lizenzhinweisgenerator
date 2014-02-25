@@ -1,8 +1,8 @@
-( function( define ) {
+( function( define, QUnit ) {
 
 define(
-	['qunit', 'jquery', 'Api', 'Author', 'LicenceStore', 'LICENCES', 'tests/assets'],
-	function( QUnit, $, Api, Author, LicenceStore, LICENCES, testAssets ) {
+	['jquery', 'app/Api', 'app/Author', 'app/LicenceStore', 'app/LICENCES', 'tests/assets'],
+	function( $, Api, Author, LicenceStore, LICENCES, testAssets ) {
 
 	QUnit.module( 'Api' );
 
@@ -130,4 +130,4 @@ define(
 
 } );
 
-}( define ) );
+}( define, QUnit ) );

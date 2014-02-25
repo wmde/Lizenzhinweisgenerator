@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'Asset', 'AttributionGenerator', 'Author'],
+define( ['jquery', 'app/Asset', 'app/AttributionGenerator', 'app/Author'],
 	function( $, Asset, AttributionGenerator, Author ) {
 
 var CC2_LICENCES = [

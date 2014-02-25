@@ -2,7 +2,7 @@
 'use strict';
 
 define(
-	['jquery', 'InputHandler' ],
+	['jquery', 'app/InputHandler' ],
 	function( $, InputHandler ) {
 
 /**

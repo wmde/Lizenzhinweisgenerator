@@ -2,7 +2,7 @@
 'use strict';
 
 define(
-	['jquery', 'Asset', 'Author'],
+	['jquery', 'app/Asset', 'app/Author'],
 	function( $, Asset, Author ) {
 
 function capitalize( string ) {

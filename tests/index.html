@@ -8,14 +8,19 @@
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
-<script src="../lib/require/require.js"></script>
-<script src="../config.js"></script>
+<script src="../lib/qunit/qunit-1.14.0.js"></script>
+<script src="../dojoConfig.js"></script>
 <script>
-	( function( require, config ) {
-		config.baseUrl = '../app';
+	( function( dojoConfig, QUnit ) {
+		QUnit.config.autoload = false;
+		QUnit.config.autostart = false;
 
-		require.config( config );
-
+		dojoConfig.baseUrl = '../';
+	}( dojoConfig, QUnit ) );
+</script>
+<script src="../lib/dojo/dojo.js"></script>
+<script>
+	( function( require ) {
 		require( [
 			'tests/app/Api.tests',
 			'tests/app/AttributionGenerator.tests',
@@ -26,7 +31,7 @@
 			QUnit.load();
 			QUnit.start();
 		} );
-	}( require, app.config ) );
+	}( require ) );
 </script>
 
 </body>
