@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	['jquery', 'app/InputHandler' ],
-	function( $, InputHandler ) {
+	['jquery', 'app/InputHandler', 'dojo/i18n!./nls/FrontPage' ],
+	function( $, InputHandler, messages ) {
 
 /**
  * Front-page renderer.
@@ -49,17 +49,17 @@ $.extend( FrontPage.prototype, {
 		this._$node.empty();
 
 		var $frontPage = $( '<div/>' ).addClass( 'frontpage' )
-			.append( $( '<h1/>' ).text( 'Lizenzverweisgenerator' ) )
+			.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
 			.append(
 				$( '<div/>' ).addClass( 'container-input' )
 				.append(
 					$( '<input type="text"/>' ).attr(
 						'placeholder',
-						'Internetadresse des Bildes auf Wikimedia Commons'
+						messages['input placeholder']
 					)
 				)
 			)
-			.append( $( '<button/>' ).text( 'Lizenztext erzeugen' ) );
+			.append( $( '<button/>' ).text( messages['generate attribution'] ) );
 
 		this._$node.append( $frontPage );
 
