@@ -124,7 +124,7 @@ QUnit.test( 'generate()', function( assert ) {
 					format: mode === 'html' ? 'html' : 'text'
 				} ) );
 
-				var $attribution = attributionGenerator.generate( mode ),
+				var $attribution = attributionGenerator.generate( mode === 'raw' ),
 					actualHtml = $( '<div/>' ).append( $attribution ).html(),
 					expectedHtml = $( '<div/>' ).append( $expected ).html();
 

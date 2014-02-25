@@ -30,7 +30,7 @@ $.extend( Author.prototype, {
 	 * @return {string}
 	 */
 	getText: function() {
-		return this._$author.text();
+		return $.trim( this._$author.text() );
 	}
 
 } );

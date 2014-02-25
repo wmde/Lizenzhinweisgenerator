@@ -149,6 +149,15 @@ $.extend( AssetPage.prototype, {
 
 		var $author = this._sanitizeUrls( $td.contents() );
 
+		// Remove useless wrapping nodes:
+		if( $author.length === 1 ) {
+			var nodeName = $author.get( 0 ).nodeName;
+
+			if( nodeName !== 'A' && nodeName !== '#text' ) {
+				$author = $author.contents();
+			}
+		}
+
 		// Remove "talk" link:
 		$author.each( function( i ) {
 			var $node = $( this );
@@ -172,31 +181,30 @@ $.extend( AssetPage.prototype, {
 	 * @return {jQuery}
 	 */
 	_sanitizeUrls: function( $nodes ) {
-		var $clonedNodes = $nodes.clone();
+		var $clonedNodes = $nodes.clone(),
+			$container = $( '<div/>' ).append( $clonedNodes );
 
-		$clonedNodes.each( function() {
-			var $node = $( this );
+		$container.find( 'a' ).each( function() {
+			var $node = $( this ),
+				href = $node.attr( 'href' );
 
-			if( $node.get( 0 ).nodeName === 'A' ) {
-				var href = $node.attr( 'href' );
-				if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
-					href = href.replace(
-						/^\/w\/index\.php\?title\=([^&]+).*$/,
-						'http://commons.wikimedia.org/wiki/$1'
-					);
-				} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
-					href = 'http://commons.wikimedia.org' + href;
-				} else if( href.indexOf( '//' ) === 0 ) {
-					href = 'http:' + href;
-				}
-
-				$node.attr( 'href', href );
-				$node.removeAttr( 'class' );
-				$node.removeAttr( 'title' );
+			if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
+				href = href.replace(
+					/^\/w\/index\.php\?title\=([^&]+).*$/,
+					'http://commons.wikimedia.org/wiki/$1'
+				);
+			} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
+				href = 'http://commons.wikimedia.org' + href;
+			} else if( href.indexOf( '//' ) === 0 ) {
+				href = 'http:' + href;
 			}
+
+			$node.attr( 'href', href );
+			$node.removeAttr( 'class' );
+			$node.removeAttr( 'title' );
 		} );
 
-		return $clonedNodes;
+		return $container.contents();
 	},
 
 	/**

@@ -40,7 +40,7 @@ return {
 		api,
 		{
 			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a>' ) )],
-			// Complex attribution:
+			// Complex attribution and attribution differs from author:
 			attribution: $( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>' )
 		}
 	),
@@ -202,6 +202,18 @@ return {
 		api,
 		{
 			authors: [new Author( $( document.createTextNode( 'F C Burnand' ) ) )]
+		}
+	),
+	'Air_France_A380_F-HPJA.jpg': new Asset(
+		'Air_France_A380_F-HPJA.jpg',
+		'Air France A380 F-HPJA',
+		'bitmap',
+		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
+		api,
+		{
+			// Author's contains HTML where the internal user page link is not on the top-most DOM level:
+			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
+			attribution: $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' )
 		}
 	)
 };
