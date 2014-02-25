@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery'], function( $ ) {
+define( ['jquery', 'dojo/_base/config'], function( $, config ) {
 
 /**
  * Represents a licence.
@@ -140,21 +140,17 @@ $.extend( Licence.prototype, {
 	/**
 	 * Retrieves the licence text of a specific licence.
 	 *
-	 * @param {string} [baseUrl]
-	 *        Default: '.'
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {jQuery} Licence text.
 	 *         Rejected parameters:
 	 *         - {string} Error message.
 	 */
-	getLegalCode: function( baseUrl ) {
+	getLegalCode: function() {
 		var self = this,
 			deferred = $.Deferred();
 
-		baseUrl = baseUrl || '.';
-
-		$.get( baseUrl + '/licences/' + this._id + '.html' )
+		$.get( config.baseUrl + 'licences/' + this._id + '.html' )
 		.done( function( html ) {
 			var $licence = $( '<div/>' )
 			.addClass( 'licence-text' )

@@ -6,9 +6,11 @@ define( [
 	'app/Asset',
 	'app/AttributionGenerator',
 	'app/Author',
-	'dojo/i18n!./nls/Questionnaire'
+	'dojo/i18n!./nls/Questionnaire',
+	'dojo/_base/config',
+	'templates/registry'
 ],
-	function( $, Asset, AttributionGenerator, Author, messages ) {
+	function( $, Asset, AttributionGenerator, Author, messages, config, templateRegistry ) {
 
 var CC2_LICENCES = [
 	'cc-by-2.0-de',
@@ -23,8 +25,6 @@ var CC2_LICENCES = [
  *
  * @param {jQuery} $node
  * @param {Asset} asset
- * @param {string} [baseUrl]
- *        Default: '.'
  *
  * @event update Triggered whenever the attribution is updated (basically, whenever a new answer is
  *        selected).
@@ -39,7 +39,7 @@ var CC2_LICENCES = [
  * @throws {Error} on incorrect parameters.
  * @throws {Error} if asset does not feature a proper licence.
  */
-var Questionnaire = function( $node, asset, baseUrl ) {
+var Questionnaire = function( $node, asset ) {
 	if( !( $node instanceof $ ) || !( asset instanceof Asset ) ) {
 		throw new Error( 'No proper parameters specified' );
 	}
@@ -50,8 +50,6 @@ var Questionnaire = function( $node, asset, baseUrl ) {
 
 	this._$node = $node;
 	this._asset = asset;
-
-	this._baseUrl = baseUrl || '.';
 };
 
 $.extend( Questionnaire.prototype, {
@@ -66,13 +64,6 @@ $.extend( Questionnaire.prototype, {
 	 * @type {Asset}
 	 */
 	_asset: null,
-
-	/**
-	 * Base url where to look for the "templates" and "licences" folder containing the HTML page
-	 * templates / licence legal codes.
-	 * @type {string}
-	 */
-	_baseUrl: null,
 
 	/**
 	 * Selected answers indexed by page numbers.
@@ -326,7 +317,7 @@ $.extend( Questionnaire.prototype, {
 			}
 
 			if( result.fullLicence ) {
-				self._asset.getLicence().getLegalCode( self._baseUrl )
+				self._asset.getLicence().getLegalCode()
 				.done( function( $licence ) {
 					$nodes.filter( '.page-r-note-fullLicence' ).append( $licence );
 					deferred.resolve( $supplement.add( $nodes ) );
@@ -435,7 +426,9 @@ $.extend( Questionnaire.prototype, {
 				var d = $.Deferred();
 
 				deferred.then( function() {
-					$.get( self._baseUrl + '/templates/' + page + '.html' )
+					var templateDir = templateRegistry.getDir( config.locale );
+
+					$.get( config.baseUrl + templateDir + '/' + page + '.html' )
 					.done( function( html ) {
 						var $content = $( '<div class="page page-' + page + '" />' )
 							.data( 'questionnaire-page', page )
