@@ -153,6 +153,12 @@ $.extend( AttributionGenerator.prototype, {
 	 * @return {jQuery}
 	 */
 	_generateAuthor: function( format ) {
+		// Prefer attribution over author:
+		var $attribution = this._asset.getAttribution();
+		if( $attribution ) {
+			return format === 'html' ? $attribution : $attribution.text();
+		}
+
 		var authors = this._asset.getAuthors(),
 			$authors = $( '<span/>' ).addClass( 'attribution-author' );
 

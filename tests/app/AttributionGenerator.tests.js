@@ -63,6 +63,13 @@ var testCasesDefinitions = {
 			html: $( '<div class="attribution"><span class="attribution-licence">CC BY-SA 3.0</span></div>' )
 		}
 	}],
+	'JapaneseToiletControlPanel.jpg': [{
+		expected: {
+			raw: $( document.createTextNode( 'Chris 73 / Wikimedia Commons (http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg), „JapaneseToiletControlPanel“, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
+			text: $( '<div class="attribution">Chris 73 / Wikimedia Commons <span class="attribution-url">(http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg)</span>, <span class="attribution-title">„JapaneseToiletControlPanel“</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
+			html: $( '<div class="attribution"><a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>, <span class="attribution-title"><a href="http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg">„JapaneseToiletControlPanel“</a></span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
+		}
+	}],
 	'Statue Andrrea Palladio Vicenza.jpg': [{
 		expected: {
 			raw: null,
