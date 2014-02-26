@@ -82,7 +82,7 @@ $.extend( Application.prototype, {
 	 */
 	start: function() {
 		var self = this;
-		this._frontPage = new FrontPage( this._$node );
+		this._frontPage = new FrontPage( this._$node, this._api );
 
 		$( this._frontPage )
 		.on( 'input', function( event, filename ) {

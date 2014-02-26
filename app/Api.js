@@ -290,7 +290,134 @@ $.extend( Api.prototype, {
 			}
 		} )
 		.fail( function( jqXHR, textStatus ) {
-			deferred.reject( textStatus, jqXHR )
+			deferred.reject( textStatus, jqXHR );
+		} );
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Retrieves image info for the images used on a specific Wikipedia page.
+	 *
+	 * @param {string} wikiBaseUrl
+	 * @param {string} title
+	 * @return {Object} jQuery Promise
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {Object[]} Image info.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
+	 */
+	getWikipediaPageImageInfo: function( wikiBaseUrl, title ) {
+		var self = this,
+			deferred = $.Deferred();
+
+		var params = {
+			action: 'query',
+			prop: 'images',
+			imlimit: 100,
+			titles: title,
+			format: 'json'
+		};
+
+		$.ajax( {
+			url: wikiBaseUrl + 'w/api.php',
+			crossDomain: true,
+			data: params,
+			dataType: 'jsonp'
+		} )
+		.done( function( response ) {
+			if( response.query === undefined || response.query.pages == undefined ) {
+				deferred.reject( 'The API returned an unexpected response' );
+				return;
+			}
+
+			var imageTitles = [];
+
+			$.each( response.query.pages, function( id, page ) {
+
+				var error = self._checkPageResponse( page );
+				if( error ) {
+					deferred.reject( error );
+					return false;
+				}
+
+				for( var i = 0; i < page.images.length; i++ ) {
+					imageTitles.push( page.images[i].title );
+				}
+			} );
+
+			if( deferred.state() === 'rejected' ) {
+				return;
+			}
+
+			self._getWikipediaImageInfos( wikiBaseUrl, imageTitles )
+			.done( function( imageUrls ) {
+				deferred.resolve( imageUrls );
+			} )
+			.fail( function( jqXHR, textStatus ) {
+				deferred.reject( textStatus );
+			} );
+		} )
+		.fail( function( jqXHR, textStatus ) {
+			deferred.reject( textStatus );
+		} );
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Retrieves image info for a list of images used on a specific Wikipedia.
+	 *
+	 * @param {string} wikiBaseUrl
+	 * @param {string[]} imageTitles
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {Object[]} Image info.
+	 *         Rejected parameters:
+	 *         - {string} Error message.
+	 */
+	_getWikipediaImageInfos: function( wikiBaseUrl, imageTitles ) {
+		var deferred = $.Deferred();
+
+		if( imageTitles.length === 0 ) {
+			deferred.resolve( [] );
+			return deferred.promise();
+		}
+
+		var params = {
+			action: 'query',
+			prop: 'imageinfo',
+			iiprop: 'url',
+			iilimit: 1,
+			iiurlwidth: 300,
+			iiurlheight: 300,
+			titles: imageTitles.join( '|' ),
+			format: 'json'
+		};
+
+		$.ajax( {
+			url: wikiBaseUrl + 'w/api.php',
+			crossDomain: true,
+			data: params,
+			dataType: 'jsonp'
+		} )
+		.done( function( response ) {
+			if( response.query === undefined || response.query.pages == undefined ) {
+				deferred.reject( 'The API returned an unexpected response' );
+				return;
+			}
+
+			var imageInfos = [];
+
+			$.each( response.query.pages, function( index, page ) {
+				imageInfos.push( page.imageinfo[0] );
+			} );
+
+			deferred.resolve( imageInfos );
+		} )
+		.fail( function( jqXHR, textStatus ) {
+			deferred.reject( textStatus );
 		} );
 
 		return deferred.promise();

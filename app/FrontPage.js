@@ -26,13 +26,13 @@ define(
  *        (1) {jQuery.Event}
  *        (2) {string} Error message
  */
-var FrontPage = function( $initNode ) {
+var FrontPage = function( $initNode, api ) {
 	if( !$initNode ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
 	this._$node = $initNode;
-	this._inputHandler = new InputHandler();
+	this._inputHandler = new InputHandler( api );
 };
 
 $.extend( FrontPage.prototype, {
@@ -40,6 +40,11 @@ $.extend( FrontPage.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
+
+	/**
+	 * @type {jQuery|null}
+	 */
+	_$frontPage: null,
 
 	/**
 	 * @type {InputHandler}
@@ -84,10 +89,14 @@ $.extend( FrontPage.prototype, {
 			.stop()
 			.slideUp( 'fast' );
 
+			$frontPage.find( '.suggestions' ).remove();
+
 			$frontPage.find( 'input' ).addClass( 'loading' );
 
 			self._evaluateInput( $frontPage.find( 'input' ).val() );
 		} );
+
+		this._$frontPage = $frontPage;
 	},
 
 	/**
@@ -146,16 +155,52 @@ $.extend( FrontPage.prototype, {
 
 		this._inputHandler.getFilename( input )
 		.done( function( filename ) {
-			$( self ).trigger( 'input', [filename] );
-			deferred.resolve( filename );
+			if( typeof filename === 'string' ) {
+				$( self ).trigger( 'input', [filename] );
+				deferred.resolve( filename );
+			} else {
+				self._renderSuggestions( filename );
+			}
 		} )
 		.fail( function( message ) {
 			$( self ).trigger( 'error', [message] );
-			self._$node.find( 'input' ).removeClass( 'loading' );
 			deferred.reject( message );
+		} )
+		.always( function() {
+			self._$node.find( 'input' ).removeClass( 'loading' );
 		} );
 
 		return deferred;
+	},
+
+	/**
+	 * Renders a list of suggestions for a list of file info objects.
+	 *
+	 * @param {Object[]} fileInfos
+	 */
+	_renderSuggestions: function( fileInfos ) {
+		var self = this,
+			$suggestions = this._$frontPage.find( '.suggestions' );
+
+		if( $suggestions.length === 0 ) {
+			$suggestions = $( '<div/>' ).addClass( 'suggestions ' )
+				.appendTo( this._$frontPage );
+		}
+
+		var $ul = $( '<ul/>' );
+		for( var i = 0; i < fileInfos.length; i++ ) {
+			var $li = $( '<li/>' ).append(
+				$( '<img/>' ).attr( 'border', '0' ).attr( 'src', fileInfos[i].thumburl )
+			);
+			( function( fileInfo ) {
+				$li.on( 'click', function() {
+					self._evaluateInput( fileInfo.descriptionurl );
+				} );
+			}( fileInfos[i] ) );
+			$ul.append( $li );
+		}
+
+		$suggestions.empty().append( $ul );
 	}
 
 } );

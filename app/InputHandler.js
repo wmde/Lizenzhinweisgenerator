@@ -7,9 +7,15 @@ define( ['jquery'], function( $ ) {
 	 * Returns a filename by analyzing input.
 	 * @constructor
 	 */
-var InputHandler = function() {};
+var InputHandler = function( api ) {
+	this._api = api
+};
 
 $.extend( InputHandler.prototype, {
+	/**
+	 * @type {Api}
+	 */
+	_api: null,
 
 	/**
 	 * Tries to retrieve a filename evaluating the input parameter.
@@ -28,13 +34,19 @@ $.extend( InputHandler.prototype, {
 		if( input instanceof $.Event ) {
 			this._getUrlFromEvent( input )
 			.done( function( url ) {
-				deferred.resolve( self._extractFilename( url ) );
+				self._extractFilenames( url )
+				.done( function( filenames ) {
+					deferred.resolve( filenames );
+				} )
+				.fail( function( message ) {
+					deferred.reject( message );
+				} );
 			} )
 			.fail( function( message ) {
 				deferred.reject( message );
 			} );
 		} else if( typeof input === 'string' ) {
-			deferred.resolve( this._extractFilename( input ) );
+			return this._extractFilenames( input );
 		} else {
 			deferred.reject( 'Cannot handle input' );
 			console.error( 'Cannot handle input:' );
@@ -57,6 +69,11 @@ $.extend( InputHandler.prototype, {
 	_getUrlFromEvent: function( event ) {
 		var deferred = $.Deferred();
 
+		if( event.type !== 'drop' || !event.dataTransfer ) {
+			deferred.reject( 'Unsupported event' );
+			return deferred.promise();
+		}
+
 		if(
 			event.dataTransfer.items !== undefined
 			&& event.dataTransfer.items[0] !== undefined
@@ -70,9 +87,29 @@ $.extend( InputHandler.prototype, {
 			deferred.resolve( $( '<div/>' ).html( img ).find( 'img' ).attr( 'src' ) );
 		}
 
-		if( deferred.state() === 'pending' ) {
-			deferred.reject( 'Unable to retrieve URL from event' );
+		return deferred.promise();
+	},
+
+	/**
+	 * Evaluates an URL an extracts the filename from it, if the URL referes to a specific file. If
+	 * the URL corresponds to a Wikipedia page, file info objects for the images used on the page
+	 * are returned in the promise object.
+	 *
+	 * @param url
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {string|Object[]} Filename or file info objects
+	 *         Rejected parameters:
+	 *         - {string} Error message
+	 */
+	_extractFilenames: function( url ) {
+		var deferred = $.Deferred();
+
+		if( url.indexOf( '.wikipedia.org/wiki/' ) !== -1 ) {
+			return this._getWikipediaPageImagesFileInfo( url );
 		}
+
+		deferred.resolve( this._extractFilename( url ) );
 
 		return deferred.promise();
 	},
@@ -80,12 +117,8 @@ $.extend( InputHandler.prototype, {
 	/**
 	 * Extracts a filename out of an URL string.
 	 *
-	 * @param url
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {string} Filename
-	 *         Rejected parameters:
-	 *         - {string} Error message
+	 * @param {string} url
+	 * @return {string}
 	 */
 	_extractFilename: function( url ) {
 		var segments = url.split( '/' );
@@ -102,6 +135,40 @@ $.extend( InputHandler.prototype, {
 		filename = filename.replace ( /_/g , ' ' ) ;
 
 		return filename;
+	},
+
+	/**
+	 * Retrieves file info for all images used on a specific Wikipedia page.
+	 *
+	 * @param {string} url
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {Object} Image info
+	 *         Rejected parameters:
+	 *         - {string} Error message
+	 */
+	_getWikipediaPageImagesFileInfo: function( url ) {
+		var self = this,
+			deferred = $.Deferred(),
+			segments = url.split( '/' ),
+			title = segments[segments.length - 1];
+
+		this._api.getWikipediaPageImageInfo( '//' + segments[2] + '/', title )
+		.done( function( imageInfos ) {
+			var fileInfos = [];
+
+			for( var i = 0; i < imageInfos.length; i++ ) {
+				imageInfos[i].filename = self._extractFilename( imageInfos[i].descriptionurl );
+				fileInfos.push( imageInfos[i] );
+			}
+
+			deferred.resolve( fileInfos );
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
+		} );
+
+		return deferred.promise();
 	}
 } );
 
