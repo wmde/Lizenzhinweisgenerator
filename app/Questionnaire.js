@@ -604,7 +604,7 @@ $.extend( Questionnaire.prototype, {
 				) {
 					self._goToAndUpdate( '7' );
 				} else {
-					self._goToAndUpdate( '4' );
+					self._goToAndUpdate( self.exit );
 				}
 			} );
 
