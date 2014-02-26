@@ -59,17 +59,18 @@ $.extend( FrontPage.prototype, {
 
 		this._$node.empty();
 
+		var $input = $( '<input type="text"/>' )
+			.attr( 'placeholder', messages['input placeholder'] )
+			.on( 'keypress', function( event ) {
+				if( event.keyCode === 13 ) {
+					event.preventDefault();
+					self._submit();
+				}
+			} );
+
 		var $frontPage = $( '<div/>' ).addClass( 'frontpage' )
 			.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
-			.append(
-				$( '<div/>' ).addClass( 'container-input' )
-				.append(
-					$( '<input type="text"/>' ).attr(
-						'placeholder',
-						messages['input placeholder']
-					)
-				)
-			)
+			.append( $( '<div/>' ).addClass( 'container-input' ).append( $input ) )
 			.append( $( '<button/>' ).text( messages['generate attribution'] ) );
 
 		this._$node.append( $frontPage );
@@ -85,18 +86,23 @@ $.extend( FrontPage.prototype, {
 
 		$frontPage.find( 'button' )
 		.on( 'click', function() {
-			$frontPage.find( '.error' )
-			.stop()
-			.slideUp( 'fast' );
-
-			$frontPage.find( '.suggestions' ).remove();
-
-			$frontPage.find( 'input' ).addClass( 'loading' );
-
-			self._evaluateInput( $frontPage.find( 'input' ).val() );
+			self._submit();
 		} );
 
 		this._$frontPage = $frontPage;
+	},
+
+	/**
+	 * Submits the input.
+	 */
+	_submit: function() {
+		this._$frontPage.find( '.error' )
+			.stop()
+			.slideUp( 'fast' );
+
+		this._$frontPage.find( '.suggestions' ).remove();
+		this._$frontPage.find( 'input' ).addClass( 'loading' );
+		this._evaluateInput( this._$frontPage.find( 'input' ).val() );
 	},
 
 	/**
