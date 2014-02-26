@@ -150,10 +150,9 @@ $.extend( InputHandler.prototype, {
 	 *         - {string} Error message
 	 */
 	_getWikipediaPageImagesFileInfo: function( url ) {
-		var segments = url.split( '/' ),
-			title = segments[segments.length - 1];
-
-		return this._api.getWikipediaPageImageInfo( '//' + segments[2] + '/', title );
+		var matches = url.match( /([-a-z]{2,}\.wikipedia\.org)\//i ),
+			title = url.split( '/' ).pop();
+		return this._api.getWikipediaPageImageInfo( '//' + matches[1] + '/', title );
 	}
 } );
 
