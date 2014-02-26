@@ -35,13 +35,15 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 		this._asset.getImageInfo( '500' )
 		.done( function( imageInfo ) {
 			if( self._$a.get( 0 ).download !== undefined ) {
-				self._$a.attr( 'href', imageInfo.url ).text( messages['download original file'] );
+				self._$a.attr( 'href', imageInfo.getUrl() )
+					.text( messages['download original file'] );
 				self._$a.attr( 'download', self._asset.getFilename() );
 			} else {
-				self._$a.attr( 'href', imageInfo.url ).text( messages['retrieve original file'] );
+				self._$a.attr( 'href', imageInfo.getUrl() )
+					.text( messages['retrieve original file'] );
 				self._$a.on( 'click', function( event ) {
 					event.preventDefault();
-					window.open( imageInfo.url, '_blank' );
+					window.open( imageInfo.getUrl(), '_blank' );
 				} );
 			}
 		} )

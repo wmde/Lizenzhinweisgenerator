@@ -57,12 +57,6 @@ $.extend( Application.prototype, {
 	_asset: null,
 
 	/**
-	 * Most current image information as retrieved from the API.
-	 * @type {Object}
-	 */
-	_imageInfo: null,
-
-	/**
 	 * @type {FrontPage|null}
 	 */
 	_frontPage: null,
@@ -279,19 +273,19 @@ $.extend( Application.prototype, {
 	/**
 	 * Returns the DOM of the attributed image without the attribution.
 	 *
-	 * @param {Object} imageInfo
+	 * @param {ImageInfo} imageInfo
 	 * @return {jQuery}
 	 */
 	_attributedImageHtml: function( imageInfo ) {
 		var html = ''
 			+ '<div class="attributed-image-frame"><div class="attributed-image">'
-			+ '<a href="' + imageInfo.descriptionurl + '">'
-			+ '<img border="0" src="' + imageInfo.thumburl + '"/>'
+			+ '<a href="' + imageInfo.getDescriptionUrl() + '">'
+			+ '<img border="0" src="' + imageInfo.getThumbnail().url + '"/>'
 			+ '</a>'
 			+ '</div></div>';
 
 		var $attributedImageFrame = $( html );
-		$attributedImageFrame.width( imageInfo.thumbwidth );
+		$attributedImageFrame.width( imageInfo.getThumbnail().width );
 
 		return $attributedImageFrame;
 	},

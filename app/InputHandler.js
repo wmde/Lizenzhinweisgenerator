@@ -91,7 +91,7 @@ $.extend( InputHandler.prototype, {
 	},
 
 	/**
-	 * Evaluates an URL an extracts the filename from it, if the URL referes to a specific file. If
+	 * Evaluates an URL an extracts the filename from it, if the URL refers to a specific file. If
 	 * the URL corresponds to a Wikipedia page, file info objects for the images used on the page
 	 * are returned in the promise object.
 	 *
@@ -145,32 +145,15 @@ $.extend( InputHandler.prototype, {
 	 * @param {string} url
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {Object} Image info
+	 *         - {ImageInfo[]}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
 	_getWikipediaPageImagesFileInfo: function( url ) {
-		var self = this,
-			deferred = $.Deferred(),
-			segments = url.split( '/' ),
+		var segments = url.split( '/' ),
 			title = segments[segments.length - 1];
 
-		this._api.getWikipediaPageImageInfo( '//' + segments[2] + '/', title )
-		.done( function( imageInfos ) {
-			var fileInfos = [];
-
-			for( var i = 0; i < imageInfos.length; i++ ) {
-				imageInfos[i].filename = self._extractFilename( imageInfos[i].descriptionurl );
-				fileInfos.push( imageInfos[i] );
-			}
-
-			deferred.resolve( fileInfos );
-		} )
-		.fail( function( message ) {
-			deferred.reject( message );
-		} );
-
-		return deferred.promise();
+		return this._api.getWikipediaPageImageInfo( '//' + segments[2] + '/', title );
 	}
 } );
 

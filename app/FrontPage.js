@@ -176,9 +176,9 @@ $.extend( FrontPage.prototype, {
 	/**
 	 * Renders a list of suggestions for a list of file info objects.
 	 *
-	 * @param {Object[]} fileInfos
+	 * @param {ImageInfo[]} imageInfos
 	 */
-	_renderSuggestions: function( fileInfos ) {
+	_renderSuggestions: function( imageInfos ) {
 		var self = this,
 			$suggestions = this._$frontPage.find( '.suggestions' );
 
@@ -188,15 +188,15 @@ $.extend( FrontPage.prototype, {
 		}
 
 		var $ul = $( '<ul/>' );
-		for( var i = 0; i < fileInfos.length; i++ ) {
+		for( var i = 0; i < imageInfos.length; i++ ) {
 			var $li = $( '<li/>' ).append(
-				$( '<img/>' ).attr( 'border', '0' ).attr( 'src', fileInfos[i].thumburl )
+				$( '<img/>' ).attr( 'border', '0' ).attr( 'src', imageInfos[i].getThumbnail().url )
 			);
-			( function( fileInfo ) {
+			( function( imageInfo ) {
 				$li.on( 'click', function() {
-					self._evaluateInput( fileInfo.descriptionurl );
+					self._evaluateInput( imageInfo.getDescriptionUrl() );
 				} );
-			}( fileInfos[i] ) );
+			}( imageInfos[i] ) );
 			$ul.append( $li );
 		}
 

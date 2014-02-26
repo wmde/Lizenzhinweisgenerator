@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'app/AssetPage'], function( $, AssetPage ) {
+define( ['jquery', 'app/AssetPage', 'app/ImageInfo'], function( $, AssetPage, ImageInfo ) {
 
 /**
  * Commons API Handler.
@@ -161,7 +161,7 @@ $.extend( Api.prototype, {
 	 * @param {number} size
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {Object} The file's image information.
+	 *         - {ImageInfo}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
@@ -184,7 +184,7 @@ $.extend( Api.prototype, {
 			if( !page.imageinfo || page.imageinfo.length === 0 ) {
 				deferred.reject( 'No image information returned' );
 			}
-			deferred.resolve( page.imageinfo[0] );
+			deferred.resolve( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[0] ) );
 		} )
 		.fail( function( message, jqXHR ) {
 			deferred.reject( message );
@@ -308,9 +308,9 @@ $.extend( Api.prototype, {
 	 * @return {Object} jQuery Promise
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {Object[]} Image info.
+	 *         - {ImageInfo[]}
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {string} Error message
 	 */
 	getWikipediaPageImageInfo: function( wikiBaseUrl, title ) {
 		var self = this,
@@ -377,9 +377,9 @@ $.extend( Api.prototype, {
 	 * @param {string[]} imageTitles
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {Object[]} Image info.
+	 *         - {ImageInfo[]}
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {string} Error message
 	 */
 	_getWikipediaImageInfos: function( wikiBaseUrl, imageTitles ) {
 		var deferred = $.Deferred();
@@ -415,7 +415,7 @@ $.extend( Api.prototype, {
 			var imageInfos = [];
 
 			$.each( response.query.pages, function( index, page ) {
-				imageInfos.push( page.imageinfo[0] );
+				imageInfos.push( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[0] ) );
 			} );
 
 			deferred.resolve( imageInfos );
