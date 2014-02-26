@@ -56,10 +56,10 @@ $.extend( Api.prototype, {
 		this._getMediaType( filename )
 		.done( function( mediaType ) {
 
-			self.getPageContent( filename )
+			self._getPageContent( filename )
 			.done( function( $dom ) {
 
-				self.getCategories( filename )
+				self._getCategories( filename )
 				.done( function( categories ) {
 					var assetPage = new AssetPage( filename, mediaType, $dom, categories, self );
 
@@ -91,7 +91,7 @@ $.extend( Api.prototype, {
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	getPageContent: function( filename ) {
+	_getPageContent: function( filename ) {
 		var self = this,
 			deferred = $.Deferred();
 
@@ -130,10 +130,10 @@ $.extend( Api.prototype, {
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	getCategories: function( filename ) {
+	_getCategories: function( filename ) {
 		var deferred = $.Deferred();
 
-		this._query( filename, 'categories' )
+		this._query( filename, 'categories', { cllimit: 500 } )
 		.done( function( page ) {
 			if( !page.categories ) {
 				deferred.reject( 'No categories found' );
@@ -269,12 +269,16 @@ $.extend( Api.prototype, {
 		params = $.extend( {
 			action: 'query',
 			prop: property,
-			cllimit: 500,
 			titles: 'File:' + filename,
 			format: 'json'
 		}, params );
 
-		$.getJSON( this._url, params )
+		$.ajax( {
+			url: this._url,
+			crossDomain: true,
+			dataType: 'jsonp',
+			data: params
+		} )
 		.done( function( response, textStatus, jqXHR ) {
 			if( response.query === undefined || response.query.pages == undefined ) {
 				deferred.reject( 'The API returned an unexpected response', jqXHR );

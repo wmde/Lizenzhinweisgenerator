@@ -5,7 +5,7 @@ define(
 	function( $, Api, LicenceStore, LICENCES, Asset, Author ) {
 
 var api = new Api(
-	'//commons.wikimedia.org/w/api.php?callback=?',
+	'//commons.wikimedia.org/w/api.php',
 	new LicenceStore( LICENCES )
 );
 
