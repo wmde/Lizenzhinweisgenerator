@@ -105,6 +105,8 @@ $.extend( InputHandler.prototype, {
 	_extractFilenames: function( url ) {
 		var deferred = $.Deferred();
 
+		url = decodeURI( url );
+
 		if( url.indexOf( '.wikipedia.org/wiki/' ) !== -1 ) {
 			return this._getWikipediaPageImagesFileInfo( url );
 		}
