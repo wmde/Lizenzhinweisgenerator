@@ -45,6 +45,10 @@
 	margin-left: 6pt;
 	opacity: 0.33;
 	text-align: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 	vertical-align: middle;
 	width: 19pt;
 }
