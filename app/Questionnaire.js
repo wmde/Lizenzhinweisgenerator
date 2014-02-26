@@ -476,14 +476,20 @@ $.extend( Questionnaire.prototype, {
 		var self = this;
 
 		$page.find( 'ul.answers li' )
-		.prepend( $( '<span/>' ).addClass( 'checkbox' ).html( '&nbsp;' ) )
+		.prepend(
+				$( '<span/>' ).addClass( 'checkbox' ).html( '&nbsp;' )
+				.on( 'mouseover', function( event ) {
+					self._startCheckboxAnimation( $( event.target ) );
+				} )
+				.on( 'mouseout', function( event ) {
+					self._stopCheckboxAnimation( $( event.target ) );
+				} )
+		)
 		.on( 'mouseover', function( event ) {
-			var $checkbox = $( event.target ).find( '.checkbox' );
-			self._startCheckboxAnimation( $checkbox );
+			self._startCheckboxAnimation( $( event.target ).find( '.checkbox' ) );
 		} )
 		.on( 'mouseout', function( event ) {
-			var $checkbox = $( event.target ).find( '.checkbox' );
-			self._stopCheckboxAnimation( $checkbox );
+			self._stopCheckboxAnimation( $( event.target ).find( '.checkbox' ) );
 		} );
 
 		return $page;
