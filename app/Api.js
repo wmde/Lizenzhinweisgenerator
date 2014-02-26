@@ -59,9 +59,9 @@ $.extend( Api.prototype, {
 			self._getPageContent( filename )
 			.done( function( $dom ) {
 
-				self._getCategories( filename )
-				.done( function( categories ) {
-					var assetPage = new AssetPage( filename, mediaType, $dom, categories, self );
+				self._getPageTemplates( filename )
+				.done( function( templates ) {
+					var assetPage = new AssetPage( filename, mediaType, $dom, templates, self );
 
 					deferred.resolve( assetPage.getAsset() );
 				} )
@@ -121,31 +121,34 @@ $.extend( Api.prototype, {
 	},
 
 	/**
-	 * Retrieves the categories of a specific file.
+	 * Retrieves the Wikipage templates used on a specific file's description page.
 	 *
 	 * @param {string} filename
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {string[]} The file's categories.
+	 *         - {string[]}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	_getCategories: function( filename ) {
+	_getPageTemplates: function( filename ) {
 		var deferred = $.Deferred();
 
-		this._query( filename, 'categories', { cllimit: 500 } )
+		this._query( filename, 'templates', {
+			tlnamespace: 10,
+			tllimit: 100
+		} )
 		.done( function( page ) {
-			if( !page.categories ) {
-				deferred.reject( 'No categories found' );
+			if( !page.templates ) {
+				deferred.reject( 'No templates found' );
 				return;
 			}
 
-			var categories = [];
-			$.each( page.categories, function( i, category ) {
-				categories.push( category.title.replace( /^[^:]+:/ , '' ) );
+			var templates = [];
+			$.each( page.templates, function( i, template ) {
+				templates.push( template.title.replace( /^[^:]+:/ , '' ) );
 			} );
 
-			deferred.resolve( categories );
+			deferred.resolve( templates );
 		} )
 		.fail( function( message, jqXHR ) {
 			deferred.reject( message );

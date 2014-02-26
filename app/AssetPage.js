@@ -16,19 +16,19 @@ function capitalize( string ) {
  * @param {string} filename
  * @param {string} mediaType
  * @param {jQuery} $dom
- * @param {string[]} categories
+ * @param {string[]} templates
  * @param {Api} api
  *
  * @throws {Error} if a required parameter is not specified.
  */
-var AssetPage = function( filename, mediaType, $dom, categories, api ) {
-	if( !filename || !mediaType || !$dom || !categories || !api ) {
+var AssetPage = function( filename, mediaType, $dom, templates, api ) {
+	if( !filename || !mediaType || !$dom || !templates || !api ) {
 		throw new Error( 'Unable to instantiate object' );
 	}
 	this._filename = filename;
 	this._mediaType = mediaType;
 	this._$dom = $dom;
-	this._categories = categories;
+	this._templates = templates;
 	this._api = api;
 };
 
@@ -52,10 +52,10 @@ $.extend( AssetPage.prototype, {
 	_$dom: null,
 
 	/**
-	 * The page's categories.
+	 * The page's templates.
 	 * @type {string[]}
 	 */
-	_categories: null,
+	_templates: null,
 
 	/**
 	 * @type {Api}
@@ -78,7 +78,7 @@ $.extend( AssetPage.prototype, {
 				this._filename,
 				this._filename.replace( /\.[^.]+$/ , '' ).replace( /_/g, ' '),
 				this._mediaType,
-				this._api.getLicenceStore().detectLicence( this._categories ),
+				this._api.getLicenceStore().detectLicence( this._templates ),
 				this._api,
 				{
 					descriptions: this._scrapeDescriptions(),
