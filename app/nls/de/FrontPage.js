@@ -1,5 +1,5 @@
 define( {
 	'licence attribution generator': 'Lizenzverweisgenerator',
-	'input placeholder': 'Internetadresse des Bildes auf Wikimedia Commons',
+	'input placeholder': 'Internetadresse eines in Wikipedia verwendeten Bildes oder eines Wikipedia-Artikels',
 	'generate attribution': 'Lizenzverweis erzeugen'
 } );
