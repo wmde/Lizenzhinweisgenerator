@@ -651,10 +651,7 @@ $.extend( Questionnaire.prototype, {
 
 			$page.find( '.a3' ).on( 'click', function() {
 				self._log( p, 3 );
-				if(
-					self._asset.getLicence().getId() === 'cc-by-2.0-de'
-					|| self._asset.getLicence().getId() === 'cc-by-sa-2.0-de'
-				) {
+				if( self._asset.getLicence().isInGroup( 'cc2de' ) ) {
 					self._goToAndUpdate( '7' );
 				} else {
 					self._goToAndUpdate( 'r-success' );
