@@ -18,18 +18,20 @@ function capitalize( string ) {
  * @param {jQuery} $dom
  * @param {string[]} templates
  * @param {Api} api
+ * @param {string} [wikiUrl]
  *
  * @throws {Error} if a required parameter is not specified.
  */
-var AssetPage = function( filename, mediaType, $dom, templates, api ) {
-	if( !filename || !mediaType || !$dom || !templates || !api ) {
+var AssetPage = function( prefixedFilename, mediaType, $dom, templates, api, wikiUrl ) {
+	if( !prefixedFilename || !mediaType || !$dom || !templates || !api ) {
 		throw new Error( 'Unable to instantiate object' );
 	}
-	this._filename = filename;
+	this._prefixedFilename = prefixedFilename;
 	this._mediaType = mediaType;
 	this._$dom = $dom;
 	this._templates = templates;
 	this._api = api;
+	this._wikiUrl = wikiUrl || api.getDefaultUrl();
 };
 
 $.extend( AssetPage.prototype, {
@@ -37,13 +39,18 @@ $.extend( AssetPage.prototype, {
 	 * The page's filename.
 	 * @type {string}
 	 */
-	_filename: null,
+	_prefixedFilename: null,
 
 	/**
 	 * The asset's media type.
 	 * @type {string}
 	 */
 	_mediaType: null,
+
+	/**
+	 * @type {string}
+	 */
+	_wikiUrl: null,
 
 	/**
 	 * The page content DOM.
@@ -75,8 +82,11 @@ $.extend( AssetPage.prototype, {
 	getAsset: function() {
 		if( !this._asset ) {
 			this._asset = new Asset(
-				this._filename,
-				this._filename.replace( /\.[^.]+$/ , '' ).replace( /_/g, ' '),
+				this._prefixedFilename,
+				this._prefixedFilename
+					.replace( /^[^:]+:/ , '' )
+					.replace( /\.[^.]+$/ , '' )
+					.replace( /_/g, ' '),
 				this._mediaType,
 				this._api.getLicenceStore().detectLicence( this._templates ),
 				this._api,
@@ -85,7 +95,8 @@ $.extend( AssetPage.prototype, {
 					authors: this._scrapeAuthors(),
 					source: this._scrapeSource(),
 					attribution: this._scrapeAttribution()
-				}
+				},
+				this._wikiUrl
 			);
 		}
 		return this._asset;

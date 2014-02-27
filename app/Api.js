@@ -7,30 +7,38 @@ define( ['jquery', 'app/AssetPage', 'app/ImageInfo'], function( $, AssetPage, Im
  * Commons API Handler.
  * @constructor
  *
- * @param {string} url
+ * @param {string} defaultUrl
  * @param {LicenceStore} licenceStore
  *
  * @throws {Error} if a required parameter is omitted.
  */
-var Api = function( url, licenceStore ) {
-	if( !url || !licenceStore ) {
+var Api = function( defaultUrl, licenceStore ) {
+	if( !defaultUrl || !licenceStore ) {
 		throw new Error( 'A required parameter has been omitted' );
 	}
-	this._url = url;
+	this._defaultUrl = defaultUrl;
 	this._licenceStore = licenceStore;
 };
 
 $.extend( Api.prototype, {
 	/**
-	 * API URL.
+	 * Default API URL.
 	 * @type {string}
 	 */
-	_url: null,
+	_defaultUrl: null,
 
 	/**
-	 * @param {LicenceStore|null} filename
+	 * @param {LicenceStore|null}
 	 */
 	_licenceStore: null,
+
+	/**
+	 * Returns the API's default URL.
+	 * @return {string}
+	 */
+	getDefaultUrl: function() {
+		return this._defaultUrl;
+	},
 
 	/**
 	 * @return {LicenceStore|null}
@@ -42,26 +50,29 @@ $.extend( Api.prototype, {
 	/**
 	 * Generates an Asset object for a specific filename.
 	 *
-	 * @param {string} filename
+	 * @param {string} prefixedFilename
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {Asset}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	getAsset: function( filename ) {
+	getAsset: function( prefixedFilename, wikiUrl ) {
 		var self = this,
 			deferred = $.Deferred();
 
-		this._getMediaType( filename )
+		this._getMediaType( prefixedFilename, wikiUrl )
 		.done( function( mediaType ) {
 
-			self._getPageContent( filename )
+			self._getPageContent( prefixedFilename, wikiUrl )
 			.done( function( $dom ) {
 
-				self._getPageTemplates( filename )
+				self._getPageTemplates( prefixedFilename, wikiUrl )
 				.done( function( templates ) {
-					var assetPage = new AssetPage( filename, mediaType, $dom, templates, self );
+					var assetPage = new AssetPage(
+						prefixedFilename, mediaType, $dom, templates, self, wikiUrl
+					);
 
 					deferred.resolve( assetPage.getAsset() );
 				} )
@@ -84,18 +95,19 @@ $.extend( Api.prototype, {
 	/**
 	 * Retrieves the asset page content of a specific file.
 	 *
-	 * @param {string} filename
+	 * @param {string} prefixedFilename
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {jQuery} Page content DOM
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	_getPageContent: function( filename ) {
+	_getPageContent: function( prefixedFilename, wikiUrl ) {
 		var self = this,
 			deferred = $.Deferred();
 
-		this._query( filename, 'revisions', {
+		this._query( prefixedFilename, 'revisions', wikiUrl, {
 			rvprop: 'content',
 			rvparse: 1
 		} )
@@ -123,17 +135,18 @@ $.extend( Api.prototype, {
 	/**
 	 * Retrieves the Wikipage templates used on a specific file's description page.
 	 *
-	 * @param {string} filename
+	 * @param {string} prefixedFilename
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {string[]}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	_getPageTemplates: function( filename ) {
+	_getPageTemplates: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
 
-		this._query( filename, 'templates', {
+		this._query( prefixedFilename, 'templates', wikiUrl, {
 			tlnamespace: 10,
 			tllimit: 100
 		} )
@@ -160,19 +173,20 @@ $.extend( Api.prototype, {
 	/**
 	 * Retrieves image information for a specific file according to a specific image size.
 	 *
-	 * @param {string} filename
+	 * @param {string} prefixedFilename
 	 * @param {number} size
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {ImageInfo}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	getImageInfo: function( filename, size ) {
+	getImageInfo: function( prefixedFilename, size, wikiUrl ) {
 		var self = this,
 			deferred = $.Deferred();
 
-		this._query( filename, 'imageinfo', {
+		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
 			iiprop: 'url',
 			iiurlwidth: size,
 			iiurlheight: size
@@ -199,19 +213,21 @@ $.extend( Api.prototype, {
 	/**
 	 * Retrieves a file's media type.
 	 *
-	 * @param {string} filename
+	 * @param {string} prefixedFilename
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise:
 	 *         Resolved parameters:
 	 *         - {string} The file's media type.
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	_getMediaType: function( filename ) {
+	_getMediaType: function( prefixedFilename, wikiUrl ) {
 		var self = this,
 			deferred = $.Deferred();
 
-		this._query( filename, 'imageinfo', {
-			iiprop: 'mediatype'
+		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
+			iiprop: 'mediatype',
+			iilimit: 1
 		} )
 		.done( function( page ) {
 			var error = self._checkPageResponse( page );
@@ -239,100 +255,72 @@ $.extend( Api.prototype, {
 	},
 
 	/**
-	 * Performs basic page response checks.
+	 * Checks a specific Wikipedia page for images returning the image info for each image used on
+	 * the page. If the page itself is a description page of an image, the resolved promise
+	 * transmits the title the function was called with.
 	 *
-	 * @param {Object} page
-	 * @return {string|null}
-	 */
-	_checkPageResponse: function( page ) {
-		if( page.missing !== undefined ) {
-			return 'Unable to locate the specified file';
-		} else if( page.invalid !== undefined ) {
-			return 'Invalid input';
-		}
-		return null;
-	},
-
-	/**
-	 * Issues an API call querying for a specific property of a file.
-	 *
-	 * @param {string} filename
-	 * @param {string} property
-	 * @param {Object} [params] API request parameter overwrites or additional parameters.
+	 * @param {string} title
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {Object} Single page JSON regarding the specified property.
+	 *         - {ImageInfo[]|string}
 	 *         Rejected parameters:
 	 *         - {string} Error message
-	 *         - {jqXHR} jqXHR object
 	 */
-	_query: function( filename, property, params ) {
-		var deferred = $.Deferred();
+	getWikipediaPageImageInfo: function( title, wikiUrl ) {
+		var self = this,
+			deferred = $.Deferred();
 
-		params = $.extend( {
-			action: 'query',
-			prop: property,
-			titles: 'File:' + filename,
-			format: 'json'
-		}, params );
-
-		$.ajax( {
-			url: this._url,
-			crossDomain: true,
-			dataType: 'jsonp',
-			data: params
-		} )
-		.done( function( response, textStatus, jqXHR ) {
-			if( response.query === undefined || response.query.pages == undefined ) {
-				deferred.reject( 'The API returned an unexpected response', jqXHR );
+		this._getMediaType( title, wikiUrl )
+		.done( function( mediaType ) {
+			if( mediaType === 'bitmap' || mediaType === 'drawing' ) {
+				deferred.resolve( title );
 				return;
 			}
 
-			$.each( response.query.pages, function( id, page ) {
-				deferred.resolve( page );
+			self._getWikipediaPageImages( title, wikiUrl )
+			.done( function( imageTitles ) {
+				self._getWikipediaImageInfos( imageTitles, wikiUrl )
+				.done( function( imageUrls ) {
+					deferred.resolve( imageUrls );
+				} )
+				.fail( function( jqXHR, textStatus ) {
+					deferred.reject( textStatus );
+				} );
+			} )
+			.fail( function( jqXHR, textStatus ) {
+				deferred.reject( textStatus );
 			} );
-
-			if( deferred.state !== 'resolved' ) {
-				deferred.reject( 'The API returned a corrupted result', jqXHR );
-			}
 		} )
 		.fail( function( jqXHR, textStatus ) {
-			deferred.reject( textStatus, jqXHR );
+			deferred.reject( textStatus );
 		} );
 
 		return deferred.promise();
 	},
 
 	/**
-	 * Retrieves image info for the images used on a specific Wikipedia page.
+	 * Retrieves the titles of the images used on an specific Wikipedia page.
 	 *
-	 * @param {string} wikiBaseUrl
 	 * @param {string} title
-	 * @return {Object} jQuery Promise
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {ImageInfo[]}
+	 *         - {string[]}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	getWikipediaPageImageInfo: function( wikiBaseUrl, title ) {
+	_getWikipediaPageImages: function( title, wikiUrl ) {
 		var self = this,
 			deferred = $.Deferred();
 
 		var params = {
-			action: 'query',
-			prop: 'images',
 			imlimit: 100,
 			titles: title,
 			format: 'json'
 		};
 
-		$.ajax( {
-			url: wikiBaseUrl + 'w/api.php',
-			crossDomain: true,
-			data: params,
-			dataType: 'jsonp'
-		} )
+		this._query( title, 'images', wikiUrl, params )
 		.done( function( response ) {
 			if( response.query === undefined || response.query.pages == undefined ) {
 				deferred.reject( 'The API returned an unexpected response' );
@@ -354,17 +342,7 @@ $.extend( Api.prototype, {
 				}
 			} );
 
-			if( deferred.state() === 'rejected' ) {
-				return;
-			}
-
-			self._getWikipediaImageInfos( wikiBaseUrl, imageTitles )
-			.done( function( imageUrls ) {
-				deferred.resolve( imageUrls );
-			} )
-			.fail( function( jqXHR, textStatus ) {
-				deferred.reject( textStatus );
-			} );
+			deferred.resolve( imageTitles );
 		} )
 		.fail( function( jqXHR, textStatus ) {
 			deferred.reject( textStatus );
@@ -376,15 +354,15 @@ $.extend( Api.prototype, {
 	/**
 	 * Retrieves image info for a list of images used on a specific Wikipedia.
 	 *
-	 * @param {string} wikiBaseUrl
 	 * @param {string[]} imageTitles
+	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {ImageInfo[]}
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	_getWikipediaImageInfos: function( wikiBaseUrl, imageTitles ) {
+	_getWikipediaImageInfos: function( imageTitles, wikiUrl ) {
 		var deferred = $.Deferred();
 
 		if( imageTitles.length === 0 ) {
@@ -393,22 +371,13 @@ $.extend( Api.prototype, {
 		}
 
 		var params = {
-			action: 'query',
-			prop: 'imageinfo',
 			iiprop: 'url',
 			iilimit: 1,
 			iiurlwidth: 300,
-			iiurlheight: 300,
-			titles: imageTitles.join( '|' ),
-			format: 'json'
+			iiurlheight: 300
 		};
 
-		$.ajax( {
-			url: wikiBaseUrl + 'w/api.php',
-			crossDomain: true,
-			data: params,
-			dataType: 'jsonp'
-		} )
+		this._query( imageTitles, 'imageinfo', wikiUrl, params )
 		.done( function( response ) {
 			if( response.query === undefined || response.query.pages == undefined ) {
 				deferred.reject( 'The API returned an unexpected response' );
@@ -425,6 +394,72 @@ $.extend( Api.prototype, {
 		} )
 		.fail( function( jqXHR, textStatus ) {
 			deferred.reject( textStatus );
+		} );
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Performs basic page response checks.
+	 *
+	 * @param {Object} page
+	 * @return {string|null}
+	 */
+	_checkPageResponse: function( page ) {
+		if( page.missing !== undefined ) {
+			return 'Unable to locate the specified file';
+		} else if( page.invalid !== undefined ) {
+			return 'Invalid input';
+		}
+		return null;
+	},
+
+	/**
+	 * Issues an API call querying for a specific property of a file.
+	 *
+	 * @param {string|string[]} title Page title(s)
+	 * @param {string} property
+	 * @param {string} [wikiUrl]
+	 * @param {Object} [params] API request parameter overwrites or additional parameters.
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {Object} Single page JSON regarding the specified property.
+	 *         Rejected parameters:
+	 *         - {string} Error message
+	 *         - {jqXHR} jqXHR object
+	 */
+	_query: function( title, property, wikiUrl, params ) {
+		var deferred = $.Deferred();
+
+		params = $.extend( {
+			action: 'query',
+			prop: property,
+			titles: $.isArray( title ) ? title.join( '|' ) : title,
+			format: 'json'
+		}, params );
+
+		$.ajax( {
+			url: ( wikiUrl || this._defaultUrl ) + 'w/api.php',
+			crossDomain: true,
+			dataType: 'jsonp',
+			data: params
+		} )
+		.done( function( response, textStatus, jqXHR ) {
+			if( response.query === undefined || response.query.pages == undefined ) {
+				deferred.reject( 'The API returned an unexpected response', jqXHR );
+				return;
+			}
+
+			$.each( response.query.pages, function( id, page ) {
+				deferred.resolve( page );
+			} );
+
+			if( deferred.state !== 'resolved' ) {
+				deferred.reject( 'The API returned a corrupted result', jqXHR );
+			}
+		} )
+		.fail( function( jqXHR, textStatus ) {
+			deferred.reject( textStatus, jqXHR );
 		} );
 
 		return deferred.promise();

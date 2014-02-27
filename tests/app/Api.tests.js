@@ -6,10 +6,7 @@ define(
 
 	QUnit.module( 'Api' );
 
-	var api = new Api(
-		'//commons.wikimedia.org/w/api.php',
-		new LicenceStore( LICENCES )
-	);
+	var api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
 
 	/**
 	 * Returns a nodes HTML as plain text.
@@ -27,12 +24,12 @@ define(
 
 			QUnit.stop();
 
-			api.getAsset( filename )
+			api.getAsset( 'File:' + filename, testAsset.getWikiUrl() )
 			.done( function( asset ) {
 
 				assert.equal(
 					asset.getFilename(),
-					filename,
+					testAsset.getFilename(),
 					'Filename "' + asset.getFilename() + '" matches.'
 				);
 
@@ -47,7 +44,8 @@ define(
 					assert.equal(
 						author.getText(),
 						testAsset.getAuthors()[i].getText(),
-						'"' + filename + '": Author text "' + author.getText() + '" matches.'
+						'"' + testAsset.getFilename() + '": Author text "' + author.getText()
+							+ '" matches.'
 					);
 
 					var authorHtml = getHtmlText( author.getHtml() );
@@ -55,7 +53,8 @@ define(
 					assert.equal(
 						authorHtml,
 						getHtmlText( testAsset.getAuthors()[i].getHtml() ),
-						'"' + filename + '": Author html "' + authorHtml + '" matches.'
+						'"' + testAsset.getFilename() + '": Author html "' + authorHtml
+							+ '" matches.'
 					);
 
 				} );
@@ -77,7 +76,7 @@ define(
 				assert.equal(
 					getHtmlText( asset.getAttribution() ),
 					getHtmlText( testAsset.getAttribution() ),
-					'Dedicated attribution of "' + filename + '" matches.'
+					'Dedicated attribution of "' + testAsset.getFilename() + '" matches.'
 				);
 
 			} )
@@ -109,7 +108,7 @@ define(
 			QUnit.stop();
 
 			( function( input ) {
-				api.getAsset( input )
+				api.getAsset( 'File:' + input )
 				.done( function( parsedFilename ) {
 					assert.ok(
 						false,

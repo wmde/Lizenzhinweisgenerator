@@ -79,8 +79,8 @@ $.extend( Application.prototype, {
 		this._frontPage = new FrontPage( this._$node, this._api );
 
 		$( this._frontPage )
-		.on( 'input', function( event, filename ) {
-			self._processFilename( filename );
+		.on( 'input', function( event, prefixedFilename, wikiUrl ) {
+			self._processFilename( prefixedFilename, wikiUrl );
 		} )
 		.on( 'error', function( event, message ) {
 			self._displayError( message );
@@ -92,12 +92,12 @@ $.extend( Application.prototype, {
 	/**
 	 * Processes a filename and updates the page rendering accordingly.
 	 *
-	 * @param {string} filename
+	 * @param {string} prefixedFilename
 	 */
-	_processFilename: function( filename ) {
+	_processFilename: function( prefixedFilename, wikiUrl ) {
 		var self = this;
 
-		self._api.getAsset( filename )
+		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
 			if( !asset.getLicence() ) {
 				self._displayError( messages['error: unable to detect licence'] );

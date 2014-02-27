@@ -3,11 +3,18 @@
 
 define( ['jquery'], function( $ ) {
 
-	/**
-	 * Returns a filename by analyzing input.
-	 * @constructor
-	 */
+/**
+ * Returns a filename by analyzing input.
+ * @constructor
+ *
+ * @param {Api} api
+ *
+ * @throws {Error} if required parameters have not been specified properly.
+ */
 var InputHandler = function( api ) {
+	if( !api ) {
+		throw new Error( 'Improper specification of required parameters' );
+	}
 	this._api = api
 };
 
@@ -18,12 +25,17 @@ $.extend( InputHandler.prototype, {
 	_api: null,
 
 	/**
-	 * Tries to retrieve a filename evaluating the input parameter.
+	 * Tries to retrieve a filename evaluating the input parameter. If the input refers to a
+	 * Wikipedia page or asset instead of a Commons page/asset, the Wikipedia base URL is returned
+	 * along with the resolved promise object. If the referred Wikipedia page does not refer to an
+	 * asset itself, the promise will contain ImageInfo objects for all images on that Wikipedia
+	 * page instead of an asset filename.
 	 *
 	 * @param {string|jQuery.Event} input May be a Commons URL or a drop event.
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {string} Filename
+	 *         - {string|ImageInfo[]}
+	 *         [- {string} wikiUrl]
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
@@ -34,9 +46,9 @@ $.extend( InputHandler.prototype, {
 		if( input instanceof $.Event ) {
 			this._getUrlFromEvent( input )
 			.done( function( url ) {
-				self._extractFilenames( url )
-				.done( function( filenames ) {
-					deferred.resolve( filenames );
+				self._evaluate( url )
+				.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
+					deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
 				} )
 				.fail( function( message ) {
 					deferred.reject( message );
@@ -46,7 +58,7 @@ $.extend( InputHandler.prototype, {
 				deferred.reject( message );
 			} );
 		} else if( typeof input === 'string' ) {
-			return this._extractFilenames( input );
+			return this._evaluate( input );
 		} else {
 			deferred.reject( 'Cannot handle input' );
 			console.error( 'Cannot handle input:' );
@@ -91,23 +103,28 @@ $.extend( InputHandler.prototype, {
 	},
 
 	/**
-	 * Evaluates an URL an extracts the filename from it, if the URL refers to a specific file. If
-	 * the URL corresponds to a Wikipedia page, file info objects for the images used on the page
-	 * are returned in the promise object.
+	 * Evaluates an URL an extracts the filename (MediaWiki title) from it, if the URL refers to a
+	 * specific file. If the URL corresponds to a Wikipedia page, file info objects for the images
+	 * used on the page are returned in the promise object.
 	 *
 	 * @param url
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {string|Object[]} Filename or file info objects
+	 *         - {string|ImageInfo[]}
+	 *         [- {string}]
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
-	_extractFilenames: function( url ) {
+	_evaluate: function( url ) {
 		var deferred = $.Deferred();
 
 		url = decodeURI( url );
 
-		if( url.indexOf( '.wikipedia.org/wiki/' ) !== -1 ) {
+		if(
+			url.indexOf( '.wikipedia.org/w' ) !== -1
+			|| url.indexOf( 'upload.wikimedia.org/wikipedia/' ) !== -1
+				&& url.indexOf( '/wikipedia/commons/' ) === -1
+		) {
 			return this._getWikipediaPageImagesFileInfo( url );
 		}
 
@@ -117,7 +134,7 @@ $.extend( InputHandler.prototype, {
 	},
 
 	/**
-	 * Extracts a filename out of an URL string.
+	 * Extracts a prefixed filename (MediaWiki page title) out of an URL string.
 	 *
 	 * @param {string} url
 	 * @return {string}
@@ -129,30 +146,61 @@ $.extend( InputHandler.prototype, {
 			? segments[segments.length - 2]
 			: segments[segments.length - 1];
 
-		filename = decodeURIComponent( filename );
+		if( filename.indexOf( 'title=' ) !== -1 ) {
+			var matches = filename.match( /title=([^&]+)/i );
+			filename = matches[1];
+		}
 
-		// Strip "File:"
-		filename = filename.replace( /^[A-Z][a-z]+:/ , '' ) ;
+		var prefixedFilename = decodeURIComponent( filename );
+		if( prefixedFilename.indexOf( ':' ) === -1 ) {
+			prefixedFilename = 'File:' + prefixedFilename;
+		}
 
-		filename = filename.replace ( /_/g , ' ' ) ;
-
-		return filename;
+		return prefixedFilename;
 	},
 
 	/**
-	 * Retrieves file info for all images used on a specific Wikipedia page.
+	 * Retrieves file info for all images used on a specific Wikipedia page. If the page is an
+	 * image description page, the promise will transmit the prefixed filename (MediaWiki page
+	 * title) and the Wikipedia base URL.
 	 *
 	 * @param {string} url
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {ImageInfo[]}
+	 *         - {ImageInfo[]|string}
+	 *         [- {string}]
 	 *         Rejected parameters:
 	 *         - {string} Error message
 	 */
 	_getWikipediaPageImagesFileInfo: function( url ) {
-		var matches = url.match( /([-a-z]{2,}\.wikipedia\.org)\//i ),
-			title = url.split( '/' ).pop();
-		return this._api.getWikipediaPageImageInfo( '//' + matches[1] + '/', title );
+		var deferred = $.Deferred(),
+			regExp1 = /([-a-z]{2,}\.wikipedia\.org)\//i,
+			regExp2 = /\/wikipedia\/([^/]+)\//,
+			matches,
+			wikiUrl;
+
+		if( regExp1.test( url ) ) {
+			matches = url.match( regExp1 );
+			wikiUrl = '//' + matches[1] + '/';
+		} else if( regExp2.test( url ) ) {
+			matches = url.match( regExp2 );
+			wikiUrl = '//' + matches[1] + '.wikipedia.org/'
+		}
+
+		if( !wikiUrl ) {
+			deferred.reject( 'Unable to resolve Wikipedia URL' );
+			return deferred.promise();
+		}
+
+		this._api.getWikipediaPageImageInfo( this._extractFilename( url ), wikiUrl )
+		.done( function( prefixedFilenameOrImageInfos ) {
+			deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
+		} )
+		.fail( function( message ) {
+			deferred.reject( message );
+		} );
+
+		return deferred.promise();
 	}
 } );
 

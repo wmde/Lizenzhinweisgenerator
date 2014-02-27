@@ -16,6 +16,7 @@ define(
  * @constructor
  *
  * @param {jQuery} $initNode
+ * @param {Api} api
  *
  * @throws {Error} if a required parameter is not defined.
  *
@@ -27,7 +28,7 @@ define(
  *        (2) {string} Error message
  */
 var FrontPage = function( $initNode, api ) {
-	if( !$initNode ) {
+	if( !$initNode || !api ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
@@ -148,7 +149,7 @@ $.extend( FrontPage.prototype, {
 	 * @param {string|jQuery.Event} input
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {string} File name.
+	 *         - {string|ImageInfo[]}
 	 *         Rejected parameters:
 	 *         - {string} Error message.
 	 *
@@ -160,12 +161,12 @@ $.extend( FrontPage.prototype, {
 			deferred = $.Deferred();
 
 		this._inputHandler.getFilename( input )
-		.done( function( filename ) {
-			if( typeof filename === 'string' ) {
-				$( self ).trigger( 'input', [filename] );
-				deferred.resolve( filename );
+		.done( function( filenameOrImageInfos, wikiUrl ) {
+			if( typeof filenameOrImageInfos === 'string' ) {
+				$( self ).trigger( 'input', [filenameOrImageInfos, wikiUrl] );
+				deferred.resolve( filenameOrImageInfos );
 			} else {
-				self._renderSuggestions( filename );
+				self._renderSuggestions( filenameOrImageInfos );
 			}
 		} )
 		.fail( function( message ) {

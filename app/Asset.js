@@ -7,32 +7,41 @@ define( ['jquery'], function( $ ) {
  * Represents a Commons asset.
  * @constructor
  *
- * @param {string} filename
+ * @param {string} prefixedFilename
  * @param {string} title
  * @param {string} mediaType
  * @param {Licence|null} licence
  * @param {Api} api
  * @param {Object} [attributes]
+ * @param {string} [wikiUrl]
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Asset = function( filename, title, mediaType, licence, api, attributes ) {
-	if( !filename || !title || !mediaType || ( !licence && licence !== null ) || !api ) {
+var Asset = function( prefixedFilename, title, mediaType, licence, api, attributes, wikiUrl ) {
+	if( !prefixedFilename || !title || !mediaType || ( !licence && licence !== null ) || !api ) {
 		throw new Error( 'No proper initialization parameters specified' );
 	}
 
-	this._filename = filename;
+	this._prefixedFilename = prefixedFilename;
 	this._title = title;
 	this._mediaType = mediaType;
 	this._licence = licence;
 	this._api = api;
+	this._wikiUrl = wikiUrl || null;
+
+	if( typeof attributes === 'string' ) {
+		wikiUrl = attributes;
+		attributes = null;
+	}
 
 	attributes = attributes || {};
 
 	this._descriptions = attributes.descriptions || null;
-	this._authors = attributes.authors || null;
+	this._authors = attributes.authors || [];
 	this._source = attributes.source || null;
 	this._$attribution = attributes.attribution || null;
+
+	this._wikiUrl = wikiUrl || api.getDefaultUrl();
 
 	this._imageInfo = {};
 };
@@ -41,7 +50,7 @@ $.extend( Asset.prototype, {
 	/**
 	 * @type {string}
 	 */
-	_filename: null,
+	_prefixedFilename: null,
 
 	/**
 	 * @type {string}
@@ -69,7 +78,7 @@ $.extend( Asset.prototype, {
 	_descriptions: null,
 
 	/**
-	 * @type {Author[]|null}
+	 * @type {Author[]}
 	 */
 	_authors: null,
 
@@ -89,10 +98,22 @@ $.extend( Asset.prototype, {
 	_imageInfo: null,
 
 	/**
+	 * @type {string}
+	 */
+	_wikiUrl: null,
+
+	/**
 	 * @return {string}
 	 */
 	getFilename: function() {
-		return this._filename;
+		return this._prefixedFilename.replace( /^[^:]+:/ , '' );
+	},
+
+	/**
+	 * @return {string}
+	 */
+	getWikiUrl: function() {
+		return this._wikiUrl;
 	},
 
 	/**
@@ -100,7 +121,7 @@ $.extend( Asset.prototype, {
 	 * @return {string}
 	 */
 	getUrl: function() {
-		return 'http://commons.wikimedia.org/wiki/File:' + this._filename;
+		return 'http:' + this._wikiUrl + 'wiki/' + this._prefixedFilename;
 	},
 
 	/**
@@ -194,7 +215,7 @@ $.extend( Asset.prototype, {
 		if( this._imageInfo[imageSize] ) {
 			deferred.resolve( this._imageInfo[imageSize] );
 		} else {
-			this._api.getImageInfo( this._filename, imageSize )
+			this._api.getImageInfo( this._prefixedFilename, imageSize, this._wikiUrl )
 			.done( function( imageInfo ) {
 				self._imageInfo[imageSize] = imageInfo;
 				deferred.resolve( imageInfo );

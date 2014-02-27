@@ -4,14 +4,11 @@ define(
 	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/Asset', 'app/Author'],
 	function( $, Api, LicenceStore, LICENCES, Asset, Author ) {
 
-var api = new Api(
-	'//commons.wikimedia.org/w/api.php',
-	new LicenceStore( LICENCES )
-);
+var api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
 
 return {
 	'LRO_Tycho_Central_Peak.jpg': new Asset(
-		'LRO_Tycho_Central_Peak.jpg',
+		'File:LRO_Tycho_Central_Peak.jpg',
 		'LRO Tycho Central Peak',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'PD' ),
@@ -22,7 +19,7 @@ return {
 		}
 	),
 	'Helene Fischer 2010.jpg': new Asset(
-		'Helene Fischer 2010.jpg',
+		'File:Helene Fischer 2010.jpg',
 		'Helene Fischer 2010',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
@@ -33,7 +30,7 @@ return {
 		}
 	),
 	'JapaneseToiletControlPanel.jpg': new Asset(
-		'JapaneseToiletControlPanel.jpg',
+		'File:JapaneseToiletControlPanel.jpg',
 		'JapaneseToiletControlPanel',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
@@ -45,7 +42,7 @@ return {
 		}
 	),
 	'13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg': new Asset(
-		'13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg',
+		'File:13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg',
 		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
 		'bitmap',
 		// Multi-licence-template:
@@ -57,7 +54,7 @@ return {
 		}
 	),
 	'Statue Andrrea Palladio Vicenza.jpg': new Asset(
-		'Statue Andrrea Palladio Vicenza.jpg',
+		'File:Statue Andrrea Palladio Vicenza.jpg',
 		'Statue Andrrea Palladio Vicenza',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-zero' ),
@@ -68,7 +65,7 @@ return {
 		}
 	),
 	'Inisheer Gardens 2002 dry-stone walls.jpg': new Asset(
-		'Inisheer Gardens 2002 dry-stone walls.jpg',
+		'File:Inisheer Gardens 2002 dry-stone walls.jpg',
 		'Inisheer Gardens 2002 dry-stone walls',
 		'bitmap',
 		// Features additional newer CC-BY-SA licence, preferring non-SA licence:
@@ -81,7 +78,7 @@ return {
 		}
 	),
 	'Wien Karlsplatz3.jpg': new Asset(
-		'Wien Karlsplatz3.jpg',
+		'File:Wien Karlsplatz3.jpg',
 		'Wien Karlsplatz3',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-2.0-de' ),
@@ -92,17 +89,15 @@ return {
 		}
 	),
 	'Brandenburg gate sunset quadriga.jpg': new Asset(
-		'Brandenburg gate sunset quadriga.jpg',
+		'File:Brandenburg gate sunset quadriga.jpg',
 		'Brandenburg gate sunset quadriga',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
-		api,
-		{
-			authors: []
-		}
+		api
+		// No attributes at all.
 	),
 	'Gerardus_t\'_Hooft_at_Harvard.jpg': new Asset(
-		'Gerardus_t\'_Hooft_at_Harvard.jpg',
+		'File:Gerardus_t\'_Hooft_at_Harvard.jpg',
 		'Gerardus t\' Hooft at Harvard',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-3.0' ),
@@ -113,7 +108,7 @@ return {
 		}
 	),
 	'1950_Yankees.jpg': new Asset(
-		'1950_Yankees.jpg',
+		'File:1950_Yankees.jpg',
 		'1950 Yankees',
 		'bitmap',
 		// Unsupported CC licence CC-BY-1.0:
@@ -124,7 +119,7 @@ return {
 		}
 	),
 	'NatMonumFengegKapell.jpg': new Asset(
-		'NatMonumFengegKapell.jpg',
+		'File:NatMonumFengegKapell.jpg',
 		'NatMonumFengegKapell',
 		'bitmap',
 		// Unsupported licence derivative CC-BY-3.0-LU:
@@ -136,7 +131,7 @@ return {
 	),
 	'"Граничар" - Туховища.JPG': new Asset(
 		// Non-Latin character set:
-		'"Граничар" - Туховища.JPG',
+		'File:"Граничар" - Туховища.JPG',
 		'"Граничар" - Туховища',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-3.0' ),
@@ -146,20 +141,17 @@ return {
 		}
 	),
 	'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg': new Asset(
-		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg',
+		'File:03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg',
 		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007',
 		'bitmap',
 		// Completely unsupported licence:
 		null,
-		api,
-		{
-			authors: []
-		}
+		api
 	),
 // TODO: Add support for properly scraping HTML lists:
 /*
 	'Drawing_of_a_CCTV_Camera.svg': new Asset(
-		'Drawing_of_a_CCTV_Camera.svg',
+		'File:Drawing_of_a_CCTV_Camera.svg',
 		'Drawing of a CCTV Camera',
 		// Drawing:
 		'drawing',
@@ -172,7 +164,7 @@ return {
 	),
 */
 	'The_Little_Princess_(1939)_full.ogv': new Asset(
-		'The_Little_Princess_(1939)_full.ogv',
+		'File:The_Little_Princess_(1939)_full.ogv',
 		'The Little Princess (1939) full',
 		// Video:
 		'video',
@@ -183,7 +175,7 @@ return {
 		}
 	),
 	'05 Air from Suite in C minor.ogg': new Asset(
-		'05 Air from Suite in C minor.ogg',
+		'File:05 Air from Suite in C minor.ogg',
 		'05 Air from Suite in C minor',
 		// Audio:
 		'audio',
@@ -194,7 +186,7 @@ return {
 		}
 	),
 	'Cox_and_box.pdf': new Asset(
-		'Cox_and_box.pdf',
+		'File:Cox_and_box.pdf',
 		'Cox and box',
 		// Office:
 		'office',
@@ -205,7 +197,7 @@ return {
 		}
 	),
 	'Air_France_A380_F-HPJA.jpg': new Asset(
-		'Air_France_A380_F-HPJA.jpg',
+		'File:Air_France_A380_F-HPJA.jpg',
 		'Air France A380 F-HPJA',
 		'bitmap',
 		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
@@ -215,6 +207,46 @@ return {
 			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
 			attribution: $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' )
 		}
+	),
+	'Seilsäge.jpg': new Asset(
+		// Localized namespace prefix:
+		'Datei:Seilsäge.jpg',
+		'Seilsäge',
+		'bitmap',
+		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
+		api,
+		// Local Wikipedia:
+		'//de.wikipedia.org/'
+	),
+	'Hektor_Philippi.JPG': new Asset(
+		// Using "File:" prefix:
+		'File:Hektor_Philippi.JPG',
+		'Hektor Philippi',
+		'bitmap',
+		// Local Wikipedia with more specific licence:
+		api.getLicenceStore().getLicence( 'cc-by-sa-3.0-de' ),
+		{
+			authors: []
+		},
+		'//de.wikipedia.org/'
+	),
+	'1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg': new Asset(
+		'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
+		'1 FC Bamberg - 1 FC Nürnberg 1901',
+		'bitmap',
+		// Public domain on local Wikipedia:
+		api.getLicenceStore().getLicence( 'PD' ),
+		api,
+		'//de.wikipedia.org/'
+	),
+	'Fiesta-Zuschauer Z1.jpeg': new Asset(
+		'Datei:Fiesta-Zuschauer Z1.jpeg',
+		'Fiesta-Zuschauer Z1',
+		'bitmap',
+		// CC-0 licence on local Wikipedia:
+		api.getLicenceStore().getLicence( 'cc-zero' ),
+		api,
+		'//de.wikipedia.org/'
 	)
 };
 
