@@ -646,7 +646,7 @@ $.extend( Questionnaire.prototype, {
 				) {
 					self._goToAndUpdate( '7' );
 				} else {
-					self._goToAndUpdate( self.exit );
+					self._goToAndUpdate( 'r-success' );
 				}
 			} );
 
@@ -676,7 +676,7 @@ $.extend( Questionnaire.prototype, {
 				self._goToAndUpdate( '3' );
 			} );
 		} else if( p === '12a' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, this.exit );
+			$page = this._applyLogAndGoTo( $page, p, 1, 'r-success' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
 		} else if( p === '12b' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '13' );
@@ -685,7 +685,7 @@ $.extend( Questionnaire.prototype, {
 			$page.find( 'a.a1' ).on( 'click', function() {
 				var value = $.trim( $( 'input.a1' ).val() );
 				self._log( '13', 1, value );
-				self._goToAndUpdate( self.exit );
+				self._goToAndUpdate( 'r-success' );
 			} );
 		}
 

@@ -23,12 +23,13 @@ body {
 .app-questionnaire {
 	background-color: rgba( 245, 245, 245, 0.9 );
 	background: linear-gradient(160deg, rgba(245,245,245,1) 0%,rgba(245,245,245,0.9) 50%, rgba(245,245,245,0.4) 80%);
+	box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 	font-size: 13pt;
+	min-height: 85px;
 	padding: 12pt;
 	position: fixed;
 	top: 15%;
 	width: 100%;
-	box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 .app-questionnaire .icon-minimize {
