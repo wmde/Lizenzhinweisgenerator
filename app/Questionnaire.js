@@ -118,16 +118,18 @@ $.extend( Questionnaire.prototype, {
 	 * Move the questionnaire to a specific page or triggers a function.
 	 *
 	 * @param {string|Function} page
+	 * @param {boolean} [movingBack]
+	 *        Default: false
 	 * @return {Object} jQuery Promise
 	 *         No resolved parameters.
 	 *         Rejected parameters:
 	 *         - {string} Error message.
 	 */
-	_goTo: function( page ) {
+	_goTo: function( page, movingBack ) {
 		var navigationPathPosition = this._getNavigationPosition( page ),
 			deferred = $.Deferred();
 
-		if( navigationPathPosition !== -1 ) {
+		if( navigationPathPosition !== -1 && movingBack ) {
 			// Navigating backwards.
 			this._navigationCache.splice( navigationPathPosition );
 			this._loggedAnswers = this._navigationCache[navigationPathPosition - 1]
@@ -222,12 +224,13 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		return {
-			useCase: useCase,
-			format: this._getAnswer( '3', 1 ) ? 'html' : 'text',
+			attributionAlthoughExceptionalUse: this._getAnswer( '5', 1 ),
 			collectionUse: this._getAnswer( '7', 1 ),
-			fullLicence: this._getAnswer( '8', 1 ),
 			edited: this._getAnswer( '12a', 2 ),
-			editor: this._getAnswer( '13', 1 )
+			editor: this._getAnswer( '13', 1 ),
+			format: this._getAnswer( '3', 1 ) ? 'html' : 'text',
+			fullLicence: this._getAnswer( '8', 1 ),
+			useCase: useCase
 		};
 	},
 
@@ -388,7 +391,7 @@ $.extend( Questionnaire.prototype, {
 			$backButton.addClass( 'disabled' );
 		} else {
 			$backButton.on( 'click', function() {
-				self._goTo( self._navigationCache[self._navigationCache.length - 1].page )
+				self._goTo( self._navigationCache[self._navigationCache.length - 1].page, true )
 				.done( function() {
 					$( self ).trigger(
 						'update',
@@ -650,7 +653,12 @@ $.extend( Questionnaire.prototype, {
 				}
 			} );
 
-			$page = this._applyLogAndGoTo( $page, p, 4, '5' );
+			if( this._getResult().attributionAlthoughExceptionalUse ) {
+				$page = this._applyDisabled( $page, 4 );
+			} else {
+				$page = this._applyLogAndGoTo( $page, p, 4, '5' );
+			}
+
 			$page = this._applyLogAndGoTo( $page, p, 5, '6' );
 		} else if( p === '5') {
 			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
@@ -749,6 +757,20 @@ $.extend( Questionnaire.prototype, {
 				[self.getAttributionGenerator(), self.generateSupplement()]
 			);
 		} );
+	},
+
+	/**
+	 * Disables an answer.
+	 *
+	 * @param {jQuery} $page
+	 * @param {number} answer
+	 */
+	_applyDisabled: function( $page, answer ) {
+		$page.find( '.a' + answer )
+		.off( 'mouseover' )
+		.addClass( 'disabled' );
+
+		return $page;
 	}
 
 } );

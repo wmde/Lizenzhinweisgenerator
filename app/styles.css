@@ -121,6 +121,14 @@ body {
 	width: 20px;
 }
 
+.app-questionnaire .answers li.disabled {
+	color: rgba( 0, 0, 0, 0.25 );
+}
+
+.app-questionnaire .answers li.disabled:hover {
+	text-decoration: none;
+}
+
 
 .app-preview {
 	height: 100%;
