@@ -27,8 +27,7 @@ var OptionsContainer = function( $node, asset, defaultOptions ) {
 	this._$node = $node;
 	this._defaultOptions = defaultOptions || [
 		'imageSize',
-		'originalFileLink',
-		'rawText'
+		'originalFileLink'
 	];
 	this._currentOptions = this._defaultOptions;
 

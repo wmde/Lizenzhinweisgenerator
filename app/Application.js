@@ -197,9 +197,12 @@ $.extend( Application.prototype, {
 
 		var self = this,
 			$optionsContainer = $( '<div/>' ).addClass( 'app-options' ).appendTo( this._$node ),
-			optionsContainer = new OptionsContainer( $optionsContainer, this._asset );
+			optionsContainer = new OptionsContainer( $optionsContainer, this._asset ),
+			licence = this._asset.getLicence(),
+			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' ),
+			additionalOptions = renderRawText ? ['rawText'] : [];
 
-		optionsContainer.render();
+		optionsContainer.render( additionalOptions );
 		$( optionsContainer ).on( 'update', function() {
 			self.updatePreview(
 				self._questionnaire.getAttributionGenerator(),
