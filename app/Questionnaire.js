@@ -67,6 +67,13 @@ $.extend( Questionnaire.prototype, {
 	_loggedAnswers: null,
 
 	/**
+	 * Caching string answers additionally in a separate object to have them restored when
+	 * re-accessing pages (e.g. by navigating back and forth).
+	 * @type {Object}
+	 */
+	_loggedStrings: null,
+
+	/**
 	 * Caches the navigation path and a copy of the loggedAnswers object for resetting when
 	 * navigating backwards.
 	 * @type {Object[]}
@@ -88,6 +95,7 @@ $.extend( Questionnaire.prototype, {
 	 */
 	start: function() {
 		this._loggedAnswers = {};
+		this._loggedStrings = {};
 
 		this._navigationCache = [];
 
@@ -352,7 +360,7 @@ $.extend( Questionnaire.prototype, {
 		if( result.edited ) {
 			editor = messages['(edited)'];
 		}
-		if( result.editor ) {
+		if( result.edited && result.editor ) {
 			editor = result.editor;
 		}
 
@@ -556,8 +564,8 @@ $.extend( Questionnaire.prototype, {
 			for( var i = 0; i < classes.length; i++ ) {
 				if( /^a[0-9]{1}$/.test( classes[i] ) ) {
 					var answerId = classes[i].split( 'a' )[1];
-					if( self._loggedAnswers[page] && self._loggedAnswers[page][answerId] ) {
-						$input.val( self._loggedAnswers[page][answerId] );
+					if( self._loggedStrings[page] && self._loggedStrings[page][answerId] ) {
+						$input.val( self._loggedStrings[page][answerId] );
 					}
 				}
 			}
@@ -719,6 +727,16 @@ $.extend( Questionnaire.prototype, {
 			page: page,
 			loggedAnswers: $.extend( {}, this._loggedAnswers )
 		} );
+
+		if( typeof value === 'string' ) {
+			if( !this._loggedStrings[page] ) {
+				this._loggedStrings[page] = {};
+			}
+			if( !this._loggedStrings[page][answer] ) {
+				this._loggedStrings[page] = {};
+			}
+			this._loggedStrings[page][answer] = value;
+		}
 	},
 
 	/**
