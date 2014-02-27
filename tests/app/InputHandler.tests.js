@@ -1,7 +1,7 @@
 ( function( define ) {
 
-define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES'],
-	function( InputHandler, Api, LicenceStore, LICENCES ) {
+define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/ImageInfo'],
+	function( InputHandler, Api, LicenceStore, LICENCES, ImageInfo ) {
 
 	QUnit.module( 'InputHandler' );
 
@@ -106,10 +106,11 @@ define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES'],
 								+ 'input "' + currentInput + '".'
 						);
 					} )
-					.fail( function() {
+					.fail( function( message ) {
 						assert.ok(
 							false,
-							'Input parsing failed.'
+							'Parsing input "' + currentInput + '" failed with message "' + message
+								+ '".'
 						)
 					} )
 					.always( function() {
@@ -120,7 +121,78 @@ define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES'],
 
 			}
 		}
+	} );
 
+	QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
+		var inputHandler = new InputHandler( api );
+
+		var testCases = [
+			{
+				input: [
+					'http://en.wikipedia.org/wiki/K%C3%B6nigsberg,_Bavaria',
+					'http://en.wikipedia.org/w/index.php?title=K%C3%B6nigsberg,_Bavaria',
+					'http://en.wikipedia.org/wiki/%3F_(film)'
+				],
+				expected: {
+					wikiUrl: '//en.wikipedia.org/'
+				}
+			},{
+				input: [
+					'http://de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern',
+					'http://de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern?uselang=en',
+					'de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern',
+					'de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern?uselang=de',
+					'http://de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern',
+					'http://de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de',
+					'de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern',
+					'de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de'
+				],
+				expected: {
+					wikiUrl: '//de.wikipedia.org/'
+				}
+			}
+		];
+
+		for( var i = 0; i < testCases.length; i++ ) {
+			var testCase = testCases[i];
+
+			for( var j = 0; j < testCase.input.length; j++ ) {
+
+				QUnit.stop();
+
+				( function( testCase, currentInput ) {
+
+					inputHandler.getFilename( currentInput )
+					.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
+						assert.ok(
+							$.isArray( prefixedFilenameOrImageInfos )
+							&& prefixedFilenameOrImageInfos[0] instanceof ImageInfo,
+							'Received ImageInfo objects for input "' + currentInput + '".'
+						);
+
+						assert.strictEqual(
+							wikiUrl,
+							testCase.expected.wikiUrl,
+							'Detected correct wiki URL "' + testCase.expected.wikiUrl + '" on '
+								+ 'input "' + currentInput + '".'
+						);
+					} )
+					.fail( function( message ) {
+						assert.ok(
+							false,
+							'Parsing input "' + currentInput + '" failed with message "' + message
+								+ '".'
+						)
+					} )
+					.always( function() {
+						QUnit.start();
+					} );
+
+				}( testCase, testCase.input[j] ) );
+
+			}
+
+		}
 	} );
 
 } );

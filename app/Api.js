@@ -236,6 +236,11 @@ $.extend( Api.prototype, {
 				return;
 			}
 
+			if( !page.imageinfo ) {
+				deferred.resolve( 'unknown' );
+				return;
+			}
+
 			for( var i = 0; i < page.imageinfo.length; i++ ) {
 				var mediaType = page.imageinfo[i].mediatype;
 				if( mediaType ) {
@@ -288,12 +293,12 @@ $.extend( Api.prototype, {
 					deferred.reject( textStatus );
 				} );
 			} )
-			.fail( function( jqXHR, textStatus ) {
-				deferred.reject( textStatus );
+			.fail( function( message ) {
+				deferred.reject( message );
 			} );
 		} )
-		.fail( function( jqXHR, textStatus ) {
-			deferred.reject( textStatus );
+		.fail( function( message ) {
+			deferred.reject( message );
 		} );
 
 		return deferred.promise();
@@ -321,26 +326,12 @@ $.extend( Api.prototype, {
 		};
 
 		this._query( title, 'images', wikiUrl, params )
-		.done( function( response ) {
-			if( response.query === undefined || response.query.pages == undefined ) {
-				deferred.reject( 'The API returned an unexpected response' );
-				return;
-			}
-
+		.done( function( page ) {
 			var imageTitles = [];
 
-			$.each( response.query.pages, function( id, page ) {
-
-				var error = self._checkPageResponse( page );
-				if( error ) {
-					deferred.reject( error );
-					return false;
-				}
-
-				for( var i = 0; i < page.images.length; i++ ) {
-					imageTitles.push( page.images[i].title );
-				}
-			} );
+			for( var i = 0; i < page.images.length; i++ ) {
+				imageTitles.push( page.images[i].title );
+			}
 
 			deferred.resolve( imageTitles );
 		} )
@@ -378,15 +369,10 @@ $.extend( Api.prototype, {
 		};
 
 		this._query( imageTitles, 'imageinfo', wikiUrl, params )
-		.done( function( response ) {
-			if( response.query === undefined || response.query.pages == undefined ) {
-				deferred.reject( 'The API returned an unexpected response' );
-				return;
-			}
-
+		.done( function( pages ) {
 			var imageInfos = [];
 
-			$.each( response.query.pages, function( index, page ) {
+			$.each( pages, function( index, page ) {
 				imageInfos.push( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[0] ) );
 			} );
 
@@ -450,11 +436,17 @@ $.extend( Api.prototype, {
 				return;
 			}
 
+			var pages = [];
+
 			$.each( response.query.pages, function( id, page ) {
-				deferred.resolve( page );
+				pages.push( page );
 			} );
 
-			if( deferred.state !== 'resolved' ) {
+			if( pages.length === 1 ) {
+				deferred.resolve( pages[0] );
+			} else if( pages.length > 0 ) {
+				deferred.resolve( pages );
+			} else {
 				deferred.reject( 'The API returned a corrupted result', jqXHR );
 			}
 		} )

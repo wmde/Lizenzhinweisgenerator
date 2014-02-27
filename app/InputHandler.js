@@ -118,8 +118,6 @@ $.extend( InputHandler.prototype, {
 	_evaluate: function( url ) {
 		var deferred = $.Deferred();
 
-		url = decodeURI( url );
-
 		if(
 			url.indexOf( '.wikipedia.org/w' ) !== -1
 			|| url.indexOf( 'upload.wikimedia.org/wikipedia/' ) !== -1
@@ -137,9 +135,15 @@ $.extend( InputHandler.prototype, {
 	 * Extracts a prefixed filename (MediaWiki page title) out of an URL string.
 	 *
 	 * @param {string} url
+	 * @param {boolean} [forcePrefix]
+	 *        Default: true
 	 * @return {string}
 	 */
-	_extractFilename: function( url ) {
+	_extractFilename: function( url, forcePrefix ) {
+		if( forcePrefix === undefined ) {
+			forcePrefix = true;
+		}
+
 		var segments = url.split( '/' );
 
 		var filename = ( $.inArray( 'thumb', segments ) !== -1 )
@@ -152,7 +156,7 @@ $.extend( InputHandler.prototype, {
 		}
 
 		var prefixedFilename = decodeURIComponent( filename );
-		if( prefixedFilename.indexOf( ':' ) === -1 ) {
+		if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
 			prefixedFilename = 'File:' + prefixedFilename;
 		}
 
@@ -177,14 +181,21 @@ $.extend( InputHandler.prototype, {
 			regExp1 = /([-a-z]{2,}\.wikipedia\.org)\//i,
 			regExp2 = /\/wikipedia\/([^/]+)\//,
 			matches,
-			wikiUrl;
+			wikiUrl,
+			title;
 
 		if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
 			wikiUrl = '//' + matches[1] + '/';
+
+			title = url.indexOf( 'title=' ) !== -1
+				? url.match( /title=([^&]+)/i )[1]
+				: this._extractFilename( url.replace( /\?.+$/, '' ), false );
+
 		} else if( regExp2.test( url ) ) {
 			matches = url.match( regExp2 );
-			wikiUrl = '//' + matches[1] + '.wikipedia.org/'
+			wikiUrl = '//' + matches[1] + '.wikipedia.org/';
+			title = this._extractFilename( url );
 		}
 
 		if( !wikiUrl ) {
@@ -192,7 +203,7 @@ $.extend( InputHandler.prototype, {
 			return deferred.promise();
 		}
 
-		this._api.getWikipediaPageImageInfo( this._extractFilename( url ), wikiUrl )
+		this._api.getWikipediaPageImageInfo( decodeURI( title ), wikiUrl )
 		.done( function( prefixedFilenameOrImageInfos ) {
 			deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
 		} )
