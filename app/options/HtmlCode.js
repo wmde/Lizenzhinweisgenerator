@@ -116,7 +116,7 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 	/**
 	 * @see Option.value
 	 */
-	value: function( value ) {
+	value: function() {
 		return undefined;
 	},
 

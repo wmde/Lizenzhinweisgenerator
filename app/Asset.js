@@ -12,12 +12,14 @@ define( ['jquery'], function( $ ) {
  * @param {string} mediaType
  * @param {Licence|null} licence
  * @param {Api} api
- * @param {Object} [attributes]
+ * @param {Object} [optionalAttributes]
  * @param {string} [wikiUrl]
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Asset = function( prefixedFilename, title, mediaType, licence, api, attributes, wikiUrl ) {
+var Asset = function(
+	prefixedFilename, title, mediaType, licence, api, optionalAttributes, wikiUrl
+) {
 	if( !prefixedFilename || !title || !mediaType || ( !licence && licence !== null ) || !api ) {
 		throw new Error( 'No proper initialization parameters specified' );
 	}
@@ -29,17 +31,15 @@ var Asset = function( prefixedFilename, title, mediaType, licence, api, attribut
 	this._api = api;
 	this._wikiUrl = wikiUrl || null;
 
-	if( typeof attributes === 'string' ) {
-		wikiUrl = attributes;
-		attributes = null;
+	if( typeof optionalAttributes === 'string' ) {
+		wikiUrl = optionalAttributes;
+		optionalAttributes = null;
 	}
 
-	attributes = attributes || {};
+	optionalAttributes = optionalAttributes || {};
 
-	this._descriptions = attributes.descriptions || null;
-	this._authors = attributes.authors || [];
-	this._source = attributes.source || null;
-	this._$attribution = attributes.attribution || null;
+	this._authors = optionalAttributes.authors || [];
+	this._$attribution = optionalAttributes.attribution || null;
 
 	this._wikiUrl = wikiUrl || api.getDefaultUrl();
 
@@ -73,19 +73,9 @@ $.extend( Asset.prototype, {
 	_api: null,
 
 	/**
-	 * @type {Object|null}
-	 */
-	_descriptions: null,
-
-	/**
 	 * @type {Author[]}
 	 */
 	_authors: null,
-
-	/**
-	 * @type {string|null}
-	 */
-	_source: null,
 
 	/**
 	 * @type {jQuery|null}
@@ -146,24 +136,6 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
-	 * @return {Object}
-	 */
-	getDescriptions: function() {
-		return this._descriptions;
-	},
-
-	/**
-	 * @param {string} languageCode
-	 * @return {string|null}
-	 */
-	getDescription: function( languageCode ) {
-		if( !this._descriptions ) {
-			return null;
-		}
-		return this._descriptions[languageCode] || null;
-	},
-
-	/**
 	 * @param {options} [options]
 	 * @return {Author[]|string}
 	 */
@@ -182,13 +154,6 @@ $.extend( Asset.prototype, {
 	 */
 	setAuthors: function( authors ) {
 		this._authors = authors;
-	},
-
-	/**
-	 * @return {string}
-	 */
-	getSource: function() {
-		return this._source;
 	},
 
 	/**

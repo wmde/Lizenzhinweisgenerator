@@ -96,7 +96,6 @@ $.extend( OptionsContainer.prototype, {
 	 *
 	 * @param {string[]} [ids]
 	 * @param {Object} [initialValues]
-	 * @return {jQuery}
 	 */
 	render: function( ids, initialValues ) {
 		this._currentOptions = $.merge( $.merge( [], this._defaultOptions ), ids || [] );

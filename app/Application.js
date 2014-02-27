@@ -93,6 +93,7 @@ $.extend( Application.prototype, {
 	 * Processes a filename and updates the page rendering accordingly.
 	 *
 	 * @param {string} prefixedFilename
+	 * @param {string} [wikiUrl]
 	 */
 	_processFilename: function( prefixedFilename, wikiUrl ) {
 		var self = this;

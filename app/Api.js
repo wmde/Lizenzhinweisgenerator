@@ -125,7 +125,7 @@ $.extend( Api.prototype, {
 
 			deferred.resolve( $( '<div/>' ).html( page.revisions[0]['*'] ) );
 		} )
-		.fail( function( message, jqXHR ) {
+		.fail( function( message ) {
 			deferred.reject( message );
 		} );
 
@@ -163,7 +163,7 @@ $.extend( Api.prototype, {
 
 			deferred.resolve( templates );
 		} )
-		.fail( function( message, jqXHR ) {
+		.fail( function( message ) {
 			deferred.reject( message );
 		} );
 
@@ -203,7 +203,7 @@ $.extend( Api.prototype, {
 			}
 			deferred.resolve( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[0] ) );
 		} )
-		.fail( function( message, jqXHR ) {
+		.fail( function( message ) {
 			deferred.reject( message );
 		} );
 

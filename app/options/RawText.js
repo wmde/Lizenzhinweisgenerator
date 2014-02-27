@@ -59,7 +59,7 @@ $.extend( RawText.prototype, Option.prototype, {
 	/**
 	 * @see Option.value
 	 */
-	value: function( value ) {
+	value: function() {
 		return undefined;
 	}
 

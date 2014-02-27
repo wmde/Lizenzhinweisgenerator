@@ -387,7 +387,7 @@ $.extend( Questionnaire.prototype, {
 		if( this._navigationCache.length === 0 ) {
 			$backButton.addClass( 'disabled' );
 		} else {
-			$backButton.on( 'click', function( event ) {
+			$backButton.on( 'click', function() {
 				self._goTo( self._navigationCache[self._navigationCache.length - 1].page )
 				.done( function() {
 					$( self ).trigger(

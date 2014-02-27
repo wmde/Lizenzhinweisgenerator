@@ -12,7 +12,6 @@ define( ['jquery' ], function( $ ) {
  *        Triggered whenever the option's value is changed.
  *        (1) {jQuery.Event}
  *
- * @param {string} id
  * @param {Asset} asset
  */
 var Option = function( asset ) {

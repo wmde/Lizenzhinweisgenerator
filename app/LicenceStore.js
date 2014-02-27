@@ -106,6 +106,7 @@ $.extend( LicenceStore.prototype, {
 			}
 		}
 
+		return null;
 	}
 
 } );
