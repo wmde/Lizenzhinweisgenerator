@@ -12,11 +12,6 @@ define( [
 ],
 	function( $, Asset, AttributionGenerator, Author, messages, config, templateRegistry ) {
 
-var CC2_LICENCES = [
-	'cc-by-2.0-de',
-	'cc-by-sa-2.0-de'
-];
-
 /**
  * Represents a questionnaire's logic.
  * The page names/numbers and the corresponding logic are based on the questionnaire "Webtool für
@@ -273,7 +268,7 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			deferred = $.Deferred(),
 			result = this._getResult(),
-			licenceId = this._asset.getLicence().getId(),
+			licence = this._asset.getLicence(),
 			pages = [];
 
 		if( result.useCase === 'other' ) {
@@ -286,14 +281,14 @@ $.extend( Questionnaire.prototype, {
 
 		if( result.useCase === 'private' ) {
 			pages.push( 'r-note-privateUse' );
-		} else if( licenceId === 'cc-zero' ) {
+		} else if( licence.isInGroup( 'cc0' ) ) {
 			pages.push( 'r-note-cc0' );
-		} else if( licenceId === 'PD' ) {
+		} else if( licence.isInGroup( 'pd' ) ) {
 			pages.push( 'r-note-pd' );
 		} else {
 			pages.push( 'r-note-' + result.format );
 
-			if( $.inArray( licenceId, CC2_LICENCES ) !== -1 ) {
+			if( licence.isInGroup( 'cc2' ) ) {
 				pages.push( 'r-restrictions-cc2' );
 			} else {
 				pages.push( 'r-restrictions' );

@@ -7,29 +7,39 @@ define( ['jquery', 'dojo/_base/config'], function( $, config ) {
  * Represents a licence.
  * @constructor
  *
- * @param {string} id A licence id to be used as internal identifier. For consistency, is should
+ * @param {string} id
+ *        A licence id to be used as internal identifier. For consistency, is should
  *        match the template name on Commons. In addition, the HTML file in the "licences" folder
  *        containing the licence's legal code should be named with the id.
- * @param {string|RegExp} name The licence name how it should be displayed. May be a regular
+ * @param {string[]} groups
+ *        Groups the licence belongs to. Groups are just plain string identifiers allowing to check
+ *        whether a licence belongs to a certain group instead of having to loop through all the
+ *        licences.
+ * @param {string|RegExp} name
+ *        The licence name how it should be displayed. May be a regular
  *        expression to generate an "abstract" licence object that may itself be used to generate a
  *        proper licence using Licence.newFromAbstract().
- * @param {RegExp|string|Object} [regExp] Regular expression used for detecting the licence
+ * @param {RegExp|string|Object} [regExp]
+ *        Regular expression used for detecting the licence
  *        analyzing the asset's Commons categories. If omitted, the name will be used for exact
  *        matching.
- * @param {string|Object} [url] The url to the licence.
- * @param {Object} [options] Default options overwrites:
+ * @param {string|Object} [url]
+ *        The url to the licence.
+ * @param {Object} [options]
+ *        Default options overwrites:
  *        - {string} outputTemplate: Text template specifying the actual text output of the licence
  *          information. {{name}} is replaced with the licence name
  *
  * @throws {Error} if no proper parameters are specified.
  * @throws {Error} when trying to instantiate an "abstract" licence with an additional regExp.
  */
-var Licence = function( id, name, regExp, url, options ) {
-	if( !id ) {
-		throw new Error( 'Internal id needs to be specified' );
+var Licence = function( id, groups, name, regExp, url, options ) {
+	if( !id || !groups || !name ) {
+		throw new Error( 'Improper specification of required parameters' );
 	}
 
 	this._id = id;
+	this._groups = groups;
 
 	if( $.isPlainObject( regExp ) ) {
 		options = regExp;
@@ -69,6 +79,12 @@ $.extend( Licence.prototype, {
 	 * @type {string}
 	 */
 	_id: null,
+
+	/**
+	 * Licence group identifiers.
+	 * @type {string[]}
+	 */
+	_groups: null,
 
 	/**
 	 * @type {Object}
@@ -114,6 +130,21 @@ $.extend( Licence.prototype, {
 	 */
 	getId: function() {
 		return this._id;
+	},
+
+	/**
+	 * Checks whether the licence belongs to a specific licence group.
+	 *
+	 * @param {string} groupId
+	 * @return {boolean}
+	 */
+	isInGroup: function( groupId ) {
+		for( var i = 0; i < this._groups.length; i++ ) {
+			if( this._groups[i] === groupId ) {
+				return true;
+			}
+		}
+		return false;
 	},
 
 	/**

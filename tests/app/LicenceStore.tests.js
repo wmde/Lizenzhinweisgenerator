@@ -6,25 +6,22 @@ define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 
 	var testSet = [
 		{
-			licence: new Licence( 'PD', 'PD-text', /^(PD|Public domain)\b/i ),
+			licence: new Licence( 'PD', ['pd'], 'PD-text', /^(PD|Public domain)\b/i ),
 			detectable: [
 				['PD NASA']
 			]
-		},
-		{
-			licence: new Licence( 'cc-by-3.0', 'CC BY 3.0', /^CC-BY-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-3.0 link' ),
+		},{
+			licence: new Licence( 'cc-by-3.0', ['cc', 'cc3'], 'CC BY 3.0', /^CC-BY-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-3.0 link' ),
 			detectable: [
 				['CC-BY-SA-3.0', 'CC-BY-3.0']
 			]
-		},
-		{
-			licence: new Licence( 'cc-by-sa-3.0-de', 'CC BY-SA 3.0 DE', 'cc-by-3.0-de link' ),
+		}, {
+			licence: new Licence( 'cc-by-sa-3.0-de', ['cc', 'cc3'], 'CC BY-SA 3.0 DE', 'cc-by-3.0-de link' ),
 			detectable: [
 				['CC-BY-SA-3.0-DE']
 			]
-		},
-		{
-			licence: new Licence( 'cc-by-sa-3.0', 'CC BY-SA 3.0', /^CC-BY-SA-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-sa-3.0 link' ),
+		}, {
+			licence: new Licence( 'cc-by-sa-3.0', ['cc', 'cc3'], 'CC BY-SA 3.0', /^CC-BY-SA-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-sa-3.0 link' ),
 			detectable: [
 				['CC-BY-SA-3.0', 'some other string'],
 				['some other string', 'CC-BY-SA-3.0'],
