@@ -31,16 +31,45 @@ body {
 	box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
+.app-questionnaire .icon-minimize {
+	color: #3b679e;
+	cursor: pointer;
+	float: right;
+	font-size: 18pt;
+	margin-right: 360px;
+	text-align: center;
+	width: 20px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.app-questionnaire .icon-minimize:hover {
+	color: #2b88d9;
+}
+
+.app-questionnaire .icon-minimize.minimized {
+	background: white;
+	border-left: 5px solid white;
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+	margin-right: 0;
+	position: absolute;
+}
+
+
+.app-questionnaire .pageContainer {
+	margin-left: 100px;
+	padding-right: 348px;
+}
+
 .app-questionnaire .page {
-	display: table-cell;
-	padding-right: 348px; /* supplement's outer width plus some addition padding */
 }
 
 .app-questionnaire .back {
-	display: table-cell;
 	padding-left: 20px;
 	padding-right: 40px;
-	vertical-align: middle;
+	position: absolute;
 }
 
 .app-questionnaire .back .button {

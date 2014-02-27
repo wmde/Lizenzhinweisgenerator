@@ -183,8 +183,13 @@ $.extend( Questionnaire.prototype, {
 
 		this._fetchPages( page )
 		.done( function( $content ) {
-			self._$node.append( self._generateBackButton() );
-			self._$node.append( $content );
+			self._$node
+				.append( self._generateMinimizeButton() )
+				.append( self._generateBackButton() )
+				.append( $( '<div/>' ).addClass( 'pageContainer' ).append( $content ) );
+
+			self._toggleMinimized( 'maximize' );
+
 			deferred.resolve();
 		} )
 		.fail( function( message ) {
@@ -394,6 +399,48 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		return $backButton;
+	},
+
+	/**
+	 * Creates the "minimize" button.
+	 *
+	 * @return {jQuery}
+	 */
+	_generateMinimizeButton: function() {
+		var self = this;
+
+		return $( '<div/>' ).addClass( 'icon-minimize' )
+			.on( 'click', function() {
+				self._toggleMinimized();
+			} );
+	},
+
+	/**
+	 * Toggles between minimized/maximized visibility.
+	 *
+	 * @param {string} forceState "maximized"|"minimized"
+	 */
+	_toggleMinimized: function( forceState ) {
+		var minimize = this._$node.offset().left >= 0;
+
+		if( forceState ) {
+			minimize = forceState === 'minimize';
+		}
+
+		var marginLeft = minimize ? this._$node.width() - 100 : 0;
+
+		this._$node.stop().animate( {
+			'marginLeft': marginLeft === 0 ? '0' : ( marginLeft * - 1 ) + 'px'
+		}, 'fast' );
+
+		this._$node.find( '.back' ).stop().animate( {
+			'marginLeft': marginLeft === 0 ? '0' : marginLeft + 'px'
+		}, 'fast' );
+
+		this._$node.find( '.icon-minimize' )
+			[minimize ? 'addClass' : 'removeClass']( 'minimized' )
+			.css( 'marginLeft', marginLeft === 0 ? '0' : ( marginLeft + 115 ) + 'px' )
+			.text( minimize ? '»' :  '«' );
 	},
 
 	/**
