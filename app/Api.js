@@ -401,7 +401,8 @@ $.extend( Api.prototype, {
 	},
 
 	/**
-	 * Issues an API call querying for a specific property of a file.
+	 * Issues a call to the Commons API of a Wikipedia API querying for a specific property of a
+	 * file.
 	 *
 	 * @param {string|string[]} title Page title(s)
 	 * @param {string} property

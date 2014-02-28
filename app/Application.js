@@ -8,11 +8,9 @@ define(
 		'app/FrontPage',
 		'app/Questionnaire',
 		'app/OptionContainer',
-		'dojo/i18n!./nls/Application',
-		'dojo/_base/config',
-		'templates/registry'
+		'app/ApplicationError'
 	],
-	function( $, Navigation, FrontPage, Questionnaire, OptionContainer, messages ) {
+	function( $, Navigation, FrontPage, Questionnaire, OptionContainer, ApplicationError ) {
 
 /**
  * Application renderer.
@@ -115,12 +113,12 @@ $.extend( Application.prototype, {
 		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
 			if( !asset.getLicence() ) {
-				self._displayError( messages['error: unable to detect licence'] );
+				self._displayError( 'unable-to-detect-licence' );
 				return;
 			}
 
 			if( asset.getMediaType() !== 'bitmap' && asset.getMediaType() !== 'drawing' ) {
-				self._displayError( messages['error: unsupported data type'] );
+				self._displayError( 'unsupported-data-type' );
 				return;
 			}
 
@@ -138,13 +136,14 @@ $.extend( Application.prototype, {
 	/**
 	 * Displays an error on the front-page.
 	 *
-	 * @param {string} message
+	 * @param {string} code
 	 */
-	_displayError: function( message ) {
-		var $error = this._$node.find( '.error' );
+	_displayError: function( code ) {
+		var error = new ApplicationError( code ),
+			$error = this._$node.find( '.error' );
 
 		$error.stop().slideUp( 'fast', function() {
-			$error.text( message ).slideDown( 'fast' );
+			$error.text( error.getMessage() ).slideDown( 'fast' );
 		} );
 	},
 
