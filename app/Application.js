@@ -8,9 +8,10 @@ define(
 		'app/FrontPage',
 		'app/Questionnaire',
 		'app/OptionContainer',
-		'app/ApplicationError'
+		'app/ApplicationError',
+		'dojo/_base/config'
 	],
-	function( $, Navigation, FrontPage, Questionnaire, OptionContainer, ApplicationError ) {
+	function( $, Navigation, FrontPage, Questionnaire, OptionContainer, ApplicationError, config ) {
 
 /**
  * Application renderer.
@@ -117,7 +118,7 @@ $.extend( Application.prototype, {
 				return;
 			}
 
-			if( asset.getMediaType() !== 'bitmap' && asset.getMediaType() !== 'drawing' ) {
+			if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
 				self._displayError( 'unsupported-data-type' );
 				return;
 			}

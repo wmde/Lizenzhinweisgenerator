@@ -1,7 +1,8 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'app/AssetPage', 'app/ImageInfo'], function( $, AssetPage, ImageInfo ) {
+define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config'],
+	function( $, AssetPage, ImageInfo, config ) {
 
 /**
  * Commons API Handler.
@@ -278,7 +279,7 @@ $.extend( Api.prototype, {
 
 		this._getMediaType( title, wikiUrl )
 		.done( function( mediaType ) {
-			if( mediaType === 'bitmap' || mediaType === 'drawing' ) {
+			if( $.inArray( mediaType, config.custom.supportedMediaTypes ) !== -1 ) {
 				deferred.resolve( title );
 				return;
 			}
