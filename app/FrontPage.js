@@ -62,12 +62,12 @@ $.extend( FrontPage.prototype, {
 
 		var $frontPage = $( '<div/>' ).addClass( 'frontpage' )
 			.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
-			.append( $( '<div/>' ).addClass( 'container-input' ).append( $input ) )
+			.append( $( '<div/>' ).addClass( 'frontpage-container-input' ).append( $input ) )
 			.append( $( '<button/>' ).text( messages['generate attribution'] ) );
 
 		this._$node.append( $frontPage );
 
-		this._renderHelp( $frontPage.find( '.container-input' ) );
+		this._renderHelp( $frontPage.find( '.frontpage-container-input' ) );
 
 		$frontPage.find( 'input' )
 		.on( 'dragenter dragover', false )
@@ -88,11 +88,11 @@ $.extend( FrontPage.prototype, {
 	 * Submits the input.
 	 */
 	_submit: function() {
-		this._$frontPage.find( '.error' )
+		this._$frontPage.find( '.frontpage-error' )
 			.stop()
 			.slideUp( 'fast' );
 
-		this._$frontPage.find( '.suggestions' ).remove();
+		this._$frontPage.find( '.frontpage-suggestions' ).remove();
 		this._$frontPage.find( 'input' ).addClass( 'loading' );
 		this._evaluateInput( this._$frontPage.find( 'input' ).val() );
 	},
@@ -105,13 +105,13 @@ $.extend( FrontPage.prototype, {
 	_renderHelp: function( $parentNode ) {
 		$.get( templateRegistry.getDir( 'content' ) + 'frontpage-help.html' )
 		.done( function( html ) {
-			var $helpIcon = $( '<a/>' ).addClass( 'icon-help' ).text( '?' ),
-				$helpContent = $( '<div/>' ).addClass( 'help-content' ).html( html );
+			var $helpIcon = $( '<a/>' ).addClass( 'icon frontpage-icon-help' ).text( '?' ),
+				$helpContent = $( '<div/>' ).addClass( 'frontpage-help-content' ).html( html );
 
 			$parentNode
 			.append( $helpIcon )
 			.append( $helpContent )
-			.append( $( '<div/>' ).addClass( 'error' ) );
+			.append( $( '<div/>' ).addClass( 'error frontpage-error' ) );
 
 			$helpIcon
 			.on( 'click', function() {
@@ -178,10 +178,10 @@ $.extend( FrontPage.prototype, {
 	 */
 	_renderSuggestions: function( imageInfos ) {
 		var self = this,
-			$suggestions = this._$frontPage.find( '.suggestions' );
+			$suggestions = this._$frontPage.find( '.frontpage-suggestions' );
 
 		if( $suggestions.length === 0 ) {
-			$suggestions = $( '<div/>' ).addClass( 'suggestions ' )
+			$suggestions = $( '<div/>' ).addClass( 'frontpage-suggestions ' )
 				.appendTo( this._$frontPage );
 		}
 

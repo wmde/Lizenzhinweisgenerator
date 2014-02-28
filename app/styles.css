@@ -13,6 +13,14 @@ body {
 	height: 100%;
 }
 
+.icon {
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 ul.navigation {
 	margin: 0;
 	padding: 0;
