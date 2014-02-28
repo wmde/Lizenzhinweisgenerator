@@ -236,8 +236,11 @@ $.extend( Application.prototype, {
 			deferred.resolve( $attributedImageFrame );
 		} )
 		.fail( function( error ) {
-			// TODO: Render error
-			deferred.reject( error );
+			self._$node.find( '.application-preview' ).empty().append(
+				$( '<div/>' )
+				.addClass( 'application-preview-error error' )
+				.text( error.getMessage() )
+			);
 		} );
 
 		return deferred.promise();

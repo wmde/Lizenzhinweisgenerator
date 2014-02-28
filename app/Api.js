@@ -187,8 +187,9 @@ $.extend( Api.prototype, {
 			iiurlheight: size
 		} )
 		.done( function( page, ajaxOptions ) {
-			if( !page.imageinfo || page.imageinfo.length === 0 ) {
+			if( !page.imageinfo || page.imageinfo[0].length === 0 ) {
 				deferred.reject( new ApiError( 'imageinfo-missing', ajaxOptions ) );
+				return;
 			}
 			deferred.resolve( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[0] ) );
 		} )

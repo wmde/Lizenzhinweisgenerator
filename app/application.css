@@ -37,3 +37,9 @@
 	top: 0;
 	width: 300px;
 }
+
+.application-preview-error {
+	color: #d17439;
+	margin-top: 12pt;
+	text-align: center;
+}
