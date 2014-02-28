@@ -481,7 +481,7 @@ $.extend( Questionnaire.prototype, {
 				deferred.then( function() {
 					var templateDir = templateRegistry.getDir( config.locale );
 
-					$.get( config.baseUrl + templateDir + '/' + page + '.html' )
+					$.get( config.baseUrl + templateDir + page + '.html' )
 					.done( function( html ) {
 						var $content = $( '<div class="page page-' + page + '" />' )
 							.data( 'questionnaire-page', page )

@@ -58,8 +58,6 @@ $.extend( FrontPage.prototype, {
 	render: function() {
 		var self = this;
 
-		this._$node.empty();
-
 		var $input = $( '<input type="text"/>' )
 			.attr( 'placeholder', messages['input placeholder'] )
 			.on( 'keypress', function( event ) {

@@ -15,5 +15,7 @@ dojoConfig = {
 		{
 			name: 'tests'
 		}
-	]
+	],
+	// Force German locale as long as not all content is translated into default (English) language:
+	locale: 'de'
 };

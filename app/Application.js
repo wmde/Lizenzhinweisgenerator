@@ -7,9 +7,11 @@ define(
 		'app/FrontPage',
 		'app/Questionnaire',
 		'app/OptionsContainer',
-		'dojo/i18n!./nls/Application'
+		'dojo/i18n!./nls/Application',
+		'dojo/_base/config',
+		'templates/registry'
 	],
-	function( $, FrontPage, Questionnaire, OptionsContainer, messages ) {
+	function( $, FrontPage, Questionnaire, OptionsContainer, messages, config, templateRegistry ) {
 
 /**
  * Application renderer.
@@ -51,6 +53,11 @@ $.extend( Application.prototype, {
 	_options: null,
 
 	/**
+	 * @type {jQuery|null}
+	 */
+	_$navigation: null,
+
+	/**
 	 * The asset currently handled by the application.
 	 * @type {Asset|null}
 	 */
@@ -62,12 +69,12 @@ $.extend( Application.prototype, {
 	_frontPage: null,
 
 	/**
-	 * @type {Questionnaire}
+	 * @type {Questionnaire|null}
 	 */
 	_questionnaire: null,
 
 	/**
-	 * @type {OptionsContainer}
+	 * @type {OptionsContainer|null}
 	 */
 	_optionsContainer: null,
 
@@ -76,6 +83,12 @@ $.extend( Application.prototype, {
 	 */
 	start: function() {
 		var self = this;
+
+		this._$node.empty();
+
+		this._$node.append( this._createGlobalNavigation() );
+		this._$navigation.find( '.button-home' ).hide();
+
 		this._frontPage = new FrontPage( this._$node, this._api );
 
 		$( this._frontPage )
@@ -87,6 +100,99 @@ $.extend( Application.prototype, {
 		} );
 
 		this._frontPage.render();
+	},
+
+	/**
+	 * Renders the global navigation bar.
+	 */
+	_createGlobalNavigation: function() {
+		var self = this;
+
+		var $navigation = $( '<ul class="navigation">'
+			+ '<li class="button-home">' + messages['Start'] + '</li>'
+			+ '<li class="button-about">' + messages['About'] + '</li>'
+			+ '<li class="button-feedback">' + messages['Feedback'] + '</li>'
+			+ '</ul>' );
+
+		$navigation.children( '.button-home' )
+		.on( 'click', function() {
+			location.reload();
+		} );
+
+		$navigation.children( '.button-about' )
+		.on( 'click', function() {
+			self._showOverlay( 'about' );
+		} );
+
+		$navigation.children( '.button-feedback' )
+		.on( 'click', function() {
+			self._showOverlay( 'feedback' );
+		} );
+
+		this._$navigation = $navigation;
+
+		return $navigation;
+	},
+
+	/**
+	 * Shows the global overlay filling its content with a specific content page.
+	 *
+	 * @param {string} page
+	 */
+	_showOverlay: function( page ) {
+		var self = this;
+
+		if( !page ) {
+			return;
+		}
+
+		var $overlay = this._$node.find( '.overlay' );
+
+		if( $overlay.length === 0 ) {
+			$overlay = $( '<div class="overlay">'
+				+ '<div class="content"></div>'
+				+ '<div class="icon-close">«</div>'
+				+ '</div>' );
+
+			$overlay.appendTo( this._$node ).hide();
+
+			$overlay.find( '.icon-close' ).on( 'click', function() {
+				self._hideOverlay();
+			} );
+		} else if( $overlay.find( '.page-' + page ).length === 1 ) {
+			$overlay.stop().slideDown( 'fast' );
+			return;
+		}
+
+		$overlay.slideUp( 'fast' );
+
+		var templateDir = templateRegistry.getDir( config.locale );
+
+		$.get( config.baseUrl + templateDir + page + '.html' )
+		.done( function( html ) {
+			var $content = $( '<div class="page page-' + page + '" />' ).html( html );
+
+			$overlay.promise().done( function() {
+				$overlay.find( '.content' ).empty().append( $content );
+				$overlay.slideDown( 'fast' );
+			} );
+		} )
+		.fail( function() {
+			console.error( 'Unable to retrieve page ' + page );
+		} );
+	},
+
+	/**
+	 * Hides the global overlay.
+	 */
+	_hideOverlay: function() {
+		var $overlay = this._$node.find( '.overlay' );
+
+		if( $overlay.length === 0 ) {
+			return;
+		}
+
+		$overlay.stop().slideUp( 'fast' );
 	},
 
 	/**
@@ -140,7 +246,10 @@ $.extend( Application.prototype, {
 	_renderApplicationPage: function() {
 		var self = this;
 
-		this._$node.empty().append( $( '<div/>' ).addClass( 'app-preview' ) );
+		this._$node
+		.empty()
+		.append( this._createGlobalNavigation() )
+		.append( $( '<div/>' ).addClass( 'app-preview' ) );
 
 		this._questionnaire = this._renderQuestionnaire();
 		this._questionnaire.start().done( function() {
