@@ -103,7 +103,12 @@ $.extend( Navigation.prototype, {
 
 		$overlay.slideUp( 'fast' );
 
-		$.get( templateRegistry.getDir( 'content' ) + page + '.html' )
+		var ajaxOptions = {
+			url: templateRegistry.getDir( 'content' ) + page + '.html',
+			dataType: 'html'
+		};
+
+		$.ajax( ajaxOptions )
 		.done( function( html ) {
 			var $content = $( '<div class="page page-' + page + '" />' ).html( html );
 
@@ -118,6 +123,8 @@ $.extend( Navigation.prototype, {
 			} );
 		} )
 		.fail( function() {
+			// TODO: Display error
+			var error = new ApiError( 'contentpage-missing' );
 			console.error( 'Unable to retrieve page ' + page );
 		} );
 	},

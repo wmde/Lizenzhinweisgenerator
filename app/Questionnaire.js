@@ -7,9 +7,10 @@ define( [
 	'app/AttributionGenerator',
 	'app/Author',
 	'dojo/i18n!./nls/Questionnaire',
-	'templates/registry'
+	'templates/registry',
+	'app/ApiError'
 ],
-	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry ) {
+	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry, ApiError ) {
 
 /**
  * Represents a questionnaire's logic.
@@ -90,7 +91,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         No resolved parameters.
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApiError}
 	 */
 	start: function() {
 		this._loggedAnswers = {};
@@ -114,8 +115,8 @@ $.extend( Questionnaire.prototype, {
 		.done( function() {
 			deferred.resolve();
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -130,7 +131,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         No resolved parameters.
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApiError}
 	 */
 	_goTo: function( page, movingBack ) {
 		var navigationPathPosition = this._getNavigationPosition( page ),
@@ -152,8 +153,8 @@ $.extend( Questionnaire.prototype, {
 			.done( function() {
 				deferred.resolve();
 			} )
-			.fail( function( message ) {
-				deferred.reject( message );
+			.fail( function( error ) {
+				deferred.reject( error );
 			} );
 		}
 
@@ -182,7 +183,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         No resolved parameters.
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApiError}
 	 */
 	_render: function( page ) {
 		var self = this,
@@ -203,9 +204,10 @@ $.extend( Questionnaire.prototype, {
 
 			deferred.resolve();
 		} )
-		.fail( function( message ) {
-			console.error( message );
-			deferred.reject( message );
+		.fail( function( error ) {
+			// TODO: Render error properly
+			console.error( error.getMessage() );
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -277,9 +279,9 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {jQuery} List of jQuery wrapped DOM nodes.
+	 *         - {jQuery} List of jQuery wrapped DOM nodes
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApiError}
 	 */
 	generateSupplement: function() {
 		var self = this,
@@ -334,15 +336,15 @@ $.extend( Questionnaire.prototype, {
 					$nodes.filter( '.page-result-note-fullLicence' ).append( $licence );
 					deferred.resolve( $supplement.add( $nodes ) );
 				} )
-				.fail( function( message ) {
-					deferred.reject( message );
+				.fail( function( error ) {
+					deferred.reject( error );
 				} );
 			} else {
 				deferred.resolve( $supplement.add( $nodes ) );
 			}
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -480,7 +482,12 @@ $.extend( Questionnaire.prototype, {
 				var d = $.Deferred();
 
 				deferred.then( function() {
-					$.get( templateRegistry.getDir( 'questionnaire' ) + page + '.html' )
+					var ajaxOptions = {
+						url: templateRegistry.getDir( 'questionnaire' ) + page + '.html',
+						dataType: 'html'
+					};
+
+					$.ajax( ajaxOptions )
 					.done( function( html ) {
 						var $content = $( '<div/>' )
 							.addClass( 'questionnaire-page page page-' + page )
@@ -491,7 +498,7 @@ $.extend( Questionnaire.prototype, {
 						d.resolve( $pages );
 					} )
 					.fail( function() {
-						d.reject( 'Unable to retrieve page ' + page );
+						d.reject( new ApiError( 'questionnaire-page-missing', ajaxOptions ) );
 					} );
 
 					return d.promise();

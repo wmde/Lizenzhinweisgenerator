@@ -102,6 +102,7 @@ $.extend( Application.prototype, {
 		this._frontPage.render();
 	},
 
+	// TODO: Move this method to FrontPage
 	/**
 	 * Processes a filename and updates the page rendering accordingly.
 	 *
@@ -114,20 +115,20 @@ $.extend( Application.prototype, {
 		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
 			if( !asset.getLicence() ) {
-				self._displayError( 'unable-to-detect-licence' );
+				self._displayError( new ApplicationError( 'licence-unknown' ) );
 				return;
 			}
 
 			if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
-				self._displayError( 'unsupported-data-type' );
+				self._displayError( new ApplicationError( 'datatype-unsupported' ) );
 				return;
 			}
 
 			self._asset = asset;
 			self._renderApplicationPage();
 		} )
-		.fail( function( message ) {
-			self._displayError( message );
+		.fail( function( error ) {
+			self._displayError( error );
 		} )
 		.always( function() {
 			self._$node.find( 'input' ).removeClass( 'loading' );
@@ -137,14 +138,13 @@ $.extend( Application.prototype, {
 	/**
 	 * Displays an error on the front-page.
 	 *
-	 * @param {string} code
+	 * @param {ApplicationError} error
 	 */
-	_displayError: function( code ) {
-		var error = new ApplicationError( code ),
-			$error = this._$node.find( '.error' );
+	_displayError: function( error ) {
+		var $error = this._$node.find( '.error' );
 
 		$error.stop().slideUp( 'fast', function() {
-			$error.text( error.getMessage() || code ).slideDown( 'fast' );
+			$error.text( error.getMessage() ).slideDown( 'fast' );
 		} );
 	},
 
@@ -249,9 +249,9 @@ $.extend( Application.prototype, {
 	 * @param {Object} supplementPromise
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {jQuery} Attributed image DOM.
+	 *         - {jQuery} Attributed image DOM
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApiError}
 	 */
 	updatePreview: function( attributionGenerator, supplementPromise ) {
 		var self = this,
@@ -288,8 +288,9 @@ $.extend( Application.prototype, {
 
 			deferred.resolve( $attributedImageFrame );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			// TODO: Render error
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();

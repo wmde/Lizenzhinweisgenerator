@@ -144,7 +144,7 @@ $.extend( FrontPage.prototype, {
 	 *         Resolved parameters:
 	 *         - {string|ImageInfo[]}
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApplicationError}
 	 *
 	 * @triggers input
 	 * @triggers error
@@ -162,9 +162,10 @@ $.extend( FrontPage.prototype, {
 				self._renderSuggestions( filenameOrImageInfos );
 			}
 		} )
-		.fail( function( message ) {
-			$( self ).trigger( 'error', [message] );
-			deferred.reject( message );
+		.fail( function( error ) {
+			// TODO: Render error here instead of triggering an event
+			$( self ).trigger( 'error', [error] );
+			deferred.reject( error );
 		} )
 		.always( function() {
 			self._$node.find( 'input' ).removeClass( 'loading' );

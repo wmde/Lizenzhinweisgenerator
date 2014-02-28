@@ -1,7 +1,8 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'dojo/_base/config'], function( $, config ) {
+define( ['jquery', 'dojo/_base/config', 'app/ApplicationError'],
+	function( $, config, ApplicationError ) {
 
 /**
  * Represents a licence.
@@ -173,9 +174,9 @@ $.extend( Licence.prototype, {
 	 *
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {jQuery} Licence text.
+	 *         - {jQuery} Licence text
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApplicationError}
 	 */
 	getLegalCode: function() {
 		var self = this,
@@ -190,7 +191,7 @@ $.extend( Licence.prototype, {
 			deferred.resolve( $licence );
 		} )
 		.fail( function() {
-			deferred.reject( 'Failed retrieving licence text' );
+			deferred.reject( new ApplicationError( 'licencetext-missing' ) );
 		} );
 
 		return deferred.promise();

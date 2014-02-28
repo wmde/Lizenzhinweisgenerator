@@ -48,6 +48,7 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 			}
 		} )
 		.fail( function() {
+			// TODO: Trigger an error event to have the option removed from the OptionContainer
 			self._$a.replaceWith( $() );
 		} );
 

@@ -169,9 +169,9 @@ $.extend( Asset.prototype, {
 	 * @param {number} imageSize
 	 * @return {Object} jQuery Promise
 	 *         Resolve parameters:
-	 *         - {Object} Image information received from the API.
+	 *         - {Object} Image information received from the API
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {ApiError}
 	 */
 	getImageInfo: function( imageSize ) {
 		var self = this,
@@ -185,8 +185,8 @@ $.extend( Asset.prototype, {
 				self._imageInfo[imageSize] = imageInfo;
 				deferred.resolve( imageInfo );
 			} )
-			.fail( function( message ) {
-				deferred.reject( message );
+			.fail( function( error ) {
+				deferred.reject( error );
 			} );
 		}
 

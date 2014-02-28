@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery'], function( $ ) {
+define( ['jquery', 'app/ApplicationError'], function( $, ApplicationError ) {
 
 /**
  * Returns a filename by analyzing input.
@@ -37,7 +37,7 @@ $.extend( InputHandler.prototype, {
 	 *         - {string|ImageInfo[]}
 	 *         [- {string} wikiUrl]
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApplicationError}
 	 */
 	getFilename: function( input ) {
 		var self = this,
@@ -50,19 +50,17 @@ $.extend( InputHandler.prototype, {
 				.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
 					deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
 				} )
-				.fail( function( message ) {
-					deferred.reject( message );
+				.fail( function( error ) {
+					deferred.reject( error );
 				} );
 			} )
-			.fail( function( message ) {
-				deferred.reject( message );
+			.fail( function( error ) {
+				deferred.reject( error );
 			} );
 		} else if( typeof input === 'string' ) {
 			return this._evaluate( input );
 		} else {
-			deferred.reject( 'Cannot handle input' );
-			console.error( 'Cannot handle input:' );
-			console.error( input );
+			deferred.reject( new ApplicationError( 'input-invalid' ) );
 		}
 
 		return deferred.promise();
@@ -76,13 +74,13 @@ $.extend( InputHandler.prototype, {
 	 *         Resolved parameters:
 	 *         - {string} File URL
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApplicationError}
 	 */
 	_getUrlFromEvent: function( event ) {
 		var deferred = $.Deferred();
 
 		if( event.type !== 'drop' || !event.dataTransfer ) {
-			deferred.reject( 'Unsupported event' );
+			deferred.reject( new ApplicationError( 'event-unsupported' ) );
 			return deferred.promise();
 		}
 
@@ -113,7 +111,7 @@ $.extend( InputHandler.prototype, {
 	 *         - {string|ImageInfo[]}
 	 *         [- {string}]
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApplicationError}
 	 */
 	_evaluate: function( url ) {
 		var deferred = $.Deferred();
@@ -174,7 +172,7 @@ $.extend( InputHandler.prototype, {
 	 *         - {ImageInfo[]|string}
 	 *         [- {string}]
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApplicationError}
 	 */
 	_getWikipediaPageImagesFileInfo: function( url ) {
 		var deferred = $.Deferred(),
@@ -199,7 +197,7 @@ $.extend( InputHandler.prototype, {
 		}
 
 		if( !wikiUrl ) {
-			deferred.reject( 'Unable to resolve Wikipedia URL' );
+			deferred.reject( new ApplicationError( 'url-invalid' ) );
 			return deferred.promise();
 		}
 
@@ -207,8 +205,8 @@ $.extend( InputHandler.prototype, {
 		.done( function( prefixedFilenameOrImageInfos ) {
 			deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();

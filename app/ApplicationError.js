@@ -7,10 +7,10 @@ define( [ 'jquery', 'dojo/i18n!./nls/ApplicationError' ], function( $, messages 
  *
  * @param {string} code
  *
- * @throws {Error} if a required parameter is not defined.
+ * @throws {Error} if a required parameter is not defined properly.
  */
 var ApplicationError = function( code ) {
-	if( !code ) {
+	if( !code || typeof code !== 'string' ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
@@ -26,10 +26,10 @@ $.extend( ApplicationError.prototype, {
 	/**
 	 * Returns the error's localized message.
 	 *
-	 * @return {string|undefined}
+	 * @return {string}
 	 */
 	getMessage: function() {
-		return messages[this._code];
+		return messages[this._code] || messages['*'];
 	}
 
 } );

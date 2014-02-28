@@ -1,8 +1,8 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config'],
-	function( $, AssetPage, ImageInfo, config ) {
+define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config', 'app/ApiError'],
+	function( $, AssetPage, ImageInfo, config, ApiError ) {
 
 /**
  * Commons API Handler.
@@ -57,7 +57,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {Asset}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	getAsset: function( prefixedFilename, wikiUrl ) {
 		var self = this,
@@ -77,17 +77,17 @@ $.extend( Api.prototype, {
 
 					deferred.resolve( assetPage.getAsset() );
 				} )
-				.fail( function( message ) {
-					deferred.reject( message );
+				.fail( function( error ) {
+					deferred.reject( error );
 				} );
 			} )
-			.fail( function( message ) {
-				deferred.reject( message );
+			.fail( function( error ) {
+				deferred.reject( error );
 			} );
 
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -102,7 +102,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {jQuery} Page content DOM
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	_getPageContent: function( prefixedFilename, wikiUrl ) {
 		var self = this,
@@ -112,16 +112,16 @@ $.extend( Api.prototype, {
 			rvprop: 'content',
 			rvparse: 1
 		} )
-		.done( function( page ) {
+		.done( function( page, ajaxOptions ) {
 			if( !page.revisions || page.revisions.length === 0 || !page.revisions[0]['*'] ) {
-				deferred.reject( 'Unable to resolve revisions' );
+				deferred.reject( new ApiError( 'revision-invalid', ajaxOptions ) );
 				return;
 			}
 
 			deferred.resolve( $( '<div/>' ).html( page.revisions[0]['*'] ) );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -136,7 +136,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {string[]}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	_getPageTemplates: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -145,9 +145,9 @@ $.extend( Api.prototype, {
 			tlnamespace: 10,
 			tllimit: 100
 		} )
-		.done( function( page ) {
+		.done( function( page, ajaxOptions ) {
 			if( !page.templates ) {
-				deferred.reject( 'No templates found' );
+				deferred.reject( new ApiError( 'templates-missing', ajaxOptions ) );
 				return;
 			}
 
@@ -158,8 +158,8 @@ $.extend( Api.prototype, {
 
 			deferred.resolve( templates );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -175,7 +175,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {ImageInfo}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	getImageInfo: function( prefixedFilename, size, wikiUrl ) {
 		var self = this,
@@ -186,14 +186,14 @@ $.extend( Api.prototype, {
 			iiurlwidth: size,
 			iiurlheight: size
 		} )
-		.done( function( page ) {
+		.done( function( page, ajaxOptions ) {
 			if( !page.imageinfo || page.imageinfo.length === 0 ) {
-				deferred.reject( 'No image information returned' );
+				deferred.reject( new ApiError( 'imageinfo-missing', ajaxOptions ) );
 			}
 			deferred.resolve( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[0] ) );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -206,9 +206,9 @@ $.extend( Api.prototype, {
 	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise:
 	 *         Resolved parameters:
-	 *         - {string} The file's media type.
+	 *         - {string}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	_getMediaType: function( prefixedFilename, wikiUrl ) {
 		var self = this,
@@ -218,7 +218,7 @@ $.extend( Api.prototype, {
 			iiprop: 'mediatype',
 			iilimit: 1
 		} )
-		.done( function( page ) {
+		.done( function( page, ajaxOptions ) {
 			if( !page.imageinfo ) {
 				deferred.resolve( 'unknown' );
 				return;
@@ -232,11 +232,10 @@ $.extend( Api.prototype, {
 				}
 			}
 
-			deferred.reject( 'Unable to resolve media type' );
-
+			deferred.reject( new ApiError( 'mediatype-missing', ajaxOptions ) );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred;
@@ -253,7 +252,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {ImageInfo[]|string}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	getWikipediaPageImageInfo: function( title, wikiUrl ) {
 		var self = this,
@@ -272,16 +271,16 @@ $.extend( Api.prototype, {
 				.done( function( imageUrls ) {
 					deferred.resolve( imageUrls );
 				} )
-				.fail( function( jqXHR, textStatus ) {
-					deferred.reject( textStatus );
+				.fail( function( error ) {
+					deferred.reject( error );
 				} );
 			} )
-			.fail( function( message ) {
-				deferred.reject( message );
+			.fail( function( error ) {
+				deferred.reject( error );
 			} );
 		} )
-		.fail( function( message ) {
-			deferred.reject( message );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -296,7 +295,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {string[]}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	_getWikipediaPageImages: function( title, wikiUrl ) {
 		var self = this,
@@ -318,8 +317,8 @@ $.extend( Api.prototype, {
 
 			deferred.resolve( imageTitles );
 		} )
-		.fail( function( jqXHR, textStatus ) {
-			deferred.reject( textStatus );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -334,7 +333,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {ImageInfo[]}
 	 *         Rejected parameters:
-	 *         - {string} Error message
+	 *         - {ApiError}
 	 */
 	_getWikipediaImageInfos: function( imageTitles, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -361,8 +360,8 @@ $.extend( Api.prototype, {
 
 			deferred.resolve( imageInfos );
 		} )
-		.fail( function( jqXHR, textStatus ) {
-			deferred.reject( textStatus );
+		.fail( function( error ) {
+			deferred.reject( error );
 		} );
 
 		return deferred.promise();
@@ -378,10 +377,10 @@ $.extend( Api.prototype, {
 	 * @param {Object} [params] API request parameter overwrites or additional parameters.
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {Object} Single page JSON regarding the specified property.
+	 *         - {Object[]}
+	 *         - {Object} Options $.ajax() has been initiated with
 	 *         Rejected parameters:
-	 *         - {string} Error message
-	 *         - {jqXHR} jqXHR object
+	 *         - {ApiError}
 	 */
 	_query: function( title, property, wikiUrl, params ) {
 		var deferred = $.Deferred();
@@ -393,27 +392,30 @@ $.extend( Api.prototype, {
 			format: 'json'
 		}, params );
 
-		$.ajax( {
+		var ajaxOptions = {
 			url: ( wikiUrl || this._defaultUrl ) + 'w/api.php',
 			crossDomain: true,
 			dataType: 'jsonp',
-			data: params
-		} )
-		.done( function( response, textStatus, jqXHR ) {
+			data: params,
+			timeout: 5000
+		};
+
+		$.ajax( ajaxOptions )
+		.done( function( response ) {
 			if( response.query === undefined || response.query.pages == undefined ) {
-				deferred.reject( 'The API returned an unexpected response', jqXHR );
+				deferred.reject( new ApiError( 'response-unexpected', ajaxOptions ) );
 				return;
 			}
 
 			var pages = [],
-				error;
+				errorCode;
 
 			$.each( response.query.pages, function( id, page ) {
 
 				if( page.missing !== undefined ) {
-					error = 'Unable to locate the specified file';
+					errorCode = 'page-missing';
 				} else if( page.invalid !== undefined ) {
-					error = 'Invalid input';
+					errorCode = 'page-invalid';
 				} else {
 					pages.push( page );
 				}
@@ -421,17 +423,19 @@ $.extend( Api.prototype, {
 			} );
 
 			if( pages.length === 1 ) {
-				deferred.resolve( pages[0] );
+				deferred.resolve( pages[0], ajaxOptions );
 			} else if( pages.length > 0 ) {
-				deferred.resolve( pages );
-			} else if( error ) {
-				deferred.reject( error );
+				deferred.resolve( pages, ajaxOptions );
+			} else if( errorCode ) {
+				deferred.reject( new ApiError( errorCode, ajaxOptions ) );
 			} else {
-				deferred.reject( 'The API returned a corrupted result', jqXHR );
+				deferred.reject( new ApiError( 'response-corrupted', ajaxOptions ) );
 			}
 		} )
-		.fail( function( jqXHR, textStatus ) {
-			deferred.reject( textStatus, jqXHR );
+		.fail( function() {
+			// Since there is no error handling for jsonp requests, the error is a timeout in any
+			// and it does not make any sense to analyze the jqXHR object.
+			deferred.reject( new ApiError( '*', ajaxOptions ) );
 		} );
 
 		return deferred.promise();
