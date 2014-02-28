@@ -42,7 +42,7 @@ var Questionnaire = function( $node, asset ) {
 		throw new Error( 'Asset does not feature a proper licence' );
 	}
 
-	this._$node = $node;
+	this._$node = $node.addClass( 'questionnaire' );
 	this._asset = asset;
 };
 
@@ -195,7 +195,9 @@ $.extend( Questionnaire.prototype, {
 			self._$node
 				.append( self._generateMinimizeButton() )
 				.append( self._generateBackButton() )
-				.append( $( '<div/>' ).addClass( 'pageContainer' ).append( $content ) );
+				.append(
+					$( '<div/>' ).addClass( 'questionnaire-pagecontainer' ).append( $content )
+				);
 
 			self._toggleMinimized( 'maximize' );
 
@@ -391,7 +393,7 @@ $.extend( Questionnaire.prototype, {
 	_generateBackButton: function() {
 		var self = this,
 			$backButton = $( '<div/>' )
-			.addClass( 'back' )
+			.addClass( 'questionnaire-back' )
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		if( this._navigationCache.length === 0 ) {
@@ -419,7 +421,7 @@ $.extend( Questionnaire.prototype, {
 	_generateMinimizeButton: function() {
 		var self = this;
 
-		return $( '<div/>' ).addClass( 'icon-minimize' )
+		return $( '<div/>' ).addClass( 'questionnaire-icon-minimize button' )
 			.on( 'click', function() {
 				self._toggleMinimized();
 			} );
@@ -443,11 +445,11 @@ $.extend( Questionnaire.prototype, {
 			'marginLeft': marginLeft === 0 ? '0' : ( marginLeft * - 1 ) + 'px'
 		}, 'fast' );
 
-		this._$node.find( '.back' ).stop().animate( {
+		this._$node.find( '.questionnaire-back' ).stop().animate( {
 			'marginLeft': marginLeft === 0 ? '0' : marginLeft + 'px'
 		}, 'fast' );
 
-		this._$node.find( '.icon-minimize' )
+		this._$node.find( '.questionnaire-icon-minimize' )
 			[minimize ? 'addClass' : 'removeClass']( 'minimized' )
 			.css( 'marginLeft', marginLeft === 0 ? '0' : ( marginLeft + 115 ) + 'px' )
 			.text( minimize ? '»' :  '«' );
@@ -480,7 +482,8 @@ $.extend( Questionnaire.prototype, {
 				deferred.then( function() {
 					$.get( templateRegistry.getDir( 'questionnaire' ) + page + '.html' )
 					.done( function( html ) {
-						var $content = $( '<div class="page page-' + page + '" />' )
+						var $content = $( '<div/>' )
+							.addClass( 'questionnaires-page page page-' + page )
 							.data( 'questionnaire-page', page )
 							.html( html );
 

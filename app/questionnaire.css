@@ -1,0 +1,88 @@
+.questionnaire .questionnaire-icon-minimize {
+	color: #3b679e;
+	float: right;
+	font-size: 18pt;
+	margin-right: 360px;
+	text-align: center;
+	width: 20px;
+}
+
+.questionnaire .icon-minimize:hover {
+	color: #2b88d9;
+}
+
+.questionnaire .icon-minimize.minimized {
+	background: white;
+	border-left: 5px solid white;
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+	margin-right: 0;
+	position: absolute;
+}
+
+.questionnaire .questionnaire-pagecontainer {
+	margin-left: 100px;
+	padding-right: 348px;
+}
+
+.questionnaire .questionnaire-back {
+	padding-left: 20px;
+	padding-right: 40px;
+	position: absolute;
+}
+
+.questionnaire .questionnaire-back .button {
+	color: #3b679e;
+	display: inline-block;
+	font-size: 45pt;
+	-moz-transform: scaleY(2.5);
+	-ms-transform: scaleY(2.5);
+	-webkit-transform: scaleY(2.5);
+}
+
+.questionnaire .questionnaires-back .button:hover {
+	background: transparent;
+	color: #2b88d9;
+}
+
+.questionnaire .questionnaire-back.disabled .button,
+.questionnaire .questionnaire-back.disabled .button:hover {
+	color: rgba(0,0,0,0.1);
+	cursor: default;
+}
+
+.questionnaire .questionnaire-page .question {
+	font-weight: bold;
+}
+
+.questionnaire .questionnaires-page ul.answers {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.questionnaire .questionnaire-page .answers li,
+.questionnaire a {
+	color: #3b679e;
+	cursor: pointer;
+}
+
+.questionnaire .questionnaire-page .answers li:hover {
+	text-decoration: underline;
+}
+
+.questionnaire .questionnaire-page .answers li .checkbox {
+	background: url( ../gfx/checkbox.png ) no-repeat;
+	display: inline-block;
+	height: 20px;
+	margin-bottom: -4px;
+	overflow: hidden;
+	width: 20px;
+}
+
+.questionnaire .questionnaires-page .answers li.disabled {
+	color: rgba( 0, 0, 0, 0.25 );
+}
+
+.questionnaire .questionnaire-page .answers li.disabled:hover {
+	text-decoration: none;
+}
