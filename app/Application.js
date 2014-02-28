@@ -172,6 +172,11 @@ $.extend( Application.prototype, {
 		.done( function( html ) {
 			var $content = $( '<div class="page page-' + page + '" />' ).html( html );
 
+			var $supportedLicences = $content.find( '.app-supportedLicences' );
+			if( $supportedLicences.length ) {
+				$supportedLicences.append( self._createSupportedLicencesHtml() );
+			}
+
 			$overlay.promise().done( function() {
 				$overlay.find( '.content' ).empty().append( $content );
 				$overlay.slideDown( 'fast' );
@@ -193,6 +198,34 @@ $.extend( Application.prototype, {
 		}
 
 		$overlay.stop().slideUp( 'fast' );
+	},
+
+	/**
+	 * Generates a jQuery wrapped list of nodes of all supported licences (licences registered in
+	 * the licence store).
+	 *
+	 * @return {jQuery}
+	 */
+	_createSupportedLicencesHtml: function() {
+		var $licences = $(),
+			licences = this._api.getLicenceStore().getLicences();
+
+		for( var i = 0; i < licences.length; i++ ) {
+
+			if( i > 0 ) {
+				$licences = $licences.add( document.createTextNode( ', ' ) );
+			}
+
+			var licence = licences[i],
+				url = licence.getUrl();
+
+			$licences = $licences.add( url
+				? $( '<a/>' ).attr( 'href', url ).text( licence.getName() )
+				: document.createTextNode( licence.getName() )
+			);
+		}
+
+		return $licences;
 	},
 
 	/**

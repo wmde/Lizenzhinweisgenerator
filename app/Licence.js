@@ -104,7 +104,7 @@ $.extend( Licence.prototype, {
 	_regExp: null,
 
 	/**
-	 * @type {string}
+	 * @type {string|null}
 	 */
 	_url: null,
 
@@ -162,7 +162,7 @@ $.extend( Licence.prototype, {
 	},
 
 	/**
-	 * @return {string}
+	 * @return {string|null}
 	 */
 	getUrl: function() {
 		return this._url;
