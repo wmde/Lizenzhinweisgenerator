@@ -27,6 +27,8 @@ var FrontPage = function( $initNode, api ) {
 
 	this._$node = $initNode;
 	this._inputHandler = new InputHandler( api );
+
+	document.title = messages['licence attribution generator'];
 };
 
 $.extend( FrontPage.prototype, {

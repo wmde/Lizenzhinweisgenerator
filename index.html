@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Licence Attribution Generator</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script src="dojoConfig.js"></script>
 		<script src="lib/dojo/dojo.js"></script>
@@ -9,13 +10,12 @@
 		<link href="app/frontpage.css" rel="stylesheet" media="screen">
 		<link href="app/global.css" rel="stylesheet" media="screen">
 		<link href="app/navigation.css" rel="stylesheet" media="screen">
-		<link href="app/optioncontainer.css" rel="stylesheet" media="screen">
 		<link href="app/option.css" rel="stylesheet" media="screen">
+		<link href="app/optioncontainer.css" rel="stylesheet" media="screen">
 		<link href="app/questionnaire.css" rel="stylesheet" media="screen">
 	</head>
 	<script>
 		( function( require ) {
-
 			require( [
 				'jquery', 'app/Application', 'app/Api', 'app/LicenceStore', 'app/LICENCES'
 			], function( $, Application, Api, LicenceStore, LICENCES ) {
@@ -35,6 +35,8 @@
 		}( require ) );
 	</script>
 	<body>
-		<div id="application" class="application">wird geladen...</div>
+		<div id="application" class="application">
+			<noscript>JavaScript needs to be enabled to use the application.</noscript>
+		</div>
 	</body>
 </html>
