@@ -1,34 +1,15 @@
-html {
-	height: 100%;
-}
-
-body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	font-family: "Helvetica Neue", "Helvetica", "Nimbus Sans L", "Arial", "Liberation Sans", sans-serif;
-}
-
 .application {
 	height: 100%;
 }
 
-.button {
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.app-frameset {
+.application-frameset {
 	border-collapse: collapse;
 	display: table;
 	height: 100%;
 	width: 100%;
 }
 
-.app-questionnaire {
+.application-questionnaire {
 	background-color: rgba( 245, 245, 245, 0.9 );
 	background: linear-gradient(160deg, rgba(245,245,245,1) 0%,rgba(245,245,245,0.9) 50%, rgba(245,245,245,0.4) 80%);
 	box-shadow: 0 3px 8px rgba(0,0,0,0.1);
@@ -40,26 +21,25 @@ body {
 	width: 100%;
 }
 
-
-.app-preview {
+.application-preview {
 	height: 100%;
 	text-align: left;
 }
 
-.app-preview > div {
+.application-preview > div {
 	clear: both;
 }
 
-.app-preview-spacer {
+.application-preview-spacer {
 	float:left;
 	height: 50%;
 	margin-bottom: 0; /* will be adjusted according to the preview's actual content */
 }
 
-.app-preview-supplement {
+.application-preview-supplement {
 	background: rgba(245,245,245,1);
-	border-bottom: 1px solid lightgrey;
-	border-left: 1px solid lightgrey;
+	border-bottom: 1px solid #d3d3d3;
+	border-left: 1px solid #d3d3d3;
 	box-shadow: 0 0 8px rgba(0,0,0,0.1);
 	font-size: 10pt;
 	padding: 16px 16px 24pt 16px;

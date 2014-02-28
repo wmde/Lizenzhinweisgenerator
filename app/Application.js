@@ -157,7 +157,7 @@ $.extend( Application.prototype, {
 		this._$node
 		.empty()
 		.append( this._navigation.create() )
-		.append( $( '<div/>' ).addClass( 'app-preview' ) );
+		.append( $( '<div/>' ).addClass( 'application-preview' ) );
 
 		this._questionnaire = this._renderQuestionnaire();
 		this._questionnaire.start().done( function() {
@@ -182,9 +182,11 @@ $.extend( Application.prototype, {
 		var self = this;
 
 		// Remove any pre-existing node:
-		this._$node.find( '.app-questionnaire' ).remove();
+		this._$node.find( '.application-questionnaire' ).remove();
 
-		var $questionnaire = $( '<div/>' ).addClass( 'app-questionnaire' ).prependTo( this._$node ),
+		var $questionnaire = $( '<div/>' )
+				.addClass( 'application-questionnaire' )
+				.prependTo( this._$node ),
 			questionnaire = new Questionnaire( $questionnaire, this._asset );
 
 		$( questionnaire )
@@ -210,10 +212,12 @@ $.extend( Application.prototype, {
 	 * Renders the options container and attaches corresponding events.
 	 */
 	_renderOptionContainer: function() {
-		this._$node.find( '.app-optioncontainer' ).remove();
+		this._$node.find( '.application-optioncontainer' ).remove();
 
 		var self = this,
-			$optionContainer = $( '<div/>' ).addClass( 'app-optioncontainer' ).appendTo( this._$node ),
+			$optionContainer = $( '<div/>' )
+				.addClass( 'application-optioncontainer' )
+				.appendTo( this._$node ),
 			optionContainer = new OptionContainer( $optionContainer, this._asset ),
 			licence = this._asset.getLicence(),
 			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' ),
@@ -261,16 +265,16 @@ $.extend( Application.prototype, {
 		.done( function( imageInfo ) {
 			var $attributedImageFrame = self._attributedImageHtml( imageInfo );
 
-			self._$node.find( '.app-preview' ).replaceWith(
+			self._$node.find( '.application-preview' ).replaceWith(
 				self._renderPreview( $attributedImageFrame )
 			);
 
-			var $preview = self._$node.find( '.app-preview' );
+			var $preview = self._$node.find( '.application-preview' );
 
 			$preview.find( '.attributed-image-frame' ).append( attributionGenerator.generate() );
 
 			$preview.find( 'img' ).on( 'load', function() {
-				$preview.find( '.app-preview-spacer' ).css(
+				$preview.find( '.application-preview-spacer' ).css(
 					'marginBottom',
 					-1 * parseInt( $preview.find( '.attributed-image-frame' ).height() / 2, 10 )
 				);
@@ -278,7 +282,7 @@ $.extend( Application.prototype, {
 
 			supplementPromise.done( function( $supplement ) {
 				$preview.append(
-					$( '<div/>' ).addClass( 'app-preview-supplement' ).append( $supplement )
+					$( '<div/>' ).addClass( 'application-preview-supplement' ).append( $supplement )
 				);
 			} );
 
@@ -318,8 +322,8 @@ $.extend( Application.prototype, {
 	 * @return {jQuery}
 	 */
 	_renderPreview: function( $attributedImageHtml ) {
-		return $( '<div/>' ).addClass( 'app-preview' )
-			.append( $( '<div/>' ).addClass( 'app-preview-spacer' ) )
+		return $( '<div/>' ).addClass( 'application-preview' )
+			.append( $( '<div/>' ).addClass( 'application-preview-spacer' ) )
 			.append( $attributedImageHtml );
 	}
 
