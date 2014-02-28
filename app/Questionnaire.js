@@ -7,10 +7,9 @@ define( [
 	'app/AttributionGenerator',
 	'app/Author',
 	'dojo/i18n!./nls/Questionnaire',
-	'dojo/_base/config',
 	'templates/registry'
 ],
-	function( $, Asset, AttributionGenerator, Author, messages, config, templateRegistry ) {
+	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry ) {
 
 /**
  * Represents a questionnaire's logic.
@@ -296,33 +295,33 @@ $.extend( Questionnaire.prototype, {
 			.text( messages['notes and advice'] );
 
 		if( result.useCase === 'private' ) {
-			pages.push( 'r-note-privateUse' );
+			pages.push( 'result-note-privateUse' );
 		} else if( licence.isInGroup( 'cc0' ) ) {
-			pages.push( 'r-note-cc0' );
+			pages.push( 'result-note-cc0' );
 		} else if( licence.isInGroup( 'pd' ) ) {
-			pages.push( 'r-note-pd' );
+			pages.push( 'result-note-pd' );
 		} else {
-			pages.push( 'r-note-' + result.format );
+			pages.push( 'result-note-' + result.format );
 
 			if( licence.isInGroup( 'cc2' ) ) {
-				pages.push( 'r-restrictions-cc2' );
+				pages.push( 'result-restrictions-cc2' );
 			} else {
-				pages.push( 'r-restrictions' );
+				pages.push( 'result-restrictions' );
 			}
 		}
 
 		if( result.collectionUse ) {
-			pages.push( 'r-note-collection' );
+			pages.push( 'result-note-collection' );
 		}
 
 		if( result.fullLicence ) {
-			pages.push( 'r-note-fullLicence' );
+			pages.push( 'result-note-fullLicence' );
 		}
 
 		this._fetchPages( pages )
 		.done( function( $nodes ) {
 			if( result.collectionUse ) {
-				$nodes.filter( '.page-r-note-collection' ).append(
+				$nodes.filter( '.page-result-note-collection' ).append(
 					self.getAttributionGenerator( { licenceOnly: true } ).generate()
 				);
 			}
@@ -330,7 +329,7 @@ $.extend( Questionnaire.prototype, {
 			if( result.fullLicence ) {
 				self._asset.getLicence().getLegalCode()
 				.done( function( $licence ) {
-					$nodes.filter( '.page-r-note-fullLicence' ).append( $licence );
+					$nodes.filter( '.page-result-note-fullLicence' ).append( $licence );
 					deferred.resolve( $supplement.add( $nodes ) );
 				} )
 				.fail( function( message ) {
@@ -479,9 +478,7 @@ $.extend( Questionnaire.prototype, {
 				var d = $.Deferred();
 
 				deferred.then( function() {
-					var templateDir = templateRegistry.getDir( config.locale );
-
-					$.get( config.baseUrl + templateDir + page + '.html' )
+					$.get( templateRegistry.getDir( 'questionnaire' ) + page + '.html' )
 					.done( function( html ) {
 						var $content = $( '<div class="page page-' + page + '" />' )
 							.data( 'questionnaire-page', page )
@@ -654,7 +651,7 @@ $.extend( Questionnaire.prototype, {
 				if( self._asset.getLicence().isInGroup( 'cc2de' ) ) {
 					self._goToAndUpdate( '7' );
 				} else {
-					self._goToAndUpdate( 'r-success' );
+					self._goToAndUpdate( 'result-success' );
 				}
 			} );
 
@@ -689,7 +686,7 @@ $.extend( Questionnaire.prototype, {
 				self._goToAndUpdate( '3' );
 			} );
 		} else if( p === '12a' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, 'r-success' );
+			$page = this._applyLogAndGoTo( $page, p, 1, 'result-success' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
 		} else if( p === '12b' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '13' );
@@ -698,7 +695,7 @@ $.extend( Questionnaire.prototype, {
 			$page.find( 'a.a1' ).on( 'click', function() {
 				var value = $.trim( $( 'input.a1' ).val() );
 				self._log( '13', 1, value );
-				self._goToAndUpdate( 'r-success' );
+				self._goToAndUpdate( 'result-success' );
 			} );
 		}
 

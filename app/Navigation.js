@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'dojo/_base/config', 'templates/registry' ],
-	function( $, messages, config, templateRegistry ) {
+	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry' ],
+	function( $, messages, templateRegistry ) {
 
 /**
  * Main navigation renderer creating and managing the main menu and its referred content.
@@ -103,9 +103,7 @@ $.extend( Navigation.prototype, {
 
 		$overlay.slideUp( 'fast' );
 
-		var templateDir = templateRegistry.getDir( config.locale );
-
-		$.get( config.baseUrl + templateDir + page + '.html' )
+		$.get( templateRegistry.getDir( 'content' ) + page + '.html' )
 		.done( function( html ) {
 			var $content = $( '<div class="page page-' + page + '" />' ).html( html );
 

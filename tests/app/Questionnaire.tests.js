@@ -14,22 +14,22 @@ QUnit.module( 'Questionnaire' );
 var testSets = {
 	'Helene Fischer 2010.jpg': [ {
 		la: {}, // Assertion #1
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	},
 	// 1st level:
 	{
 		la: { '3': { 1: true } },
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { format: 'html' }
 	}, {
 		la: { '3': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	}, {
 		la: { '3': { 3: true } }, // exit
-		templates: ['r-note-privateUse']
+		templates: ['result-note-privateUse']
 	}, {
 		la: { '3': { 4: true } },
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	}, {
 		la: { '3': { 5: true } }, // exit
 		templates: []
@@ -37,200 +37,200 @@ var testSets = {
 	// 2nd level:
 	{
 		la: { '3': { 1: true }, '7': { 1: true } },
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true } },
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { format: 'html' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection']
 	}, { // #10
 		la: { '3': { 2: true }, '7': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	}, {
 		la: { '3': { 4: true }, '5': { 1: true } }, // restart
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	}, {
 		la: { '3': { 4: true }, '5': { 2: true } }, //exit
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	},
 	// 3rd level:
 	{
 		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 1: true } }, // exit
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true } },
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 1: true } }, // exit
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true } },
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection']
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { licenceLink: false }
 	}, { // #20
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	},
 	// 4th level:
 	{
 		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit (unsupported)
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit (unsupported)
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
-		templates: [ 'r-note-html', 'r-restrictions' ],
+		templates: [ 'result-note-html', 'result-restrictions' ],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 1: true } }, // exit
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection']
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection']
 	}, { // #30
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 1: true } }, // exit
-		templates: ['r-note-text', 'r-restrictions']
+		templates: ['result-note-text', 'result-restrictions']
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true } },
-		templates: ['r-note-text', 'r-restrictions'],
+		templates: ['result-note-text', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	},
 	// 5th level:
 	{
 		la: { '3': { 1: true }, '7': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-		templates: ['r-note-html', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-html', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: 'Editor', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-		templates: ['r-note-html', 'r-restrictions'],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { editor: 'Editor', format: 'html' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	}, { // #40
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true } },
-		templates: ['r-note-text', 'r-restrictions'],
+		templates: ['result-note-text', 'result-restrictions'],
 			attrGenOpt: { editor: '(bearbeitet)' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 2: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions'],
+		templates: ['result-note-text', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { editor: '(bearbeitet)', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit & unsupported
-		templates: ['r-note-text', 'r-restrictions'],
+		templates: ['result-note-text', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)' }
 	},
 	// 6th level:
 	{
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection', 'result-note-fullLicence'],
 		attrGenOpt: { editor: 'Editor', licenceLink: false }
 	}, { // #50
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 1: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-		templates: ['r-note-text', 'r-restrictions', 'r-note-fullLicence'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-fullLicence'],
 		attrGenOpt: { editor: 'Editor', licenceLink: false }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-		templates: ['r-note-text', 'r-restrictions', 'r-note-collection'],
+		templates: ['result-note-text', 'result-restrictions', 'result-note-collection'],
 		attrGenOpt: { editor: 'Editor' }
 	}, {
 		la: { '3': { 2: true }, '7': { 2: true }, '8': { 2: true }, '12a': { 2: true }, '12b': { 1: true }, '13': { 1: 'Editor' } }, // exit
-		templates: ['r-note-text', 'r-restrictions'],
+		templates: ['result-note-text', 'result-restrictions'],
 		attrGenOpt: { editor: 'Editor' }
 	} ],
 	'Wien Karlsplatz3.jpg': [ {
 		la: {},
-		templates: ['r-note-text', 'r-restrictions-cc2']
+		templates: ['result-note-text', 'result-restrictions-cc2']
 	} ],
 	'LRO_Tycho_Central_Peak.jpg': [ {
 		la: {},
-		templates: ['r-note-pd']
+		templates: ['result-note-pd']
 	} ],
 	'Statue Andrrea Palladio Vicenza.jpg': [ {
 		la: {},
-		templates: ['r-note-cc0']
+		templates: ['result-note-cc0']
 	} ]
 };
 
