@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry' ],
-	function( $, messages, templateRegistry ) {
+	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/ApiError' ],
+	function( $, messages, templateRegistry, ApiError ) {
 
 /**
  * Main navigation renderer creating and managing the main menu and its referred content.
@@ -123,9 +123,16 @@ $.extend( Navigation.prototype, {
 			} );
 		} )
 		.fail( function() {
-			// TODO: Display error
-			var error = new ApiError( 'contentpage-missing' );
-			console.error( 'Unable to retrieve page ' + page );
+			var error = new ApiError( 'contentpage-missing', ajaxOptions );
+
+			$overlay.promise().done( function() {
+				$overlay.find( '.navigation-overlay-content' ).empty().append(
+					$( '<div/>' )
+					.addClass( 'navigation-overlay-error error' )
+					.text( error.getMessage() )
+				);
+				$overlay.slideDown( 'fast' );
+			} );
 		} );
 	},
 

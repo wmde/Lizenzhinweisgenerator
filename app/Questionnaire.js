@@ -134,8 +134,9 @@ $.extend( Questionnaire.prototype, {
 	 *         - {ApiError}
 	 */
 	_goTo: function( page, movingBack ) {
-		var navigationPathPosition = this._getNavigationPosition( page ),
-			deferred = $.Deferred();
+		var self = this,
+			deferred = $.Deferred(),
+			navigationPathPosition = this._getNavigationPosition( page );
 
 		if( navigationPathPosition !== -1 && movingBack ) {
 			// Navigating backwards.
@@ -154,7 +155,15 @@ $.extend( Questionnaire.prototype, {
 				deferred.resolve();
 			} )
 			.fail( function( error ) {
-				deferred.reject( error );
+				self._render( 'error' )
+				.done( function( $content ) {
+					$content.find( '.questionnaire-error' )
+						.addClass( 'error' )
+						.text( error.getMessage() );
+				} )
+				.fail( function( error ) {
+					alert( error.getMessage() );
+				} );
 			} );
 		}
 
@@ -181,7 +190,8 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @param {string} page
 	 * @return {Object} jQuery Promise
-	 *         No resolved parameters.
+	 *         Resolved parameters:
+	 *         {jQuery} Page content
 	 *         Rejected parameters:
 	 *         - {ApiError}
 	 */
@@ -202,11 +212,9 @@ $.extend( Questionnaire.prototype, {
 
 			self._toggleMinimized( 'maximize' );
 
-			deferred.resolve();
+			deferred.resolve( $content );
 		} )
 		.fail( function( error ) {
-			// TODO: Render error properly
-			console.error( error.getMessage() );
 			deferred.reject( error );
 		} );
 

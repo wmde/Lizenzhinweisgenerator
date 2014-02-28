@@ -98,3 +98,7 @@
 .questionnaire .questionnaire-page .answers li.disabled:hover {
 	text-decoration: none;
 }
+
+.questionnaire .questionnaire-error {
+	color: #d17439;
+}

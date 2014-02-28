@@ -58,3 +58,9 @@
 .navigation-overlay .navigation-overlay-icon-close:hover {
 	color: #2b88d9;
 }
+
+.navigation-overlay-error {
+	color: #d17439;
+	margin-top: 24pt;
+	text-align: center;
+}
