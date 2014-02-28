@@ -21,7 +21,7 @@ define( [
  * @param {Asset} asset
  * @param {string[]} defaultOptions
  */
-var OptionsContainer = function( $node, asset, defaultOptions ) {
+var OptionContainer = function( $node, asset, defaultOptions ) {
 	var self = this;
 
 	this._$node = $node;
@@ -45,7 +45,7 @@ var OptionsContainer = function( $node, asset, defaultOptions ) {
 		} )
 		.on( 'toggleunderlay updateunderlay', function( event, $underlay ) {
 			var $button = $underlay.data( 'anchor' ).closest( '.button' ),
-				$container = $button.closest( '.optionscontainer-option' ),
+				$container = $button.closest( '.optioncontainer-option' ),
 				padding = $underlay.outerWidth() - $underlay.width();
 
 			$button[ $underlay.is( ':visible' ) ? 'addClass' : 'removeClass' ]( 'active' );
@@ -64,9 +64,9 @@ var OptionsContainer = function( $node, asset, defaultOptions ) {
 	}
 };
 
-$.extend( OptionsContainer.prototype, {
+$.extend( OptionContainer.prototype, {
 	/**
-	 * Node of the OptionsContainer, node the Options are appended to.
+	 * Node of the OptionContainer, node the Options are appended to.
 	 * @type {jQuery}
 	 */
 	_$node: null,
@@ -105,10 +105,11 @@ $.extend( OptionsContainer.prototype, {
 			var id = this._options[i].id;
 
 			if( $.inArray( id, this._currentOptions ) !== -1 ) {
-				this._$node.append(
+				this._$node.addClass( 'optioncontainer' )
+				.append(
 					$( '<div/>' )
-					.addClass( 'optionscontainer-option' )
-					.addClass( 'optionscontainer-option-' + id )
+					.addClass( 'optioncontainer-option' )
+					.addClass( 'optioncontainer-option-' + id )
 					.append( this._options[i].instance.render() )
 				);
 				if( initialValues && initialValues[id] ) {
@@ -163,7 +164,7 @@ $.extend( OptionsContainer.prototype, {
 
 } );
 
-return OptionsContainer;
+return OptionContainer;
 
 } );
 

@@ -22,7 +22,7 @@ $.extend( RawText.prototype, Option.prototype, {
 
 		this._destroyUnderlay();
 
-		var $a = $( '<a/>' ).addClass( 'button' ).text( messages['plain text attribution'] );
+		var $a = $( '<a/>' ).addClass( 'option button' ).text( messages['plain text attribution'] );
 
 		$a
 		.on( 'mousedown', function() {

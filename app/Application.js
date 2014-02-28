@@ -7,12 +7,12 @@ define(
 		'app/Navigation',
 		'app/FrontPage',
 		'app/Questionnaire',
-		'app/OptionsContainer',
+		'app/OptionContainer',
 		'dojo/i18n!./nls/Application',
 		'dojo/_base/config',
 		'templates/registry'
 	],
-	function( $, Navigation, FrontPage, Questionnaire, OptionsContainer, messages ) {
+	function( $, Navigation, FrontPage, Questionnaire, OptionContainer, messages ) {
 
 /**
  * Application renderer.
@@ -75,9 +75,9 @@ $.extend( Application.prototype, {
 	_questionnaire: null,
 
 	/**
-	 * @type {OptionsContainer|null}
+	 * @type {OptionContainer|null}
 	 */
-	_optionsContainer: null,
+	_optionContainer: null,
 
 	/**
 	 * Starts the application.
@@ -161,7 +161,7 @@ $.extend( Application.prototype, {
 
 		this._questionnaire = this._renderQuestionnaire();
 		this._questionnaire.start().done( function() {
-			self._optionsContainer = self._renderOptionsContainer();
+			self._optionContainer = self._renderOptionContainer();
 		} );
 
 		// Evaluate to get the default attribution:
@@ -169,7 +169,7 @@ $.extend( Application.prototype, {
 			self._questionnaire.getAttributionGenerator(),
 			self._questionnaire.generateSupplement()
 		).done( function() {
-			self._optionsContainer.setAttributionGenerator(
+			self._optionContainer.setAttributionGenerator(
 				self._questionnaire.getAttributionGenerator()
 			);
 		} );
@@ -190,13 +190,13 @@ $.extend( Application.prototype, {
 		$( questionnaire )
 		.on( 'update', function( event, attributionGenerator, supplementPromise ) {
 			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
-				self._optionsContainer.setAttributionGenerator( attributionGenerator );
+				self._optionContainer.setAttributionGenerator( attributionGenerator );
 
 				var optionKeys = ( attributionGenerator.getOptions().format === 'html' )
 					? ['htmlCode']
 					: [];
 
-				self._optionsContainer.render( optionKeys, self._options );
+				self._optionContainer.render( optionKeys, self._options );
 			} );
 		} )
 		.on( 'exit', function() {
@@ -209,33 +209,33 @@ $.extend( Application.prototype, {
 	/**
 	 * Renders the options container and attaches corresponding events.
 	 */
-	_renderOptionsContainer: function() {
-		this._$node.find( '.app-options' ).remove();
+	_renderOptionContainer: function() {
+		this._$node.find( '.app-optioncontainer' ).remove();
 
 		var self = this,
-			$optionsContainer = $( '<div/>' ).addClass( 'app-options' ).appendTo( this._$node ),
-			optionsContainer = new OptionsContainer( $optionsContainer, this._asset ),
+			$optionContainer = $( '<div/>' ).addClass( 'app-optioncontainer' ).appendTo( this._$node ),
+			optionContainer = new OptionContainer( $optionContainer, this._asset ),
 			licence = this._asset.getLicence(),
 			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' ),
 			additionalOptions = renderRawText ? ['rawText'] : [];
 
-		optionsContainer.render( additionalOptions );
-		$( optionsContainer ).on( 'update', function() {
+		optionContainer.render( additionalOptions );
+		$( optionContainer ).on( 'update', function() {
 			self.updatePreview(
 				self._questionnaire.getAttributionGenerator(),
 				self._questionnaire.generateSupplement()
 			)
 			.done( function( $attributedImageFrame ) {
-				self._optionsContainer.setAttributionGenerator(
+				self._optionContainer.setAttributionGenerator(
 					self._questionnaire.getAttributionGenerator()
 				);
 
-				self._optionsContainer.getOption( 'htmlCode' )
+				self._optionContainer.getOption( 'htmlCode' )
 					.setImageHtml( $attributedImageFrame.clone() );
 			} );
 		} );
 
-		return optionsContainer;
+		return optionContainer;
 	},
 
 	/**
@@ -253,8 +253,8 @@ $.extend( Application.prototype, {
 		var self = this,
 			deferred = new $.Deferred();
 
-		this._options.imageSize = this._optionsContainer
-			? this._optionsContainer.getOption( 'imageSize' ).value()
+		this._options.imageSize = this._optionContainer
+			? this._optionContainer.getOption( 'imageSize' ).value()
 			: this._options.imageSize;
 
 		this._asset.getImageInfo( this._options.imageSize )

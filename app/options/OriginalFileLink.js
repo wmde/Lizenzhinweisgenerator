@@ -22,7 +22,7 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 	render: function() {
 		var self = this;
 
-		this._$a = $( '<a/>' ).addClass( 'button' );
+		this._$a = $( '<a/>' ).addClass( 'option button' );
 
 		this._$a
 		.on( 'mousedown', function() {

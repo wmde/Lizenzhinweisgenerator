@@ -27,7 +27,7 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 
 		this._destroyUnderlay();
 
-		var $a = $( '<a/>' ).addClass( 'button' ).text( messages['html code'] );
+		var $a = $( '<a/>' ).addClass( 'option button' ).text( messages['html code'] );
 
 		$a
 		.on( 'mousedown', function() {

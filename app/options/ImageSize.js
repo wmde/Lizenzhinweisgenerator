@@ -21,7 +21,7 @@ $.extend( ImageSize.prototype, Option.prototype, {
 	 */
 	render: function() {
 		var self = this,
-			$container = $( '<span/>' ).addClass( 'button' ),
+			$container = $( '<span/>' ).addClass( 'option button' ),
 			$label = $( '<label/>' )
 				.attr( 'for', 'option-imageSize-input' )
 				.text( messages['maximum image width/height:'] + ' ' ),

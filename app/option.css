@@ -1,0 +1,55 @@
+.option.button {
+	background: linear-gradient( 180deg, #3b679e 0%, #2b88d9 100% );
+	border: 1px solid rgba(59,103,158,0.3);
+	color: #ffffff;
+	cursor: pointer;
+	display: inline-block;
+	margin: 5pt;
+	padding: 4px 8px;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b679e', endColorstr='#2b88d9', GradientType=0 );
+}
+
+.option.button {
+	text-decoration: none;
+}
+
+.option.button:hover {
+	border: 1px solid rgba(255,255,255,0.5);
+}
+
+.option.button.active {
+	background: transparent;
+	border: 1px solid rgba(59,103,158,0.5);
+	box-shadow: inset 1px 1px 1px rgba(0,0,0,0.3);
+	padding: 5px 7px 3px 9px;
+}
+
+.option select {
+	margin: 0;
+}
+
+.option-underlay {
+	background: #2b88d9;
+	background: linear-gradient(190deg, #3b679e 0%,#2b88d9 40%);
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: #FFFFFF;
+	font-size: 10pt;
+	display: none;
+	padding: 8px 8px 24px 8px;
+	position: fixed;
+}
+
+.option-underlay textarea {
+	border: 0;
+	float: left;
+	padding: 0;
+	margin: 0;
+	resize: none;
+	width: 100%;
+}
+
+.option-underlay input {
+	clear: both;
+	float: left;
+}

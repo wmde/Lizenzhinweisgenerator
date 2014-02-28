@@ -1,0 +1,19 @@
+.optioncontainer {
+	background: linear-gradient(180deg, #3b679e 0%,#2b88d9 100%);
+	bottom: 0;
+	box-shadow: -1px -1px 10px rgba(0,0,0,0.3);
+	color: white;
+	display: table;
+	font-size: 10pt;
+	position: fixed;
+	table-layout: fixed;
+	width: 100%;
+	white-space: nowrap;
+	z-index: 1;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b679e', endColorstr='#2b88d9', GradientType=0 );
+}
+
+.optioncontainer > * {
+	display: table-cell;
+	text-align: center;
+}
