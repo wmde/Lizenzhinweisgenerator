@@ -113,12 +113,6 @@ $.extend( Api.prototype, {
 			rvparse: 1
 		} )
 		.done( function( page ) {
-			var error = self._checkPageResponse( page );
-			if( error ) {
-				deferred.reject( error );
-				return;
-			}
-
 			if( !page.revisions || page.revisions.length === 0 || !page.revisions[0]['*'] ) {
 				deferred.reject( 'Unable to resolve revisions' );
 				return;
@@ -193,12 +187,6 @@ $.extend( Api.prototype, {
 			iiurlheight: size
 		} )
 		.done( function( page ) {
-			var error = self._checkPageResponse( page );
-			if( error ) {
-				deferred.reject( error );
-				return;
-			}
-
 			if( !page.imageinfo || page.imageinfo.length === 0 ) {
 				deferred.reject( 'No image information returned' );
 			}
@@ -231,12 +219,6 @@ $.extend( Api.prototype, {
 			iilimit: 1
 		} )
 		.done( function( page ) {
-			var error = self._checkPageResponse( page );
-			if( error ) {
-				deferred.reject( error );
-				return;
-			}
-
 			if( !page.imageinfo ) {
 				deferred.resolve( 'unknown' );
 				return;
@@ -387,21 +369,6 @@ $.extend( Api.prototype, {
 	},
 
 	/**
-	 * Performs basic page response checks.
-	 *
-	 * @param {Object} page
-	 * @return {string|null}
-	 */
-	_checkPageResponse: function( page ) {
-		if( page.missing !== undefined ) {
-			return 'Unable to locate the specified file';
-		} else if( page.invalid !== undefined ) {
-			return 'Invalid input';
-		}
-		return null;
-	},
-
-	/**
 	 * Issues a call to the Commons API of a Wikipedia API querying for a specific property of a
 	 * file.
 	 *
@@ -438,16 +405,27 @@ $.extend( Api.prototype, {
 				return;
 			}
 
-			var pages = [];
+			var pages = [],
+				error;
 
 			$.each( response.query.pages, function( id, page ) {
-				pages.push( page );
+
+				if( page.missing !== undefined ) {
+					error = 'Unable to locate the specified file';
+				} else if( page.invalid !== undefined ) {
+					error = 'Invalid input';
+				} else {
+					pages.push( page );
+				}
+
 			} );
 
 			if( pages.length === 1 ) {
 				deferred.resolve( pages[0] );
 			} else if( pages.length > 0 ) {
 				deferred.resolve( pages );
+			} else if( error ) {
+				deferred.reject( error );
 			} else {
 				deferred.reject( 'The API returned a corrupted result', jqXHR );
 			}

@@ -26,7 +26,7 @@ $.extend( ApplicationError.prototype, {
 	/**
 	 * Returns the error's localized message.
 	 *
-	 * @return {string}
+	 * @return {string|undefined}
 	 */
 	getMessage: function() {
 		return messages[this._code];

@@ -144,7 +144,7 @@ $.extend( Application.prototype, {
 			$error = this._$node.find( '.error' );
 
 		$error.stop().slideUp( 'fast', function() {
-			$error.text( error.getMessage() ).slideDown( 'fast' );
+			$error.text( error.getMessage() || code ).slideDown( 'fast' );
 		} );
 	},
 
