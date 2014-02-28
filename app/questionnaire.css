@@ -1,3 +1,15 @@
+.questionnaire {
+	background: linear-gradient(160deg, rgba(245,245,245,1) 0%,rgba(245,245,245,0.9) 50%, rgba(245,245,245,0.4) 80%);
+	box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+	font-size: 13pt;
+	min-height: 85px;
+	padding: 12pt;
+	position: fixed;
+	top: 15%;
+	width: 100%;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#d9f5f5f5', GradientType=1 );
+}
+
 .questionnaire .questionnaire-icon-minimize {
 	color: #3b679e;
 	float: right;
@@ -39,7 +51,7 @@
 	-webkit-transform: scaleY(2.5);
 }
 
-.questionnaire .questionnaires-back .button:hover {
+.questionnaire .questionnaire-back .button:hover {
 	background: transparent;
 	color: #2b88d9;
 }
@@ -54,7 +66,7 @@
 	font-weight: bold;
 }
 
-.questionnaire .questionnaires-page ul.answers {
+.questionnaire .questionnaire-page ul.answers {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -79,7 +91,7 @@
 	width: 20px;
 }
 
-.questionnaire .questionnaires-page .answers li.disabled {
+.questionnaire .questionnaire-page .answers li.disabled {
 	color: rgba( 0, 0, 0, 0.25 );
 }
 

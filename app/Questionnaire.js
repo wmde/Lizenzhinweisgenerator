@@ -483,7 +483,7 @@ $.extend( Questionnaire.prototype, {
 					$.get( templateRegistry.getDir( 'questionnaire' ) + page + '.html' )
 					.done( function( html ) {
 						var $content = $( '<div/>' )
-							.addClass( 'questionnaires-page page page-' + page )
+							.addClass( 'questionnaire-page page page-' + page )
 							.data( 'questionnaire-page', page )
 							.html( html );
 
