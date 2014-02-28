@@ -44,26 +44,26 @@ $.extend( Navigation.prototype, {
 		var self = this;
 
 		var $navigation = $( '<ul class="navigation">'
-			+ '<li class="button-home">' + messages['Start'] + '</li>'
-			+ '<li class="button-about">' + messages['About'] + '</li>'
-			+ '<li class="button-feedback">' + messages['Feedback'] + '</li>'
+			+ '<li class="button navigation-button-home">' + messages['Start'] + '</li>'
+			+ '<li class="button navigation-button-about">' + messages['About'] + '</li>'
+			+ '<li class="button navigation-button-feedback">' + messages['Feedback'] + '</li>'
 			+ '</ul>' );
 
-		$navigation.children( '.button-home' )
+		$navigation.children( '.navigation-button-home' )
 		.on( 'click', function() {
 			location.reload();
 		} );
 
 		if( !showStartButton && showStartButton !== undefined ) {
-			$navigation.children( '.button-home' ).hide();
+			$navigation.children( '.navigation-button-home' ).hide();
 		}
 
-		$navigation.children( '.button-about' )
+		$navigation.children( '.navigation-button-about' )
 		.on( 'click', function() {
 			self._showOverlay( 'about' );
 		} );
 
-		$navigation.children( '.button-feedback' )
+		$navigation.children( '.navigation-button-feedback' )
 		.on( 'click', function() {
 			self._showOverlay( 'feedback' );
 		} );
@@ -83,17 +83,17 @@ $.extend( Navigation.prototype, {
 			return;
 		}
 
-		var $overlay = this._$node.find( '.overlay' );
+		var $overlay = this._$node.find( '.navigation-overlay' );
 
 		if( $overlay.length === 0 ) {
-			$overlay = $( '<div class="overlay">'
-				+ '<div class="content"></div>'
-				+ '<div class="icon-close">«</div>'
+			$overlay = $( '<div class="navigation-overlay">'
+				+ '<div class="navigation-overlay-content"></div>'
+				+ '<div class="navigation-overlay-icon-close button">«</div>'
 				+ '</div>' );
 
 			$overlay.appendTo( this._$node ).hide();
 
-			$overlay.find( '.icon-close' ).on( 'click', function() {
+			$overlay.find( '.navigation-overlay-icon-close' ).on( 'click', function() {
 				self._hideOverlay();
 			} );
 		} else if( $overlay.find( '.page-' + page ).length === 1 ) {
@@ -113,7 +113,7 @@ $.extend( Navigation.prototype, {
 			}
 
 			$overlay.promise().done( function() {
-				$overlay.find( '.content' ).empty().append( $content );
+				$overlay.find( '.navigation-overlay-content' ).empty().append( $content );
 				$overlay.slideDown( 'fast' );
 			} );
 		} )
@@ -126,7 +126,7 @@ $.extend( Navigation.prototype, {
 	 * Hides the global overlay.
 	 */
 	_hideOverlay: function() {
-		var $overlay = this._$node.find( '.overlay' );
+		var $overlay = this._$node.find( '.navigation-overlay' );
 
 		if( $overlay.length === 0 ) {
 			return;

@@ -13,78 +13,12 @@ body {
 	height: 100%;
 }
 
-.icon {
+.button {
 	cursor: pointer;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-}
-
-ul.navigation {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	position: absolute;
-	top: 0;
-	left: 100px;
-}
-
-ul.navigation li {
-	float: left;
-	color: #3b679e;
-	cursor: pointer;
-	margin: 0 4pt 4pt 4pt;
-	background: rgba(0,0,0,0.2);
-	padding: 24pt 10pt 8pt 10pt;
-	border-radius: 0 0 10px 10px;
-	box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-	font-size: 10pt;
-	display: inline;
-	background: linear-gradient(160deg, rgba(230,230,230,1) 0%,rgba(250,250,250,1) 85%);
-}
-
-ul.navigation li:hover {
-	color: #2b88d9;
-	padding-top: 28pt;
-}
-
-.overlay {
-	padding: 0 24pt;
-	overflow-y: scroll;
-	height: 80%;
-	font-size: 10pt;
-	background: rgba(255,255,255,0.8);
-	position: absolute;
-	top: 0;
-	box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-	left: 50%;
-	width: 700px;
-	margin-left: -350px;
-	border-radius: 0 0 10px 10px;
-	background: radial-gradient(ellipse at center, rgba(255,255,255,0.85) 50%,rgba(255,255,255,1) 80%);
-}
-
-.overlay .icon-close {
-	cursor: pointer;
-	position: absolute;
-	top: 0;
-	left: 700px;
-	color: #3b679e;
-	font-size: 18pt;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	-webkit-transform: rotate(90deg);
-	-moz-transform: rotate(90deg);
-	-ms-transform: rotate(90deg);
-	-o-transform: rotate(90deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-}
-
-.overlay .icon-close:hover {
-	color: #2b88d9;
 }
 
 .app-frameset {

@@ -105,7 +105,7 @@ $.extend( FrontPage.prototype, {
 	_renderHelp: function( $parentNode ) {
 		$.get( templateRegistry.getDir( 'content' ) + 'frontpage-help.html' )
 		.done( function( html ) {
-			var $helpIcon = $( '<a/>' ).addClass( 'icon frontpage-icon-help' ).text( '?' ),
+			var $helpIcon = $( '<a/>' ).addClass( 'button frontpage-icon-help' ).text( '?' ),
 				$helpContent = $( '<div/>' ).addClass( 'frontpage-help-content' ).html( html );
 
 			$parentNode
