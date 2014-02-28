@@ -1,8 +1,16 @@
 ( function( define ) {
 'use strict';
 
-define( [ 'jquery', 'app/InputHandler', 'dojo/i18n!./nls/FrontPage', 'templates/registry' ],
-	function( $, InputHandler, messages, templateRegistry ) {
+define(
+	[
+		'jquery',
+		'app/InputHandler',
+		'dojo/i18n!./nls/FrontPage',
+		'templates/registry',
+		'app/ApplicationError',
+		'dojo/_base/config'
+	],
+	function( $, InputHandler, messages, templateRegistry, ApplicationError, config ) {
 
 /**
  * Front-page renderer.
@@ -13,12 +21,11 @@ define( [ 'jquery', 'app/InputHandler', 'dojo/i18n!./nls/FrontPage', 'templates/
  *
  * @throws {Error} if a required parameter is not defined.
  *
- * @event input Triggered if a filename is ready to be processed.
+ * @event asset
+ *        Triggered when processing the input has successfully resulted in instantiating an Asset
+ *        object.
  *        (1) {jQuery.Event}
- *        (2) {string} File name
- * @event error Triggered if an error occurs.
- *        (1) {jQuery.Event}
- *        (2) {string} Error message
+ *        (2) {Asset}
  */
 var FrontPage = function( $initNode, api ) {
 	if( !$initNode || !api ) {
@@ -26,6 +33,7 @@ var FrontPage = function( $initNode, api ) {
 	}
 
 	this._$node = $initNode;
+	this._api = api;
 	this._inputHandler = new InputHandler( api );
 
 	document.title = messages['licence attribution generator'];
@@ -36,6 +44,11 @@ $.extend( FrontPage.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
+
+	/**
+	 * @type {Api}
+	 */
+	_api: null,
 
 	/**
 	 * @type {jQuery|null}
@@ -156,22 +169,66 @@ $.extend( FrontPage.prototype, {
 		this._inputHandler.getFilename( input )
 		.done( function( filenameOrImageInfos, wikiUrl ) {
 			if( typeof filenameOrImageInfos === 'string' ) {
-				$( self ).trigger( 'input', [filenameOrImageInfos, wikiUrl] );
+				self._processFilename( filenameOrImageInfos, wikiUrl );
 				deferred.resolve( filenameOrImageInfos );
 			} else {
 				self._renderSuggestions( filenameOrImageInfos );
 			}
 		} )
 		.fail( function( error ) {
-			// TODO: Render error here instead of triggering an event
-			$( self ).trigger( 'error', [error] );
-			deferred.reject( error );
+			self._displayError( error );
 		} )
 		.always( function() {
 			self._$node.find( 'input' ).removeClass( 'loading' );
 		} );
 
 		return deferred;
+	},
+
+	/**
+	 * Processes a filename and updates the page rendering accordingly.
+	 *
+	 * @param {string} prefixedFilename
+	 * @param {string} [wikiUrl]
+	 *
+	 * @triggers asset
+	 */
+	_processFilename: function( prefixedFilename, wikiUrl ) {
+		var self = this;
+
+		self._api.getAsset( prefixedFilename, wikiUrl )
+		.done( function( asset ) {
+			if( !asset.getLicence() ) {
+				self._displayError( new ApplicationError( 'licence-unknown' ) );
+				return;
+			}
+
+			if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
+				self._displayError( new ApplicationError( 'datatype-unsupported' ) );
+				return;
+			}
+
+			$( self ).trigger( 'asset', [asset] );
+		} )
+		.fail( function( error ) {
+			self._displayError( error );
+		} )
+		.always( function() {
+			self._$node.find( 'input' ).removeClass( 'loading' );
+		} );
+	},
+
+	/**
+	 * Displays an error on the front-page.
+	 *
+	 * @param {ApplicationError} error
+	 */
+	_displayError: function( error ) {
+		var $error = this._$node.find( '.error' );
+
+		$error.stop().slideUp( 'fast', function() {
+			$error.text( error.getMessage() ).slideDown( 'fast' );
+		} );
 	},
 
 	/**

@@ -7,11 +7,9 @@ define(
 		'app/Navigation',
 		'app/FrontPage',
 		'app/Questionnaire',
-		'app/OptionContainer',
-		'app/ApplicationError',
-		'dojo/_base/config'
+		'app/OptionContainer'
 	],
-	function( $, Navigation, FrontPage, Questionnaire, OptionContainer, ApplicationError, config ) {
+	function( $, Navigation, FrontPage, Questionnaire, OptionContainer ) {
 
 /**
  * Application renderer.
@@ -92,60 +90,12 @@ $.extend( Application.prototype, {
 		this._frontPage = new FrontPage( this._$node, this._api );
 
 		$( this._frontPage )
-		.on( 'input', function( event, prefixedFilename, wikiUrl ) {
-			self._processFilename( prefixedFilename, wikiUrl );
-		} )
-		.on( 'error', function( event, message ) {
-			self._displayError( message );
+		.on( 'asset', function( event, asset ) {
+			self._asset = asset;
+			self._renderApplicationPage();
 		} );
 
 		this._frontPage.render();
-	},
-
-	// TODO: Move this method to FrontPage
-	/**
-	 * Processes a filename and updates the page rendering accordingly.
-	 *
-	 * @param {string} prefixedFilename
-	 * @param {string} [wikiUrl]
-	 */
-	_processFilename: function( prefixedFilename, wikiUrl ) {
-		var self = this;
-
-		self._api.getAsset( prefixedFilename, wikiUrl )
-		.done( function( asset ) {
-			if( !asset.getLicence() ) {
-				self._displayError( new ApplicationError( 'licence-unknown' ) );
-				return;
-			}
-
-			if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
-				self._displayError( new ApplicationError( 'datatype-unsupported' ) );
-				return;
-			}
-
-			self._asset = asset;
-			self._renderApplicationPage();
-		} )
-		.fail( function( error ) {
-			self._displayError( error );
-		} )
-		.always( function() {
-			self._$node.find( 'input' ).removeClass( 'loading' );
-		} );
-	},
-
-	/**
-	 * Displays an error on the front-page.
-	 *
-	 * @param {ApplicationError} error
-	 */
-	_displayError: function( error ) {
-		var $error = this._$node.find( '.error' );
-
-		$error.stop().slideUp( 'fast', function() {
-			$error.text( error.getMessage() ).slideDown( 'fast' );
-		} );
 	},
 
 	/**
