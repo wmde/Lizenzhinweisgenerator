@@ -18,6 +18,8 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 
 	/**
 	 * @see Option.render
+	 *
+	 * @triggers error
 	 */
 	render: function() {
 		var self = this;
@@ -47,9 +49,8 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 				} );
 			}
 		} )
-		.fail( function() {
-			// TODO: Trigger an error event to have the option removed from the OptionContainer
-			self._$a.replaceWith( $() );
+		.fail( function( error ) {
+			$( self ).trigger( 'error', [error] );
 		} );
 
 		return self._$a;

@@ -60,6 +60,23 @@ var OptionContainer = function( $node, asset, defaultOptions ) {
 				top: $container.offset().top - $underlay.outerHeight(),
 				left: $container.offset().left + $container.width() / 2 - $underlay.outerWidth() / 2
 			} );
+		} )
+		.on( 'error', function( event ) {
+			var id;
+
+			for( var i = 0; i < self._options.length; i++ ) {
+				if( self._options[i].instance === this ) {
+					id = self._options[i].id;
+				}
+			}
+
+			var index = $.inArray( id, self._currentOptions );
+
+			if( index !== -1 ) {
+				self._currentOptions.splice( index, 1 );
+			}
+
+			self._reRender();
 		} );
 	}
 };
@@ -91,13 +108,14 @@ $.extend( OptionContainer.prototype, {
 	_currentOptions: null,
 
 	/**
-	 * Renders the bar according to the submitted option ids.
+	 * Renders the bar according to the submitted option ids. If no option ids are given, the
+	 * default options will be rendered.
 	 *
 	 * @param {string[]} [ids]
 	 * @param {Object} [initialValues]
 	 */
 	render: function( ids, initialValues ) {
-		this._currentOptions = $.merge( $.merge( [], this._defaultOptions ), ids || [] );
+		this._currentOptions = ids || this._defaultOptions;
 
 		this._$node.empty();
 
@@ -135,6 +153,16 @@ $.extend( OptionContainer.prototype, {
 		for( i = 0; i < this._options.length; i++ ) {
 			this._options[i].instance.value( values[this._options[i].id] );
 		}
+	},
+
+	/**
+	 * Returns the default options' id.
+	 */
+	push: function( optionId ) {
+		if( $.inArray( optionId, this._currentOptions ) === -1 ) {
+			this._currentOptions.push( optionId );
+		}
+		this._reRender();
 	},
 
 	/**

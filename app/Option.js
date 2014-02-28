@@ -12,6 +12,12 @@ define( ['jquery' ], function( $ ) {
  *        Triggered whenever the option's value is changed.
  *        (1) {jQuery.Event}
  *
+ * @event error
+ *        Triggered when the option is in an erroneous state indicating that the option's rendering
+ *        should be removed.
+ *        (1) {jQuery.Event}
+ *        (2) {ApplicationError}
+ *
  * @param {Asset} asset
  */
 var Option = function( asset ) {

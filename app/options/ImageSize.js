@@ -54,10 +54,20 @@ $.extend( ImageSize.prototype, Option.prototype, {
 	 * @see Option.value
 	 */
 	value: function( value ) {
+		var self = this;
+
 		if( value === undefined ) {
 			return this._$select ? this._$select.val() : null;
+		} else if( !value ) {
+			return;
 		}
-		this._$select.val( value );
+
+		this._$select.children( 'option' ).each( function() {
+			if( $( this ).attr( 'value' ) === value.toString() ) {
+				self._$select.val( value.toString() );
+				return false;
+			}
+		} );
 	}
 
 

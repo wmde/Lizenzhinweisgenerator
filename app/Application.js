@@ -192,13 +192,8 @@ $.extend( Application.prototype, {
 		$( questionnaire )
 		.on( 'update', function( event, attributionGenerator, supplementPromise ) {
 			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
+				self._optionContainer.push( 'htmlCode' );
 				self._optionContainer.setAttributionGenerator( attributionGenerator );
-
-				var optionKeys = ( attributionGenerator.getOptions().format === 'html' )
-					? ['htmlCode']
-					: [];
-
-				self._optionContainer.render( optionKeys, self._options );
 			} );
 		} )
 		.on( 'exit', function() {
@@ -220,10 +215,12 @@ $.extend( Application.prototype, {
 				.appendTo( this._$node ),
 			optionContainer = new OptionContainer( $optionContainer, this._asset ),
 			licence = this._asset.getLicence(),
-			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' ),
-			additionalOptions = renderRawText ? ['rawText'] : [];
+			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
 
-		optionContainer.render( additionalOptions );
+		if( renderRawText ) {
+			optionContainer.push( 'rawText' );
+		}
+
 		$( optionContainer ).on( 'update', function() {
 			self.updatePreview(
 				self._questionnaire.getAttributionGenerator(),
