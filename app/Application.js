@@ -80,8 +80,10 @@ $.extend( Application.prototype, {
 
 	/**
 	 * Starts the application.
+	 *
+	 * @param {string} [url]
 	 */
-	start: function() {
+	start: function( url ) {
 		var self = this;
 
 		this._$node.empty();
@@ -89,7 +91,7 @@ $.extend( Application.prototype, {
 		this._navigation = new Navigation( this._$node, this._api );
 
 		var $frontPage = $( '<div/>' );
-		this._frontPage = new FrontPage( $frontPage, this._api );
+		this._frontPage = new FrontPage( $frontPage, this._api, url );
 
 		$( this._frontPage )
 		.on( 'asset', function( event, asset ) {
@@ -159,8 +161,7 @@ $.extend( Application.prototype, {
 	_addEventHandlers: function( instance ) {
 		var self = this;
 
-		$( instance )
-		.on( 'update', function() {
+		$( instance ).on( 'update', function() {
 			self._preview.update(
 				self._questionnaire.getAttributionGenerator(),
 				self._questionnaire.generateSupplement(),
@@ -178,6 +179,12 @@ $.extend( Application.prototype, {
 				}
 			} );
 		} );
+
+		if( instance instanceof Questionnaire ) {
+			$( instance ).on( 'back', function( event, asset ) {
+				self.start( asset.getUrl() );
+			} );
+		}
 	},
 
 	/**

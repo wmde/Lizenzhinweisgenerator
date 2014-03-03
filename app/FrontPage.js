@@ -20,6 +20,7 @@ define(
  *
  * @param {jQuery} $node
  * @param {Api} api
+ * @param {string} url
  *
  * @throws {Error} if a required parameter is not defined.
  *
@@ -29,7 +30,7 @@ define(
  *        (1) {jQuery.Event}
  *        (2) {Asset}
  */
-var FrontPage = function( $node, api ) {
+var FrontPage = function( $node, api, url ) {
 	if( !$node || !api ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
@@ -40,7 +41,7 @@ var FrontPage = function( $node, api ) {
 
 	document.title = messages['licence attribution generator'];
 
-	this._render();
+	this._render( url );
 };
 
 $.extend( FrontPage.prototype, {
@@ -66,8 +67,10 @@ $.extend( FrontPage.prototype, {
 
 	/**
 	 * Renders the front page.
+	 *
+	 * @param {string} [url]
 	 */
-	_render: function() {
+	_render: function( url ) {
 		var self = this;
 
 		var $input = $( '<input type="text"/>' )
@@ -78,6 +81,10 @@ $.extend( FrontPage.prototype, {
 					self._submit();
 				}
 			} );
+
+		if( url ) {
+			$input.val( url );
+		}
 
 		this._$node
 		.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )

@@ -29,6 +29,10 @@ define(
  *        selected).
  *        (1) {jQuery.Event}
  *
+ * @event back Triggered when navigating back out of the questionnaire's context.
+ *       (1) {jQuery.Event}
+ *       (2) {Asset}
+ *
  * @throws {Error} on incorrect parameters.
  * @throws {Error} if asset does not feature a proper licence.
  */
@@ -393,6 +397,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {jQuery}
 	 *
 	 * @triggers update
+	 * @triggers back
 	 */
 	_generateBackButton: function() {
 		var self = this,
@@ -400,16 +405,16 @@ $.extend( Questionnaire.prototype, {
 			.addClass( 'questionnaire-back' )
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
-		if( this._navigationCache.length === 0 ) {
-			$backButton.addClass( 'disabled' );
-		} else {
-			$backButton.on( 'click', function() {
+		$backButton.on( 'click', function() {
+			if( self._navigationCache.length === 0 ) {
+				$( self ).trigger( 'back', [self._asset] );
+			} else {
 				self._goTo( self._navigationCache[self._navigationCache.length - 1].page, true )
 				.done( function() {
 					$( self ).trigger( 'update' );
 				} );
-			} );
-		}
+			}
+		} );
 
 		return $backButton;
 	},
