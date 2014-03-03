@@ -403,7 +403,7 @@ $.extend( Api.prototype, {
 
 		$.ajax( ajaxOptions )
 		.done( function( response ) {
-			if( response.query === undefined || response.query.pages == undefined ) {
+			if( response.query === undefined || response.query.pages === undefined ) {
 				deferred.reject( new AjaxError( 'response-unexpected', ajaxOptions ) );
 				return;
 			}
@@ -412,8 +412,9 @@ $.extend( Api.prototype, {
 				errorCode;
 
 			$.each( response.query.pages, function( id, page ) {
+				var isSharedImage = property === 'imageinfo' && page.imagerepository === 'shared';
 
-				if( page.missing !== undefined ) {
+				if( page.missing !== undefined && !isSharedImage ) {
 					errorCode = 'page-missing';
 				} else if( page.invalid !== undefined ) {
 					errorCode = 'page-invalid';
