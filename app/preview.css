@@ -3,6 +3,14 @@
 	text-align: left;
 }
 
+.preview h3 {
+	margin-bottom: 4pt;
+}
+
+.preview p {
+	margin: 4pt 0;
+}
+
 .preview > div {
 	clear: both;
 }
@@ -19,12 +27,13 @@
 	border-left: 1px solid #d3d3d3;
 	box-shadow: 0 0 8px rgba(0,0,0,0.1);
 	font-size: 10pt;
-	padding: 16px 16px 24pt 16px;
+	padding: 16px 16px 32pt 16px;
 	position: absolute;
 	right: 0;
 	text-align: left;
 	top: 0;
 	width: 300px;
+	z-index: 1;
 }
 
 .preview-error {
