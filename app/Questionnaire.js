@@ -683,6 +683,7 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_applyLogic: function( $page ) {
 		var self = this,
+			value,
 			p = $page.data( 'questionnaire-page' );
 
 		if( p === '3' ) {
@@ -716,18 +717,65 @@ $.extend( Questionnaire.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 1, '12a' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12a' );
 		} else if( p === '9' ) {
-			$page.find( 'a.a1' ).on( 'click', function() {
-				var value = $.trim( $( 'input.a1' ).val() );
-				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-				self._log( '9', 1, value );
-				self._goToAndUpdate( '3' );
-			} );
-			$page.find( '.a2' ).on( 'click', function() {
-				var value = 'unbekannt';
+
+			var submit9a = function() {
+				if( !self._getLoggedString( '9', '1' ) ) {
+					submit9b();
+				} else {
+					self._log( '9', 1, function() {
+						return self._getLoggedString( '9', '1' );
+					} );
+					self._goToAndUpdate( '3' );
+				}
+			};
+
+			var submit9b = function() {
+				var value =  messages['unknown'];
 				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
 				self._log( '9', 2, value );
 				self._goToAndUpdate( '3' );
+			};
+
+			$page.find( 'input.a1' )
+			.on( 'keyup', function() {
+				var value = $.trim( $( this ).val() );
+
+				if( value === '' ) {
+					self._asset.setAuthors(
+						[new Author( $( document.createTextNode( messages['unknown'] ) ) )]
+					);
+					delete self._loggedAnswers['9'];
+					delete self._loggedStrings['9'];
+				} else {
+					self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
+					self._log( '9', 1, value, false );
+				}
+
+				$( self ).trigger( 'update' );
+			} )
+			.on( 'keypress', function( event ) {
+				if( event.keyCode === 13 ) {
+					event.preventDefault();
+					submit9a();
+				}
 			} );
+
+			$page.find( 'a.a1' ).on( 'click', function() {
+				submit9a();
+			} );
+
+			$page.find( '.a2' ).on( 'click', function() {
+				submit9b();
+			} );
+
+			// Initially update when moving forward to this page. This ensures displaying "unknown
+			// author" when accessing the page the first time.
+			if( !this._getLoggedString( '9', 1 ) ) {
+				value = messages['unknown'];
+				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
+				$( this ).trigger( 'update' );
+			}
+
 		} else if( p === '12a' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, 'result-success' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
@@ -767,9 +815,11 @@ $.extend( Questionnaire.prototype, {
 				submit13();
 			} );
 
-			// Initially update when moving back to this page:
-			if( this._getLoggedString( '13', 1 ) ) {
-				this._log( '13', 1, this._getLoggedString( '13', 1 ), false );
+			// Initially update when moving back to this page to reflect previously entered value in
+			// preview:
+			value = this._getLoggedString( '13', 1 );
+			if( value ) {
+				this._log( '13', 1, value, false );
 				$( this ).trigger( 'update' );
 			}
 		}

@@ -1,4 +1,5 @@
 define( {
 	'notes and advice': 'Anmerkungen und Hinweise',
-	'(edited)': '(bearbeitet)'
+	'(edited)': '(bearbeitet)',
+	'unknown': 'unknown'
 } );
