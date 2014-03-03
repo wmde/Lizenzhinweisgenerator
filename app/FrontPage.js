@@ -63,6 +63,11 @@ $.extend( FrontPage.prototype, {
 	_inputHandler: null,
 
 	/**
+	 * @type {string|null}
+	 */
+	_initialPaddingTop: null,
+
+	/**
 	 * Renders the front page.
 	 */
 	render: function() {
@@ -99,12 +104,17 @@ $.extend( FrontPage.prototype, {
 		} );
 
 		this._$frontPage = $frontPage;
+		this._initialPaddingTop = this._$frontPage.css( 'paddingTop' );
 	},
 
 	/**
 	 * Submits the input.
 	 */
 	_submit: function() {
+		this._$frontPage.stop().animate( {
+			paddingTop: this._initialPaddingTop
+		} );
+
 		this._$frontPage.find( '.frontpage-error' )
 			.stop()
 			.slideUp( 'fast' );
@@ -269,6 +279,10 @@ $.extend( FrontPage.prototype, {
 		}
 
 		$suggestions.empty().append( $ul );
+
+		this._$frontPage.stop().animate( {
+			paddingTop: '30pt'
+		} );
 	}
 
 } );
