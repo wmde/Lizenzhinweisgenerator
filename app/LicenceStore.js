@@ -1,3 +1,7 @@
+/**
+ * @licence GNU GPL v3
+ * @author snater.com < wikimedia@snater.com >
+ */
 define( ['jquery', 'app/Licence'], function( $, Licence ) {
 'use strict';
 

@@ -1,3 +1,7 @@
+/**
+ * @licence GNU GPL v3
+ * @author snater.com < wikimedia@snater.com >
+ */
 define(
 	['jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/AjaxError'],
 	function( $, messages, templateRegistry, AjaxError ) {

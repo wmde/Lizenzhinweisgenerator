@@ -1,3 +1,7 @@
+/**
+ * @licence GNU GPL v3
+ * @author snater.com < wikimedia@snater.com >
+ */
 define( ['jquery', 'app/Option', 'dojo/i18n!./nls/RawText'], function( $, Option, messages ) {
 'use strict';
 

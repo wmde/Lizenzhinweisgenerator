@@ -1,3 +1,7 @@
+/**
+ * @licence GNU GPL v3
+ * @author snater.com < wikimedia@snater.com >
+ */
 define(
 	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/Asset', 'app/Author'],
 	function( $, Api, LicenceStore, LICENCES, Asset, Author ) {
