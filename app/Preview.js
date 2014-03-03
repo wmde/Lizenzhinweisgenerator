@@ -19,7 +19,8 @@ var Preview = function( $node, asset ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
-	this._$node = $node;
+	this._$node = $node.addClass( 'preview' ).append( $( '<div/>' ).addClass( 'preview-spacer' ) );
+
 	this._asset = asset;
 };
 
@@ -33,6 +34,11 @@ $.extend( Preview.prototype, {
 	 * @type {Asset}
 	 */
 	_asset: null,
+
+	/**
+	 * @type {number}
+	 */
+	_currentImageSize: null,
 
 	/**
 	 * Updates the preview.
@@ -52,20 +58,18 @@ $.extend( Preview.prototype, {
 
 		this._asset.getImageInfo( imageSize )
 		.done( function( imageInfo ) {
-			var $attributedImageFrame = self._attributedImageHtml( imageInfo ),
-				$preview = self._create( $attributedImageFrame );
+			var $attributedImageFrame = self._$node.find( '.attributed-image-frame' );
 
-			self._$node.replaceWith( $preview );
-			self._$node = $preview;
+			if( imageSize === self._currentImageSize ) {
+				$attributedImageFrame.children().not( '.attributed-image' ).remove();
+			} else {
+				self._$node.find( '.attributed-image-frame' ).remove();
 
-			self._$node.find( '.attributed-image-frame' ).append( attributionGenerator.generate() );
+				$attributedImageFrame = self._attributedImageHtml( imageInfo )
+					.appendTo( self._$node );
+			}
 
-			self._$node.find( 'img' ).on( 'load', function() {
-				self._$node.find( '.preview-spacer' ).css(
-					'marginBottom',
-					-1 * parseInt( self._$node.find( '.attributed-image-frame' ).height() / 2, 10 )
-				);
-			} );
+			$attributedImageFrame.append( attributionGenerator.generate() );
 
 			supplementPromise.done( function( $content ) {
 				var $supplement = self._$node.find( '.preview-supplement' );
@@ -77,6 +81,8 @@ $.extend( Preview.prototype, {
 
 				$supplement.empty().append( $content );
 			} );
+
+			self._currentImageSize = imageSize;
 
 			deferred.resolve( $attributedImageFrame );
 		} )
@@ -105,22 +111,19 @@ $.extend( Preview.prototype, {
 			+ '</a>'
 			+ '</div></div>';
 
-		var $attributedImageFrame = $( html );
+		var self = this,
+			$attributedImageFrame = $( html );
+
 		$attributedImageFrame.width( imageInfo.getThumbnail().width );
 
-		return $attributedImageFrame;
-	},
+		$attributedImageFrame.find( 'img' ).on( 'load', function() {
+			self._$node.find( '.preview-spacer' ).css(
+				'marginBottom',
+				-1 * parseInt( $attributedImageFrame.height() / 2, 10 )
+			);
+		} );
 
-	/**
-	 * Renders the preview.
-	 *
-	 * @param {jQuery} $attributedImageHtml
-	 * @return {jQuery}
-	 */
-	_create: function( $attributedImageHtml ) {
-		return $( '<div/>' ).addClass( 'preview' )
-			.append( $( '<div/>' ).addClass( 'preview-spacer' ) )
-			.append( $attributedImageHtml );
+		return $attributedImageFrame;
 	}
 
 } );
