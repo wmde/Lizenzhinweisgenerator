@@ -10,6 +10,7 @@ define( ['jquery'], function( $ ) {
  * @constructor
  *
  * @param {jQuery} $node
+ * @param {Asset} asset
  *
  * @throws {Error} if a required parameter is not defined.
  */
@@ -66,10 +67,15 @@ $.extend( Preview.prototype, {
 				);
 			} );
 
-			supplementPromise.done( function( $supplement ) {
-				self._$node.append(
-					$( '<div/>' ).addClass( 'preview-supplement' ).append( $supplement )
-				);
+			supplementPromise.done( function( $content ) {
+				var $supplement = self._$node.find( '.preview-supplement' );
+
+				if( $supplement.length === 0 ) {
+					$supplement = $( '<div/>' ).addClass( 'preview-supplement' )
+						.appendTo( self._$node );
+				}
+
+				$supplement.empty().append( $content );
 			} );
 
 			deferred.resolve( $attributedImageFrame );
