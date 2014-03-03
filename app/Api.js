@@ -1,8 +1,6 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config', 'app/AjaxError'],
 	function( $, AssetPage, ImageInfo, config, AjaxError ) {
+'use strict';
 
 /**
  * Commons API Handler.
@@ -444,5 +442,3 @@ $.extend( Api.prototype, {
 return Api;
 
 } );
-
-}( define ) );

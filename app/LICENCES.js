@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['app/Licence'], function( Licence ) {
+'use strict';
 
 /**
  * Array of licences. The licence will be detected by order: If an asset features multiple licences,
@@ -23,5 +21,3 @@ return [
 ];
 
 } );
-
-}( define ) );

@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/Licence'], function( $, Licence ) {
+'use strict';
 
 /**
  * Licence store storing an ordered list of licences.
@@ -116,5 +114,3 @@ $.extend( LicenceStore.prototype, {
 return LicenceStore;
 
 } );
-
-}( define ) );

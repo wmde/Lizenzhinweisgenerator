@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/Option', 'dojo/i18n!./nls/RawText'], function( $, Option, messages ) {
+'use strict';
 
 function RawText() {
 	Option.apply( this, arguments );
@@ -68,5 +66,3 @@ $.extend( RawText.prototype, Option.prototype, {
 return RawText;
 
 } );
-
-}( define ) );

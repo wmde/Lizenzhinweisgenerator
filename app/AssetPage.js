@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/Asset', 'app/Author'], function( $, Asset, Author ) {
+'use strict';
 
 /**
  * Represents a Commons asset page.
@@ -207,5 +205,3 @@ $.extend( AssetPage.prototype, {
 return AssetPage;
 
 } );
-
-}( define ) );

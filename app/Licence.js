@@ -1,8 +1,6 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'dojo/_base/config', 'app/ApplicationError'],
 	function( $, config, ApplicationError ) {
+'use strict';
 
 /**
  * Represents a licence.
@@ -214,5 +212,3 @@ Licence.newFromAbstract = function( abstractLicence, rawText ) {
 return Licence;
 
 } );
-
-}( define ) );

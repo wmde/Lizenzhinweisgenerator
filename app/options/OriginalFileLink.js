@@ -1,8 +1,6 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/Option', 'dojo/i18n!./nls/OriginalFileLink'],
 	function( $, Option, messages ) {
+'use strict';
 
 function OriginalFileLink() {
 	Option.apply( this, arguments );
@@ -71,5 +69,3 @@ $.extend( OriginalFileLink.prototype, Option.prototype, {
 return OriginalFileLink;
 
 } );
-
-}( define ) );

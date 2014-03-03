@@ -1,6 +1,3 @@
-( function( define ) {
-'use strict';
-
 define(
 	[
 		'jquery',
@@ -10,6 +7,7 @@ define(
 		'app/OptionContainer'
 	],
 	function( $, Navigation, FrontPage, Questionnaire, OptionContainer ) {
+'use strict';
 
 /**
  * Application renderer.
@@ -283,5 +281,3 @@ $.extend( Application.prototype, {
 return Application;
 
 } );
-
-}( define ) );

@@ -1,6 +1,3 @@
-( function( define ) {
-'use strict';
-
 define( [
 	'jquery',
 	'app/options/OriginalFileLink',
@@ -8,6 +5,7 @@ define( [
 	'app/options/ImageSize',
 	'app/options/RawText'
 ], function( $, OriginalFileLink, HtmlCode, ImageSize, RawText ) {
+'use strict';
 
 /**
  * Visual container for input elements that act as options.
@@ -204,5 +202,3 @@ $.extend( OptionContainer.prototype, {
 return OptionContainer;
 
 } );
-
-}( define ) );

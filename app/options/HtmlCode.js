@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/Option', 'dojo/i18n!./nls/HtmlCode'], function( $, Option, messages ) {
+'use strict';
 
 function HtmlCode() {
 	Option.apply( this, arguments );
@@ -163,5 +161,3 @@ $.extend( HtmlCode.prototype, Option.prototype, {
 return HtmlCode;
 
 } );
-
-}( define ) );

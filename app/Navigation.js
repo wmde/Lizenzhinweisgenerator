@@ -1,9 +1,7 @@
-( function( define ) {
-'use strict';
-
 define(
 	['jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/AjaxError'],
 	function( $, messages, templateRegistry, AjaxError ) {
+'use strict';
 
 /**
  * Main navigation renderer creating and managing the main menu and its referred content.
@@ -182,5 +180,3 @@ $.extend( Navigation.prototype, {
 return Navigation;
 
 } );
-
-}( define ) );

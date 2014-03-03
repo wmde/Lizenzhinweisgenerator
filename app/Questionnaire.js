@@ -1,17 +1,16 @@
 /* global alert */
-( function( alert ) {
-'use strict';
-
-define( [
-	'jquery',
-	'app/Asset',
-	'app/AttributionGenerator',
-	'app/Author',
-	'dojo/i18n!./nls/Questionnaire',
-	'templates/registry',
-	'app/AjaxError'
-],
+define(
+	[
+		'jquery',
+		'app/Asset',
+		'app/AttributionGenerator',
+		'app/Author',
+		'dojo/i18n!./nls/Questionnaire',
+		'templates/registry',
+		'app/AjaxError'
+	],
 	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry, AjaxError ) {
+'use strict';
 
 /**
  * Represents a questionnaire's logic.
@@ -829,5 +828,3 @@ $.extend( Questionnaire.prototype, {
 return Questionnaire;
 
 } );
-
-}( alert ) );

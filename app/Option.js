@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery'], function( $ ) {
+'use strict';
 
 /**
  * Option
@@ -131,5 +129,3 @@ $.extend( Option.prototype, {
 return Option;
 
 } );
-
-}( define ) );

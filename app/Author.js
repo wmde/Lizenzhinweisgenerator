@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery'], function( $ ) {
+'use strict';
 
 /**
  * Represents a Commons author.
@@ -38,5 +36,3 @@ $.extend( Author.prototype, {
 return Author;
 
 } );
-
-}( define ) );

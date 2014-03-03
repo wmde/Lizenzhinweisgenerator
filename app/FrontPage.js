@@ -1,6 +1,3 @@
-( function( define ) {
-'use strict';
-
 define(
 	[
 		'jquery',
@@ -11,6 +8,7 @@ define(
 		'dojo/_base/config'
 	],
 	function( $, InputHandler, messages, templateRegistry, ApplicationError, config ) {
+'use strict';
 
 /**
  * Front-page renderer.
@@ -274,5 +272,3 @@ $.extend( FrontPage.prototype, {
 return FrontPage;
 
 } );
-
-}( define ) );

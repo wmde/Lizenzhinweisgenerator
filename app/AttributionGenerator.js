@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery'], function( $ ) {
+'use strict';
 
 /**
  * Generator for attribution texts.
@@ -241,5 +239,3 @@ $.extend( AttributionGenerator.prototype, {
 return AttributionGenerator;
 
 } );
-
-}( define ) );

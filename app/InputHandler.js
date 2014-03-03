@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/ApplicationError'], function( $, ApplicationError ) {
+'use strict';
 
 /**
  * Returns a filename by analyzing input.
@@ -216,5 +214,3 @@ $.extend( InputHandler.prototype, {
 return InputHandler;
 
 } );
-
-}( define ) );

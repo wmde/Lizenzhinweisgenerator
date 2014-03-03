@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery', 'app/Option', 'dojo/i18n!./nls/ImageSize'], function( $, Option, messages ) {
+'use strict';
 
 function ImageSize() {
 	Option.apply( this, arguments );
@@ -76,5 +74,3 @@ $.extend( ImageSize.prototype, Option.prototype, {
 return ImageSize;
 
 } );
-
-}( define ) );

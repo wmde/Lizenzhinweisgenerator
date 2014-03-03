@@ -1,7 +1,5 @@
-( function( define ) {
-'use strict';
-
 define( ['jquery'], function( $ ) {
+'use strict';
 
 /**
  * Standardized container for image information.
@@ -80,5 +78,3 @@ ImageInfo.newFromMediaWikiImageInfoJson = function( imageinfo ) {
 return ImageInfo;
 
 } );
-
-}( define ) );
