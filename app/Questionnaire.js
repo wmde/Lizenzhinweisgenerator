@@ -28,12 +28,6 @@ define(
  * @event update Triggered whenever the attribution is updated (basically, whenever a new answer is
  *        selected).
  *        (1) {jQuery.Event}
- *        (2) {AttributionGenerator} Attribution generator instantiated at the current stage of the
- *            questionnaire.
- *        (3) {Object} jQuery Promise (see generateSupplement() for parameters)
- *
- * @event exit Triggered when the questionnaire is completed.
- *        (1) {jQuery.Event}
  *
  * @throws {Error} on incorrect parameters.
  * @throws {Error} if asset does not feature a proper licence.
@@ -108,7 +102,7 @@ $.extend( Questionnaire.prototype, {
 			page = '3';
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
-			page = this.exit;
+			page = this._exit;
 		} else if( licenceId === 'CC' ) {
 			page = '15';
 		} else if( this._asset.getAuthors().length === 0 ) {
@@ -272,18 +266,14 @@ $.extend( Questionnaire.prototype, {
 	/**
 	 * Exits the questionnaire.
 	 *
-	 * @triggers update
-	 * @triggers exit
-	 *
 	 * @throws {Error} if questionnaire has not yet been started.
 	 */
-	exit: function() {
+	_exit: function() {
 		if( this._navigationCache === null ) {
 			throw new Error( 'Trying to exit questionnaire although it hast not been started' );
 		}
 
-		this._$node.empty();
-		$( this ).trigger( 'exit' );
+		this._$node.remove();
 	},
 
 	/**
@@ -416,10 +406,7 @@ $.extend( Questionnaire.prototype, {
 			$backButton.on( 'click', function() {
 				self._goTo( self._navigationCache[self._navigationCache.length - 1].page, true )
 				.done( function() {
-					$( self ).trigger(
-						'update',
-						[self.getAttributionGenerator(), self.generateSupplement()]
-					);
+					$( self ).trigger( 'update' );
 				} );
 			} );
 		}
@@ -750,8 +737,6 @@ $.extend( Questionnaire.prototype, {
 	 * @param {string} page
 	 * @param {number|string} answer
 	 * @param {string} [value] If omitted, boolean "true" is logged for the answer.
-	 *
-	 * @triggers update
 	 */
 	_log: function( page, answer, value ) {
 		if( !this._loggedAnswers[page] ) {
@@ -799,17 +784,14 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @param {string|Function} toPage
 	 *
-	 * @trigger update
+	 * @triggers update
 	 */
 	_goToAndUpdate: function( toPage ) {
 		var self = this;
 
 		this._goTo( toPage )
 		.done( function() {
-			$( self ).trigger(
-				'update',
-				[self.getAttributionGenerator(), self.generateSupplement()]
-			);
+			$( self ).trigger( 'update' );
 		} );
 	},
 

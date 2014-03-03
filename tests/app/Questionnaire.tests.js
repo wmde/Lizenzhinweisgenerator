@@ -279,53 +279,6 @@ QUnit.test( 'start()', function( assert ) {
 	} );
 } );
 
-QUnit.test( 'exit()', function( assert ) {
-
-	$.each( testAssets, function( filename, testAsset ) {
-
-		if( testAsset.getLicence() === null ) {
-			return true;
-		}
-
-		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' ),
-			issuedEvent = false;
-
-		assert.throws(
-			function() {
-				questionnaire.exit();
-			},
-			'(' + testAsset.getTitle() + ') Throwing error when trying to exit the '
-			+ 'questionnaire without it being started.'
-		);
-
-		// Overwrite function that only would generate API overhead and are not subject of this
-		// test:
-		questionnaire.generateSupplement = function() {
-			return undefined;
-		};
-		questionnaire.getAttributionGenerator = function() {
-			return undefined;
-		};
-
-		questionnaire.start();
-
-		$( questionnaire ).on( 'exit', function() {
-			issuedEvent = true;
-		} );
-
-		questionnaire.exit();
-
-		assert.ok(
-			issuedEvent,
-			'(' + testAsset.getTitle() + ') Issuing "exit" function triggered "exit" event.'
-		);
-
-		$( questionnaire ).off( 'exit' );
-
-	} );
-
-} );
-
 QUnit.test( 'generateSupplement()', function( assert ) {
 	var testStack = [];
 

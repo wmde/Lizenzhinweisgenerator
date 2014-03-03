@@ -110,99 +110,72 @@ $.extend( Application.prototype, {
 		var $preview = $( '<div/>' );
 		this._preview = new Preview( $preview, asset );
 
-		this._$node
-		.empty()
-		.append( this._navigation.create() )
-		.append( $preview );
+		var $questionnaire = $( '<div/>' );
+		this._questionnaire = new Questionnaire( $questionnaire, asset );
+		this._addEventHandlers( this._questionnaire );
 
-		this._questionnaire = this._renderQuestionnaire();
-		this._questionnaire.start().done( function() {
-			self._optionContainer = self._renderOptionContainer();
-		} );
-
-		// Evaluate to get the default attribution:
-		this._preview.update(
-			self._questionnaire.getAttributionGenerator(),
-			self._questionnaire.generateSupplement(),
-			self._getImageSize()
-		).done( function() {
-			self._optionContainer.setAttributionGenerator(
-				self._questionnaire.getAttributionGenerator()
-			);
-		} );
-	},
-
-	/**
-	 * Renders and starts the questionnaire.
-	 *
-	 * @param {Asset} asset
-	 */
-	_renderQuestionnaire: function( asset ) {
-		var self = this;
-
-		// Remove any pre-existing node:
-		this._$node.find( '.application-questionnaire' ).remove();
-
-		var $questionnaire = $( '<div/>' )
-				.addClass( 'application-questionnaire' )
-				.prependTo( this._$node ),
-			questionnaire = new Questionnaire( $questionnaire, asset );
-
-		$( questionnaire )
-		.on( 'update', function( event, attributionGenerator, supplementPromise ) {
-			self._preview.update(
-				attributionGenerator,
-				supplementPromise,
-				self._getImageSize()
-			).done( function() {
-				self._optionContainer.push( 'htmlCode' );
-				self._optionContainer.setAttributionGenerator( attributionGenerator );
-			} );
-		} )
-		.on( 'exit', function() {
-			$questionnaire.remove();
-		} );
-
-		return questionnaire;
-	},
-
-	/**
-	 * Renders the options container and attaches corresponding events.
-	 *
-	 * @param {Asset} asset
-	 */
-	_renderOptionContainer: function( asset ) {
-		this._$node.find( '.application-optioncontainer' ).remove();
-
-		var self = this,
-			$optionContainer = $( '<div/>' )
-				.addClass( 'application-optioncontainer' )
-				.appendTo( this._$node ),
-			optionContainer = new OptionContainer( $optionContainer, asset ),
+		var $optionContainer = $( '<div/>' ),
 			licence = asset.getLicence(),
 			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
 
+		this._optionContainer = new OptionContainer( $optionContainer, asset );
+
 		if( renderRawText ) {
-			optionContainer.push( 'rawText' );
+			this._optionContainer.push( 'rawText' );
 		}
 
-		$( optionContainer ).on( 'update', function() {
+		this._addEventHandlers( this._optionContainer );
+
+		this._$node
+		.empty()
+		.append( this._navigation.create() )
+		.append( $preview )
+		.append( $questionnaire )
+		.append( $optionContainer );
+
+		this._questionnaire.start().done( function() {
+			self._optionContainer.render();
+
+			// Evaluate initial state to reflect the default attribution:
 			self._preview.update(
 				self._questionnaire.getAttributionGenerator(),
 				self._questionnaire.generateSupplement(),
 				self._getImageSize()
-			)
-			.done( function( $attributedImageFrame ) {
+			).done( function() {
 				self._optionContainer.setAttributionGenerator(
 					self._questionnaire.getAttributionGenerator()
 				);
-
-				self._optionContainer.getOption( 'htmlCode' )
-					.setImageHtml( $attributedImageFrame.clone() );
 			} );
 		} );
+	},
 
-		return optionContainer;
+	/**
+	 * Adds event handlers to the provided instance.
+	 *
+	 * @param {*} instance
+	 */
+	_addEventHandlers: function( instance ) {
+		var self = this;
+
+		$( instance )
+		.on( 'update', function() {
+			self._preview.update(
+				self._questionnaire.getAttributionGenerator(),
+				self._questionnaire.generateSupplement(),
+				self._getImageSize()
+			).done( function( $attributedImageFrame ) {
+				if( instance instanceof Questionnaire ) {
+					self._optionContainer.push( 'htmlCode' );
+					self._optionContainer.setAttributionGenerator(
+						self._questionnaire.getAttributionGenerator()
+					);
+
+				} else if ( instance instanceof OptionContainer ) {
+					self._optionContainer.getOption( 'htmlCode' )
+					.setImageHtml( $attributedImageFrame.clone() );
+				}
+			} );
+		} );
 	},
 
 	/**

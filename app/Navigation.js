@@ -11,17 +11,17 @@ define(
  * Main navigation renderer creating and managing the main menu and its referred content.
  * @constructor
  *
- * @param {jQuery} $initNode
+ * @param {jQuery} $node
  * @param {Api} api
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Navigation = function( $initNode, api ) {
-	if( !$initNode || !api ) {
+var Navigation = function( $node, api ) {
+	if( !$node || !api ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
-	this._$node = $initNode;
+	this._$node = $node;
 	this._api = api;
 };
 
