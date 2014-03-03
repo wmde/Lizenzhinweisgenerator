@@ -87,16 +87,18 @@ $.extend( Application.prototype, {
 		this._$node.empty();
 
 		this._navigation = new Navigation( this._$node, this._api );
-		this._$node.append( this._navigation.create( false ) );
 
-		this._frontPage = new FrontPage( this._$node, this._api );
+		var $frontPage = $( '<div/>' );
+		this._frontPage = new FrontPage( $frontPage, this._api );
 
 		$( this._frontPage )
 		.on( 'asset', function( event, asset ) {
 			self._renderApplicationPage( asset );
 		} );
 
-		this._frontPage.render();
+		this._$node
+		.append( this._navigation.create( false ) )
+		.append( $frontPage );
 	},
 
 	/**

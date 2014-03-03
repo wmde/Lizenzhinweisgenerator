@@ -18,7 +18,7 @@ define(
  * Front-page renderer.
  * @constructor
  *
- * @param {jQuery} $initNode
+ * @param {jQuery} $node
  * @param {Api} api
  *
  * @throws {Error} if a required parameter is not defined.
@@ -29,16 +29,18 @@ define(
  *        (1) {jQuery.Event}
  *        (2) {Asset}
  */
-var FrontPage = function( $initNode, api ) {
-	if( !$initNode || !api ) {
+var FrontPage = function( $node, api ) {
+	if( !$node || !api ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
-	this._$node = $initNode;
+	this._$node = $node.addClass( 'frontpage' );
 	this._api = api;
 	this._inputHandler = new InputHandler( api );
 
 	document.title = messages['licence attribution generator'];
+
+	this._render();
 };
 
 $.extend( FrontPage.prototype, {
@@ -53,11 +55,6 @@ $.extend( FrontPage.prototype, {
 	_api: null,
 
 	/**
-	 * @type {jQuery|null}
-	 */
-	_$frontPage: null,
-
-	/**
 	 * @type {InputHandler}
 	 */
 	_inputHandler: null,
@@ -70,7 +67,7 @@ $.extend( FrontPage.prototype, {
 	/**
 	 * Renders the front page.
 	 */
-	render: function() {
+	_render: function() {
 		var self = this;
 
 		var $input = $( '<input type="text"/>' )
@@ -82,46 +79,43 @@ $.extend( FrontPage.prototype, {
 				}
 			} );
 
-		var $frontPage = $( '<div/>' ).addClass( 'frontpage' )
-			.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
-			.append( $( '<div/>' ).addClass( 'frontpage-container-input' ).append( $input ) )
-			.append( $( '<button/>' ).text( messages['generate attribution'] ) );
+		this._$node
+		.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
+		.append( $( '<div/>' ).addClass( 'frontpage-container-input' ).append( $input ) )
+		.append( $( '<button/>' ).text( messages['generate attribution'] ) );
 
-		this._$node.append( $frontPage );
+		this._renderHelp( this._$node.find( '.frontpage-container-input' ) );
 
-		this._renderHelp( $frontPage.find( '.frontpage-container-input' ) );
-
-		$frontPage.find( 'input' )
+		this._$node.find( 'input' )
 		.on( 'dragenter dragover', false )
 		.on( 'drop', function( event ) {
 			event.preventDefault();
 			self._evaluateInput( event );
 		} );
 
-		$frontPage.find( 'button' )
+		this._$node.find( 'button' )
 		.on( 'click', function() {
 			self._submit();
 		} );
-
-		this._$frontPage = $frontPage;
-		this._initialPaddingTop = this._$frontPage.css( 'paddingTop' );
 	},
 
 	/**
 	 * Submits the input.
 	 */
 	_submit: function() {
-		this._$frontPage.stop().animate( {
+		this._initialPaddingTop = this._initialPaddingTop || this._$node.css( 'paddingTop' );
+
+		this._$node.stop().animate( {
 			paddingTop: this._initialPaddingTop
 		} );
 
-		this._$frontPage.find( '.frontpage-error' )
+		this._$node.find( '.frontpage-error' )
 			.stop()
 			.slideUp( 'fast' );
 
-		this._$frontPage.find( '.frontpage-suggestions' ).remove();
-		this._$frontPage.find( 'input' ).addClass( 'loading' );
-		this._evaluateInput( this._$frontPage.find( 'input' ).val() );
+		this._$node.find( '.frontpage-suggestions' ).remove();
+		this._$node.find( 'input' ).addClass( 'loading' );
+		this._evaluateInput( this._$node.find( 'input' ).val() );
 	},
 
 	/**
@@ -250,11 +244,11 @@ $.extend( FrontPage.prototype, {
 	 */
 	_renderSuggestions: function( imageInfos ) {
 		var self = this,
-			$suggestions = this._$frontPage.find( '.frontpage-suggestions' );
+			$suggestions = this._$node.find( '.frontpage-suggestions' );
 
 		if( $suggestions.length === 0 ) {
 			$suggestions = $( '<div/>' ).addClass( 'frontpage-suggestions ' )
-				.appendTo( this._$frontPage );
+				.appendTo( this._$node );
 		}
 
 		/**
@@ -280,7 +274,7 @@ $.extend( FrontPage.prototype, {
 
 		$suggestions.empty().append( $ul );
 
-		this._$frontPage.stop().animate( {
+		this._$node.stop().animate( {
 			paddingTop: '30pt'
 		} );
 	}
