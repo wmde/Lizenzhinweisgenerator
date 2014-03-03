@@ -1,4 +1,5 @@
-( function( define, QUnit ) {
+( function( QUnit ) {
+'use strict';
 
 define(
 	['jquery', 'app/Api', 'app/Author', 'app/LicenceStore', 'app/LICENCES', 'tests/assets'],
@@ -15,7 +16,7 @@ define(
 	 * @return {string|null}
 	 */
 	function getHtmlText( $node ) {
-		return $node ? $( '<div/>' ).append( $node ).html() : null
+		return $node ? $( '<div/>' ).append( $node ).html() : null;
 	}
 
 	QUnit.test( 'Check scraped asset', function( assert ) {
@@ -87,7 +88,7 @@ define(
 				);
 			} )
 			.always( function() {
-				QUnit.start()
+				QUnit.start();
 			} );
 
 		} );
@@ -102,31 +103,34 @@ define(
 			'TimedText:Elephants_Dream.ogg.ca.srt'
 		];
 
-		for( var i = 0; i < negativeTestCases.length; i++ ) {
-			var input = negativeTestCases[i];
-
+		/**
+		 * @param {string} input
+		 */
+		function testAssetErrorHandling( input ) {
 			QUnit.stop();
 
-			( function( input ) {
-				api.getAsset( 'File:' + input )
-				.done( function( parsedFilename ) {
-					assert.ok(
-						false,
-						'Unexpected result: "' + parsedFilename + '".'
-					);
-				} ).fail( function( message ) {
-					assert.ok(
-						true,
-						'Rejected input "' + input + '" with error message "' + message + '".'
-					);
-				} )
-				.always( function() {
-					QUnit.start();
-				} );
-			}( input ) );
+			api.getAsset( 'File:' + input )
+			.done( function( parsedFilename ) {
+				assert.ok(
+					false,
+					'Unexpected result: "' + parsedFilename + '".'
+				);
+			} ).fail( function( message ) {
+				assert.ok(
+					true,
+					'Rejected input "' + input + '" with error message "' + message + '".'
+				);
+			} )
+			.always( function() {
+				QUnit.start();
+			} );
+		}
+
+		for( var i = 0; i < negativeTestCases.length; i++ ) {
+			testAssetErrorHandling(  negativeTestCases[i] );
 		}
 	} );
 
 } );
 
-}( define, QUnit ) );
+}( QUnit ) );

@@ -1,4 +1,4 @@
-define( [ 'jquery', 'app/ApplicationError', 'dojo/i18n!./nls/AjaxError' ],
+define( ['jquery', 'app/ApplicationError', 'dojo/i18n!./nls/AjaxError'],
 	function( $, ApplicationError, messages ) {
 'use strict';
 

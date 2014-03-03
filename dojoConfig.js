@@ -1,4 +1,4 @@
-dojoConfig = {
+this.dojoConfig = {
 	baseUrl: './',
 	packages: [
 		{

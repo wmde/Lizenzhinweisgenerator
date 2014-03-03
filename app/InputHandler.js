@@ -15,7 +15,7 @@ var InputHandler = function( api ) {
 	if( !api ) {
 		throw new Error( 'Improper specification of required parameters' );
 	}
-	this._api = api
+	this._api = api;
 };
 
 $.extend( InputHandler.prototype, {
@@ -90,7 +90,7 @@ $.extend( InputHandler.prototype, {
 			&& event.dataTransfer.items[0].getAsString !== undefined
 		) {
 			event.dataTransfer.items[0].getAsString( function( url ) {
-				deferred.resolve( url )
+				deferred.resolve( url );
 			} );
 		} else {
 			var img = event.dataTransfer.getData( 'text/html' );

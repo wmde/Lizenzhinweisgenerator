@@ -1,4 +1,5 @@
-( function( define ) {
+( function( QUnit ) {
+'use strict';
 
 define(
 	['jquery', 'app/AttributionGenerator', 'tests/assets'],
@@ -150,4 +151,4 @@ QUnit.test( 'generate()', function( assert ) {
 
 } );
 
-}( define ) );
+}( QUnit ) );

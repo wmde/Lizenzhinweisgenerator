@@ -142,7 +142,7 @@ $.extend( Asset.prototype, {
 	getAuthors: function( options ) {
 		options = options || {};
 
-		if( !options.format !== 'string' ) {
+		if( options.format !== 'string' ) {
 			return this._authors;
 		}
 

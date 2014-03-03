@@ -22,8 +22,6 @@ define( [
  * @param {string[]} defaultOptions
  */
 var OptionContainer = function( $node, asset, defaultOptions ) {
-	var self = this;
-
 	this._$node = $node;
 	this._defaultOptions = defaultOptions || [
 		'imageSize',
@@ -39,45 +37,7 @@ var OptionContainer = function( $node, asset, defaultOptions ) {
 	];
 
 	for( var i = 0; i < this._options.length; i++ ) {
-		$( this._options[i].instance )
-		.on( 'update', function() {
-			$( self ).trigger( 'update' );
-		} )
-		.on( 'toggleunderlay updateunderlay', function( event, $underlay ) {
-			var $button = $underlay.data( 'anchor' ).closest( '.button' ),
-				$container = $button.closest( '.optioncontainer-option' ),
-				padding = $underlay.outerWidth() - $underlay.width();
-
-			$button[ $underlay.is( ':visible' ) ? 'addClass' : 'removeClass' ]( 'active' );
-
-			$underlay.width( $container.width() - 10 - padding );
-
-			$underlay.css( 'width', 'auto' );
-			$underlay.css( 'top', '0' );
-			$underlay.css( 'left', '0' );
-
-			$underlay.offset( {
-				top: $container.offset().top - $underlay.outerHeight(),
-				left: $container.offset().left + $container.width() / 2 - $underlay.outerWidth() / 2
-			} );
-		} )
-		.on( 'error', function( event ) {
-			var id;
-
-			for( var i = 0; i < self._options.length; i++ ) {
-				if( self._options[i].instance === this ) {
-					id = self._options[i].id;
-				}
-			}
-
-			var index = $.inArray( id, self._currentOptions );
-
-			if( index !== -1 ) {
-				self._currentOptions.splice( index, 1 );
-			}
-
-			self._reRender();
-		} );
+		this._attachEventHandlers( this._options[i].instance );
 	}
 };
 
@@ -106,6 +66,55 @@ $.extend( OptionContainer.prototype, {
 	 * @type {string[]}
 	 */
 	_currentOptions: null,
+
+	/**
+	 * Attaches default event handlers to an Option instance.
+	 *
+	 * @param {Option} optionInstance
+	 */
+	_attachEventHandlers: function( optionInstance ) {
+		var self = this;
+
+		$( optionInstance )
+		.on( 'update', function() {
+			$( self ).trigger( 'update' );
+		} )
+		.on( 'toggleunderlay updateunderlay', function( event, $underlay ) {
+			var $button = $underlay.data( 'anchor' ).closest( '.button' ),
+				$container = $button.closest( '.optioncontainer-option' ),
+				padding = $underlay.outerWidth() - $underlay.width();
+
+			$button[ $underlay.is( ':visible' ) ? 'addClass' : 'removeClass' ]( 'active' );
+
+			$underlay.width( $container.width() - 10 - padding );
+
+			$underlay.css( 'width', 'auto' );
+			$underlay.css( 'top', '0' );
+			$underlay.css( 'left', '0' );
+
+			$underlay.offset( {
+				top: $container.offset().top - $underlay.outerHeight(),
+				left: $container.offset().left + $container.width() / 2 - $underlay.outerWidth() / 2
+			} );
+		} )
+		.on( 'error', function() {
+			var id;
+
+			for( var i = 0; i < self._options.length; i++ ) {
+				if( self._options[i].instance === this ) {
+					id = self._options[i].id;
+				}
+			}
+
+			var index = $.inArray( id, self._currentOptions );
+
+			if( index !== -1 ) {
+				self._currentOptions.splice( index, 1 );
+			}
+
+			self._reRender();
+		} );
+	},
 
 	/**
 	 * Renders the bar according to the submitted option ids. If no option ids are given, the

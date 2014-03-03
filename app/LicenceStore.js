@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['app/Licence'], function( Licence ) {
+define( ['jquery', 'app/Licence'], function( $, Licence ) {
 
 /**
  * Licence store storing an ordered list of licences.
@@ -74,12 +74,14 @@ $.extend( LicenceStore.prototype, {
 			strings = [strings];
 		}
 
-		var detectedLicences = [];
+		var detectedLicences = [],
+			i,
+			j;
 
-		for( var i = 0; i < strings.length; i++ ) {
+		for( i = 0; i < strings.length; i++ ) {
 			var string = strings[i];
 
-			for( var j = 0; j < this._licences.length; j++ ) {
+			for( j = 0; j < this._licences.length; j++ ) {
 				var licence = this._licences[j];
 
 				if( licence.match( string ) ) {

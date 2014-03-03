@@ -74,7 +74,7 @@ ImageInfo.newFromMediaWikiImageInfoJson = function( imageinfo ) {
 			width: imageinfo.thumbwidth || null,
 			height: imageinfo.thumbheight || null
 		}
-	)
+	);
 };
 
 return ImageInfo;

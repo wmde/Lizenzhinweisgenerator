@@ -1,7 +1,9 @@
-( function( define ) {
+( function( QUnit ) {
+'use strict';
 
-define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/ImageInfo'],
-	function( InputHandler, Api, LicenceStore, LICENCES, ImageInfo ) {
+define(
+	['jquery', 'app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/ImageInfo'],
+	function( $, InputHandler, Api, LicenceStore, LICENCES, ImageInfo ) {
 
 	QUnit.module( 'InputHandler' );
 
@@ -81,44 +83,46 @@ define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app
 	QUnit.test( 'getFilename()', function( assert ) {
 		var inputHandler = new InputHandler( api );
 
+		/**
+		 * @param {Object} testCase
+		 * @param {string} currentInput
+		 */
+		function testGetFilename( testCase, currentInput ) {
+			QUnit.stop();
+
+			inputHandler.getFilename( currentInput )
+			.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
+				assert.equal(
+					prefixedFilenameOrImageInfos,
+					testCase.expected.file,
+					'Detected correct filename "' + testCase.expected.file + '" on input "'
+						+ currentInput + '".'
+				);
+
+				assert.strictEqual(
+					wikiUrl,
+					testCase.expected.wikiUrl,
+					'Detected correct wiki URL "' + testCase.expected.wikiUrl + '" on '
+						+ 'input "' + currentInput + '".'
+				);
+			} )
+			.fail( function( message ) {
+				assert.ok(
+					false,
+					'Parsing input "' + currentInput + '" failed with message "' + message
+						+ '".'
+				);
+			} )
+			.always( function() {
+				QUnit.start();
+			} );
+		}
+
 		for( var i = 0; i < testCases.length; i++ ) {
 			var testCase = testCases[i];
 
 			for( var j = 0; j < testCase.input.length; j++ ) {
-
-				QUnit.stop();
-
-				( function( testCase, currentInput ) {
-
-					inputHandler.getFilename( currentInput )
-					.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
-						assert.equal(
-							prefixedFilenameOrImageInfos,
-							testCase.expected.file,
-							'Detected correct filename "' + testCase.expected.file + '" on input "'
-								+ currentInput + '".'
-						);
-
-						assert.strictEqual(
-							wikiUrl,
-							testCase.expected.wikiUrl,
-							'Detected correct wiki URL "' + testCase.expected.wikiUrl + '" on '
-								+ 'input "' + currentInput + '".'
-						);
-					} )
-					.fail( function( message ) {
-						assert.ok(
-							false,
-							'Parsing input "' + currentInput + '" failed with message "' + message
-								+ '".'
-						)
-					} )
-					.always( function() {
-						QUnit.start();
-					} );
-
-				}( testCase, testCase.input[j] ) );
-
+				testGetFilename( testCase, testCase.input[j] );
 			}
 		}
 	} );
@@ -153,43 +157,45 @@ define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app
 			}
 		];
 
+		/**
+		 * @param {Object} testCase
+		 * @param {string} currentInput
+		 */
+		function assertReturnedImageObjects( testCase, currentInput ) {
+			QUnit.stop();
+
+			inputHandler.getFilename( currentInput )
+			.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
+				assert.ok(
+					$.isArray( prefixedFilenameOrImageInfos )
+					&& prefixedFilenameOrImageInfos[0] instanceof ImageInfo,
+					'Received ImageInfo objects for input "' + currentInput + '".'
+				);
+
+				assert.strictEqual(
+					wikiUrl,
+					testCase.expected.wikiUrl,
+					'Detected correct wiki URL "' + testCase.expected.wikiUrl + '" on '
+						+ 'input "' + currentInput + '".'
+				);
+			} )
+			.fail( function( message ) {
+				assert.ok(
+					false,
+					'Parsing input "' + currentInput + '" failed with message "' + message
+						+ '".'
+				);
+			} )
+			.always( function() {
+				QUnit.start();
+			} );
+		}
+
 		for( var i = 0; i < testCases.length; i++ ) {
 			var testCase = testCases[i];
 
 			for( var j = 0; j < testCase.input.length; j++ ) {
-
-				QUnit.stop();
-
-				( function( testCase, currentInput ) {
-
-					inputHandler.getFilename( currentInput )
-					.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
-						assert.ok(
-							$.isArray( prefixedFilenameOrImageInfos )
-							&& prefixedFilenameOrImageInfos[0] instanceof ImageInfo,
-							'Received ImageInfo objects for input "' + currentInput + '".'
-						);
-
-						assert.strictEqual(
-							wikiUrl,
-							testCase.expected.wikiUrl,
-							'Detected correct wiki URL "' + testCase.expected.wikiUrl + '" on '
-								+ 'input "' + currentInput + '".'
-						);
-					} )
-					.fail( function( message ) {
-						assert.ok(
-							false,
-							'Parsing input "' + currentInput + '" failed with message "' + message
-								+ '".'
-						)
-					} )
-					.always( function() {
-						QUnit.start();
-					} );
-
-				}( testCase, testCase.input[j] ) );
-
+				assertReturnedImageObjects( testCase, testCase.input[j] );
 			}
 
 		}
@@ -197,4 +203,4 @@ define( ['app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app
 
 } );
 
-}( define ) );
+}( QUnit ) );

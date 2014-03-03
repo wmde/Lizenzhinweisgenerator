@@ -2,7 +2,7 @@
 'use strict';
 
 define(
-	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/AjaxError' ],
+	['jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/AjaxError'],
 	function( $, messages, templateRegistry, AjaxError ) {
 
 /**

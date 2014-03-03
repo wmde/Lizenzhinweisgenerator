@@ -1,4 +1,5 @@
-( function( define ) {
+( function( QUnit ) {
+'use strict';
 
 define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 
@@ -57,7 +58,7 @@ define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 			licenceStore.getLicences().length,
 			licences.length,
 			'Instantiated licence store with ' + licences.length + ' licences.'
-		)
+		);
 	} );
 
 	QUnit.test( 'appendLicence()', function( assert ) {
@@ -125,7 +126,7 @@ define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 					testSet[i].licence,
 					'Detected licence "' + testSet[i].licence.getId() + '" on "' + detectables[i][j]
 						+ '"'
-				)
+				);
 			}
 		}
 
@@ -138,4 +139,4 @@ define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 
 } );
 
-}( define ) );
+}( QUnit ) );

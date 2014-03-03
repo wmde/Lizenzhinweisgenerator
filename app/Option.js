@@ -1,7 +1,7 @@
 ( function( define ) {
 'use strict';
 
-define( ['jquery' ], function( $ ) {
+define( ['jquery'], function( $ ) {
 
 /**
  * Option
@@ -56,7 +56,7 @@ $.extend( Option.prototype, {
 	 * @return {*}
 	 */
 	value: function( value ) {
-		throw new Error( 'Abstract function "value" is not implemented' )
+		throw new Error( 'Abstract function "value" is not implemented' );
 	},
 
 	/**

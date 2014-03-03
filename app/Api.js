@@ -105,8 +105,7 @@ $.extend( Api.prototype, {
 	 *         - {AjaxError}
 	 */
 	_getPageContent: function( prefixedFilename, wikiUrl ) {
-		var self = this,
-			deferred = $.Deferred();
+		var deferred = $.Deferred();
 
 		this._query( prefixedFilename, 'revisions', wikiUrl, {
 			rvprop: 'content',
@@ -178,8 +177,7 @@ $.extend( Api.prototype, {
 	 *         - {AjaxError}
 	 */
 	getImageInfo: function( prefixedFilename, size, wikiUrl ) {
-		var self = this,
-			deferred = $.Deferred();
+		var deferred = $.Deferred();
 
 		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
 			iiprop: 'url',
@@ -212,8 +210,7 @@ $.extend( Api.prototype, {
 	 *         - {AjaxError}
 	 */
 	_getMediaType: function( prefixedFilename, wikiUrl ) {
-		var self = this,
-			deferred = $.Deferred();
+		var deferred = $.Deferred();
 
 		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
 			iiprop: 'mediatype',
@@ -299,8 +296,7 @@ $.extend( Api.prototype, {
 	 *         - {AjaxError}
 	 */
 	_getWikipediaPageImages: function( title, wikiUrl ) {
-		var self = this,
-			deferred = $.Deferred();
+		var deferred = $.Deferred();
 
 		var params = {
 			imlimit: 100,

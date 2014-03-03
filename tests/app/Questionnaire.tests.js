@@ -1,4 +1,5 @@
-( function( define, QUnit ) {
+( function( QUnit ) {
+'use strict';
 
 define(
 	['jquery', 'app/Questionnaire', 'app/AttributionGenerator', 'tests/assets'],
@@ -111,7 +112,7 @@ var testSets = {
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 1: true }, '7': { 2: true }, '12a': { 2: true }, '12b': { 3: true } }, // exit (unsupported)
-		templates: [ 'result-note-html', 'result-restrictions' ],
+		templates: ['result-note-html', 'result-restrictions'],
 		attrGenOpt: { editor: '(bearbeitet)', format: 'html' }
 	}, {
 		la: { '3': { 2: true }, '7': { 1: true }, '8': { 1: true }, '12a': { 1: true } }, // exit
@@ -356,10 +357,6 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 					}
 				}
 
-				if( error ) {
-					console.error( $pages );
-				}
-
 				assert.ok(
 					!error,
 					'(' + testAsset.getTitle() + ') Using expected templates ('
@@ -392,18 +389,24 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 		return deferred.promise();
 	}
 
+	/**
+	 * @param {Function[]} testStack
+	 * @param {Asset} testAsset
+	 * @param {Object} testCase
+	 * @return {Function[]}
+	 */
+	function pushToTestStack( testStack, testAsset, testCase ) {
+		testStack.push( function() {
+			return assertProperTemplateUsage( testAsset, testCase );
+		} );
+		return testStack;
+	}
+
 	$.each( testSets, function( filename, testCases ) {
 		var testAsset = testAssets[filename];
 
 		for( var i = 0; i < testCases.length; i++ ) {
-			var testCase = testCases[i];
-
-			( function( testStack, testAsset, testCase ) {
-				testStack.push( function() {
-					return assertProperTemplateUsage( testAsset, testCase );
-				} );
-			}( testStack, testAsset, testCase ) );
-
+			testStack = pushToTestStack( testStack, testAsset, testCases[i] );
 		}
 	} );
 
@@ -478,24 +481,30 @@ QUnit.test( 'getAttributionGenerator()', function( assert ) {
 			deferred.resolve();
 		} )
 		.always( function() {
-			deferred.resolve()
+			deferred.resolve();
 		} );
 
 		return deferred.promise();
+	}
+
+	/**
+	 * @param {Function[]} testStack
+	 * @param {Asset} testAsset
+	 * @param {Object} testCase
+	 * @return {Function[]}
+	 */
+	function pushToTestStack( testStack, testAsset, testCase ) {
+		testStack.push( function() {
+			return assertProperAttributionGenerator( testAsset, testCase );
+		} );
+		return testStack;
 	}
 
 	$.each( testSets, function( filename, testCases ) {
 		var testAsset = testAssets[filename];
 
 		for( var i = 0; i < testCases.length; i++ ) {
-			var testCase = testCases[i];
-
-			( function( testStack, testAsset, testCase ) {
-				testStack.push( function() {
-					return assertProperAttributionGenerator( testAsset, testCase );
-				} );
-			}( testStack, testAsset, testCase ) );
-
+			pushToTestStack( testStack, testAsset, testCases[i] );
 		}
 	} );
 
@@ -515,4 +524,4 @@ QUnit.test( 'getAttributionGenerator()', function( assert ) {
 
 } );
 
-}( define, QUnit ) );
+}( QUnit ) );

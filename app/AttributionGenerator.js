@@ -211,7 +211,7 @@ $.extend( AttributionGenerator.prototype, {
 		$title = $( '<span/>' ).addClass( 'attribution-title' );
 
 		if( format === 'html' ) {
-			$title.append( $( '<a/>' ).attr( 'href', this._asset.getUrl() ).text( title ) )
+			$title.append( $( '<a/>' ).attr( 'href', this._asset.getUrl() ).text( title ) );
 		} else {
 			$title.text( title );
 		}

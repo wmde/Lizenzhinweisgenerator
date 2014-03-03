@@ -1,8 +1,7 @@
-( function( define ) {
-
 define(
 	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/Asset', 'app/Author'],
 	function( $, Api, LicenceStore, LICENCES, Asset, Author ) {
+'use strict';
 
 var api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
 
@@ -126,7 +125,7 @@ return {
 		null,
 		api,
 		{
-			authors: [new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() ) ]
+			authors: [new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() )]
 		}
 	),
 	'"Граничар" - Туховища.JPG': new Asset(
@@ -251,5 +250,3 @@ return {
 };
 
 } );
-
-}( define ) );

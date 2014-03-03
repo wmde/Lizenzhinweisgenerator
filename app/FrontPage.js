@@ -245,16 +245,24 @@ $.extend( FrontPage.prototype, {
 				.appendTo( this._$frontPage );
 		}
 
+		/**
+		 * @param {jQuery} $li
+		 * @param {Object} imageInfo
+		 */
+		function attachEventHandler( $li, imageInfo ) {
+			$li.on( 'click', function() {
+				self._evaluateInput( imageInfo.getDescriptionUrl() );
+			} );
+		}
+
 		var $ul = $( '<ul/>' );
 		for( var i = 0; i < imageInfos.length; i++ ) {
 			var $li = $( '<li/>' ).append(
 				$( '<img/>' ).attr( 'border', '0' ).attr( 'src', imageInfos[i].getThumbnail().url )
 			);
-			( function( imageInfo ) {
-				$li.on( 'click', function() {
-					self._evaluateInput( imageInfo.getDescriptionUrl() );
-				} );
-			}( imageInfos[i] ) );
+
+			attachEventHandler( $li, imageInfos[i] );
+
 			$ul.append( $li );
 		}
 

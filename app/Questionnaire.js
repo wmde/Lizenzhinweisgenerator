@@ -1,4 +1,5 @@
-( function( define ) {
+/* global alert */
+( function( alert ) {
 'use strict';
 
 define( [
@@ -476,49 +477,61 @@ $.extend( Questionnaire.prototype, {
 	 *         - {string} Error message.
 	 */
 	_fetchPages: function( pages ) {
-		var self = this,
-			deferred = $.Deferred(),
-			promises = [],
+		var deferreds = [$.Deferred()],
 			$pages = $();
 
 		if( typeof pages === 'string' ) {
 			pages = [pages];
 		}
 
+		deferreds[0].resolve( $pages );
+
 		for( var i = 0; i < pages.length; i++ ) {
-			( function( page ) {
-				var d = $.Deferred();
-
-				deferred.then( function() {
-					var ajaxOptions = {
-						url: templateRegistry.getDir( 'questionnaire' ) + page + '.html',
-						dataType: 'html'
-					};
-
-					$.ajax( ajaxOptions )
-					.done( function( html ) {
-						var $content = $( '<div/>' )
-							.addClass( 'questionnaire-page page page-' + page )
-							.data( 'questionnaire-page', page )
-							.html( html );
-
-						$pages = $pages.add( self._applyFunctionality( $content ) );
-						d.resolve( $pages );
-					} )
-					.fail( function() {
-						d.reject( new AjaxError( 'questionnaire-page-missing', ajaxOptions ) );
-					} );
-
-					return d.promise();
-				} );
-
-				promises.push( d.promise() );
-			}( pages[i] ) );
+			deferreds.push( this._fetchPage( deferreds[deferreds.length - 1], pages[i] ) );
 		}
 
-		deferred.resolve( $pages );
+		return deferreds[deferreds.length - 1].promise();
+	},
 
-		return promises[promises.length - 1];
+	/**
+	 * Fetches the DOM structure of a specific page by id and adds it to preexisting DOM.
+	 *
+	 * @param {Object} deferred jQuery Deferred
+	 *        Required resolved parameter:
+	 *        - {jQuery} Preexisting DOM
+	 * @param {string} page
+	 * @return {Object} jQuery Deferred
+	 *         Resolved parameters:
+	 *         - {jQuery} Preexisting DOM with added page DOM
+	 */
+	_fetchPage: function( deferred, page ) {
+		var self = this,
+			d = $.Deferred();
+
+		deferred.then( function( $pages ) {
+			var ajaxOptions = {
+				url: templateRegistry.getDir( 'questionnaire' ) + page + '.html',
+				dataType: 'html'
+			};
+
+			$.ajax( ajaxOptions )
+			.done( function( html ) {
+				var $content = $( '<div/>' )
+					.addClass( 'questionnaire-page page page-' + page )
+					.data( 'questionnaire-page', page )
+					.html( html );
+
+				$pages = $pages.add( self._applyFunctionality( $content ) );
+				d.resolve( $pages );
+			} )
+			.fail( function() {
+				d.reject( new AjaxError( 'questionnaire-page-missing', ajaxOptions ) );
+			} );
+
+			return d.promise();
+		} );
+
+		return d;
 	},
 
 	/**
@@ -601,13 +614,21 @@ $.extend( Questionnaire.prototype, {
 
 		$checkbox.data( 'app-animation', deferred );
 
+		/**
+		 * @param {Function[]} queue
+		 * @param {number} offsetFactor
+		 * @return {Function[]}
+		 */
+		function addAnimationStageToQueue( queue, offsetFactor ) {
+			queue.push( function() {
+				$checkbox.css( 'backgroundPosition', offsetFactor * 20 + 'px 0' );
+			} );
+			return queue;
+		}
+
 		var queue = [];
 		for( var i = -1; i >= -4; i-- ) {
-			( function( offsetFactor ) {
-				queue.push( function() {
-					$checkbox.css( 'backgroundPosition', offsetFactor * 20 + 'px 0' );
-				} );
-			}( i ) );
+			queue = addAnimationStageToQueue( queue, i );
 		}
 
 		function next() {
@@ -682,7 +703,7 @@ $.extend( Questionnaire.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 5, '6' );
 		} else if( p === '5') {
 			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '5a' )
+			$page = this._applyLogAndGoTo( $page, p, 2, '5a' );
 		} else if( p === '7' ) {
 			var goTo = this._getResult().useCase === 'print' ? '8' : '12a';
 			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
@@ -809,4 +830,4 @@ return Questionnaire;
 
 } );
 
-}( define ) );
+}( alert ) );

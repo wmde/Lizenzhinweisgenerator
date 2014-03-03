@@ -35,6 +35,6 @@ define( ['dojo/_base/config'], function( config ) {
 
 			return dir;
 		}
-	}
+	};
 
 } );
