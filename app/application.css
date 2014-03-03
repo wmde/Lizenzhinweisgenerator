@@ -8,38 +8,3 @@
 	height: 100%;
 	width: 100%;
 }
-
-.application-preview {
-	height: 100%;
-	text-align: left;
-}
-
-.application-preview > div {
-	clear: both;
-}
-
-.application-preview-spacer {
-	float:left;
-	height: 50%;
-	margin-bottom: 0; /* will be adjusted according to the preview's actual content */
-}
-
-.application-preview-supplement {
-	background: rgba(245,245,245,1);
-	border-bottom: 1px solid #d3d3d3;
-	border-left: 1px solid #d3d3d3;
-	box-shadow: 0 0 8px rgba(0,0,0,0.1);
-	font-size: 10pt;
-	padding: 16px 16px 24pt 16px;
-	position: absolute;
-	right: 0;
-	text-align: left;
-	top: 0;
-	width: 300px;
-}
-
-.application-preview-error {
-	color: #d17439;
-	margin-top: 12pt;
-	text-align: center;
-}

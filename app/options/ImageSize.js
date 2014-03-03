@@ -59,7 +59,7 @@ $.extend( ImageSize.prototype, Option.prototype, {
 		var self = this;
 
 		if( value === undefined ) {
-			return this._$select ? this._$select.val() : null;
+			return this._$select ? parseInt( this._$select.val(), 10 ) : null;
 		} else if( !value ) {
 			return;
 		}

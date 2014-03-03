@@ -7,28 +7,29 @@ define(
 		'jquery',
 		'app/Navigation',
 		'app/FrontPage',
+		'app/Preview',
 		'app/Questionnaire',
 		'app/OptionContainer'
 	],
-	function( $, Navigation, FrontPage, Questionnaire, OptionContainer ) {
+	function( $, Navigation, FrontPage, Preview, Questionnaire, OptionContainer ) {
 'use strict';
 
 /**
- * Application renderer.
+ * Application renderer
  * @constructor
  *
- * @param {jQuery} $initNode
+ * @param {jQuery} $node
  * @param {Api} api
  * @param {Object} [options]
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Application = function( $initNode, api, options ) {
-	if( !$initNode || !api ) {
+var Application = function( $node, api, options ) {
+	if( !$node || !api ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
-	this._$node = $initNode;
+	this._$node = $node;
 	this._api = api;
 
 	this._options = $.extend( {
@@ -53,12 +54,6 @@ $.extend( Application.prototype, {
 	_options: null,
 
 	/**
-	 * The asset currently handled by the application.
-	 * @type {Asset|null}
-	 */
-	_asset: null,
-
-	/**
 	 * @type {FrontPage|null}
 	 */
 	_frontPage: null,
@@ -67,6 +62,11 @@ $.extend( Application.prototype, {
 	 * @type {Navigation|null}
 	 */
 	_navigation: null,
+
+	/**
+	 * @type {Preview|null}
+	 */
+	_preview: null,
 
 	/**
 	 * @type {Questionnaire|null}
@@ -93,8 +93,7 @@ $.extend( Application.prototype, {
 
 		$( this._frontPage )
 		.on( 'asset', function( event, asset ) {
-			self._asset = asset;
-			self._renderApplicationPage();
+			self._renderApplicationPage( asset );
 		} );
 
 		this._frontPage.render();
@@ -102,14 +101,19 @@ $.extend( Application.prototype, {
 
 	/**
 	 * Renders the application page.
+	 *
+	 * @param {Asset} asset
 	 */
-	_renderApplicationPage: function() {
+	_renderApplicationPage: function( asset ) {
 		var self = this;
+
+		var $preview = $( '<div/>' );
+		this._preview = new Preview( $preview, asset );
 
 		this._$node
 		.empty()
 		.append( this._navigation.create() )
-		.append( $( '<div/>' ).addClass( 'application-preview' ) );
+		.append( $preview );
 
 		this._questionnaire = this._renderQuestionnaire();
 		this._questionnaire.start().done( function() {
@@ -117,9 +121,10 @@ $.extend( Application.prototype, {
 		} );
 
 		// Evaluate to get the default attribution:
-		self.updatePreview(
+		this._preview.update(
 			self._questionnaire.getAttributionGenerator(),
-			self._questionnaire.generateSupplement()
+			self._questionnaire.generateSupplement(),
+			self._getImageSize()
 		).done( function() {
 			self._optionContainer.setAttributionGenerator(
 				self._questionnaire.getAttributionGenerator()
@@ -129,8 +134,10 @@ $.extend( Application.prototype, {
 
 	/**
 	 * Renders and starts the questionnaire.
+	 *
+	 * @param {Asset} asset
 	 */
-	_renderQuestionnaire: function() {
+	_renderQuestionnaire: function( asset ) {
 		var self = this;
 
 		// Remove any pre-existing node:
@@ -139,11 +146,15 @@ $.extend( Application.prototype, {
 		var $questionnaire = $( '<div/>' )
 				.addClass( 'application-questionnaire' )
 				.prependTo( this._$node ),
-			questionnaire = new Questionnaire( $questionnaire, this._asset );
+			questionnaire = new Questionnaire( $questionnaire, asset );
 
 		$( questionnaire )
 		.on( 'update', function( event, attributionGenerator, supplementPromise ) {
-			self.updatePreview( attributionGenerator, supplementPromise ).done( function() {
+			self._preview.update(
+				attributionGenerator,
+				supplementPromise,
+				self._getImageSize()
+			).done( function() {
 				self._optionContainer.push( 'htmlCode' );
 				self._optionContainer.setAttributionGenerator( attributionGenerator );
 			} );
@@ -157,16 +168,18 @@ $.extend( Application.prototype, {
 
 	/**
 	 * Renders the options container and attaches corresponding events.
+	 *
+	 * @param {Asset} asset
 	 */
-	_renderOptionContainer: function() {
+	_renderOptionContainer: function( asset ) {
 		this._$node.find( '.application-optioncontainer' ).remove();
 
 		var self = this,
 			$optionContainer = $( '<div/>' )
 				.addClass( 'application-optioncontainer' )
 				.appendTo( this._$node ),
-			optionContainer = new OptionContainer( $optionContainer, this._asset ),
-			licence = this._asset.getLicence(),
+			optionContainer = new OptionContainer( $optionContainer, asset ),
+			licence = asset.getLicence(),
 			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
 
 		if( renderRawText ) {
@@ -174,9 +187,10 @@ $.extend( Application.prototype, {
 		}
 
 		$( optionContainer ).on( 'update', function() {
-			self.updatePreview(
+			self._preview.update(
 				self._questionnaire.getAttributionGenerator(),
-				self._questionnaire.generateSupplement()
+				self._questionnaire.generateSupplement(),
+				self._getImageSize()
 			)
 			.done( function( $attributedImageFrame ) {
 				self._optionContainer.setAttributionGenerator(
@@ -192,92 +206,12 @@ $.extend( Application.prototype, {
 	},
 
 	/**
-	 * Updates the preview.
-	 *
-	 * @param {AttributionGenerator} attributionGenerator
-	 * @param {Object} supplementPromise
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {jQuery} Attributed image DOM
-	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 * @return {number}
 	 */
-	updatePreview: function( attributionGenerator, supplementPromise ) {
-		var self = this,
-			deferred = new $.Deferred();
-
-		this._options.imageSize = this._optionContainer
+	_getImageSize: function() {
+		return this._optionContainer
 			? this._optionContainer.getOption( 'imageSize' ).value()
 			: this._options.imageSize;
-
-		this._asset.getImageInfo( this._options.imageSize )
-		.done( function( imageInfo ) {
-			var $attributedImageFrame = self._attributedImageHtml( imageInfo );
-
-			self._$node.find( '.application-preview' ).replaceWith(
-				self._renderPreview( $attributedImageFrame )
-			);
-
-			var $preview = self._$node.find( '.application-preview' );
-
-			$preview.find( '.attributed-image-frame' ).append( attributionGenerator.generate() );
-
-			$preview.find( 'img' ).on( 'load', function() {
-				$preview.find( '.application-preview-spacer' ).css(
-					'marginBottom',
-					-1 * parseInt( $preview.find( '.attributed-image-frame' ).height() / 2, 10 )
-				);
-			} );
-
-			supplementPromise.done( function( $supplement ) {
-				$preview.append(
-					$( '<div/>' ).addClass( 'application-preview-supplement' ).append( $supplement )
-				);
-			} );
-
-			deferred.resolve( $attributedImageFrame );
-		} )
-		.fail( function( error ) {
-			self._$node.find( '.application-preview' ).empty().append(
-				$( '<div/>' )
-				.addClass( 'application-preview-error error' )
-				.text( error.getMessage() )
-			);
-		} );
-
-		return deferred.promise();
-	},
-
-	/**
-	 * Returns the DOM of the attributed image without the attribution.
-	 *
-	 * @param {ImageInfo} imageInfo
-	 * @return {jQuery}
-	 */
-	_attributedImageHtml: function( imageInfo ) {
-		var html = ''
-			+ '<div class="attributed-image-frame"><div class="attributed-image">'
-			+ '<a href="' + imageInfo.getDescriptionUrl() + '">'
-			+ '<img border="0" src="' + imageInfo.getThumbnail().url + '"/>'
-			+ '</a>'
-			+ '</div></div>';
-
-		var $attributedImageFrame = $( html );
-		$attributedImageFrame.width( imageInfo.getThumbnail().width );
-
-		return $attributedImageFrame;
-	},
-
-	/**
-	 * Renders the preview.
-	 *
-	 * @param {jQuery} $attributedImageHtml
-	 * @return {jQuery}
-	 */
-	_renderPreview: function( $attributedImageHtml ) {
-		return $( '<div/>' ).addClass( 'application-preview' )
-			.append( $( '<div/>' ).addClass( 'application-preview-spacer' ) )
-			.append( $attributedImageHtml );
 	}
 
 } );
