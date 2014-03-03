@@ -171,7 +171,7 @@ $.extend( Asset.prototype, {
 	 *         Resolve parameters:
 	 *         - {Object} Image information received from the API
 	 *         Rejected parameters:
-	 *         - {ApiError}
+	 *         - {AjaxError}
 	 */
 	getImageInfo: function( imageSize ) {
 		var self = this,

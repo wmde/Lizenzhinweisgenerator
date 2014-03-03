@@ -198,7 +198,7 @@ $.extend( Application.prototype, {
 	 *         Resolved parameters:
 	 *         - {jQuery} Attributed image DOM
 	 *         Rejected parameters:
-	 *         - {ApiError}
+	 *         - {AjaxError}
 	 */
 	updatePreview: function( attributionGenerator, supplementPromise ) {
 		var self = this,

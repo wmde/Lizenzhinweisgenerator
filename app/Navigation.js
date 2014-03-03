@@ -2,8 +2,8 @@
 'use strict';
 
 define(
-	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/ApiError' ],
-	function( $, messages, templateRegistry, ApiError ) {
+	[ 'jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/AjaxError' ],
+	function( $, messages, templateRegistry, AjaxError ) {
 
 /**
  * Main navigation renderer creating and managing the main menu and its referred content.
@@ -123,7 +123,7 @@ $.extend( Navigation.prototype, {
 			} );
 		} )
 		.fail( function() {
-			var error = new ApiError( 'contentpage-missing', ajaxOptions );
+			var error = new AjaxError( 'contentpage-missing', ajaxOptions );
 
 			$overlay.promise().done( function() {
 				$overlay.find( '.navigation-overlay-content' ).empty().append(

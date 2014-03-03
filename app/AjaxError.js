@@ -1,4 +1,4 @@
-define( [ 'jquery', 'app/ApplicationError', 'dojo/i18n!./nls/ApiError' ],
+define( [ 'jquery', 'app/ApplicationError', 'dojo/i18n!./nls/AjaxError' ],
 	function( $, ApplicationError, messages ) {
 'use strict';
 
@@ -11,7 +11,7 @@ define( [ 'jquery', 'app/ApplicationError', 'dojo/i18n!./nls/ApiError' ],
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var ApiError = function( code, ajaxOptions ) {
+var AjaxError = function( code, ajaxOptions ) {
 	ApplicationError.call( this, code );
 
 	if( !ajaxOptions ) {
@@ -21,8 +21,8 @@ var ApiError = function( code, ajaxOptions ) {
 	this._ajaxOptions = ajaxOptions;
 };
 
-$.extend( ApiError.prototype, ApplicationError.prototype, {
-	constructor: ApiError,
+$.extend( AjaxError.prototype, ApplicationError.prototype, {
+	constructor: AjaxError,
 
 	/**
 	 * @type {Object}
@@ -39,6 +39,6 @@ $.extend( ApiError.prototype, ApplicationError.prototype, {
 
 } );
 
-return ApiError;
+return AjaxError;
 
 } );

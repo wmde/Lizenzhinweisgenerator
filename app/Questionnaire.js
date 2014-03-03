@@ -8,9 +8,9 @@ define( [
 	'app/Author',
 	'dojo/i18n!./nls/Questionnaire',
 	'templates/registry',
-	'app/ApiError'
+	'app/AjaxError'
 ],
-	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry, ApiError ) {
+	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry, AjaxError ) {
 
 /**
  * Represents a questionnaire's logic.
@@ -91,7 +91,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         No resolved parameters.
 	 *         Rejected parameters:
-	 *         - {ApiError}
+	 *         - {AjaxError}
 	 */
 	start: function() {
 		this._loggedAnswers = {};
@@ -131,7 +131,7 @@ $.extend( Questionnaire.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         No resolved parameters.
 	 *         Rejected parameters:
-	 *         - {ApiError}
+	 *         - {AjaxError}
 	 */
 	_goTo: function( page, movingBack ) {
 		var self = this,
@@ -193,7 +193,7 @@ $.extend( Questionnaire.prototype, {
 	 *         Resolved parameters:
 	 *         {jQuery} Page content
 	 *         Rejected parameters:
-	 *         - {ApiError}
+	 *         - {AjaxError}
 	 */
 	_render: function( page ) {
 		var self = this,
@@ -289,7 +289,7 @@ $.extend( Questionnaire.prototype, {
 	 *         Resolved parameters:
 	 *         - {jQuery} List of jQuery wrapped DOM nodes
 	 *         Rejected parameters:
-	 *         - {ApiError}
+	 *         - {AjaxError}
 	 */
 	generateSupplement: function() {
 		var self = this,
@@ -506,7 +506,7 @@ $.extend( Questionnaire.prototype, {
 						d.resolve( $pages );
 					} )
 					.fail( function() {
-						d.reject( new ApiError( 'questionnaire-page-missing', ajaxOptions ) );
+						d.reject( new AjaxError( 'questionnaire-page-missing', ajaxOptions ) );
 					} );
 
 					return d.promise();
