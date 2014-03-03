@@ -136,7 +136,7 @@ $.extend( AttributionGenerator.prototype, {
 
 			if( this._options.editor ) {
 				$attribution
-				.append( document.createTextNode( ' ' ) )
+				.append( document.createTextNode( ', ' ) )
 				.append( $editor );
 			}
 

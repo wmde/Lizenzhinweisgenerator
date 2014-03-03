@@ -264,7 +264,14 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_getAnswer: function( page, answerId ) {
 		var pageAnswers = this._loggedAnswers[page];
-		return ( pageAnswers && pageAnswers[answerId] ) ? pageAnswers[answerId] : false;
+
+		if( !pageAnswers || !pageAnswers[answerId] ) {
+			return false;
+		}
+
+		return $.isFunction( pageAnswers[answerId] )
+			? pageAnswers[answerId]()
+			: pageAnswers[answerId];
 	},
 
 	/**
@@ -406,6 +413,8 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
+			delete self._loggedStrings[self._$node.find( '.page' ).data( 'questionnairePage' )];
+
 			if( self._navigationCache.length === 0 ) {
 				$( self ).trigger( 'back', [self._asset] );
 			} else {
@@ -726,14 +735,60 @@ $.extend( Questionnaire.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 1, '13' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '12c' );
 		} else if( p === '13' ) {
-			$page.find( 'a.a1' ).on( 'click', function() {
-				var value = $.trim( $( 'input.a1' ).val() );
-				self._log( '13', 1, value );
+
+			var submit13 = function() {
+				self._log( '13', 1, function() {
+					return self._getLoggedString( '13', '1' );
+				} );
 				self._goToAndUpdate( 'result-success' );
+			};
+
+			$page.find( 'input.a1' )
+			.on( 'keyup', function() {
+				var value = $( this ).val();
+
+				if( value === '' ) {
+					delete self._loggedAnswers['13'];
+					delete self._loggedStrings['13'];
+				} else {
+					self._log( '13', 1, value, false );
+				}
+
+				$( self ).trigger( 'update' );
+			} )
+			.on( 'keypress', function( event ) {
+				if( event.keyCode === 13 ) {
+					event.preventDefault();
+					submit13();
+				}
 			} );
+
+			$page.find( 'a.a1' ).on( 'click', function() {
+				submit13();
+			} );
+
+			// Initially update when moving back to this page:
+			if( this._getLoggedString( '13', 1 ) ) {
+				this._log( '13', 1, this._getLoggedString( '13', 1 ), false );
+				$( this ).trigger( 'update' );
+			}
 		}
 
 		return $page;
+	},
+
+	/**
+	 * Returns a logged string.
+	 *
+	 * @param {string} page
+	 * @param {number} answer
+	 * @returns {string}
+	 */
+	_getLoggedString: function( page, answer ) {
+		if( this._loggedStrings[page] && this._loggedStrings[page][answer] ) {
+			return this._loggedStrings[page][answer];
+		}
+		return null;
 	},
 
 	/**
@@ -741,18 +796,28 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @param {string} page
 	 * @param {number|string} answer
-	 * @param {string} [value] If omitted, boolean "true" is logged for the answer.
+	 * @param {string|Function|boolean} [value] If omitted, boolean "true" is logged for the answer.
+	 *        If of type "boolean", the value is assumed to be the value for the "cacheNavigation"
+	 *        parameter.
+	 * @param {boolean} cacheNavigation (Default: true)
 	 */
-	_log: function( page, answer, value ) {
+	_log: function( page, answer, value, cacheNavigation ) {
+		if( typeof value === 'boolean' ) {
+			cacheNavigation = value;
+			value = undefined;
+		}
+
 		if( !this._loggedAnswers[page] ) {
 			this._loggedAnswers[page] = {};
 		}
 		this._loggedAnswers[page][answer] = ( value ) ? value : true;
 
-		this._navigationCache.push( {
-			page: page,
-			loggedAnswers: $.extend( {}, this._loggedAnswers )
-		} );
+		if( cacheNavigation === undefined || cacheNavigation === true ) {
+			this._navigationCache.push( {
+				page: page,
+				loggedAnswers: $.extend( {}, this._loggedAnswers )
+			} );
+		}
 
 		if( typeof value === 'string' ) {
 			if( !this._loggedStrings[page] ) {
