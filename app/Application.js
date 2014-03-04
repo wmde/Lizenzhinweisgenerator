@@ -182,6 +182,9 @@ $.extend( Application.prototype, {
 
 		if( instance instanceof Questionnaire ) {
 			$( instance ).on( 'back', function( event, asset ) {
+				// Prevent opened underlay from remaining visible:
+				self._optionContainer.render();
+
 				self.start( asset.getUrl() );
 			} );
 		}
