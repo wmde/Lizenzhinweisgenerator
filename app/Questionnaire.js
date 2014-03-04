@@ -148,6 +148,67 @@ $.extend( Questionnaire.prototype, {
 				: {};
 		}
 
+		var $container = this._$node.find( '.questionnaire-contentcontainer' );
+
+		if( $container.length === 0 ) {
+			return this._resolveGoto( page );
+		}
+
+		var initialLeftMargin = $container.css( 'marginLeft' ),
+			newLeftMargin = movingBack ? $( document ).width() : -1 * $container.width();
+
+		// Fixate width to prevent wrapping:
+		$container.width( $container.width() );
+
+		$container.find( '.questionnaire-icon-minimize' ).hide();
+
+		$container.stop().animate( {
+			marginLeft: newLeftMargin + 'px'
+		}, {
+			duration: 'fast',
+			complete: function() {
+				self._resolveGoto( page )
+				.done( function() {
+					$container = self._$node.find( '.questionnaire-contentcontainer' );
+					$container.width( $container.width() );
+
+					var startLeftMargin = movingBack
+						? -1 * $container.width()
+						: $( document ).width();
+
+					$container.css( 'marginLeft', startLeftMargin + 'px' );
+
+					$container.stop().animate( {
+						marginLeft: initialLeftMargin
+					}, {
+						duration: 'fast',
+						complete: function() {
+							$container.css( 'width', 'auto' );
+							deferred.resolve();
+						}
+					} );
+				} ).fail( function( error ) {
+					deferred.reject( error );
+				} );
+			}
+		} );
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Resolves going to a specific page.
+	 *
+	 * @param {string|Function} page
+	 * @return {Object} jQuery Promise
+	 *         No resolved parameters.
+	 *         Rejected parameters:
+	 *         - {AjaxError}
+	 */
+	_resolveGoto: function( page ) {
+		var self = this,
+			deferred = $.Deferred();
+
 		if( $.isFunction( page ) ) {
 			page.apply( this );
 			deferred.resolve();
@@ -166,6 +227,8 @@ $.extend( Questionnaire.prototype, {
 				.fail( function( error ) {
 					alert( error.getMessage() );
 				} );
+
+				deferred.reject( error );
 			} );
 		}
 
@@ -205,12 +268,14 @@ $.extend( Questionnaire.prototype, {
 
 		this._fetchPages( page )
 		.done( function( $content ) {
-			self._$node
+			self._$node.append(
+				$( '<div/>' ).addClass( 'questionnaire-contentcontainer' )
 				.append( self._generateMinimizeButton() )
 				.append( self._generateBackButton() )
 				.append(
 					$( '<div/>' ).addClass( 'questionnaire-pagecontainer' ).append( $content )
-				);
+				)
+			);
 
 			self._toggleMinimized( 'maximize' );
 

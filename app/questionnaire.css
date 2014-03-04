@@ -23,8 +23,10 @@
 	float: right;
 	font-size: 18pt;
 	margin-right: 360px;
+	position: relative;
 	text-align: center;
 	width: 20px;
+	z-index: 1;
 }
 
 .questionnaire .questionnaire-icon-minimize:hover {
@@ -42,6 +44,7 @@
 .questionnaire .questionnaire-pagecontainer {
 	margin-left: 100px;
 	padding-right: 348px;
+	position: relative;
 }
 
 .questionnaire .questionnaire-back {
@@ -75,6 +78,7 @@
 }
 
 .questionnaire .questionnaire-page ul.answers {
+	display: inline-block;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
