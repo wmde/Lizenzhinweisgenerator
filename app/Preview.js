@@ -79,6 +79,13 @@ $.extend( Preview.prototype, {
 						.appendTo( self._$node );
 				}
 
+				var currentSupplement = $supplement.html(),
+					newSupplement = $( '<div/>' ).append( $content ).html();
+
+				if( currentSupplement === newSupplement ) {
+					return;
+				}
+
 				$supplement.empty().append( $content );
 			} );
 
