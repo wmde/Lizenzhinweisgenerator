@@ -38,6 +38,7 @@
 	display: none;
 	padding: 8px 8px 24px 8px;
 	position: fixed;
+	z-index: 1;
 }
 
 .option-underlay textarea {
