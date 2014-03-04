@@ -164,33 +164,27 @@ $.extend( Questionnaire.prototype, {
 
 		$container.stop().animate( {
 			marginLeft: newLeftMargin + 'px'
-		}, {
-			duration: 'fast',
-			complete: function() {
-				self._resolveGoto( page )
-				.done( function() {
-					$container = self._$node.find( '.questionnaire-contentcontainer' );
-					$container.width( $container.width() );
+		}, 'fast' ).promise().done( function() {
+			self._resolveGoto( page )
+			.done( function() {
+				$container = self._$node.find( '.questionnaire-contentcontainer' );
+				$container.width( $container.width() );
 
-					var startLeftMargin = movingBack
-						? -1 * $container.width()
-						: $( document ).width();
+				var startLeftMargin = movingBack
+					? -1 * $container.width()
+					: $( document ).width();
 
-					$container.css( 'marginLeft', startLeftMargin + 'px' );
+				$container.css( 'marginLeft', startLeftMargin + 'px' );
 
-					$container.stop().animate( {
-						marginLeft: initialLeftMargin
-					}, {
-						duration: 'fast',
-						complete: function() {
-							$container.css( 'width', 'auto' );
-							deferred.resolve();
-						}
-					} );
-				} ).fail( function( error ) {
-					deferred.reject( error );
+				$container.stop().animate( {
+					marginLeft: initialLeftMargin
+				}, 'fast' ).promise().done( function() {
+					$container.css( 'width', 'auto' );
+					deferred.resolve();
 				} );
-			}
+			} ).fail( function( error ) {
+				deferred.reject( error );
+			} );
 		} );
 
 		return deferred.promise();
