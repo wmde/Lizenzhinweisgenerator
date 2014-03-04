@@ -351,6 +351,10 @@ $.extend( Api.prototype, {
 
 		this._query( imageTitles, 'imageinfo', wikiUrl, params )
 		.done( function( pages ) {
+			if( !$.isArray( pages ) ) {
+				pages = [pages];
+			}
+
 			var imageInfos = [];
 
 			$.each( pages, function( index, page ) {
