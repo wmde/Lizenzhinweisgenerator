@@ -79,14 +79,17 @@ $.extend( Preview.prototype, {
 						.appendTo( self._$node );
 				}
 
-				var currentSupplement = $supplement.html(),
-					newSupplement = $( '<div/>' ).append( $content ).html();
+				$supplement.show();
 
-				if( currentSupplement === newSupplement ) {
+				if( $supplement.text() === $content.text() ) {
 					return;
 				}
 
-				$supplement.empty().append( $content );
+				$supplement.contents().fadeOut( 'fast' ).promise().done( function() {
+					$supplement.empty().append( $content );
+					$supplement.contents().fadeIn( 'fast' );
+				} );
+
 			} );
 
 			self._currentImageSize = imageSize;
