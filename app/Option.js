@@ -121,6 +121,9 @@ $.extend( Option.prototype, {
 		} );
 	},
 
+	/**
+	 * Destroys the underlay.
+	 */
 	_destroyUnderlay: function() {
 		if( this._$underlay ) {
 			this._$underlay.remove();

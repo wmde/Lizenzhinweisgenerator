@@ -9,7 +9,7 @@
 	table-layout: fixed;
 	width: 100%;
 	white-space: nowrap;
-	z-index: 1;
+	z-index: 2;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b679e', endColorstr='#2b88d9', GradientType=0 );
 }
 

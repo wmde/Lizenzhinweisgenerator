@@ -84,9 +84,10 @@ $.extend( OptionContainer.prototype, {
 		.on( 'toggleunderlay updateunderlay', function( event, $underlay ) {
 			var $button = $underlay.data( 'anchor' ).closest( '.button' ),
 				$container = $button.closest( '.optioncontainer-option' ),
-				padding = $underlay.outerWidth() - $underlay.width();
+				padding = $underlay.outerWidth() - $underlay.width(),
+				isVisible = $underlay.is( ':visible' );
 
-			$button[ $underlay.is( ':visible' ) ? 'addClass' : 'removeClass' ]( 'active' );
+			$button[ isVisible ? 'addClass' : 'removeClass' ]( 'active' );
 
 			$underlay.width( $container.width() - 10 - padding );
 
@@ -94,9 +95,23 @@ $.extend( OptionContainer.prototype, {
 			$underlay.css( 'top', '0' );
 			$underlay.css( 'left', '0' );
 
+			var containerOffset = $container.offset();
+
 			$underlay.offset( {
-				top: $container.offset().top - $underlay.outerHeight(),
-				left: $container.offset().left + $container.width() / 2 - $underlay.outerWidth() / 2
+				top: isVisible
+					? containerOffset.top
+					: containerOffset.top - $underlay.outerHeight(),
+				left: containerOffset.left + $container.width() / 2 - $underlay.outerWidth() / 2
+			} );
+
+			$underlay.stop().show().animate( {
+				top: isVisible
+					? containerOffset.top - $underlay.outerHeight()
+					: containerOffset.top
+			}, 'fast' ).promise().done( function() {
+				if( !isVisible ) {
+					$underlay.hide();
+				}
 			} );
 		} )
 		.on( 'error', function() {
