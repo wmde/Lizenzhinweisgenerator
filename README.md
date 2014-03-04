@@ -1,7 +1,16 @@
 # Licence Attribution Generator
 
-Currently deployed version: http://tools.wmflabs.org/file-reuse/
+This project is aimed at helping more people to build upon legally and
+to share creative works collected at Wikimedia Commons. A questionaire
+leads the user
+through the process of collecting information needed when publishing
+images from Wikipedia and other places to create a legally sufficient
+attribution line.
 
+Supported licenses: Public Domain, CC0 1.0, CC BY 2.0 DE, CC BY 3.0 DE,
+CC BY 3.0, CC BY-SA 2.0 DE, CC BY-SA 3.0 DE, CC BY-SA 3.0
+
+Currently deployed version: http://tools.wmflabs.org/file-reuse/
 
 ## Technical documentation
 
