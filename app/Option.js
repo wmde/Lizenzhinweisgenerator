@@ -115,7 +115,7 @@ $.extend( Option.prototype, {
 			.appendTo( 'body' );
 
 		$( window ).on( 'resize', function() {
-			if( self._$underlay.is( ':visible' ) ) {
+			if( self._$underlay && self._$underlay.is( ':visible' ) ) {
 				$( self ).trigger( 'updateunderlay', [self._$underlay] );
 			}
 		} );
