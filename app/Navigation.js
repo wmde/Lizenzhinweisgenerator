@@ -3,8 +3,8 @@
  * @author snater.com < wikimedia@snater.com >
  */
 define(
-	['jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/AjaxError'],
-	function( $, messages, templateRegistry, AjaxError ) {
+	['jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/AjaxError'],
+	function( $, messages, templateRegistry, Api, LicenceStore, LICENCES, AjaxError ) {
 'use strict';
 
 /**
@@ -16,13 +16,12 @@ define(
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Navigation = function( $node, api ) {
-	if( !$node || !api ) {
+var Navigation = function( $node ) {
+	if( !$node ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
 	this._$node = $node;
-	this._api = api;
 };
 
 $.extend( Navigation.prototype, {
@@ -159,7 +158,7 @@ $.extend( Navigation.prototype, {
 	 */
 	_createSupportedLicencesHtml: function() {
 		var $licences = $(),
-			licences = this._api.getLicenceStore().getLicences();
+            licences = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) ).getLicenceStore().getLicences();
 
 		for( var i = 0; i < licences.length; i++ ) {
 

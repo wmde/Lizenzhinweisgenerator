@@ -9,9 +9,21 @@ define(
 		'dojo/i18n!./nls/FrontPage',
 		'templates/registry',
 		'app/ApplicationError',
-		'dojo/_base/config'
+        'app/Api',
+        'app/NoApi',
+        'app/LicenceStore',
+        'app/LICENCES'
 	],
-	function( $, InputHandler, messages, templateRegistry, ApplicationError, config ) {
+	function(
+        $,
+        InputHandler,
+        messages,
+        templateRegistry,
+        ApplicationError,
+        Api,
+        NoApi,
+        LicenceStore,
+        LICENCES ) {
 'use strict';
 
 /**
@@ -19,7 +31,6 @@ define(
  * @constructor
  *
  * @param {jQuery} $node
- * @param {Api} api
  * @param {string} url
  *
  * @throws {Error} if a required parameter is not defined.
@@ -30,14 +41,12 @@ define(
  *        (1) {jQuery.Event}
  *        (2) {Asset}
  */
-var FrontPage = function( $node, api, url ) {
-	if( !$node || !api ) {
-		throw new Error( 'Required parameters are nor properly defined' );
+var FrontPage = function( $node, url ) {
+	if( !$node ) {
+		throw new Error( 'Required parameters are not properly defined' );
 	}
 
 	this._$node = $node.addClass( 'frontpage' );
-	this._api = api;
-	this._inputHandler = new InputHandler( api );
 
 	document.title = messages['licence attribution generator'];
 
@@ -49,11 +58,6 @@ $.extend( FrontPage.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
-
-	/**
-	 * @type {Api}
-	 */
-	_api: null,
 
 	/**
 	 * @type {InputHandler}
@@ -69,6 +73,7 @@ $.extend( FrontPage.prototype, {
 	 * Renders the front page.
 	 *
 	 * @param {string} [url]
+	 *        Default: false
 	 */
 	_render: function( url ) {
 		var self = this;
@@ -179,6 +184,13 @@ $.extend( FrontPage.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
+        if( !input.match( /wiki(m|p)edia/ ) ) {
+            this._api = new NoApi();
+        } else {
+            this._api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+        }
+        this._inputHandler = new InputHandler( this._api );
+
 		this._inputHandler.getFilename( input )
 		.done( function( filenameOrImageInfos, wikiUrl ) {
 			if( typeof filenameOrImageInfos === 'string' ) {
@@ -216,10 +228,10 @@ $.extend( FrontPage.prototype, {
 				return;
 			}
 
-			if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
+			/*if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
 				self._displayError( new ApplicationError( 'datatype-unsupported' ) );
 				return;
-			}
+			}*/
 
 			$( self ).trigger( 'asset', [asset] );
 		} )

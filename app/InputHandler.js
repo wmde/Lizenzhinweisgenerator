@@ -124,9 +124,11 @@ $.extend( InputHandler.prototype, {
 				&& url.indexOf( '/wikipedia/commons/' ) === -1
 		) {
 			return this._getWikipediaPageImagesFileInfo( url );
-		}
-
-		deferred.resolve( this._extractFilename( url ) );
+		} else if ( url.indexOf( 'commons.wikimedia.org' ) !== -1 ) {
+            deferred.resolve( this._extractFilename( url ) );
+        } else {
+            deferred.resolve( url );
+        }
 
 		return deferred.promise();
 	},

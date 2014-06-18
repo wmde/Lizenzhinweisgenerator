@@ -9,11 +9,13 @@ define(
 		'app/Asset',
 		'app/AttributionGenerator',
 		'app/Author',
+        'app/LicenceStore',
+        'app/LICENCES',
 		'dojo/i18n!./nls/Questionnaire',
 		'templates/registry',
 		'app/AjaxError'
 	],
-	function( $, Asset, AttributionGenerator, Author, messages, templateRegistry, AjaxError ) {
+	function( $, Asset, AttributionGenerator, Author, LicenceStore, LICENCES, messages, templateRegistry, AjaxError ) {
 'use strict';
 
 /**
@@ -107,10 +109,14 @@ $.extend( Questionnaire.prototype, {
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			page = this._exit;
-		} else if( licenceId === 'CC' ) {
-			page = '15';
+		} else if( licenceId === 'CC' || licenceId === 'unknown' ) {
+			page = '2';
 		} else if( this._asset.getAuthors().length === 0 ) {
 			page = '9';
+		} else if( !this._asset.getLicence().isInGroup( 'cc4' ) && this._asset.getTitle().length === 0 ) {
+			page = '10';
+		} else if( this._asset.getUrl().length === 0 ) {
+			page = '11';
 		}
 
 		this._goTo( page )
@@ -142,9 +148,8 @@ $.extend( Questionnaire.prototype, {
 
 		if( navigationPathPosition !== -1 && movingBack ) {
 			// Navigating backwards.
-			this._navigationCache.splice( navigationPathPosition );
-			this._loggedAnswers = this._navigationCache[navigationPathPosition - 1]
-				? this._navigationCache[navigationPathPosition - 1].loggedAnswers
+			this._loggedAnswers = this._navigationCache[navigationPathPosition]
+				? this._navigationCache[navigationPathPosition/* - 1*/].loggedAnswers
 				: {};
 		}
 
@@ -472,7 +477,7 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			delete self._loggedStrings[self._$node.find( '.page' ).data( 'questionnairePage' )];
+			//delete self._loggedStrings[self._$node.find( '.page' ).data( 'questionnairePage' )];
 
 			if( self._navigationCache.length === 0 ) {
 				$( self ).trigger( 'back', [self._asset] );
@@ -745,7 +750,154 @@ $.extend( Questionnaire.prototype, {
 			value,
 			p = $page.data( 'questionnaire-page' );
 
-		if( p === '3' ) {
+		if( p === '2' ) {
+            $page.find( 'span.checkbox').parent().on( 'click', function() {
+                self._asset._licence = new LicenceStore( LICENCES ).detectLicence( $( this ).data( 'licenceId' ) );
+            });
+
+            var goto = '3';
+            if( !this._asset.getAuthors() ||
+                    this._asset.getAuthors().length === 0 ||
+                    this._asset.getAuthors({ format: 'string' }) === messages['author-undefined'] ) {
+                goto = 'form-author';
+            } else if ( !this._asset._title ) {
+                goto = 'form-title';
+            } else if ( !this._asset._url ) {
+                goto = 'form-url';
+            }
+
+			for( var answer = 1; answer <= 8; answer ++ ) {
+				$page = this._applyLogAndGoTo( $page, p, answer, goto );
+			}
+			$page = this._applyLogAndGoTo( $page, p, 9, 'result-note-cc0' );
+			$page = this._applyLogAndGoTo( $page, p, 10, '15' );
+        } else if( p === 'form-author' ) {
+            var goto = '3';
+            if ( !this._asset._title || this._asset._title === messages['file-untitled'] ) {
+                goto = 'form-title';
+            } else if ( !this._asset._url ) {
+                goto = 'form-url';
+            }
+
+            $page = this._applyLogAndGoTo( $page, p, 2, goto );
+
+            var submitFormAuthor = function() {
+                self._log( 'form-author', 1, function() {
+                    return self._getLoggedString( 'form-author', '1' );
+                } );
+                self._goToAndUpdate( goto );
+            };
+
+            $page.find( 'input.a1' )
+                .on( 'keyup', function() {
+                    var value = $.trim( $( this ).val() );
+
+                    if( value === '' ) {
+                        self._asset.setAuthors(
+                            [ new Author( $( messages['author-undefined'] ) ) ]
+                        );
+                        delete self._loggedAnswers['form-author'];
+                        delete self._loggedStrings['form-author'];
+                    } else {
+                        self._asset.setAuthors( [ new Author( $( document.createTextNode( value ) ) ) ] );
+                        self._log( 'form-author', 1, value, false );
+                    }
+
+                    $( self ).trigger( 'update' );
+                } )
+                .on( 'keypress', function( event ) {
+                    if( event.keyCode === 13 ) {
+                        event.preventDefault();
+                        submitFormAuthor();
+                    }
+                } )
+                .val( self._asset.getAuthors( { format: 'string' } ) );
+
+            $page.find( 'a.a1' ).on( 'click', function() {
+                submitFormAuthor();
+            } );
+
+        } else if( p === 'form-title' ) {
+            var goto = '3';
+
+            if ( !this._asset._url ) {
+                goto = 'form-url';
+            }
+
+            $page = this._applyLogAndGoTo( $page, p, 2, goto );
+
+            var submitFormTitle = function() {
+                self._log( 'form-title', 1, function() {
+                    return self._getLoggedString( 'form-title', '1' );
+                } );
+                self._goToAndUpdate( goto );
+            };
+
+            $page.find( 'input.a1' )
+                .on( 'keyup', function() {
+                    var value = $.trim( $( this ).val() );
+
+                    if( value === '' ) {
+                        self._asset._title = messages['file-untitled'];
+                        delete self._loggedAnswers['form-title'];
+                        delete self._loggedStrings['form-title'];
+                    } else {
+                        self._asset._title = value;
+                        self._log( 'form-title', 1, value, false );
+                    }
+
+                    $( self ).trigger( 'update' );
+                } )
+                .on( 'keypress', function( event ) {
+                    if( event.keyCode === 13 ) {
+                        event.preventDefault();
+                        submitFormTitle();
+                    }
+                } )
+                .val( self._asset.getTitle() );
+
+            $page.find( 'a.a1' ).on( 'click', function() {
+                submitFormTitle();
+            } );
+
+        } else if( p === 'form-url' ) {
+            $page = this._applyLogAndGoTo( $page, p, 2, '3' );
+
+            var submitFormUrl = function() {
+                self._log( 'form-url', 1, function() {
+                    return self._getLoggedString( 'form-url', '1' );
+                } );
+                self._goToAndUpdate( '3' );
+            };
+
+            $page.find( 'input.a1' )
+                .on( 'keyup', function() {
+                    var value = $.trim( $( this ).val() );
+
+                    if( value === '' ) {
+                        self._asset._url = messages['unknown'];
+                        delete self._loggedAnswers['form-url'];
+                        delete self._loggedStrings['form-url'];
+                    } else {
+                        self._asset._url = value;
+                        self._log( 'form-url', 1, value, false );
+                    }
+
+                    $( self ).trigger( 'update' );
+                } )
+                .on( 'keypress', function( event ) {
+                    if( event.keyCode === 13 ) {
+                        event.preventDefault();
+                        submitFormUrl();
+                    }
+                } )
+                .val( self._asset.getUrl() );
+
+            $page.find( 'a.a1' ).on( 'click', function() {
+                submitFormUrl();
+            } );
+
+        } else if( p === '3' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '7' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '7' );
 
@@ -754,7 +906,7 @@ $.extend( Questionnaire.prototype, {
 				if( self._asset.getLicence().isInGroup( 'cc2de' ) ) {
 					self._goToAndUpdate( '7' );
 				} else {
-					self._goToAndUpdate( 'result-success' );
+					self._goToAndUpdate( 'result-note-privateUse' );
 				}
 			} );
 
@@ -916,9 +1068,8 @@ $.extend( Questionnaire.prototype, {
 			value = undefined;
 		}
 
-		if( !this._loggedAnswers[page] ) {
-			this._loggedAnswers[page] = {};
-		}
+		// (re)initialize page answer
+		this._loggedAnswers[page] = {};
 		this._loggedAnswers[page][answer] = ( value ) ? value : true;
 
 		if( cacheNavigation === undefined || cacheNavigation === true ) {
