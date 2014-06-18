@@ -3,8 +3,8 @@ define( {
 		'notes and advice': 'Notes and advice',
 		'(edited)': '(edited)',
 		'unknown': 'unknown',
-        'file-untitled': 'Untitled',
-        'author-undefined': 'Unknown author'
+		'file-untitled': 'No Title',
+		'author-undefined': 'anonymous'
 	},
 	'de': true
 } );

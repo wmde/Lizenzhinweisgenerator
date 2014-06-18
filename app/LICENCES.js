@@ -25,7 +25,7 @@ return [
 	new Licence( 'cc-by-sa-3.0', ['cc', 'cc3'], 'CC BY-SA 3.0', /^(Bild-)?CC-BY-SA(-|\/)3.0(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ),
 	new Licence( 'CC', ['cc', 'cc4'], 'CC BY-SA 4.0', /^(Bild-)?CC-BY-SA(-|\/)4.0(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by-sa/4.0/legalcode/' ),
 
-    new Licence( 'unknown', [], 'Unknown', '', '' )
+	new Licence( 'unknown', [], 'Unknown', '', '' )
 ];
 
 } );

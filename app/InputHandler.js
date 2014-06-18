@@ -125,10 +125,10 @@ $.extend( InputHandler.prototype, {
 		) {
 			return this._getWikipediaPageImagesFileInfo( url );
 		} else if ( url.indexOf( 'commons.wikimedia.org' ) !== -1 ) {
-            deferred.resolve( this._extractFilename( url ) );
-        } else {
-            deferred.resolve( url );
-        }
+			deferred.resolve( this._extractFilename( url ) );
+		} else {
+			deferred.resolve( url );
+		}
 
 		return deferred.promise();
 	},

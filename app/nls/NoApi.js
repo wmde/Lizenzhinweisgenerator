@@ -1,7 +1,7 @@
 define( {
-    root: {
-        'file-untitled': 'Untitled',
-        'author-undefined': 'Unknown author'
-    },
-    'de': true
+	root: {
+		'file-untitled': 'No Title',
+		'author-undefined': 'anonymous'
+	},
+	'de': true
 } );

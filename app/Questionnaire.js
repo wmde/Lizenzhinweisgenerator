@@ -9,8 +9,8 @@ define(
 		'app/Asset',
 		'app/AttributionGenerator',
 		'app/Author',
-        'app/LicenceStore',
-        'app/LICENCES',
+		'app/LicenceStore',
+		'app/LICENCES',
 		'dojo/i18n!./nls/Questionnaire',
 		'templates/registry',
 		'app/AjaxError'
@@ -149,7 +149,7 @@ $.extend( Questionnaire.prototype, {
 		if( navigationPathPosition !== -1 && movingBack ) {
 			// Navigating backwards.
 			this._loggedAnswers = this._navigationCache[navigationPathPosition]
-				? this._navigationCache[navigationPathPosition/* - 1*/].loggedAnswers
+				? this._navigationCache[navigationPathPosition].loggedAnswers
 				: {};
 		}
 
@@ -477,8 +477,6 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			//delete self._loggedStrings[self._$node.find( '.page' ).data( 'questionnairePage' )];
-
 			if( self._navigationCache.length === 0 ) {
 				$( self ).trigger( 'back', [self._asset] );
 			} else {
@@ -751,153 +749,170 @@ $.extend( Questionnaire.prototype, {
 			p = $page.data( 'questionnaire-page' );
 
 		if( p === '2' ) {
-            $page.find( 'span.checkbox').parent().on( 'click', function() {
-                self._asset._licence = new LicenceStore( LICENCES ).detectLicence( $( this ).data( 'licenceId' ) );
-            });
+			$page.find( 'span.checkbox' ).parent().on( 'click', function() {
+				self._asset._licence = new LicenceStore( LICENCES ).detectLicence( $( this ).data( 'licenceId' ) );
+			});
 
-            var goto = '3';
-            if( !this._asset.getAuthors() ||
-                    this._asset.getAuthors().length === 0 ||
-                    this._asset.getAuthors({ format: 'string' }) === messages['author-undefined'] ) {
-                goto = 'form-author';
-            } else if ( !this._asset._title ) {
-                goto = 'form-title';
-            } else if ( !this._asset._url ) {
-                goto = 'form-url';
-            }
+			var goto = '3';
+			if( !this._asset.getAuthors() ||
+					this._asset.getAuthors().length === 0 ||
+					this._asset.getAuthors( { format: 'string' } ) === messages['author-undefined'] ) {
+				goto = 'form-author';
+			} else if( !this._asset._title ) {
+				goto = 'form-title';
+			} else if( !this._asset._url ) {
+				goto = 'form-url';
+			}
 
 			for( var answer = 1; answer <= 8; answer ++ ) {
 				$page = this._applyLogAndGoTo( $page, p, answer, goto );
 			}
 			$page = this._applyLogAndGoTo( $page, p, 9, 'result-note-cc0' );
 			$page = this._applyLogAndGoTo( $page, p, 10, '15' );
-        } else if( p === 'form-author' ) {
-            var goto = '3';
-            if ( !this._asset._title || this._asset._title === messages['file-untitled'] ) {
-                goto = 'form-title';
-            } else if ( !this._asset._url ) {
-                goto = 'form-url';
-            }
+		} else if( p === 'form-author' ) {
+			var goto = '3';
+			if ( !this._asset._title || this._asset._title === messages['file-untitled'] ) {
+				goto = 'form-title';
+			} else if ( !this._asset._url ) {
+				goto = 'form-url';
+			}
 
-            $page = this._applyLogAndGoTo( $page, p, 2, goto );
+			var submitFormAuthor = function() {
+				self._log( 'form-author', 1, function() {
+					return self._getLoggedString( 'form-author', '1' );
+				} );
+				self._goToAndUpdate( goto );
+			};
 
-            var submitFormAuthor = function() {
-                self._log( 'form-author', 1, function() {
-                    return self._getLoggedString( 'form-author', '1' );
-                } );
-                self._goToAndUpdate( goto );
-            };
+			$page.find( 'input.a1' )
+				.on( 'keyup', function() {
+					var value = $.trim( $( this ).val() );
 
-            $page.find( 'input.a1' )
-                .on( 'keyup', function() {
-                    var value = $.trim( $( this ).val() );
+					if( value === '' ) {
+						self._asset.setAuthors(
+							[ new Author( $( messages['author-undefined'] ) ) ]
+						);
+						delete self._loggedAnswers['form-author'];
+						delete self._loggedStrings['form-author'];
+					} else {
+						self._asset.setAuthors( [ new Author( $( document.createTextNode( value ) ) ) ] );
+						self._log( 'form-author', 1, value, false );
+					}
 
-                    if( value === '' ) {
-                        self._asset.setAuthors(
-                            [ new Author( $( messages['author-undefined'] ) ) ]
-                        );
-                        delete self._loggedAnswers['form-author'];
-                        delete self._loggedStrings['form-author'];
-                    } else {
-                        self._asset.setAuthors( [ new Author( $( document.createTextNode( value ) ) ) ] );
-                        self._log( 'form-author', 1, value, false );
-                    }
+					$( self ).trigger( 'update' );
+				} )
+				.on( 'keypress', function( event ) {
+					if( event.keyCode === 13 ) {
+						event.preventDefault();
+						submitFormAuthor();
+					}
+				} )
+				.val( self._asset.getAuthors( { format: 'string' } ) );
 
-                    $( self ).trigger( 'update' );
-                } )
-                .on( 'keypress', function( event ) {
-                    if( event.keyCode === 13 ) {
-                        event.preventDefault();
-                        submitFormAuthor();
-                    }
-                } )
-                .val( self._asset.getAuthors( { format: 'string' } ) );
+			$page.find( 'a.a1' ).on( 'click', function() {
+				submitFormAuthor();
+			} );
 
-            $page.find( 'a.a1' ).on( 'click', function() {
-                submitFormAuthor();
-            } );
+			$page.find( 'li.a2' ).on( 'click', function() {
+				$page.find( 'input.a1' ).val( messages['author-undefined'] );
+				self._asset.setAuthors( [ new Author( $( document.createTextNode( messages['author-undefined'] ) ) ) ] );
+				self._log( 'form-author', 1, messages['author-undefined'], false );
+				submitFormAuthor();
+			});
 
-        } else if( p === 'form-title' ) {
-            var goto = '3';
+		} else if( p === 'form-title' ) {
+			var goto = '3';
 
-            if ( !this._asset._url ) {
-                goto = 'form-url';
-            }
+			if ( !this._asset._url ) {
+				goto = 'form-url';
+			}
 
-            $page = this._applyLogAndGoTo( $page, p, 2, goto );
+			var submitFormTitle = function() {
+				self._log( 'form-title', 1, function() {
+					return self._getLoggedString( 'form-title', '1' );
+				} );
+				self._goToAndUpdate( goto );
+			};
 
-            var submitFormTitle = function() {
-                self._log( 'form-title', 1, function() {
-                    return self._getLoggedString( 'form-title', '1' );
-                } );
-                self._goToAndUpdate( goto );
-            };
+			$page.find( 'input.a1' )
+				.on( 'keyup', function() {
+					var value = $.trim( $( this ).val() );
 
-            $page.find( 'input.a1' )
-                .on( 'keyup', function() {
-                    var value = $.trim( $( this ).val() );
+					if( value === '' ) {
+						self._asset._title = messages['file-untitled'];
+						delete self._loggedAnswers['form-title'];
+						delete self._loggedStrings['form-title'];
+					} else {
+						self._asset._title = value;
+						self._log( 'form-title', 1, value, false );
+					}
 
-                    if( value === '' ) {
-                        self._asset._title = messages['file-untitled'];
-                        delete self._loggedAnswers['form-title'];
-                        delete self._loggedStrings['form-title'];
-                    } else {
-                        self._asset._title = value;
-                        self._log( 'form-title', 1, value, false );
-                    }
+					$( self ).trigger( 'update' );
+				} )
+				.on( 'keypress', function( event ) {
+					if( event.keyCode === 13 ) {
+						event.preventDefault();
+						submitFormTitle();
+					}
+				} )
+				.val( self._asset.getTitle() );
 
-                    $( self ).trigger( 'update' );
-                } )
-                .on( 'keypress', function( event ) {
-                    if( event.keyCode === 13 ) {
-                        event.preventDefault();
-                        submitFormTitle();
-                    }
-                } )
-                .val( self._asset.getTitle() );
+			$page.find( 'a.a1' ).on( 'click', function() {
+				submitFormTitle();
+			} );
 
-            $page.find( 'a.a1' ).on( 'click', function() {
-                submitFormTitle();
-            } );
+			$page.find( 'li.a2' ).on( 'click', function() {
+				$page.find( 'input.a1' ).val( messages['file-untitled'] );
+				self._asset._title = messages['file-untitled'];
+				self._log( 'form-title', 1, messages['file-untitled'], false );
+				submitFormTitle();
+			});
 
-        } else if( p === 'form-url' ) {
-            $page = this._applyLogAndGoTo( $page, p, 2, '3' );
+		} else if( p === 'form-url' ) {
+			$page = this._applyLogAndGoTo( $page, p, 2, '3' );
 
-            var submitFormUrl = function() {
-                self._log( 'form-url', 1, function() {
-                    return self._getLoggedString( 'form-url', '1' );
-                } );
-                self._goToAndUpdate( '3' );
-            };
+			var submitFormUrl = function() {
+				self._log( 'form-url', 1, function() {
+					return self._getLoggedString( 'form-url', '1' );
+				} );
+				self._goToAndUpdate( '3' );
+			};
 
-            $page.find( 'input.a1' )
-                .on( 'keyup', function() {
-                    var value = $.trim( $( this ).val() );
+			$page.find( 'input.a1' )
+				.on( 'keyup', function() {
+					var value = $.trim( $( this ).val() );
 
-                    if( value === '' ) {
-                        self._asset._url = messages['unknown'];
-                        delete self._loggedAnswers['form-url'];
-                        delete self._loggedStrings['form-url'];
-                    } else {
-                        self._asset._url = value;
-                        self._log( 'form-url', 1, value, false );
-                    }
+					if( value === '' ) {
+						self._asset._url = '';
+						delete self._loggedAnswers['form-url'];
+						delete self._loggedStrings['form-url'];
+					} else {
+						self._asset._url = value;
+						self._log( 'form-url', 1, value, false );
+					}
 
-                    $( self ).trigger( 'update' );
-                } )
-                .on( 'keypress', function( event ) {
-                    if( event.keyCode === 13 ) {
-                        event.preventDefault();
-                        submitFormUrl();
-                    }
-                } )
-                .val( self._asset.getUrl() );
+					$( self ).trigger( 'update' );
+				} )
+				.on( 'keypress', function( event ) {
+					if( event.keyCode === 13 ) {
+						event.preventDefault();
+						submitFormUrl();
+					}
+				} )
+				.val( self._asset.getUrl() );
 
-            $page.find( 'a.a1' ).on( 'click', function() {
-                submitFormUrl();
-            } );
+			$page.find( 'a.a1' ).on( 'click', function() {
+				submitFormUrl();
+			} );
 
-        } else if( p === '3' ) {
+			$page.find( 'li.a2').on( 'click', function() {
+				$page.find( 'input.a1' ).val();
+				self._asset._url = '';
+				self._log( 'form-url', 1, '', false );
+				submitFormUrl();
+			});
+
+		} else if( p === '3' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '7' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '7' );
 

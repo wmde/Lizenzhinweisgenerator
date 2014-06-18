@@ -158,7 +158,7 @@ $.extend( Navigation.prototype, {
 	 */
 	_createSupportedLicencesHtml: function() {
 		var $licences = $(),
-            licences = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) ).getLicenceStore().getLicences();
+			licences = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) ).getLicenceStore().getLicences();
 
 		for( var i = 0; i < licences.length; i++ ) {
 

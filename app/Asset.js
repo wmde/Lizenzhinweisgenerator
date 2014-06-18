@@ -33,7 +33,7 @@ var Asset = function(
 	this._licence = licence;
 	this._api = api;
 	this._wikiUrl = wikiUrl || null;
-    this._url = url || '';
+	this._url = url || '';
 
 	if( typeof optionalAttributes === 'string' ) {
 		wikiUrl = optionalAttributes;
@@ -115,8 +115,15 @@ $.extend( Asset.prototype, {
 	 * @return {string}
 	 */
 	getUrl: function() {
-        return this._wikiUrl ? 'http:' + this._wikiUrl + 'wiki/' + this._prefixedFilename :
-            ( this._url.indexOf( 'http' ) === 0 ) ? this._url : 'http://' + this._url;
+		if( this._wikiUrl ) {
+			return 'http:' + this._wikiUrl + 'wiki/' + this._prefixedFilename;
+		} else {
+			if( this._url.indexOf( 'http' ) === 0 ) {
+				return this._url;
+			} else {
+				return 'http://' + this._url;
+			}
+		}
 	},
 
 	/**
@@ -151,11 +158,11 @@ $.extend( Asset.prototype, {
 			return this._authors;
 		}
 
-        var arrAuthors = [];
-        $.each( this._authors, function( index, author ) {
-            arrAuthors.push( author._$author.text() );
-        });
-        return arrAuthors.join( '; ' );
+		var authors = [];
+		$.each( this._authors, function( index, author ) {
+			authors.push( author.getText() );
+		} );
+		return authors.join( '; ' );
 	},
 
 	/**

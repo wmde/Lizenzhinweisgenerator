@@ -9,21 +9,21 @@ define(
 		'dojo/i18n!./nls/FrontPage',
 		'templates/registry',
 		'app/ApplicationError',
-        'app/Api',
-        'app/NoApi',
-        'app/LicenceStore',
-        'app/LICENCES'
+		'app/Api',
+		'app/NoApi',
+		'app/LicenceStore',
+		'app/LICENCES'
 	],
 	function(
-        $,
-        InputHandler,
-        messages,
-        templateRegistry,
-        ApplicationError,
-        Api,
-        NoApi,
-        LicenceStore,
-        LICENCES ) {
+		$,
+		InputHandler,
+		messages,
+		templateRegistry,
+		ApplicationError,
+		Api,
+		NoApi,
+		LicenceStore,
+		LICENCES ) {
 'use strict';
 
 /**
@@ -73,7 +73,6 @@ $.extend( FrontPage.prototype, {
 	 * Renders the front page.
 	 *
 	 * @param {string} [url]
-	 *        Default: false
 	 */
 	_render: function( url ) {
 		var self = this;
@@ -184,12 +183,12 @@ $.extend( FrontPage.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-        if( !input.match( /wiki(m|p)edia/ ) ) {
-            this._api = new NoApi();
-        } else {
-            this._api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
-        }
-        this._inputHandler = new InputHandler( this._api );
+		if( !input.match( /wiki(m|p)edia/ ) ) {
+			this._api = new NoApi();
+		} else {
+			this._api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+		}
+		this._inputHandler = new InputHandler( this._api );
 
 		this._inputHandler.getFilename( input )
 		.done( function( filenameOrImageInfos, wikiUrl ) {
