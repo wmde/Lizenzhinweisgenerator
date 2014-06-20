@@ -624,6 +624,11 @@ $.extend( Questionnaire.prototype, {
 	_applyGenerics: function( $page ) {
 		var self = this;
 
+		$page.find( 'div.expandable-trigger').on( 'click', function() {
+			$( '.expandable' ).slideUp();
+			$( this ).next().slideDown();
+		});
+
 		$page.find( 'ul.answers li' )
 		.prepend(
 				$( '<span/>' ).addClass( 'checkbox' ).html( '&nbsp;' )
