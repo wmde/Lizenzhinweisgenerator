@@ -130,3 +130,11 @@
 .questionnaire .questionnaire-error {
 	color: #d17439;
 }
+
+div.expandable-trigger {
+	font-weight: bold;
+}
+
+div.expandable {
+	display: none;
+}
