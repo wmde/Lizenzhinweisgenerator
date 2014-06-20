@@ -779,8 +779,6 @@ $.extend( Questionnaire.prototype, {
                 goto = 'form-url';
             }
 
-            $page = this._applyLogAndGoTo( $page, p, 2, goto );
-
             var submitFormAuthor = function() {
                 self._log( 'form-author', 1, function() {
                     return self._getLoggedString( 'form-author', '1' );
@@ -817,14 +815,19 @@ $.extend( Questionnaire.prototype, {
                 submitFormAuthor();
             } );
 
+			$page.find( 'li.a2').on( 'click', function() {
+				$page.find( 'input.a1' ).val( messages['author-undefined'] );
+				self._asset.setAuthors( [ new Author( $( document.createTextNode( messages['author-undefined'] ) ) ) ] );
+				self._log( 'form-author', 1, messages['author-undefined'], false );
+				submitFormAuthor();
+			});
+
         } else if( p === 'form-title' ) {
             var goto = '3';
 
             if ( !this._asset._url ) {
                 goto = 'form-url';
             }
-
-            $page = this._applyLogAndGoTo( $page, p, 2, goto );
 
             var submitFormTitle = function() {
                 self._log( 'form-title', 1, function() {
@@ -860,6 +863,13 @@ $.extend( Questionnaire.prototype, {
                 submitFormTitle();
             } );
 
+			$page.find( 'li.a2').on( 'click', function() {
+				$page.find( 'input.a1' ).val( messages['file-untitled'] );
+				self._asset._title = messages['file-untitled'];
+				self._log( 'form-title', 1, messages['file-untitled'], false );
+				submitFormTitle();
+			});
+
         } else if( p === 'form-url' ) {
             $page = this._applyLogAndGoTo( $page, p, 2, '3' );
 
@@ -875,7 +885,7 @@ $.extend( Questionnaire.prototype, {
                     var value = $.trim( $( this ).val() );
 
                     if( value === '' ) {
-                        self._asset._url = messages['unknown'];
+                        self._asset._url = '';
                         delete self._loggedAnswers['form-url'];
                         delete self._loggedStrings['form-url'];
                     } else {
@@ -896,6 +906,13 @@ $.extend( Questionnaire.prototype, {
             $page.find( 'a.a1' ).on( 'click', function() {
                 submitFormUrl();
             } );
+
+			$page.find( 'li.a2').on( 'click', function() {
+				$page.find( 'input.a1' ).val();
+				self._asset._url = '';
+				self._log( 'form-url', 1, '', false );
+				submitFormUrl();
+			});
 
         } else if( p === '3' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '7' );

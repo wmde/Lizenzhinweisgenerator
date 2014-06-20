@@ -1,4 +1,4 @@
 define( {
-    'file-untitled': 'Unbenannt',
-    'author-undefined': 'Unbekannter Autor'
+    'file-untitled': 'Ohne Titel',
+    'author-undefined': 'anonym'
 } );
