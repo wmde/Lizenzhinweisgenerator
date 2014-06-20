@@ -148,6 +148,7 @@ $.extend( Questionnaire.prototype, {
 
 		if( navigationPathPosition !== -1 && movingBack ) {
 			// Navigating backwards.
+			this._navigationCache.splice( navigationPathPosition );
 			this._loggedAnswers = this._navigationCache[navigationPathPosition]
 				? this._navigationCache[navigationPathPosition].loggedAnswers
 				: {};
