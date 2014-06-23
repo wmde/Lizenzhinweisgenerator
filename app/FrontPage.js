@@ -227,11 +227,6 @@ $.extend( FrontPage.prototype, {
 				return;
 			}
 
-			/*if( $.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1 ) {
-				self._displayError( new ApplicationError( 'datatype-unsupported' ) );
-				return;
-			}*/
-
 			$( self ).trigger( 'asset', [asset] );
 		} )
 		.fail( function( error ) {
