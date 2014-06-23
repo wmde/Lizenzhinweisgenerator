@@ -2,6 +2,10 @@ this.dojoConfig = {
 	baseUrl: './',
 	packages: [
 		{
+			name: 'dojo',
+			location: 'lib/dojo'
+		},
+		{
 			name: 'jquery',
 			location: 'lib/jquery',
 			main: 'jquery-1.11.0.min'

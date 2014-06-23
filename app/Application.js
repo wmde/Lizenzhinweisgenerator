@@ -19,18 +19,16 @@ define(
  * @constructor
  *
  * @param {jQuery} $node
- * @param {Api} api
  * @param {Object} [options]
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Application = function( $node, api, options ) {
-	if( !$node || !api ) {
+var Application = function( $node, options ) {
+	if( !$node ) {
 		throw new Error( 'Required parameters are nor properly defined' );
 	}
 
 	this._$node = $node;
-	this._api = api;
 
 	this._options = $.extend( {
 		'imageSize': 500
@@ -42,11 +40,6 @@ $.extend( Application.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
-
-	/**
-	 * @type {Api}
-	 */
-	_api: null,
 
 	/**
 	 * @type {Object}
@@ -88,10 +81,10 @@ $.extend( Application.prototype, {
 
 		this._$node.empty();
 
-		this._navigation = new Navigation( this._$node, this._api );
+		this._navigation = new Navigation( this._$node );
 
 		var $frontPage = $( '<div/>' );
-		this._frontPage = new FrontPage( $frontPage, this._api, url );
+		this._frontPage = new FrontPage( $frontPage, url );
 
 		$( this._frontPage )
 		.on( 'asset', function( event, asset ) {

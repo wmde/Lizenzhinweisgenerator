@@ -15,27 +15,26 @@
 		<link href="app/preview.css" rel="stylesheet" media="screen">
 		<link href="app/questionnaire.css" rel="stylesheet" media="screen">
 	</head>
-	<script>
-		( function( require ) {
-			require( [
-				'jquery', 'app/Application', 'app/Api', 'app/LicenceStore', 'app/LICENCES'
+	<body>
+		<script>
+			( function( require ) {
+				require( [
+				'jquery',
+				'app/Application',
+				'app/Api',
+				'app/LicenceStore',
+				'app/LICENCES'
 			], function( $, Application, Api, LicenceStore, LICENCES ) {
 
-				$.event.props.push( 'dataTransfer' );
+					$( document ).ready( function () {
+						var application = new Application( $( '#application' ) );
 
-				$( document ).ready( function () {
-					var application = new Application(
-						$( '#application' ),
-						new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) )
-					);
+						application.start();
+					} );
 
-					application.start();
 				} );
-
-			} );
-		}( require ) );
-	</script>
-	<body>
+			}( require ) );
+		</script>
 		<div id="application" class="application">
 			<noscript>JavaScript needs to be enabled to use the application.</noscript>
 		</div>
