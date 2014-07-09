@@ -65,8 +65,8 @@ $.extend( Api.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-		this._getMediaType( prefixedFilename, wikiUrl )
-		.done( function( mediaType ) {
+		this._getMetaData( prefixedFilename, wikiUrl )
+		.done( function( metaData ) {
 
 			self._getPageContent( prefixedFilename, wikiUrl )
 			.done( function( $dom ) {
@@ -74,7 +74,7 @@ $.extend( Api.prototype, {
 				self._getPageTemplates( prefixedFilename, wikiUrl )
 				.done( function( templates ) {
 					var assetPage = new AssetPage(
-						prefixedFilename, mediaType, $dom, templates, self, wikiUrl
+						prefixedFilename, metaData.mediatype, $dom, templates, self, wikiUrl
 					);
 
 					deferred.resolve( assetPage.getAsset() );
@@ -201,21 +201,21 @@ $.extend( Api.prototype, {
 	},
 
 	/**
-	 * Retrieves a file's media type.
+	 * Retrieves a file's meta data.
 	 *
 	 * @param {string} prefixedFilename
 	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise:
 	 *         Resolved parameters:
-	 *         - {string}
+	 *         - {Object}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
-	_getMediaType: function( prefixedFilename, wikiUrl ) {
+	_getMetaData: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
 
 		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
-			iiprop: 'mediatype',
+			iiprop: 'mediatype|url',
 			iilimit: 1
 		} )
 		.done( function( page, ajaxOptions ) {
@@ -225,11 +225,12 @@ $.extend( Api.prototype, {
 			}
 
 			for( var i = 0; i < page.imageinfo.length; i++ ) {
-				var mediaType = page.imageinfo[i].mediatype;
-				if( mediaType ) {
-					deferred.resolve( mediaType.toLowerCase() );
-					return;
+				var metaData = page.imageinfo[i];
+				if( metaData.mediatype ) {
+					metaData.mediatype = metaData.mediatype.toLowerCase();
 				}
+				deferred.resolve( metaData );
+				return;
 			}
 
 			deferred.reject( new AjaxError( 'mediatype-missing', ajaxOptions ) );
@@ -244,13 +245,15 @@ $.extend( Api.prototype, {
 	/**
 	 * Checks a specific Wikipedia page for images returning the image info for each image used on
 	 * the page. If the page itself is a description page of an image, the resolved promise
-	 * transmits the title the function was called with.
+	 * transmits the title the function was called with. The resolved promise's second parameter is
+	 * the original wiki URL or the full asset URL if the asset is not stored on the local Wiki.
 	 *
 	 * @param {string} title
 	 * @param {string} [wikiUrl]
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {ImageInfo[]|string}
+	 *         - {string}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
@@ -258,10 +261,10 @@ $.extend( Api.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-		this._getMediaType( title, wikiUrl )
-		.done( function( mediaType ) {
-			if( $.inArray( mediaType, config.custom.supportedMediaTypes ) !== -1 ) {
-				deferred.resolve( title );
+		this._getMetaData( title, wikiUrl )
+		.done( function( metaData ) {
+			if( $.inArray( metaData.mediatype, config.custom.supportedMediaTypes ) !== -1 ) {
+				deferred.resolve( title, metaData.url );
 				return;
 			}
 
@@ -269,7 +272,7 @@ $.extend( Api.prototype, {
 			.done( function( imageTitles ) {
 				self._getWikipediaImageInfos( imageTitles, wikiUrl )
 				.done( function( imageUrls ) {
-					deferred.resolve( imageUrls );
+					deferred.resolve( imageUrls, wikiUrl );
 				} )
 				.fail( function( error ) {
 					deferred.reject( error );
