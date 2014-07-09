@@ -56,11 +56,11 @@ return {
 			authors: [new Author( $( '<div/>' ).html( '©&nbsp;<a href="http://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.roletschek.de">Fahrradtechnik und Fotografie</a>' ).contents() )]
 		}
 	),
-	'Statue Andrrea Palladio Vicenza.jpg': new Asset(
-		'File:Statue Andrrea Palladio Vicenza.jpg',
-		'Statue Andrrea Palladio Vicenza',
+	'1871_Proclamation_of_the_German_Empire.jpg': new Asset(
+		'File:1871_Proclamation_of_the_German_Empire.jpg',
+		'1871 Proclamation of the German Empire',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-zero' ),
+		api.getLicenceStore().getLicence( 'PD' ),
 		api,
 		{
 			// No detectable author:
@@ -151,21 +151,6 @@ return {
 		null,
 		api
 	),
-// TODO: Add support for properly scraping HTML lists:
-/*
-	'Drawing_of_a_CCTV_Camera.svg': new Asset(
-		'File:Drawing_of_a_CCTV_Camera.svg',
-		'Drawing of a CCTV Camera',
-		// Drawing:
-		'drawing',
-		api.getLicenceStore().getLicence( 'PD' ),
-		api,
-		{
-			// Very complex author:
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/File:Drawing_of_a_CCTV_Camera.JPG">Drawing_of_a_CCTV_Camera.JPG</a>: <a href="http://commons.wikimedia.org/wiki/User_talk:Think_outside_the_box">Think outside the box</a> | derivative work: <a href="http://commons.wikimedia.org/wiki/User:PhoneixS">PhoneixS</a>' ) )]
-		}
-	),
-*/
 	'The_Little_Princess_(1939)_full.ogv': new Asset(
 		'File:The_Little_Princess_(1939)_full.ogv',
 		'The Little Princess (1939) full',
@@ -251,6 +236,54 @@ return {
 		api,
 		'//de.wikipedia.org/'
 	)
+// TODO: Edge cases
+/*
+	'File:"L\'Absinthe", par Edgar Degas (1876).jpg': new Asset(
+		'File:"L\'Absinthe", par Edgar Degas (1876).jpg',
+		'"L\'Absinthe", par Edgar Degas (1876)',
+		'bitmap',
+		api.getLicenceStore().getLicence( 'PD' ),
+		api,
+		{
+			authors: // TODO
+		}
+	),
+	'Statue Andrrea Palladio Vicenza.jpg': new Asset(
+		'File:Statue Andrrea Palladio Vicenza.jpg',
+		'Statue Andrrea Palladio Vicenza',
+		'bitmap',
+		api.getLicenceStore().getLicence( 'cc-zero' ),
+		api,
+		{
+			authors: // TODO
+		}
+	),
+	'1870_Erhard_Map_of_Paris_and_Vicinity,_France_-_Geographicus_-_Paris-erhard-1870.jpg': new Asset(
+		'File:1870_Erhard_Map_of_Paris_and_Vicinity,_France_-_Geographicus_-_Paris-erhard-1870.jpg',
+		'1870 Erhard Map of Paris and Vicinity, France - Geographicus - Paris-erhard-1870',
+		'bitmap',
+		api.getLicenceStore().getLicence( 'PD' ),
+		api,
+		{
+			authors: // TODO
+		}
+	),
+*/
+// TODO: Add support for properly scraping HTML lists:
+/*
+	'Drawing_of_a_CCTV_Camera.svg': new Asset(
+		'File:Drawing_of_a_CCTV_Camera.svg',
+		'Drawing of a CCTV Camera',
+		// Drawing:
+		'drawing',
+		api.getLicenceStore().getLicence( 'PD' ),
+		api,
+		{
+			// Very complex author:
+			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/File:Drawing_of_a_CCTV_Camera.JPG">Drawing_of_a_CCTV_Camera.JPG</a>: <a href="http://commons.wikimedia.org/wiki/User_talk:Think_outside_the_box">Think outside the box</a> | derivative work: <a href="http://commons.wikimedia.org/wiki/User:PhoneixS">PhoneixS</a>' ) )]
+		}
+	),
+*/
 };
 
 } );
