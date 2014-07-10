@@ -6,7 +6,7 @@ define( ['jquery'], function( $ ) {
 'use strict';
 
 /**
- * Represents a Commons asset.
+ * Represents an asset.
  * @constructor
  *
  * @param {string} prefixedFilename
@@ -97,6 +97,11 @@ $.extend( Asset.prototype, {
 	_wikiUrl: null,
 
 	/**
+	 * @type {string|null}
+	 */
+	_url: null,
+
+	/**
 	 * @return {string}
 	 */
 	getFilename: function() {
@@ -111,6 +116,18 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
+	 * @param {string|null} url
+	 *
+	 * @throws {Error} if the URL is not specified properly.
+	 */
+	setUrl: function( url ) {
+		if( typeof url !== 'string' && url !== null ) {
+			throw new Error( 'URL needs to be a string or null' );
+		}
+		this._url = url;
+	},
+
+	/**
 	 * Returns the asset's URL.
 	 * @return {string}
 	 */
@@ -118,12 +135,28 @@ $.extend( Asset.prototype, {
 		if( this._wikiUrl ) {
 			return 'http:' + this._wikiUrl + 'wiki/' + this._prefixedFilename;
 		} else {
+			if( !this._url ) {
+				return '';
+			}
+
 			if( this._url.indexOf( 'http' ) === 0 ) {
 				return this._url;
 			} else {
 				return 'http://' + this._url;
 			}
 		}
+	},
+
+	/**
+	 * @param {string} title
+	 *
+	 * @throws {Error} if the title is not of type "string".
+	 */
+	setTitle: function( title ) {
+		if( typeof title !== 'string' ) {
+			throw new Error( 'title needs to be a string' );
+		}
+		this._title = title;
 	},
 
 	/**

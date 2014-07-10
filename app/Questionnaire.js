@@ -752,171 +752,126 @@ $.extend( Questionnaire.prototype, {
 	_applyLogic: function( $page ) {
 		var self = this,
 			value,
-			p = $page.data( 'questionnaire-page' );
+			p = $page.data( 'questionnaire-page' ),
+			goTo;
 
 		if( p === '2' ) {
 			$page.find( 'span.checkbox' ).parent().on( 'click', function() {
+				// FIXME Do not set private variable, LicenceStore instance should be a
+				// configuration matter.
 				self._asset._licence = new LicenceStore( LICENCES ).detectLicence( $( this ).data( 'licenceId' ) );
-			});
+			} );
 
-			var goto = '3';
-			if( !this._asset.getAuthors() ||
-					this._asset.getAuthors().length === 0 ||
-					this._asset.getAuthors( { format: 'string' } ) === messages['author-undefined'] ) {
-				goto = 'form-author';
-			} else if( !this._asset._title ) {
-				goto = 'form-title';
-			} else if( !this._asset._url ) {
-				goto = 'form-url';
+			goTo = '3';
+			if(
+				!this._asset.getAuthors()
+				|| this._asset.getAuthors().length === 0
+				|| this._asset.getAuthors( { format: 'string' } ) === messages['author-undefined']
+			) {
+				goTo = 'form-author';
+			} else if( !this._asset.getTitle() ) {
+				goTo = 'form-title';
+			} else if( !this._asset.getUrl() ) {
+				goTo = 'form-url';
 			}
 
-			for( var answer = 1; answer <= 8; answer ++ ) {
-				$page = this._applyLogAndGoTo( $page, p, answer, goto );
+			for( var answer = 1; answer <= 8; answer++ ) {
+				$page = this._applyLogAndGoTo( $page, p, answer, goTo );
 			}
 			$page = this._applyLogAndGoTo( $page, p, 9, 'result-note-cc0' );
 			$page = this._applyLogAndGoTo( $page, p, 10, '15' );
-		} else if( p === 'form-author' ) {
-			var goto = '3';
-			if ( !this._asset._title || this._asset._title === messages['file-untitled'] ) {
-				goto = 'form-title';
-			} else if ( !this._asset._url ) {
-				goto = 'form-url';
+
+		} else if( p === 'form-author' || p === 'form-title' || p === 'form-url' ) {
+			goTo = '3';
+
+			var title = this._asset.getTitle();
+
+			if( p === 'form-author' && ( !title || title === messages['file-untitled'] ) ) {
+				goTo = 'form-title';
+			} else if( p !== 'form-url' && !this._asset.getUrl() ) {
+				goTo = 'form-url';
 			}
 
-			var submitFormAuthor = function() {
-				self._log( 'form-author', 1, function() {
-					return self._getLoggedString( 'form-author', '1' );
+			var submitForm = function() {
+				self._log( p, 1, function() {
+					return self._getLoggedString( p, 1 );
 				} );
-				self._goToAndUpdate( goto );
+				self._goToAndUpdate( goTo );
 			};
 
-			$page.find( 'input.a1' )
-				.on( 'keyup', function() {
-					var value = $.trim( $( this ).val() );
+			var $input = $page.find( 'input.a1' );
 
-					if( value === '' ) {
-						self._asset.setAuthors(
-							[ new Author( $( messages['author-undefined'] ) ) ]
-						);
-						delete self._loggedAnswers['form-author'];
-						delete self._loggedStrings['form-author'];
-					} else {
-						self._asset.setAuthors( [ new Author( $( document.createTextNode( value ) ) ) ] );
-						self._log( 'form-author', 1, value, false );
-					}
+			if( p === 'form-author' ) {
+				$input.val( self._asset.getAuthors( { format: 'string' } ) );
+			} else if( p === 'form-title' ) {
+				$input.val( self._asset.getTitle() );
+			} else if( p === 'form-url' ) {
+				$input.val( self._asset.getUrl() );
+			}
 
-					$( self ).trigger( 'update' );
-				} )
-				.on( 'keypress', function( event ) {
-					if( event.keyCode === 13 ) {
-						event.preventDefault();
-						submitFormAuthor();
+			$input
+			.on( 'keyup', function() {
+				var value = $.trim( $( this ).val() );
+
+				if( value === '' ) {
+					if( p === 'form-author' ) {
+						self._asset.setAuthors( [new Author( $( messages['author-undefined'] ) )] );
+					} else if( p === 'form-title' ) {
+						self._asset.setTitle( messages['file-untitled'] );
+					} else if( p === 'form-url' ) {
+						self._asset.setUrl( null );
 					}
-				} )
-				.val( self._asset.getAuthors( { format: 'string' } ) );
+					delete self._loggedAnswers[p];
+					delete self._loggedStrings[p];
+				} else {
+					if( p === 'form-author' ) {
+						self._asset.setAuthors( [
+							new Author( $( document.createTextNode( value ) ) )
+						] );
+					} else if( p === 'form-title' ) {
+						self._asset.setTitle( value );
+					} else if( p === 'form-url' ) {
+						self._asset.setUrl( value );
+					}
+					self._log( p, 1, value, false );
+				}
+
+				$( self ).trigger( 'update' );
+			} )
+			.on( 'keypress', function( event ) {
+				if( event.keyCode === 13 ) {
+					event.preventDefault();
+					submitForm();
+				}
+			} );
 
 			$page.find( 'a.a1' ).on( 'click', function() {
-				submitFormAuthor();
+				submitForm();
 			} );
 
 			$page.find( 'li.a2' ).on( 'click', function() {
-				$page.find( 'input.a1' ).val( messages['author-undefined'] );
-				self._asset.setAuthors( [ new Author( $( document.createTextNode( messages['author-undefined'] ) ) ) ] );
-				self._log( 'form-author', 1, messages['author-undefined'], false );
-				submitFormAuthor();
-			});
+				$input.val( messages['author-undefined'] );
 
-		} else if( p === 'form-title' ) {
-			var goto = '3';
+				var value;
 
-			if ( !this._asset._url ) {
-				goto = 'form-url';
-			}
+				if( p === 'form-author' ) {
+					value = messages['author-undefined'];
+					self._asset.setAuthors( [
+						new Author( $( document.createTextNode( value ) ) )
+					] );
+				} else if( p === 'form-title' ) {
+					value = messages['file-untitled'];
+					self._asset.setTitle( value );
+				} else if( p === 'form-url' ) {
+					value = '';
+					self._asset.setUrl( null );
+				}
 
-			var submitFormTitle = function() {
-				self._log( 'form-title', 1, function() {
-					return self._getLoggedString( 'form-title', '1' );
-				} );
-				self._goToAndUpdate( goto );
-			};
+				$input.val( value );
+				self._log( p, 1, '', false );
 
-			$page.find( 'input.a1' )
-				.on( 'keyup', function() {
-					var value = $.trim( $( this ).val() );
-
-					if( value === '' ) {
-						self._asset._title = messages['file-untitled'];
-						delete self._loggedAnswers['form-title'];
-						delete self._loggedStrings['form-title'];
-					} else {
-						self._asset._title = value;
-						self._log( 'form-title', 1, value, false );
-					}
-
-					$( self ).trigger( 'update' );
-				} )
-				.on( 'keypress', function( event ) {
-					if( event.keyCode === 13 ) {
-						event.preventDefault();
-						submitFormTitle();
-					}
-				} )
-				.val( self._asset.getTitle() );
-
-			$page.find( 'a.a1' ).on( 'click', function() {
-				submitFormTitle();
+				submitForm();
 			} );
-
-			$page.find( 'li.a2' ).on( 'click', function() {
-				$page.find( 'input.a1' ).val( messages['file-untitled'] );
-				self._asset._title = messages['file-untitled'];
-				self._log( 'form-title', 1, messages['file-untitled'], false );
-				submitFormTitle();
-			});
-
-		} else if( p === 'form-url' ) {
-			$page = this._applyLogAndGoTo( $page, p, 2, '3' );
-
-			var submitFormUrl = function() {
-				self._log( 'form-url', 1, function() {
-					return self._getLoggedString( 'form-url', '1' );
-				} );
-				self._goToAndUpdate( '3' );
-			};
-
-			$page.find( 'input.a1' )
-				.on( 'keyup', function() {
-					var value = $.trim( $( this ).val() );
-
-					if( value === '' ) {
-						self._asset._url = '';
-						delete self._loggedAnswers['form-url'];
-						delete self._loggedStrings['form-url'];
-					} else {
-						self._asset._url = value;
-						self._log( 'form-url', 1, value, false );
-					}
-
-					$( self ).trigger( 'update' );
-				} )
-				.on( 'keypress', function( event ) {
-					if( event.keyCode === 13 ) {
-						event.preventDefault();
-						submitFormUrl();
-					}
-				} )
-				.val( self._asset.getUrl() );
-
-			$page.find( 'a.a1' ).on( 'click', function() {
-				submitFormUrl();
-			} );
-
-			$page.find( 'li.a2').on( 'click', function() {
-				$page.find( 'input.a1' ).val();
-				self._asset._url = '';
-				self._log( 'form-url', 1, '', false );
-				submitFormUrl();
-			});
 
 		} else if( p === '3' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, '7' );
@@ -942,7 +897,7 @@ $.extend( Questionnaire.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '5a' );
 		} else if( p === '7' ) {
-			var goTo = this._getResult().useCase === 'print' ? '8' : '12a';
+			goTo = this._getResult().useCase === 'print' ? '8' : '12a';
 			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
 			$page = this._applyLogAndGoTo( $page, p, 2, goTo );
 		} else if( p === '8' ) {
