@@ -233,7 +233,7 @@ var testSets = {
 		la: {},
 		templates: ['result-note-pd']
 	} ],
-	'Statue Andrrea Palladio Vicenza.jpg': [ {
+	'Fiesta-Zuschauer Z1.jpeg': [ {
 		la: {},
 		templates: ['result-note-cc0']
 	} ]
