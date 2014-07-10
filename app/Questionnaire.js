@@ -3,19 +3,14 @@
  * @author snater.com < wikimedia@snater.com >
  */
 /* global alert */
-define(
-	[
-		'jquery',
-		'app/Asset',
-		'app/AttributionGenerator',
-		'app/Author',
-		'app/LicenceStore',
-		'app/LICENCES',
-		'dojo/i18n!./nls/Questionnaire',
-		'templates/registry',
-		'app/AjaxError'
-	],
-	function( $, Asset, AttributionGenerator, Author, LicenceStore, LICENCES, messages, templateRegistry, AjaxError ) {
+define( [
+	'jquery',
+	'app/AttributionGenerator',
+	'app/QuestionnairePage',
+	'dojo/i18n!./nls/Questionnaire',
+	'templates/registry',
+	'app/AjaxError'
+], function( $, AttributionGenerator, QuestionnairePage, messages, templateRegistry, AjaxError ) {
 'use strict';
 
 /**
@@ -39,7 +34,7 @@ define(
  * @throws {Error} if asset does not feature a proper licence.
  */
 var Questionnaire = function( $node, asset ) {
-	if( !( $node instanceof $ ) || !( asset instanceof Asset ) ) {
+	if( !( $node instanceof $ ) || asset === undefined ) {
 		throw new Error( 'No proper parameters specified' );
 	}
 
@@ -113,7 +108,10 @@ $.extend( Questionnaire.prototype, {
 			page = '2';
 		} else if( this._asset.getAuthors().length === 0 ) {
 			page = '9';
-		} else if( !this._asset.getLicence().isInGroup( 'cc4' ) && this._asset.getTitle().length === 0 ) {
+		} else if(
+			!this._asset.getLicence().isInGroup( 'cc4' )
+			&& this._asset.getTitle().length === 0
+		) {
 			page = '10';
 		} else if( this._asset.getUrl().length === 0 ) {
 			page = '11';
@@ -335,7 +333,7 @@ $.extend( Questionnaire.prototype, {
 		}
 
 		return $.isFunction( pageAnswers[answerId] )
-			? pageAnswers[answerId]()
+			? pageAnswers[answerId]( this )
 			: pageAnswers[answerId];
 	},
 
@@ -583,12 +581,36 @@ $.extend( Questionnaire.prototype, {
 
 			$.ajax( ajaxOptions )
 			.done( function( html ) {
-				var $content = $( '<div/>' )
-					.addClass( 'questionnaire-page page page-' + page )
-					.data( 'questionnaire-page', page )
-					.html( html );
+				var questionnairePage = new QuestionnairePage(
+					page,
+					html,
+					self._asset,
+					self._getResult(),
+					self._loggedStrings
+				);
 
-				$pages = $pages.add( self._applyFunctionality( $content ) );
+				questionnairePage.applyValuesToInputElements( self._loggedStrings[page] );
+
+				$( questionnairePage )
+				.on( 'log', function( event, o ) {
+					if( o.answer === undefined ) {
+						delete self._loggedAnswers[o.page];
+						delete self._loggedStrings[o.page];
+						questionnairePage.setResult( self._getResult() );
+					} else {
+						self._log( o.page, o.answer, o.value, o.cacheNavigation );
+					}
+				} )
+				.on( 'goto', function( event, toPage ) {
+					self._goToAndUpdate( toPage );
+				} )
+				.on( 'update', function( event, asset ) {
+					self._asset = asset;
+					$( self ).trigger( 'update' );
+					questionnairePage.setResult( self._getResult() );
+				} );
+
+				$pages = $pages.add( questionnairePage.$page );
 				d.resolve( $pages );
 			} )
 			.fail( function() {
@@ -602,426 +624,13 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Applies functionality to a page's DOM.
-	 *
-	 * @param {jQuery} $page
-	 * @return {jQuery}
-	 */
-	_applyFunctionality: function( $page ) {
-		$page = this._applyGenerics( $page );
-		$page = this._applyValuesToInputElements( $page );
-		$page = this._applyLogic( $page );
-		return $page;
-	},
-
-	/**
-	 * Applies generic HTML and functionality to a page's DOM.
-	 *
-	 * @param {jQuery} $page
-	 * @return {jQuery}
-	 */
-	_applyGenerics: function( $page ) {
-		var self = this;
-
-		$page.find( 'div.expandable-trigger').on( 'click', function() {
-			$( '.expandable' ).slideUp();
-			$( this ).next().slideDown();
-		});
-
-		$page.find( 'ul.answers li' )
-		.prepend(
-				$( '<span/>' ).addClass( 'checkbox' ).html( '&nbsp;' )
-				.on( 'mouseover', function( event ) {
-					self._startCheckboxAnimation( $( event.target ) );
-				} )
-				.on( 'mouseout', function( event ) {
-					self._stopCheckboxAnimation( $( event.target ) );
-				} )
-		)
-		.on( 'mouseover', function( event ) {
-			self._startCheckboxAnimation( $( event.target ).find( '.checkbox' ) );
-		} )
-		.on( 'mouseout', function( event ) {
-			self._stopCheckboxAnimation( $( event.target ).find( '.checkbox' ) );
-		} );
-
-		return $page;
-	},
-
-	/**
-	 * Applies default or existing answers to input elements.
-	 *
-	 * @param {jQuery} $page
-	 */
-	_applyValuesToInputElements: function( $page ) {
-		var self = this,
-			page = $page.data( 'questionnaire-page' );
-
-		$page.find( 'input' ).each( function() {
-			var $input = $( this ),
-				classes = $input.attr( 'class' ).split( ' ' );
-
-			for( var i = 0; i < classes.length; i++ ) {
-				if( /^a[0-9]{1}$/.test( classes[i] ) ) {
-					var answerId = classes[i].split( 'a' )[1];
-					if( self._loggedStrings[page] && self._loggedStrings[page][answerId] ) {
-						$input.val( self._loggedStrings[page][answerId] );
-					}
-				}
-			}
-
-		} );
-
-		return $page;
-	},
-
-	/**
-	 * Starts a checkbox ticking animation.
-	 *
-	 * @param {jQuery} $checkbox
-	 */
-	_startCheckboxAnimation: function( $checkbox ) {
-		var deferred = $.Deferred(),
-			promise = deferred.promise();
-
-		$checkbox.data( 'app-animation', deferred );
-
-		/**
-		 * @param {Function[]} queue
-		 * @param {number} offsetFactor
-		 * @return {Function[]}
-		 */
-		function addAnimationStageToQueue( queue, offsetFactor ) {
-			queue.push( function() {
-				$checkbox.css( 'backgroundPosition', offsetFactor * 20 + 'px 0' );
-			} );
-			return queue;
-		}
-
-		var queue = [];
-		for( var i = -1; i >= -4; i-- ) {
-			queue = addAnimationStageToQueue( queue, i );
-		}
-
-		function next() {
-			if( promise.state() === 'resolved' ) {
-				$checkbox.css( 'backgroundPosition', '0 0' );
-				queue = [];
-			}
-
-			if( queue.length === 0 ) {
-				return;
-			}
-
-			queue.shift()();
-
-			setTimeout( function() {
-				next();
-			}, 25 );
-		}
-
-		next();
-	},
-
-	/**
-	 * Stops a checkbox ticking animation.
-	 *
-	 * @param {jQuery} $checkbox
-	 */
-	_stopCheckboxAnimation: function( $checkbox ) {
-		var deferred = $checkbox.data( 'app-animation' );
-
-		if( !deferred ) {
-			return;
-		}
-
-		deferred.resolve();
-
-		deferred.promise().done( function() {
-			$checkbox.css( 'backgroundPosition', '0 0' );
-			$checkbox.removeData( 'app-animation' );
-		} );
-	},
-
-	/**
-	 * Applies logic of a specific page to a node.
-	 *
-	 * @param {jQuery} $page
-	 * @return {jQuery}
-	 */
-	_applyLogic: function( $page ) {
-		var self = this,
-			value,
-			p = $page.data( 'questionnaire-page' ),
-			goTo;
-
-		if( p === '2' ) {
-			$page.find( 'span.checkbox' ).parent().on( 'click', function() {
-				// FIXME Do not set private variable, LicenceStore instance should be a
-				// configuration matter.
-				self._asset._licence = new LicenceStore( LICENCES ).detectLicence( $( this ).data( 'licenceId' ) );
-			} );
-
-			goTo = '3';
-			if(
-				!this._asset.getAuthors()
-				|| this._asset.getAuthors().length === 0
-				|| this._asset.getAuthors( { format: 'string' } ) === messages['author-undefined']
-			) {
-				goTo = 'form-author';
-			} else if( !this._asset.getTitle() ) {
-				goTo = 'form-title';
-			} else if( !this._asset.getUrl() ) {
-				goTo = 'form-url';
-			}
-
-			for( var answer = 1; answer <= 8; answer++ ) {
-				$page = this._applyLogAndGoTo( $page, p, answer, goTo );
-			}
-			$page = this._applyLogAndGoTo( $page, p, 9, 'result-note-cc0' );
-			$page = this._applyLogAndGoTo( $page, p, 10, '15' );
-
-		} else if( p === 'form-author' || p === 'form-title' || p === 'form-url' ) {
-			goTo = '3';
-
-			var title = this._asset.getTitle();
-
-			if( p === 'form-author' && ( !title || title === messages['file-untitled'] ) ) {
-				goTo = 'form-title';
-			} else if( p !== 'form-url' && !this._asset.getUrl() ) {
-				goTo = 'form-url';
-			}
-
-			var submitForm = function() {
-				self._log( p, 1, function() {
-					return self._getLoggedString( p, 1 );
-				} );
-				self._goToAndUpdate( goTo );
-			};
-
-			var $input = $page.find( 'input.a1' );
-
-			if( p === 'form-author' ) {
-				$input.val( self._asset.getAuthors( { format: 'string' } ) );
-			} else if( p === 'form-title' ) {
-				$input.val( self._asset.getTitle() );
-			} else if( p === 'form-url' ) {
-				$input.val( self._asset.getUrl() );
-			}
-
-			$input
-			.on( 'keyup', function() {
-				var value = $.trim( $( this ).val() );
-
-				if( value === '' ) {
-					if( p === 'form-author' ) {
-						self._asset.setAuthors( [new Author( $( messages['author-undefined'] ) )] );
-					} else if( p === 'form-title' ) {
-						self._asset.setTitle( messages['file-untitled'] );
-					} else if( p === 'form-url' ) {
-						self._asset.setUrl( null );
-					}
-					delete self._loggedAnswers[p];
-					delete self._loggedStrings[p];
-				} else {
-					if( p === 'form-author' ) {
-						self._asset.setAuthors( [
-							new Author( $( document.createTextNode( value ) ) )
-						] );
-					} else if( p === 'form-title' ) {
-						self._asset.setTitle( value );
-					} else if( p === 'form-url' ) {
-						self._asset.setUrl( value );
-					}
-					self._log( p, 1, value, false );
-				}
-
-				$( self ).trigger( 'update' );
-			} )
-			.on( 'keypress', function( event ) {
-				if( event.keyCode === 13 ) {
-					event.preventDefault();
-					submitForm();
-				}
-			} );
-
-			$page.find( 'a.a1' ).on( 'click', function() {
-				submitForm();
-			} );
-
-			$page.find( 'li.a2' ).on( 'click', function() {
-				$input.val( messages['author-undefined'] );
-
-				var value;
-
-				if( p === 'form-author' ) {
-					value = messages['author-undefined'];
-					self._asset.setAuthors( [
-						new Author( $( document.createTextNode( value ) ) )
-					] );
-				} else if( p === 'form-title' ) {
-					value = messages['file-untitled'];
-					self._asset.setTitle( value );
-				} else if( p === 'form-url' ) {
-					value = '';
-					self._asset.setUrl( null );
-				}
-
-				$input.val( value );
-				self._log( p, 1, '', false );
-
-				submitForm();
-			} );
-
-		} else if( p === '3' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, '7' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '7' );
-
-			$page.find( '.a3' ).on( 'click', function() {
-				self._log( p, 3 );
-				if( self._asset.getLicence().isInGroup( 'cc2de' ) ) {
-					self._goToAndUpdate( '7' );
-				} else {
-					self._goToAndUpdate( 'result-note-privateUse' );
-				}
-			} );
-
-			if( this._getResult().attributionAlthoughExceptionalUse ) {
-				$page = this._applyDisabled( $page, 4 );
-			} else {
-				$page = this._applyLogAndGoTo( $page, p, 4, '5' );
-			}
-
-			$page = this._applyLogAndGoTo( $page, p, 5, '6' );
-		} else if( p === '5') {
-			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '5a' );
-		} else if( p === '7' ) {
-			goTo = this._getResult().useCase === 'print' ? '8' : '12a';
-			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
-			$page = this._applyLogAndGoTo( $page, p, 2, goTo );
-		} else if( p === '8' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, '12a' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '12a' );
-		} else if( p === '9' ) {
-
-			var submit9a = function() {
-				if( !self._getLoggedString( '9', '1' ) ) {
-					submit9b();
-				} else {
-					self._log( '9', 1, function() {
-						return self._getLoggedString( '9', '1' );
-					} );
-					self._goToAndUpdate( '3' );
-				}
-			};
-
-			var submit9b = function() {
-				var value =  messages['unknown'];
-				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-				self._log( '9', 2, value );
-				self._goToAndUpdate( '3' );
-			};
-
-			$page.find( 'input.a1' )
-			.on( 'keyup', function() {
-				var value = $.trim( $( this ).val() );
-
-				if( value === '' ) {
-					self._asset.setAuthors(
-						[new Author( $( document.createTextNode( messages['unknown'] ) ) )]
-					);
-					delete self._loggedAnswers['9'];
-					delete self._loggedStrings['9'];
-				} else {
-					self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-					self._log( '9', 1, value, false );
-				}
-
-				$( self ).trigger( 'update' );
-			} )
-			.on( 'keypress', function( event ) {
-				if( event.keyCode === 13 ) {
-					event.preventDefault();
-					submit9a();
-				}
-			} );
-
-			$page.find( 'a.a1' ).on( 'click', function() {
-				submit9a();
-			} );
-
-			$page.find( '.a2' ).on( 'click', function() {
-				submit9b();
-			} );
-
-			// Initially update when moving forward to this page. This ensures displaying "unknown
-			// author" when accessing the page the first time.
-			if( !this._getLoggedString( '9', 1 ) ) {
-				value = messages['unknown'];
-				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-				$( this ).trigger( 'update' );
-			}
-
-		} else if( p === '12a' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, 'result-success' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
-		} else if( p === '12b' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, '13' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '12c' );
-		} else if( p === '13' ) {
-
-			var submit13 = function() {
-				self._log( '13', 1, function() {
-					return self._getLoggedString( '13', '1' );
-				} );
-				self._goToAndUpdate( 'result-success' );
-			};
-
-			$page.find( 'input.a1' )
-			.on( 'keyup', function() {
-				var value = $( this ).val();
-
-				if( value === '' ) {
-					delete self._loggedAnswers['13'];
-					delete self._loggedStrings['13'];
-				} else {
-					self._log( '13', 1, value, false );
-				}
-
-				$( self ).trigger( 'update' );
-			} )
-			.on( 'keypress', function( event ) {
-				if( event.keyCode === 13 ) {
-					event.preventDefault();
-					submit13();
-				}
-			} );
-
-			$page.find( 'a.a1' ).on( 'click', function() {
-				submit13();
-			} );
-
-			// Initially update when moving back to this page to reflect previously entered value in
-			// preview:
-			value = this._getLoggedString( '13', 1 );
-			if( value ) {
-				this._log( '13', 1, value, false );
-				$( this ).trigger( 'update' );
-			}
-		}
-
-		return $page;
-	},
-
-	/**
 	 * Returns a logged string.
 	 *
 	 * @param {string} page
 	 * @param {number} answer
-	 * @returns {string}
+	 * @return {string}
 	 */
-	_getLoggedString: function( page, answer ) {
+	getLoggedString: function( page, answer ) {
 		if( this._loggedStrings[page] && this._loggedStrings[page][answer] ) {
 			return this._loggedStrings[page][answer];
 		}
@@ -1067,25 +676,6 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Short-cut that logs an answer and triggers going to some page.
-	 *
-	 * @param {jQuery} $page
-	 * @param {string} currentPage
-	 * @param {number|string} answer
-	 * @param {string|Function} toPage
-	 */
-	_applyLogAndGoTo: function( $page, currentPage, answer, toPage ) {
-		var self = this;
-
-		$page.find( '.a' + answer ).on( 'click', function() {
-			self._log( currentPage, answer );
-			self._goToAndUpdate( toPage );
-		} );
-
-		return $page;
-	},
-
-	/**
 	 * Triggers going to a page and issues an "update" event after rendering the page.
 	 *
 	 * @param {string|Function} toPage
@@ -1099,20 +689,6 @@ $.extend( Questionnaire.prototype, {
 		.done( function() {
 			$( self ).trigger( 'update' );
 		} );
-	},
-
-	/**
-	 * Disables an answer.
-	 *
-	 * @param {jQuery} $page
-	 * @param {number} answer
-	 */
-	_applyDisabled: function( $page, answer ) {
-		$page.find( '.a' + answer )
-		.off( 'mouseover' )
-		.addClass( 'disabled' );
-
-		return $page;
 	}
 
 } );
