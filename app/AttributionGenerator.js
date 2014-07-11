@@ -76,7 +76,7 @@ $.extend( AttributionGenerator.prototype, {
 			return false;
 		}
 
-		if( attributionGenerator.getAsset().getFilename() !== this._asset.getFilename() ) {
+		if( !attributionGenerator.getAsset().equals( this._asset ) ) {
 			return false;
 		}
 

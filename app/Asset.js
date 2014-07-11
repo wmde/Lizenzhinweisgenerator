@@ -240,6 +240,31 @@ $.extend( Asset.prototype, {
 		}
 
 		return deferred.promise();
+	},
+
+	/**
+	 * Checks if the asset object equals another asset object.
+	 *
+	 * @param {Asset} asset
+	 * @return {boolean}
+	 */
+	equals: function( asset ) {
+		var authors = asset.getAuthors();
+
+		if( authors.length !== this._authors.length ) {
+			return false;
+		}
+
+		for( var i = 0; i < this._authors.length; i++ ) {
+			if( authors[i].getText() !== this._authors[i].getText() ) {
+				return false;
+			}
+		}
+
+		return asset.getFilename() === this.getFilename()
+			&& asset.getTitle() === this.getTitle()
+			&& asset.getUrl === this.getUrl()
+			&& asset.getLicence().getId() === this.getLicence().getId();
 	}
 
 } );

@@ -170,21 +170,8 @@ $.extend( QuestionnairePage.prototype, {
 			goTo;
 
 		if( p === '2' ) {
-			$page.find( 'span.checkbox' ).parent().on( 'click', function() {
-				// FIXME Do not set private variable, LicenceStore instance should be a
-				// configuration matter.
-				self._asset._licence = new LicenceStore( LICENCES ).detectLicence(
-					$( this ).data( 'licenceId' )
-				);
-				self._update();
-			} );
-
 			goTo = '3';
-			if(
-				!this._asset.getAuthors()
-				|| this._asset.getAuthors().length === 0
-				|| this._asset.getAuthors( { format: 'string' } ) === messages['author-undefined']
-			) {
+			if( !this._asset.getAuthors().length || this._asset.getAuthors()[0].getText() === messages['author-undefined'] ) {
 				goTo = 'form-author';
 			} else if( !this._asset.getTitle() ) {
 				goTo = 'form-title';
@@ -192,9 +179,11 @@ $.extend( QuestionnairePage.prototype, {
 				goTo = 'form-url';
 			}
 
-			for( var answer = 1; answer <= 8; answer++ ) {
-				$page = this._applyLogAndGoTo( $page, p, answer, goTo );
-			}
+			$page.find( '.a1' ).on( 'click', function() {
+				self._log( p, 1, $( this ).data( 'licenceId' ) );
+				self._goTo( goTo );
+			} );
+
 			$page = this._applyLogAndGoTo( $page, p, 9, 'result-note-cc0' );
 			$page = this._applyLogAndGoTo( $page, p, 10, '15' );
 
@@ -233,26 +222,13 @@ $.extend( QuestionnairePage.prototype, {
 
 				if( value === '' ) {
 					if( p === 'form-author' ) {
-						self._asset.setAuthors( [new Author( $( messages['author-undefined'] ) )] );
+						value = messages['author-undefined'];
 					} else if( p === 'form-title' ) {
-						self._asset.setTitle( messages['file-untitled'] );
-					} else if( p === 'form-url' ) {
-						self._asset.setUrl( null );
+						value = messages['file-untitled'];
 					}
-
-					self._log( p );
-				} else {
-					if( p === 'form-author' ) {
-						self._asset.setAuthors( [
-							new Author( $( document.createTextNode( value ) ) )
-						] );
-					} else if( p === 'form-title' ) {
-						self._asset.setTitle( value );
-					} else if( p === 'form-url' ) {
-						self._asset.setUrl( value );
-					}
-					self._log( p, 1, value, false );
 				}
+
+				self._log( p, 1, value, false );
 
 				self._update();
 			} )
@@ -272,21 +248,15 @@ $.extend( QuestionnairePage.prototype, {
 
 				if( p === 'form-author' ) {
 					value = messages['author-undefined'];
-					self._asset.setAuthors( [
-						new Author( $( document.createTextNode( value ) ) )
-					] );
 				} else if( p === 'form-title' ) {
 					value = messages['file-untitled'];
-					self._asset.setTitle( value );
 				} else if( p === 'form-url' ) {
 					value = '';
-					self._asset.setUrl( null );
 				}
 
 				self._log( p, 1, value );
-
-				$input.val( value );
-				submitForm();
+				self._goTo( goTo );
+				self._update();
 			} );
 
 		} else if( p === '3' ) {

@@ -5,12 +5,16 @@
 /* global alert */
 define( [
 	'jquery',
+	'app/Asset',
 	'app/AttributionGenerator',
+	'app/Author',
+	'app/LicenceStore',
+	'app/LICENCES',
 	'app/QuestionnairePage',
 	'dojo/i18n!./nls/Questionnaire',
 	'templates/registry',
 	'app/AjaxError'
-], function( $, AttributionGenerator, QuestionnairePage, messages, templateRegistry, AjaxError ) {
+], function( $, Asset, AttributionGenerator, Author, LicenceStore, LICENCES, QuestionnairePage, messages, templateRegistry, AjaxError ) {
 'use strict';
 
 /**
@@ -307,7 +311,44 @@ $.extend( Questionnaire.prototype, {
 			useCase = 'other';
 		}
 
+		var asset = new Asset(
+			this._asset._prefixedFilename,
+			this._asset.getTitle(),
+			this._asset.getMediaType(),
+			this._asset.getLicence(),
+			this._asset._api,
+			{
+				authors: this._asset.getAuthors(),
+				attribution: this._asset.getAttribution()
+			},
+			this._asset.getWikiUrl(),
+			this._asset.getUrl()
+		);
+
+		var licenceId = this._getAnswer( '2', 1 );
+
+		if( licenceId ) {
+			asset._licence = new LicenceStore( LICENCES ).detectLicence( licenceId );
+		}
+
+		var customAuthor = this._getAnswer( 'form-author', 1 ),
+			customTitle = this._getAnswer( 'form-title', 1 ),
+			customUrl = this._getAnswer( 'form-url', 1 );
+
+		if( ( !asset.getAuthors().length || asset.getAuthors()[0].getText() === messages['author-undefined'] ) && customAuthor ) {
+			asset.setAuthors( [new Author( $( document.createTextNode( customAuthor ) ) )] );
+		}
+
+		if( ( !asset.getTitle() || asset.getTitle() === messages['file-untitled'] ) && customTitle ) {
+			asset.setTitle( customTitle );
+		}
+
+		if( ( !asset.getUrl() || asset.getUrl() === '' ) && customUrl ) {
+			asset.setUrl( customUrl );
+		}
+
 		return {
+			asset: asset,
 			attributionAlthoughExceptionalUse: this._getAnswer( '5', 1 ),
 			collectionUse: this._getAnswer( '7', 1 ),
 			edited: this._getAnswer( '12a', 2 ),
@@ -363,7 +404,7 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			deferred = $.Deferred(),
 			result = this._getResult(),
-			licence = this._asset.getLicence(),
+			licence = result.asset.getLicence(),
 			pages = [];
 
 		if( result.useCase === 'other' ) {
@@ -407,7 +448,7 @@ $.extend( Questionnaire.prototype, {
 			}
 
 			if( result.fullLicence ) {
-				self._asset.getLicence().getLegalCode()
+				result.asset.getLicence().getLegalCode()
 				.done( function( $licence ) {
 					$nodes.filter( '.page-result-note-fullLicence' ).append( $licence );
 					deferred.resolve( $supplement.add( $nodes ) );
@@ -450,7 +491,7 @@ $.extend( Questionnaire.prototype, {
 			format: result.format
 		}, options );
 
-		var attributionGenerator = new AttributionGenerator( this._asset, options );
+		var attributionGenerator = new AttributionGenerator( result.asset, options );
 
 		// Return cached attribution generator for allowing external objects to check whether a
 		// change actually has occurred.
