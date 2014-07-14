@@ -36,12 +36,12 @@ define( [
  *
  * @throws {Error} on incorrect parameters.
  */
-var QuestionnairePage = function( pageId, html, asset, result ) {
+var QuestionnairePage = function( pageId, html, asset, questionnaireState ) {
 	if(
 		typeof pageId !== 'string'
 		|| typeof html !== 'string'
 		|| asset === undefined
-		|| result === undefined
+		|| questionnaireState === undefined
 	) {
 		throw new Error( 'No proper parameters specified' );
 	}
@@ -49,7 +49,7 @@ var QuestionnairePage = function( pageId, html, asset, result ) {
 	this._pageId = pageId;
 	this._html = html;
 	this._asset = asset;
-	this._result = result;
+	this._questionnaireState = questionnaireState;
 
 	this.$page = $( '<div/>' )
 		.addClass( 'questionnaire-page page page-' + pageId )
@@ -78,10 +78,10 @@ $.extend( QuestionnairePage.prototype, {
 	_asset: null,
 
 	/**
-	 * The most current result.
-	 * @type {Object}
+	 * The questionnaire state as to the current state of the page.
+	 * @type {QuestionnaireState}
 	 */
-	_result: null,
+	_questionnaireState: null,
 
 	/**
 	 * Node the questionnaire page is initialized on.
@@ -102,6 +102,16 @@ $.extend( QuestionnairePage.prototype, {
 	},
 
 	/**
+	 * Applies a QuestionnaireState.
+	 *
+	 * @param {QuestionnaireState} state
+	 */
+	applyState: function( state ) {
+		this._applyValuesToInputElements( state );
+		this._update();
+	},
+
+	/**
 	 * Applies generic HTML and functionality to a page's DOM.
 	 *
 	 * @param {jQuery} $page
@@ -109,11 +119,6 @@ $.extend( QuestionnairePage.prototype, {
 	 */
 	_applyGenerics: function( $page ) {
 		var self = this;
-
-		$page.find( 'div.expandable-trigger').on( 'click', function() {
-			$( '.expandable' ).slideUp();
-			$( this ).next().slideDown();
-		} );
 
 		$page.find( 'ul.answers li' )
 		.prepend(
@@ -138,9 +143,12 @@ $.extend( QuestionnairePage.prototype, {
 	/**
 	 * Applies default or existing answers to input elements.
 	 *
-	 * @param {Object} [loggedStrings]
+	 * @param {QuestionnaireState} state
 	 */
-	applyValuesToInputElements: function( loggedStrings ) {
+	_applyValuesToInputElements: function( state ) {
+		var self = this,
+			strings = state.getPageStrings( state.getPageId() );
+
 		this.$page.find( 'input' ).each( function() {
 			var $input = $( this ),
 				classes = $input.attr( 'class' ).split( ' ' );
@@ -148,12 +156,13 @@ $.extend( QuestionnairePage.prototype, {
 			for( var i = 0; i < classes.length; i++ ) {
 				if( /^a[0-9]{1}$/.test( classes[i] ) ) {
 					var answerId = classes[i].split( 'a' )[1];
-					if( loggedStrings && loggedStrings[answerId] ) {
-						$input.val( loggedStrings[answerId] );
+					if( strings[answerId] ) {
+						$input.val( strings[answerId] );
+						// Log strings to have them reflected in connected components when updating:
+						self._log( state.getPageId(), answerId, strings[answerId] );
 					}
 				}
 			}
-
 		} );
 	},
 
@@ -165,9 +174,20 @@ $.extend( QuestionnairePage.prototype, {
 	 */
 	_applyLogic: function( $page ) {
 		var self = this,
-			value,
 			p = $page.data( 'questionnaire-page' ),
-			goTo;
+			goTo,
+			$input;
+
+		var evaluateInput = function( $input, p ) {
+			var value = $.trim( $input.val() );
+
+			if( value !== '' ) {
+				self._log( p, 1, value );
+			} else {
+				self._removeFromLog( p, 1 );
+				self._log( p, 2 );
+			}
+		};
 
 		if( p === '2' ) {
 			goTo = '3';
@@ -191,72 +211,35 @@ $.extend( QuestionnairePage.prototype, {
 			goTo = '3';
 
 			var title = this._asset.getTitle();
-
 			if( p === 'form-author' && ( !title || title === messages['file-untitled'] ) ) {
 				goTo = 'form-title';
-			} else if( p !== 'form-url' && !this._asset.getUrl() ) {
+			} else if( p !== 'form-url' && ( !this._asset.getUrl() || this._asset.getUrl() === '' ) ) {
 				goTo = 'form-url';
 			}
 
-			var submitForm = function() {
-				self._log( p, 1, function( questionnaire ) {
-					return questionnaire.getLoggedString( p, 1 );
-				} );
-				self._update();
-				self._goTo( goTo );
-			};
-
-			var $input = $page.find( 'input.a1' );
-
-			if( p === 'form-author' ) {
-				$input.val( self._asset.getAuthors( { format: 'string' } ) );
-			} else if( p === 'form-title' ) {
-				$input.val( self._asset.getTitle() );
-			} else if( p === 'form-url' ) {
-				$input.val( self._asset.getUrl() );
-			}
+			$input = $page.find( 'input.a1' );
 
 			$input
 			.on( 'keyup', function() {
-				var value = $.trim( $( this ).val() );
-
-				if( value === '' ) {
-					if( p === 'form-author' ) {
-						value = messages['author-undefined'];
-					} else if( p === 'form-title' ) {
-						value = messages['file-untitled'];
-					}
-				}
-
-				self._log( p, 1, value, false );
-
-				self._update();
+				evaluateInput( $input, p );
 			} )
 			.on( 'keypress', function( event ) {
 				if( event.keyCode === 13 ) {
 					event.preventDefault();
-					submitForm();
+					evaluateInput( $input, p );
+					self._goTo( goTo );
 				}
 			} );
 
 			$page.find( 'a.a1' ).on( 'click', function() {
-				submitForm();
+				evaluateInput( $input, p );
+				self._goTo( goTo );
 			} );
 
 			$page.find( 'li.a2' ).on( 'click', function() {
-				var value;
-
-				if( p === 'form-author' ) {
-					value = messages['author-undefined'];
-				} else if( p === 'form-title' ) {
-					value = messages['file-untitled'];
-				} else if( p === 'form-url' ) {
-					value = '';
-				}
-
-				self._log( p, 1, value );
+				$input.val( '' );
+				evaluateInput( $input, p );
 				self._goTo( goTo );
-				self._update();
 			} );
 
 		} else if( p === '3' ) {
@@ -265,14 +248,14 @@ $.extend( QuestionnairePage.prototype, {
 
 			$page.find( '.a3' ).on( 'click', function() {
 				self._log( p, 3 );
-				if( self._asset.getLicence().isInGroup( 'cc2de' ) ) {
+				if( self._questionnaireState.getAsset().getLicence().isInGroup( 'cc2de' ) ) {
 					self._goTo( '7' );
 				} else {
 					self._goTo( 'result-note-privateUse' );
 				}
 			} );
 
-			if( this._result.attributionAlthoughExceptionalUse ) {
+			if( this._questionnaireState.getResult().attributionAlthoughExceptionalUse ) {
 				$page = this._applyDisabled( $page, 4 );
 			} else {
 				$page = this._applyLogAndGoTo( $page, p, 4, '5' );
@@ -283,7 +266,7 @@ $.extend( QuestionnairePage.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
 			$page = this._applyLogAndGoTo( $page, p, 2, '5a' );
 		} else if( p === '7' ) {
-			goTo = this._result.useCase === 'print' ? '8' : '12a';
+			goTo = this._questionnaireState.getResult().useCase === 'print' ? '8' : '12a';
 			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
 			$page = this._applyLogAndGoTo( $page, p, 2, goTo );
 		} else if( p === '8' ) {
@@ -291,62 +274,30 @@ $.extend( QuestionnairePage.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 2, '12a' );
 		} else if( p === '9' ) {
 
-			var submit9a = function() {
-				if( self._asset.getAuthors().length === 0 ) {
-					submit9b();
-				} else {
-					self._log( '9', 1, function( questionnaire ) {
-						return questionnaire.getLoggedString( '9', 1 );
-					} );
-					self._goTo( '3' );
-				}
-			};
+			$input = $page.find( 'input.a1' );
 
-			var submit9b = function() {
-				var value =  messages['unknown'];
-				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-				self._log( '9', 2, value );
-				self._goTo( '3' );
-			};
-
-			$page.find( 'input.a1' )
+			$input
 			.on( 'keyup', function() {
-				var value = $.trim( $( this ).val() );
-
-				if( value === '' ) {
-					self._asset.setAuthors(
-						[new Author( $( document.createTextNode( messages['unknown'] ) ) )]
-					);
-					self._log( p );
-				} else {
-					self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-					self._log( '9', 1, value, false );
-				}
-
-				self._update();
+					evaluateInput( $input, p );
 			} )
 			.on( 'keypress', function( event ) {
 				if( event.keyCode === 13 ) {
 					event.preventDefault();
-					submit9a();
+					evaluateInput( $input, p );
+					self._goTo( '3' );
 				}
 			} );
 
 			$page.find( 'a.a1' ).on( 'click', function() {
-				submit9a();
+				evaluateInput( $input, p );
+				self._goTo( '3' );
 			} );
 
 			$page.find( '.a2' ).on( 'click', function() {
-				submit9b();
+				$input.val( '' );
+				evaluateInput( $input, p );
+				self._goTo( '3' );
 			} );
-
-			// Initially update when moving forward to this page. This ensures displaying "unknown
-			// author" when accessing the page the first time.
-			if( this._asset.getAuthors().length === 0 ) {
-				value = messages['unknown'];
-				self._asset.setAuthors( [new Author( $( document.createTextNode( value ) ) )] );
-				this._update();
-			}
 
 		} else if( p === '12a' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, 'result-success' );
@@ -356,42 +307,24 @@ $.extend( QuestionnairePage.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 2, '12c' );
 		} else if( p === '13' ) {
 
-			var submit13 = function() {
-				self._log( '13', 1, function( questionnaire ) {
-					return questionnaire.getLoggedString( '13', '1' );
-				} );
-				self._goTo( 'result-success' );
-			};
+			$input = $page.find( 'input.a1' );
 
-			$page.find( 'input.a1' )
+			$input
 			.on( 'keyup', function() {
-				var value = $( this ).val();
-
-				if( value === '' ) {
-					self._log( p );
-				} else {
-					self._log( '13', 1, value, false );
-				}
-
-				self._update();
+				evaluateInput( $input, p );
 			} )
 			.on( 'keypress', function( event ) {
 				if( event.keyCode === 13 ) {
 					event.preventDefault();
-					submit13();
+					evaluateInput( $input, p );
+					self._goTo( 'result-success' );
 				}
 			} );
 
 			$page.find( 'a.a1' ).on( 'click', function() {
-				submit13();
+				evaluateInput( $input, p );
+				self._goTo( 'result-success' );
 			} );
-
-			// Initially update when moving back to this page to reflect previously entered value in
-			// preview:
-			if( this._result['editor'] ) {
-				this._log( '13', 1, this._result['editor'], false );
-				this._update();
-			}
 		}
 
 		return $page;
@@ -402,27 +335,23 @@ $.extend( QuestionnairePage.prototype, {
 	 *
 	 * @param {string} page
 	 * @param {number|string} answer
-	 * @param {string|Function|boolean} [value] If omitted, boolean "true" is logged for the answer.
-	 *        If of type "boolean", the value is assumed to be the value for the "cacheNavigation"
+	 * @param {string|boolean} [value] If omitted, boolean "true" is logged for the answer. If of
+	 *        type "boolean", the value is assumed to be the value for the "cacheNavigation"
 	 *        parameter.
-	 * @param {boolean} cacheNavigation (Default: true)
 	 */
-	_log: function( page, answer, value, cacheNavigation ) {
-		var logObject = {
-			page: page
-		};
+	_log: function( page, answer, value ) {
+		this._questionnaireState.setValue( page, answer, value );
+		this._update();
+	},
 
-		if( answer ) {
-			logObject.answer = answer;
-		}
-
-		if( value ) {
-			logObject.value = value;
-		}
-
-		logObject.cacheNavigation = cacheNavigation === undefined ? true: cacheNavigation;
-
-		$( this ).trigger( 'log', logObject );
+	/**
+	 * Removes a specific answer from the log.
+	 *
+	 * @param {string} page
+	 * @param {number} answer
+	 */
+	_removeFromLog: function( page, answer ) {
+		this._questionnaireState.deleteValue( page, answer );
 	},
 
 	/**
@@ -437,11 +366,7 @@ $.extend( QuestionnairePage.prototype, {
 		var self = this;
 
 		$page.find( '.a' + answer ).on( 'click', function() {
-			$( self ).trigger( 'log', {
-				page: currentPage,
-				answer: answer
-			} );
-
+			self._log( currentPage, answer );
 			self._goTo( toPage );
 		} );
 
@@ -465,9 +390,9 @@ $.extend( QuestionnairePage.prototype, {
 	/**
 	 * Triggers going to a page and issues an "update" event after rendering the page.
 	 *
-	 * @param {string|Function} toPage
+	 * @param {string} toPage
 	 *
-	 * @triggers update
+	 * @triggers goto
 	 */
 	_goTo: function( toPage ) {
 		$( this ).trigger( 'goto', [toPage] );
@@ -475,18 +400,11 @@ $.extend( QuestionnairePage.prototype, {
 
 	/**
 	 * Notifies update the page having updated.
+	 *
+	 * @triggers {update}
 	 */
 	_update: function() {
-		$( this ).trigger( 'update', [this._asset] );
-	},
-
-	/**
-	 * Sets/updates the current result.
-	 *
-	 * @param {Object} result
-	 */
-	setResult: function( result ) {
-		this._result = result;
+		$( this ).trigger( 'update', [this._questionnaireState] );
 	},
 
 	/**

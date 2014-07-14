@@ -5,22 +5,27 @@
 /* global alert */
 define( [
 	'jquery',
-	'app/Asset',
-	'app/AttributionGenerator',
-	'app/Author',
-	'app/LicenceStore',
-	'app/LICENCES',
 	'app/QuestionnairePage',
+	'app/QuestionnaireState',
+	'dojo/Deferred',
 	'dojo/i18n!./nls/Questionnaire',
 	'templates/registry',
 	'app/AjaxError'
-], function( $, Asset, AttributionGenerator, Author, LicenceStore, LICENCES, QuestionnairePage, messages, templateRegistry, AjaxError ) {
+], function(
+	$,
+	QuestionnairePage,
+	QuestionnaireState,
+	Deferred,
+	messages,
+	templateRegistry,
+	AjaxError
+) {
 'use strict';
 
 /**
  * Represents a questionnaire's logic.
  * The page names/numbers and the corresponding logic are based on the questionnaire "Webtool für
- * Creative Commons-Lizenzen v1".
+ * Creative Commons-Lizenzen".
  * @constructor
  *
  * @param {jQuery} $node
@@ -64,26 +69,21 @@ $.extend( Questionnaire.prototype, {
 	_asset: null,
 
 	/**
-	 * Selected answers indexed by page numbers.
-	 * @type {Object}
-	 */
-	_loggedAnswers: null,
-
-	/**
-	 * Caching string answers additionally in a separate object to have them restored when
-	 * re-accessing pages (e.g. by navigating back and forth).
-	 * @type {Object}
-	 */
-	_loggedStrings: null,
-
-	/**
 	 * Caches the navigation path and a copy of the loggedAnswers object for resetting when
 	 * navigating backwards.
-	 * @type {Object[]}
+	 * @type {QuestionnaireState[]|null}
 	 */
 	_navigationCache: null,
 
 	/**
+	 * The most current questionnaire state.
+	 * @type {QuestionnaireState|null}
+	 */
+	_questionnaireState: null,
+
+	/**
+	 * Cached attribution generator that prevents broadcasting a new object to other components
+	 * although no attributes have changed.
 	 * @type {AttributionGenerator|null}
 	 */
 	_attributionGenerator: null,
@@ -97,33 +97,32 @@ $.extend( Questionnaire.prototype, {
 	 *         - {AjaxError}
 	 */
 	start: function() {
-		this._loggedAnswers = {};
-		this._loggedStrings = {};
-
 		this._navigationCache = [];
 
-		var deferred = $.Deferred(),
+		var self = this,
+			deferred = $.Deferred(),
 			licenceId = this._asset.getLicence().getId(),
 			page = '3';
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
-			page = this._exit;
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
+			this._exit();
+			return deferred.resolve().promise();
 		} else if( licenceId === 'CC' || licenceId === 'unknown' ) {
 			page = '2';
-		} else if( this._asset.getAuthors().length === 0 ) {
+		} else if( !this._asset.getAuthors().length ) {
 			page = '9';
 		} else if(
-			!this._asset.getLicence().isInGroup( 'cc4' )
-			&& this._asset.getTitle().length === 0
-		) {
+			!this._asset.getLicence().isInGroup( 'cc4' ) && !this._asset.getTitle().length ) {
 			page = '10';
-		} else if( this._asset.getUrl().length === 0 ) {
+		} else if( !this._asset.getUrl().length ) {
 			page = '11';
 		}
 
 		this._goTo( page )
 		.done( function() {
 			deferred.resolve();
+			$( self ).trigger( 'update' );
 		} )
 		.fail( function( error ) {
 			deferred.reject( error );
@@ -133,37 +132,81 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Move the questionnaire to a specific page or triggers a function.
+	 * Default page movement.
 	 *
-	 * @param {string|Function} page
-	 * @param {boolean} [movingBack]
-	 *        Default: false
+	 * @param {string} toPage
 	 * @return {Object} jQuery Promise
-	 *         No resolved parameters.
+	 *         Resolved parameters:
+	 *         - {QuestionnairePage}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
-	_goTo: function( page, movingBack ) {
-		var self = this,
-			deferred = $.Deferred(),
-			navigationPathPosition = this._getNavigationPosition( page );
+	_goTo: function( toPage ) {
+		var self = this;
 
-		if( navigationPathPosition !== -1 && movingBack ) {
-			// Navigating backwards.
-			this._navigationCache.splice( navigationPathPosition );
-			this._loggedAnswers = this._navigationCache[navigationPathPosition]
-				? this._navigationCache[navigationPathPosition].loggedAnswers
-				: {};
+		if( this._questionnaireState ) {
+			this._navigationCache.push( this._questionnaireState.clone() );
+		} else {
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
+			this._navigationCache.push( this._questionnaireState.clone() );
 		}
 
-		var $container = this._$node.find( '.questionnaire-contentcontainer' );
+		return this._animateToPage( toPage )
+		.then( function( questionnairePage ) {
 
-		if( $container.length === 0 ) {
-			return this._resolveGoto( page );
+			self._questionnaireState.setPageId( toPage );
+			questionnairePage.applyState( self._questionnaireState );
+		} );
+	},
+
+	/**
+	 * Triggers going back in questionnaire.
+	 *
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {QuestionnairePage}
+	 *         Rejected parameters:
+	 *         - {AjaxError}
+	 */
+	_goBack: function() {
+		var self = this,
+			previousState = this._navigationCache.pop();
+
+		return this._animateToPage( previousState.getPageId(), true )
+		.done( function( questionnairePage ) {
+			self._questionnaireState = previousState.clone();
+			questionnairePage.applyState( previousState );
+			self._questionnaireState.setPageId( previousState.getPageId() );
+			// Delete boolean (page progressive) answers to have (re)set text input reflected in
+			// attribution:
+			self._questionnaireState.deleteBooleanAnswers( previousState.getPageId() );
+			$( self ).trigger( 'update' );
+		} );
+	},
+
+	/**
+	 * Animates page transition.
+	 *
+	 * @param {string} pageId
+	 * @param {boolean} back
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {QuestionnairePage}
+	 *         Rejected parameters:
+	 *         - {AjaxError}
+	 */
+	_animateToPage: function( pageId, back ) {
+		var self = this,
+			deferred = $.Deferred(),
+			$container = this._$node.find( '.questionnaire-contentcontainer' );
+
+		if( !$container.length ) {
+			// The first page being rendered, no need to animate.
+			return this._render( pageId );
 		}
 
 		var initialLeftMargin = $container.css( 'marginLeft' ),
-			newLeftMargin = movingBack ? $( document ).width() : -1 * $container.width();
+			newLeftMargin = back ? $( document ).width() : -1 * $container.width();
 
 		// Fixate width to prevent wrapping:
 		$container.width( $container.width() );
@@ -173,14 +216,12 @@ $.extend( Questionnaire.prototype, {
 		$container.stop().animate( {
 			marginLeft: newLeftMargin + 'px'
 		}, 'fast' ).promise().done( function() {
-			self._resolveGoto( page )
-			.done( function() {
+			self._render( pageId )
+			.done( function( questionnairePage ) {
 				$container = self._$node.find( '.questionnaire-contentcontainer' );
 				$container.width( $container.width() );
 
-				var startLeftMargin = movingBack
-					? -1 * $container.width()
-					: $( document ).width();
+				var startLeftMargin = back ? -1 * $container.width() : $( document ).width();
 
 				$container.css( 'marginLeft', startLeftMargin + 'px' );
 
@@ -188,9 +229,10 @@ $.extend( Questionnaire.prototype, {
 					marginLeft: initialLeftMargin
 				}, 'fast' ).promise().done( function() {
 					$container.css( 'width', 'auto' );
-					deferred.resolve();
+					deferred.resolve( questionnairePage );
 				} );
-			} ).fail( function( error ) {
+			} )
+			.fail( function( error ) {
 				deferred.reject( error );
 			} );
 		} );
@@ -199,66 +241,12 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Resolves going to a specific page.
-	 *
-	 * @param {string|Function} page
-	 * @return {Object} jQuery Promise
-	 *         No resolved parameters.
-	 *         Rejected parameters:
-	 *         - {AjaxError}
-	 */
-	_resolveGoto: function( page ) {
-		var self = this,
-			deferred = $.Deferred();
-
-		if( $.isFunction( page ) ) {
-			page.apply( this );
-			deferred.resolve();
-		} else {
-			this._render( page )
-			.done( function() {
-				deferred.resolve();
-			} )
-			.fail( function( error ) {
-				self._render( 'error' )
-				.done( function( $content ) {
-					$content.find( '.questionnaire-error' )
-						.addClass( 'error' )
-						.text( error.getMessage() );
-				} )
-				.fail( function( error ) {
-					alert( error.getMessage() );
-				} );
-
-				deferred.reject( error );
-			} );
-		}
-
-		return deferred.promise();
-	},
-
-	/**
-	 * Returns the position of a page in the navigation cache or -1 if the page is not cached.
-	 *
-	 * @param {string} page
-	 * @return {number}
-	 */
-	_getNavigationPosition: function( page ) {
-		for( var i = 0; i < this._navigationCache.length; i++ ) {
-			if( this._navigationCache[i].page === page ) {
-				return i;
-			}
-		}
-		return -1;
-	},
-
-	/**
 	 * Renders a page.
 	 *
 	 * @param {string} page
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         {jQuery} Page content
+	 *         - {QuestionnairePage}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
@@ -268,22 +256,34 @@ $.extend( Questionnaire.prototype, {
 
 		this._$node.empty();
 
-		this._fetchPages( page )
-		.done( function( $content ) {
+		this._fetchPage( page )
+		.done( function( questionnairePage ) {
 			self._$node.append(
 				$( '<div/>' ).addClass( 'questionnaire-contentcontainer' )
 				.append( self._generateMinimizeButton() )
 				.append( self._generateBackButton() )
 				.append(
-					$( '<div/>' ).addClass( 'questionnaire-pagecontainer' ).append( $content )
+					$( '<div/>' )
+					.addClass( 'questionnaire-pagecontainer' )
+					.append( questionnairePage.$page )
 				)
 			);
 
 			self._toggleMinimized( 'maximize' );
 
-			deferred.resolve( $content );
+			deferred.resolve( questionnairePage );
 		} )
 		.fail( function( error ) {
+			self._render( 'error' )
+			.done( function( questionnairePage ) {
+				questionnairePage.$page.find( '.questionnaire-error' )
+					.addClass( 'error' )
+					.text( error.getMessage() );
+			} )
+			.fail( function( error ) {
+				alert( error.getMessage() );
+			} );
+
 			deferred.reject( error );
 		} );
 
@@ -291,91 +291,49 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Returns a result object containing processable attributes of the evaluated current answer
-	 * set.
-	 *
-	 * @return {Object}
-	 */
-	_getResult: function() {
-		var useCase = false;
-
-		if( this._getAnswer( '3', 1 ) ) {
-			useCase = 'online';
-		} else if( this._getAnswer( '3', 2 ) ) {
-			useCase = 'print';
-		} else if( this._getAnswer( '3', 3 ) ) {
-			useCase = 'private';
-		} else if( this._getAnswer( '3', 4 ) ) {
-			useCase = 'exceptional';
-		} else if( this._getAnswer( '3', 5 ) ) {
-			useCase = 'other';
-		}
-
-		var asset = new Asset(
-			this._asset._prefixedFilename,
-			this._asset.getTitle(),
-			this._asset.getMediaType(),
-			this._asset.getLicence(),
-			this._asset._api,
-			{
-				authors: this._asset.getAuthors(),
-				attribution: this._asset.getAttribution()
-			},
-			this._asset.getWikiUrl(),
-			this._asset.getUrl()
-		);
-
-		var licenceId = this._getAnswer( '2', 1 );
-
-		if( licenceId ) {
-			asset._licence = new LicenceStore( LICENCES ).detectLicence( licenceId );
-		}
-
-		var customAuthor = this._getAnswer( 'form-author', 1 ),
-			customTitle = this._getAnswer( 'form-title', 1 ),
-			customUrl = this._getAnswer( 'form-url', 1 );
-
-		if( ( !asset.getAuthors().length || asset.getAuthors()[0].getText() === messages['author-undefined'] ) && customAuthor ) {
-			asset.setAuthors( [new Author( $( document.createTextNode( customAuthor ) ) )] );
-		}
-
-		if( ( !asset.getTitle() || asset.getTitle() === messages['file-untitled'] ) && customTitle ) {
-			asset.setTitle( customTitle );
-		}
-
-		if( ( !asset.getUrl() || asset.getUrl() === '' ) && customUrl ) {
-			asset.setUrl( customUrl );
-		}
-
-		return {
-			asset: asset,
-			attributionAlthoughExceptionalUse: this._getAnswer( '5', 1 ),
-			collectionUse: this._getAnswer( '7', 1 ),
-			edited: this._getAnswer( '12a', 2 ),
-			editor: this._getAnswer( '13', 1 ),
-			format: this._getAnswer( '3', 1 ) ? 'html' : 'text',
-			fullLicence: this._getAnswer( '8', 1 ),
-			useCase: useCase
-		};
-	},
-
-	/**
-	 * Returns a logged answer or "false" if the specific answer has not yet been given.
+	 * Fetches the DOM structure of a specific page by id and adds it to preexisting DOM.
 	 *
 	 * @param {string} page
-	 * @param {number} answerId
-	 * @return {string|boolean}
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {QuestionnairePage}
+	 *         Rejected parameters:
+	 *         - {AjaxError}
 	 */
-	_getAnswer: function( page, answerId ) {
-		var pageAnswers = this._loggedAnswers[page];
+	_fetchPage: function( page ) {
+		var self = this,
+			deferred = $.Deferred();
 
-		if( !pageAnswers || !pageAnswers[answerId] ) {
-			return false;
-		}
+		var ajaxOptions = {
+			url: templateRegistry.getDir( 'questionnaire' ) + page + '.html',
+			dataType: 'html'
+		};
 
-		return $.isFunction( pageAnswers[answerId] )
-			? pageAnswers[answerId]( this )
-			: pageAnswers[answerId];
+		$.ajax( ajaxOptions )
+		.done( function( html ) {
+			var questionnairePage = new QuestionnairePage(
+				page,
+				html,
+				self._asset,
+				self._questionnaireState
+			);
+
+			$( questionnairePage )
+			.on( 'goto', function( event, toPage ) {
+				self._goTo( toPage );
+			} )
+			.on( 'update', function( event, state ) {
+				self._questionnaireState = state;
+				$( self ).trigger( 'update' );
+			} );
+
+			deferred.resolve( questionnairePage );
+		} )
+		.fail( function() {
+			deferred.reject( new AjaxError( 'questionnaire-page-missing', ajaxOptions ) );
+		} );
+
+		return deferred.promise();
 	},
 
 	/**
@@ -392,106 +350,12 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Generates the attribution supplement containing notes and restrictions.
+	 * Returns the, as to the questionnaire, currently appropriate AttributionGenerator object.
 	 *
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {jQuery} List of jQuery wrapped DOM nodes
-	 *         Rejected parameters:
-	 *         - {AjaxError}
-	 */
-	generateSupplement: function() {
-		var self = this,
-			deferred = $.Deferred(),
-			result = this._getResult(),
-			licence = result.asset.getLicence(),
-			pages = [];
-
-		if( result.useCase === 'other' ) {
-			deferred.resolve( $() );
-			return deferred.promise();
-		}
-
-		var $supplement = $( '<h2/>' )
-			.text( messages['notes and advice'] );
-
-		if( result.useCase === 'private' ) {
-			pages.push( 'result-note-privateUse' );
-		} else if( licence.isInGroup( 'cc0' ) ) {
-			pages.push( 'result-note-cc0' );
-		} else if( licence.isInGroup( 'pd' ) ) {
-			pages.push( 'result-note-pd' );
-		} else {
-			pages.push( 'result-note-' + result.format );
-
-			if( licence.isInGroup( 'cc2' ) ) {
-				pages.push( 'result-restrictions-cc2' );
-			} else {
-				pages.push( 'result-restrictions' );
-			}
-		}
-
-		if( result.collectionUse ) {
-			pages.push( 'result-note-collection' );
-		}
-
-		if( result.fullLicence ) {
-			pages.push( 'result-note-fullLicence' );
-		}
-
-		this._fetchPages( pages )
-		.done( function( $nodes ) {
-			if( result.collectionUse ) {
-				$nodes.filter( '.page-result-note-collection' ).append(
-					self.getAttributionGenerator( { licenceOnly: true } ).generate()
-				);
-			}
-
-			if( result.fullLicence ) {
-				result.asset.getLicence().getLegalCode()
-				.done( function( $licence ) {
-					$nodes.filter( '.page-result-note-fullLicence' ).append( $licence );
-					deferred.resolve( $supplement.add( $nodes ) );
-				} )
-				.fail( function( error ) {
-					deferred.reject( error );
-				} );
-			} else {
-				deferred.resolve( $supplement.add( $nodes ) );
-			}
-		} )
-		.fail( function( error ) {
-			deferred.reject( error );
-		} );
-
-		return deferred.promise();
-	},
-
-	/**
-	 * Instantiates an AttributionGenerator object.
-	 *
-	 * @param {Object} [options]
 	 * @return {AttributionGenerator}
 	 */
-	getAttributionGenerator: function( options ) {
-		var result = this._getResult(),
-			editor = null;
-
-		if( result.edited ) {
-			editor = messages['(edited)'];
-		}
-		if( result.edited && result.editor ) {
-			editor = result.editor;
-		}
-
-		options = $.extend( {
-			editor: editor,
-			licenceOnly: options ? options.licenceOnly : false,
-			licenceLink: !result.fullLicence,
-			format: result.format
-		}, options );
-
-		var attributionGenerator = new AttributionGenerator( result.asset, options );
+	getAttributionGenerator: function() {
+		var attributionGenerator = this._questionnaireState.getAttributionGenerator();
 
 		// Return cached attribution generator for allowing external objects to check whether a
 		// change actually has occurred.
@@ -517,10 +381,10 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			if( self._navigationCache.length === 0 ) {
+			if( self._navigationCache.length === 1 ) {
 				$( self ).trigger( 'back', [self._asset] );
 			} else {
-				self._goTo( self._navigationCache[self._navigationCache.length - 1].page, true )
+				self._goBack()
 				.done( function() {
 					$( self ).trigger( 'update' );
 				} );
@@ -573,46 +437,40 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Fetches the DOM structure(s) of one ore more template pages by id(s).
+	 * Fetches the DOM structures of one ore more template pages by ids.
 	 *
-	 * @param {string|string[]} pages
+	 * @param {string[]} pages
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {jQuery} jQuery wrapped DOM node(s) of the requested page(s).
+	 *         - {jQuery} jQuery wrapped DOM nodes of the requested pages.
 	 *         Rejected parameters:
-	 *         - {string} Error message.
+	 *         - {AjaxError}
 	 */
 	_fetchPages: function( pages ) {
 		var deferreds = [$.Deferred()],
 			$pages = $();
 
-		if( typeof pages === 'string' ) {
-			pages = [pages];
-		}
-
 		deferreds[0].resolve( $pages );
 
 		for( var i = 0; i < pages.length; i++ ) {
-			deferreds.push( this._fetchPage( deferreds[deferreds.length - 1], pages[i] ) );
+			// TODO: Replace with dojo DefferdList.
+			deferreds.push( this._fetchPagesChain( deferreds[deferreds.length - 1], pages[i] ) );
 		}
 
 		return deferreds[deferreds.length - 1].promise();
 	},
 
 	/**
-	 * Fetches the DOM structure of a specific page by id and adds it to preexisting DOM.
-	 *
-	 * @param {Object} deferred jQuery Deferred
-	 *        Required resolved parameter:
-	 *        - {jQuery} Preexisting DOM
+	 * @param {Object} deferred
 	 * @param {string} page
-	 * @return {Object} jQuery Deferred
+	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {jQuery} Preexisting DOM with added page DOM
+	 *         - {jQuery} jQuery wrapped DOM nodes of the requested pages.
+	 *         Rejected parameters:
+	 *         - {AjaxError}
 	 */
-	_fetchPage: function( deferred, page ) {
-		var self = this,
-			d = $.Deferred();
+	_fetchPagesChain: function( deferred, page ) {
+			var d = $.Deferred();
 
 		deferred.then( function( $pages ) {
 			var ajaxOptions = {
@@ -622,36 +480,17 @@ $.extend( Questionnaire.prototype, {
 
 			$.ajax( ajaxOptions )
 			.done( function( html ) {
-				var questionnairePage = new QuestionnairePage(
-					page,
-					html,
-					self._asset,
-					self._getResult(),
-					self._loggedStrings
-				);
+				var $content = $( '<div/>' )
+					.addClass( 'questionnaire-page page page-' + page )
+					.data( 'questionnaire-page', page )
+					.html( html );
 
-				questionnairePage.applyValuesToInputElements( self._loggedStrings[page] );
-
-				$( questionnairePage )
-				.on( 'log', function( event, o ) {
-					if( o.answer === undefined ) {
-						delete self._loggedAnswers[o.page];
-						delete self._loggedStrings[o.page];
-						questionnairePage.setResult( self._getResult() );
-					} else {
-						self._log( o.page, o.answer, o.value, o.cacheNavigation );
-					}
-				} )
-				.on( 'goto', function( event, toPage ) {
-					self._goToAndUpdate( toPage );
-				} )
-				.on( 'update', function( event, asset ) {
-					self._asset = asset;
-					$( self ).trigger( 'update' );
-					questionnairePage.setResult( self._getResult() );
+				$content.find( 'div.expandable-trigger').on( 'click', function() {
+					$( '.expandable' ).slideUp();
+					$( this ).next().slideDown();
 				} );
 
-				$pages = $pages.add( questionnairePage.$page );
+				$pages = $pages.add( $content );
 				d.resolve( $pages );
 			} )
 			.fail( function() {
@@ -665,71 +504,77 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Returns a logged string.
+	 * Generates the attribution supplement containing notes and restrictions.
 	 *
-	 * @param {string} page
-	 * @param {number} answer
-	 * @return {string}
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {jQuery} List of jQuery wrapped DOM nodes
+	 *         Rejected parameters:
+	 *         - {AjaxError}
 	 */
-	getLoggedString: function( page, answer ) {
-		if( this._loggedStrings[page] && this._loggedStrings[page][answer] ) {
-			return this._loggedStrings[page][answer];
-		}
-		return null;
-	},
+	generateSupplement: function() {
+		var self = this,
+			deferred = $.Deferred(),
+			result = this._questionnaireState.getResult(),
+			licence = result.asset.getLicence(),
+			pages = [];
 
-	/**
-	 * Logs an answer.
-	 *
-	 * @param {string} page
-	 * @param {number|string} answer
-	 * @param {string|Function|boolean} [value] If omitted, boolean "true" is logged for the answer.
-	 *        If of type "boolean", the value is assumed to be the value for the "cacheNavigation"
-	 *        parameter.
-	 * @param {boolean} cacheNavigation (Default: true)
-	 */
-	_log: function( page, answer, value, cacheNavigation ) {
-		if( typeof value === 'boolean' ) {
-			cacheNavigation = value;
-			value = undefined;
+		if( result.useCase === 'other' ) {
+			deferred.resolve( $() );
+			return deferred.promise();
 		}
 
-		// (re)initialize page answer
-		this._loggedAnswers[page] = {};
-		this._loggedAnswers[page][answer] = ( value ) ? value : true;
+		var $supplement = $( '<h2/>' ).text( messages['notes and advice'] );
 
-		if( cacheNavigation === undefined || cacheNavigation === true ) {
-			this._navigationCache.push( {
-				page: page,
-				loggedAnswers: $.extend( {}, this._loggedAnswers )
-			} );
-		}
+		if( result.useCase === 'private' ) {
+			pages.push( 'result-note-privateUse' );
+		} else if( licence.isInGroup( 'cc0' ) ) {
+			pages.push( 'result-note-cc0' );
+		} else if( licence.isInGroup( 'pd' ) ) {
+			pages.push( 'result-note-pd' );
+		} else {
+			pages.push( 'result-note-' + result.format );
 
-		if( typeof value === 'string' ) {
-			if( !this._loggedStrings[page] ) {
-				this._loggedStrings[page] = {};
+			if( licence.isInGroup( 'cc2' ) ) {
+				pages.push( 'result-restrictions-cc2' );
+			} else {
+				pages.push( 'result-restrictions' );
 			}
-			if( !this._loggedStrings[page][answer] ) {
-				this._loggedStrings[page] = {};
-			}
-			this._loggedStrings[page][answer] = value;
 		}
-	},
 
-	/**
-	 * Triggers going to a page and issues an "update" event after rendering the page.
-	 *
-	 * @param {string|Function} toPage
-	 *
-	 * @triggers update
-	 */
-	_goToAndUpdate: function( toPage ) {
-		var self = this;
+		if( result.collectionUse ) {
+			pages.push( 'result-note-collection' );
+		}
 
-		this._goTo( toPage )
-		.done( function() {
-			$( self ).trigger( 'update' );
+		if( result.fullLicence ) {
+			pages.push( 'result-note-fullLicence' );
+		}
+
+		this._fetchPages( pages )
+		.then( function( $nodes ) {
+			if( result.collectionUse ) {
+				$nodes.filter( '.page-result-note-collection' ).append(
+					self.getAttributionGenerator( { licenceOnly: true } ).generate()
+				);
+			}
+
+			if( result.fullLicence ) {
+				result.asset.getLicence().getLegalCode()
+				.done( function( $licence ) {
+					$nodes.filter( '.page-result-note-fullLicence' ).append( $licence );
+					deferred.resolve( $supplement.add( $nodes ) );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
+			} else {
+				deferred.resolve( $supplement.add( $nodes ) );
+			}
+		}, function( error ) {
+			deferred.reject( error );
 		} );
+
+		return deferred.promise();
 	}
 
 } );

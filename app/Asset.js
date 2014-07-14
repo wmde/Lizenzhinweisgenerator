@@ -263,7 +263,7 @@ $.extend( Asset.prototype, {
 
 		return asset.getFilename() === this.getFilename()
 			&& asset.getTitle() === this.getTitle()
-			&& asset.getUrl === this.getUrl()
+			&& asset.getUrl() === this.getUrl()
 			&& asset.getLicence().getId() === this.getLicence().getId();
 	}
 

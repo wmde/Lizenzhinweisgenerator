@@ -294,7 +294,7 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 		};
 
 		questionnaire.start().done( function() {
-			questionnaire._loggedAnswers = testCase.la;
+			questionnaire._questionnaireState._answers = testCase.la;
 
 			questionnaire.generateSupplement()
 			.done( function( $node ) {
@@ -418,7 +418,7 @@ QUnit.test( 'getAttributionGenerator()', function( assert ) {
 		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' );
 
 		questionnaire.start().done( function() {
-			questionnaire._loggedAnswers = testCase.la;
+			questionnaire._questionnaireState._answers = testCase.la;
 
 			assert.ok(
 				questionnaire.getAttributionGenerator().equals(
