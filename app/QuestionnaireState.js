@@ -4,12 +4,11 @@
  */
 define( [
 	'jquery',
-	'app/Asset',
 	'app/Author',
 	'app/LicenceStore',
 	'app/LICENCES',
 	'dojo/i18n!./nls/QuestionnaireState'
-], function( $, Asset, Author, LicenceStore, LICENCES, messages ) {
+], function( $, Author, LicenceStore, LICENCES, messages ) {
 'use strict';
 
 /**
@@ -25,7 +24,7 @@ define( [
  * @throws {Error} on incorrect parameters.
  */
 var QuestionnaireState = function( pageId, asset, previousState ) {
-	if( typeof pageId !== 'string' || !( asset instanceof Asset ) ) {
+	if( typeof pageId !== 'string' || asset === undefined ) {
 		throw new Error( 'Improperly specified parameters' );
 	}
 
@@ -180,24 +179,12 @@ $.extend( QuestionnaireState.prototype, {
 		}
 
 		// Generate new asset that will consider all answers:
-		var asset = new Asset(
-			this._asset._prefixedFilename,
-			this._asset.getTitle(),
-			this._asset.getMediaType(),
-			this._asset.getLicence(),
-			this._asset._api,
-			{
-				authors: this._asset.getAuthors(),
-				attribution: this._asset.getAttribution()
-			},
-			this._asset.getWikiUrl(),
-			this._asset.getUrl()
-		);
+		var asset = this._asset.clone();
 
 		var licenceId = this._getAnswer( '2', 1 );
 
 		if( licenceId ) {
-			asset._licence = new LicenceStore( LICENCES ).detectLicence( licenceId );
+			asset.setLicence( new LicenceStore( LICENCES ).detectLicence( licenceId ) );
 		}
 
 		var customAuthor = this._getAnswer( 'form-author', 1 ),

@@ -174,6 +174,13 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
+	 * @param {Licence} licence
+	 */
+	setLicence: function( licence ) {
+		this._licence = licence;
+	},
+
+	/**
 	 * @return {Licence|null}
 	 */
 	getLicence: function() {
@@ -265,6 +272,27 @@ $.extend( Asset.prototype, {
 			&& asset.getTitle() === this.getTitle()
 			&& asset.getUrl() === this.getUrl()
 			&& asset.getLicence().getId() === this.getLicence().getId();
+	},
+
+	/**
+	 * Clones the asset.
+	 *
+	 * @return {Asset}
+	 */
+	clone: function() {
+		return new Asset(
+			this._prefixedFilename,
+			this.getTitle(),
+			this.getMediaType(),
+			this.getLicence(),
+			this._api,
+			{
+				authors: this.getAuthors(),
+				attribution: this.getAttribution()
+			},
+			this.getWikiUrl(),
+			this.getUrl()
+		);
 	}
 
 } );
