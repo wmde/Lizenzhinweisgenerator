@@ -5,12 +5,11 @@
 define( [
 	'jquery',
 	'app/Asset',
-	'app/AttributionGenerator',
 	'app/Author',
 	'app/LicenceStore',
 	'app/LICENCES',
 	'dojo/i18n!./nls/QuestionnaireState'
-], function( $, Asset, AttributionGenerator, Author, LicenceStore, LICENCES, messages ) {
+], function( $, Asset, Author, LicenceStore, LICENCES, messages ) {
 'use strict';
 
 /**
@@ -240,41 +239,6 @@ $.extend( QuestionnaireState.prototype, {
 	_getAnswer: function( page, answerId ) {
 		var pageAnswers = this._answers[page];
 		return pageAnswers && pageAnswers[answerId] ? pageAnswers[answerId] : false;
-	},
-
-	/**
-	 * Instantiates an AttributionGenerator object.
-	 *
-	 * @param {Object} [options]
-	 * @return {AttributionGenerator}
-	 */
-	getAttributionGenerator: function( options ) {
-		var result = this.getResult(),
-			editor = null;
-
-		if( result.edited ) {
-			editor = messages['(edited)'];
-		}
-		if( result.edited && result.editor ) {
-			editor = result.editor;
-		}
-
-		options = $.extend( {
-			editor: editor,
-			licenceOnly: options ? options.licenceOnly : false,
-			licenceLink: !result.fullLicence,
-			format: result.format
-		}, options );
-
-		var attributionGenerator = new AttributionGenerator( result.asset, options );
-
-		// Return cached attribution generator for allowing external objects to check whether a
-		// change actually has occurred.
-		if( !attributionGenerator.equals( this._attributionGenerator ) ) {
-			this._attributionGenerator = attributionGenerator;
-		}
-
-		return this._attributionGenerator;
 	}
 
 } );

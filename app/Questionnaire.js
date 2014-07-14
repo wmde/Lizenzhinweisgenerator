@@ -5,6 +5,7 @@
 /* global alert */
 define( [
 	'jquery',
+	'app/AttributionGenerator',
 	'app/QuestionnairePage',
 	'app/QuestionnaireState',
 	'dojo/Deferred',
@@ -13,6 +14,7 @@ define( [
 	'app/AjaxError'
 ], function(
 	$,
+	AttributionGenerator,
 	QuestionnairePage,
 	QuestionnaireState,
 	Deferred,
@@ -354,8 +356,25 @@ $.extend( Questionnaire.prototype, {
 	 *
 	 * @return {AttributionGenerator}
 	 */
-	getAttributionGenerator: function() {
-		var attributionGenerator = this._questionnaireState.getAttributionGenerator();
+	getAttributionGenerator: function( options ) {
+		var result = this._questionnaireState.getResult(),
+			editor = null;
+
+		if( result.edited ) {
+			editor = messages['(edited)'];
+		}
+		if( result.edited && result.editor ) {
+			editor = result.editor;
+		}
+
+		options = $.extend( {
+			editor: editor,
+			licenceOnly: options ? options.licenceOnly : false,
+			licenceLink: !result.fullLicence,
+			format: result.format
+		}, options );
+
+		var attributionGenerator = new AttributionGenerator( result.asset, options );
 
 		// Return cached attribution generator for allowing external objects to check whether a
 		// change actually has occurred.
