@@ -2,7 +2,9 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( ['jquery', 'app/Author', 'app/WikiAsset'], function( $, Author, WikiAsset ) {
+define(
+	['jquery', 'app/Author', 'app/WikiAsset', 'dojo/_base/config'],
+	function( $, Author, WikiAsset, config ) {
 'use strict';
 
 /**
@@ -18,7 +20,14 @@ define( ['jquery', 'app/Author', 'app/WikiAsset'], function( $, Author, WikiAsse
  *
  * @throws {Error} if a required parameter is not specified.
  */
-var AssetPage = function( prefixedFilename, mediaType, $dom, templates, api, wikiUrl ) {
+var WikiAssetPage = function(
+	prefixedFilename,
+	mediaType,
+	$dom,
+	templates,
+	api,
+	wikiUrl
+) {
 	if( !prefixedFilename || !mediaType || !$dom || !templates || !api ) {
 		throw new Error( 'Unable to instantiate object' );
 	}
@@ -30,7 +39,7 @@ var AssetPage = function( prefixedFilename, mediaType, $dom, templates, api, wik
 	this._wikiUrl = wikiUrl || api.getDefaultUrl();
 };
 
-$.extend( AssetPage.prototype, {
+$.extend( WikiAssetPage.prototype, {
 	/**
 	 * The page's filename.
 	 * @type {string}
@@ -80,7 +89,7 @@ $.extend( AssetPage.prototype, {
 			this._asset = new WikiAsset(
 				this._prefixedFilename,
 				this._mediaType,
-				this._api.getLicenceStore().detectLicence( this._templates ),
+				config.custom.licenceStore.detectLicence( this._templates ),
 				this._prefixedFilename
 					.replace( /^[^:]+:/ , '' )
 					.replace( /\.[^.]+$/ , '' )
@@ -205,6 +214,6 @@ $.extend( AssetPage.prototype, {
 
 } );
 
-return AssetPage;
+return WikiAssetPage;
 
 } );

@@ -232,10 +232,6 @@ var testSets = {
 	'LRO_Tycho_Central_Peak.jpg': [ {
 		la: {},
 		templates: ['result-note-pd']
-	} ],
-	'Fiesta-Zuschauer Z1.jpeg': [ {
-		la: {},
-		templates: ['result-note-cc0']
 	} ]
 };
 
@@ -243,38 +239,27 @@ QUnit.test( 'start()', function( assert ) {
 	var questionnaire;
 
 	$.each( testAssets, function( filename, testAsset ) {
+		questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' );
 
-		if( testAsset.getLicence() === null ) {
-			assert.throws(
-				function() {
-					questionnaire = new Questionnaire( $( '<div/>' ), testAsset );
-				},
-				'(' + testAsset.getTitle() + ') Trying to instantiate a questionnaire for an '
-					+ 'asset not featuring a proper licence fails.'
+		QUnit.stop();
+
+		questionnaire.start()
+		.done( function() {
+			assert.ok(
+				true,
+				'(' + testAsset.getTitle() + ') Started questionnaire.'
 			);
-		} else {
-			questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' );
-
-			QUnit.stop();
-
-			questionnaire.start()
-			.done( function() {
-				assert.ok(
-					true,
-					'(' + testAsset.getTitle() + ') Started questionnaire.'
-				);
-			} )
-			.fail( function( message ) {
-				assert.ok(
-					false,
-					'(' + testAsset.getTitle() + ') Failed starting questionnaire with error "'
-						+ message + '".'
-				);
-			} )
-			.always( function() {
-				QUnit.start();
-			} );
-		}
+		} )
+		.fail( function( message ) {
+			assert.ok(
+				false,
+				'(' + testAsset.getTitle() + ') Failed starting questionnaire with error "'
+					+ message + '".'
+			);
+		} )
+		.always( function() {
+			QUnit.start();
+		} );
 
 	} );
 } );

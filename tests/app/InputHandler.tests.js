@@ -6,12 +6,12 @@
 'use strict';
 
 define(
-	['jquery', 'app/InputHandler', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/ImageInfo'],
-	function( $, InputHandler, Api, LicenceStore, LICENCES, ImageInfo ) {
+	['jquery', 'app/InputHandler', 'app/Api', 'app/ImageInfo'],
+	function( $, InputHandler, Api, ImageInfo ) {
 
 	QUnit.module( 'InputHandler' );
 
-	var api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+	var api = new Api( '//commons.wikimedia.org/' );
 
 	var testCases = [
 		{

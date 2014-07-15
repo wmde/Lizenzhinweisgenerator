@@ -2,13 +2,9 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( [
-	'jquery',
-	'app/Author',
-	'app/LicenceStore',
-	'app/LICENCES',
-	'dojo/i18n!./nls/QuestionnaireState'
-], function( $, Author, LicenceStore, LICENCES, messages ) {
+define(
+	['jquery', 'app/Author', 'dojo/_base/config', 'dojo/i18n!./nls/QuestionnaireState'],
+	function( $, Author, config, messages ) {
 'use strict';
 
 /**
@@ -184,9 +180,9 @@ $.extend( QuestionnaireState.prototype, {
 		var licenceId = this._getAnswer( '2', 1 );
 
 		if( licenceId ) {
-			asset.setLicence( new LicenceStore( LICENCES ).detectLicence( licenceId ) );
+			asset.setLicence( config.custom.licenceStore.detectLicence( licenceId ) );
 		} else if( !asset.getLicence() ) {
-			asset.setLicence( new LicenceStore( LICENCES ).detectLicence( 'unknown' ) );
+			asset.setLicence( config.custom.licenceStore.detectLicence( 'unknown' ) );
 		}
 
 		var customAuthor = this._getAnswer( 'form-author', 1 ),

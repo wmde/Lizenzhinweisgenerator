@@ -23,6 +23,7 @@ this.dojoConfig = {
 	// Force German locale as long as not all content is translated into default (English) language:
 	locale: 'de',
 	custom: {
+		licenceStore: null,
 		supportedMediaTypes: ['bitmap', 'drawing']
 	}
 };

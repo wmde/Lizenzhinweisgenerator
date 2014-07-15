@@ -2,8 +2,8 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
+/* jshint strict: false */
 define( ['jquery', 'app/Asset', 'dojo/_base/declare'], function( $, Asset, declare ) {
-'use strict';
 
 /**
  * Represents an asset.
@@ -63,11 +63,7 @@ var WikiAsset = declare( Asset, {
 	 * @return {string}
 	 */
 	getUrl: function() {
-		if( this._wikiUrl ) {
-			return 'http:' + this._wikiUrl + 'wiki/' + this._filename;
-		} else {
-			return this.inherited( 'getUrl', [] );
-		}
+		return 'http:' + ( this._wikiUrl || this._api.getDefaultUrl() ) + 'wiki/' + this._filename;
 	},
 
 	/**
@@ -77,7 +73,7 @@ var WikiAsset = declare( Asset, {
 	 * @return {boolean}
 	 */
 	equals: function( asset ) {
-		return this.inherited( 'equals', [asset] ) && asset.getWikiUrl() === this.getWikiUrl();
+		return this.inherited( arguments ) && asset.getWikiUrl() === this.getWikiUrl();
 	}
 
 } );

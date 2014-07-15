@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Attribution Generator</title>
+		<title>Licence Attribution Generator</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script src="dojoConfig.js"></script>
 		<script src="lib/dojo/dojo.js"></script>
@@ -21,14 +21,15 @@
 				require( [
 				'jquery',
 				'app/Application',
-				'app/Api',
 				'app/LicenceStore',
-				'app/LICENCES'
-			], function( $, Application, Api, LicenceStore, LICENCES ) {
+				'app/LICENCES',
+				'dojo/_base/config'
+			], function( $, Application, LicenceStore, LICENCES, config ) {
 
 					$( document ).ready( function () {
-						var application = new Application( $( '#application' ) );
+						config.custom.licenceStore = new LicenceStore( LICENCES );
 
+						var application = new Application( $( '#application' ) );
 						application.start();
 					} );
 

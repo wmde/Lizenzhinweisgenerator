@@ -25,7 +25,7 @@ define(
  */
 var Application = function( $node, options ) {
 	if( !$node ) {
-		throw new Error( 'Required parameters are nor properly defined' );
+		throw new Error( 'Required parameter(s) not defined' );
 	}
 
 	this._$node = $node;

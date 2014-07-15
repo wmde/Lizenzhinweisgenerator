@@ -2,28 +2,23 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define(
-	[
-		'jquery',
-		'app/InputHandler',
-		'dojo/i18n!./nls/FrontPage',
-		'templates/registry',
-		'app/ApplicationError',
-		'app/Api',
-		'app/NoApi',
-		'app/LicenceStore',
-		'app/LICENCES'
-	],
-	function(
-		$,
-		InputHandler,
-		messages,
-		templateRegistry,
-		ApplicationError,
-		Api,
-		NoApi,
-		LicenceStore,
-		LICENCES ) {
+define( [
+	'jquery',
+	'app/InputHandler',
+	'dojo/i18n!./nls/FrontPage',
+	'templates/registry',
+	'app/ApplicationError',
+	'app/Api',
+	'app/NoApi'
+], function(
+	$,
+	InputHandler,
+	messages,
+	templateRegistry,
+	ApplicationError,
+	Api,
+	NoApi
+) {
 'use strict';
 
 /**
@@ -186,7 +181,7 @@ $.extend( FrontPage.prototype, {
 		if( !input.match( /wiki(m|p)edia/ ) ) {
 			this._api = new NoApi();
 		} else {
-			this._api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+			this._api = new Api( '//commons.wikimedia.org/' );
 		}
 		this._inputHandler = new InputHandler( this._api );
 
