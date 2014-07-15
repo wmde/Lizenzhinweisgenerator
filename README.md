@@ -1,14 +1,14 @@
 # Licence Attribution Generator
 
 This project is aimed at helping more people to build upon legally and
-to share creative works collected at Wikimedia Commons. A questionaire
+to share creative works collected at Wikimedia Commons. A questionnaire
 leads the user
 through the process of collecting information needed when publishing
 images from Wikipedia and other places to create a legally sufficient
 attribution line.
 
-Supported licenses: Public Domain, CC0 1.0, CC BY 2.0 DE, CC BY 3.0 DE,
-CC BY 3.0, CC BY-SA 2.0 DE, CC BY-SA 3.0 DE, CC BY-SA 3.0
+Supported licences: Public Domain, CC0 1.0, CC BY 2.0 DE, CC BY 3.0 DE,
+CC BY 3.0, CC BY-SA 2.0 DE, CC BY-SA 3.0 DE, CC BY-SA 3.0.
 
 Currently deployed version: http://tools.wmflabs.org/file-reuse/
 
@@ -27,3 +27,7 @@ To "activate" a locale, parallel to defining locale support in the root language
 ### Coding conventions
 
 Coding style adheres to the [Wikibase coding conventions](http://www.mediawiki.org/wiki/Wikibase/Coding_conventions).
+
+### Testing
+
+QUnit tests are located in the <code>tests</code> directory. Before merging changes, tests should be run by accessing <code>/tests/index.html</code> in a browser.
