@@ -3,266 +3,279 @@
  * @author snater.com < wikimedia@snater.com >
  */
 define(
-	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/Asset', 'app/Author'],
-	function( $, Api, LicenceStore, LICENCES, Asset, Author ) {
+	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/WikiAsset', 'app/Author', 'dojo/_base/config'],
+	function( $, Api, LicenceStore, LICENCES, WikiAsset, Author, config ) {
 'use strict';
 
-var api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+config.custom.licenceStore = new LicenceStore( LICENCES );
+
+var api = new Api( '//commons.wikimedia.org/' );
 
 return {
-	'LRO_Tycho_Central_Peak.jpg': new Asset(
+	'LRO_Tycho_Central_Peak.jpg': new WikiAsset(
 		'File:LRO_Tycho_Central_Peak.jpg',
+		'bitmap',
+		config.custom.licenceStore.getLicence( 'PD' ),
 		'LRO Tycho Central Peak',
-		'bitmap',
-		api.getLicenceStore().getLicence( 'PD' ),
-		api,
-		{
-			// Author without link:
-			authors: [new Author( $( document.createTextNode( 'NASA / GSFC / Arizona State Univ. / Lunar Reconnaissance Orbiter' ) ) )]
-		}
+		[new Author( $( document.createTextNode( 'NASA / GSFC / Arizona State Univ. / Lunar Reconnaissance Orbiter' ) ) )],
+		null,
+		null,
+		api
 	),
-	'Helene Fischer 2010.jpg': new Asset(
+	'Helene Fischer 2010.jpg': new WikiAsset(
 		'File:Helene Fischer 2010.jpg',
+		'bitmap',
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Helene Fischer 2010',
-		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
-		api,
-		{
-			// Author with internal wiki link:
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a>' ) )]
-		}
+		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a>' ) )],
+		null,
+		null,
+		api
 	),
-	'JapaneseToiletControlPanel.jpg': new Asset(
+	'JapaneseToiletControlPanel.jpg': new WikiAsset(
 		'File:JapaneseToiletControlPanel.jpg',
-		'JapaneseToiletControlPanel',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
-		api,
-		{
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a>' ) )],
-			// Complex attribution and attribution differs from author:
-			attribution: $( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>' )
-		}
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
+		'JapaneseToiletControlPanel',
+		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a>' ) )],
+		null,
+		// Complex attribution and attribution differs from author:
+		$( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>' ),
+		api
 	),
-	'13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg': new Asset(
+	'13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg': new WikiAsset(
 		'File:13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg',
-		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
 		'bitmap',
 		// Multi-licence-template:
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
-		api,
-		{
-			// Complex author:
-			authors: [new Author( $( '<div/>' ).html( '©&nbsp;<a href="http://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.roletschek.de">Fahrradtechnik und Fotografie</a>' ).contents() )]
-		}
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
+		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
+		// Complex author:
+		[new Author( $( '<div/>' ).html( '©&nbsp;<a href="http://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.roletschek.de">Fahrradtechnik und Fotografie</a>' ).contents() )],
+		null,
+		null,
+		api
 	),
-	'1871_Proclamation_of_the_German_Empire.jpg': new Asset(
+	'1871_Proclamation_of_the_German_Empire.jpg': new WikiAsset(
 		'File:1871_Proclamation_of_the_German_Empire.jpg',
-		'1871 Proclamation of the German Empire',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'PD' ),
-		api,
-		{
-			// No detectable author:
-			authors: []
-		}
+		config.custom.licenceStore.getLicence( 'PD' ),
+		'1871 Proclamation of the German Empire',
+		// No detectable author:
+		null,
+		null,
+		null,
+		api
 	),
-	'Inisheer Gardens 2002 dry-stone walls.jpg': new Asset(
+	'Inisheer Gardens 2002 dry-stone walls.jpg': new WikiAsset(
 		'File:Inisheer Gardens 2002 dry-stone walls.jpg',
-		'Inisheer Gardens 2002 dry-stone walls',
 		'bitmap',
 		// Features additional newer CC-BY-SA licence, preferring non-SA licence:
-		api.getLicenceStore().getLicence( 'cc-by-2.0-de' ),
-		api,
-		{
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ) )],
-			// Simple attribution:
-			attribution: $( '<a href="http://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' )
-		}
-	),
-	'Wien Karlsplatz3.jpg': new Asset(
-		'File:Wien Karlsplatz3.jpg',
-		'Wien Karlsplatz3',
-		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-2.0-de' ),
-		api,
-		{
-			// Strip "(talk)" link:
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Ikar.us">Ikar.us</a>' ) )]
-		}
-	),
-	'Brandenburg gate sunset quadriga.jpg': new Asset(
-		'File:Brandenburg gate sunset quadriga.jpg',
-		'Brandenburg gate sunset quadriga',
-		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
+		config.custom.licenceStore.getLicence( 'cc-by-2.0-de' ),
+		'Inisheer Gardens 2002 dry-stone walls',
+		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ) )],
+		null,
+		// Simple attribution:
+		$( '<a href="http://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ),
 		api
-		// No attributes at all.
 	),
-	'Gerardus_t\'_Hooft_at_Harvard.jpg': new Asset(
-		'File:Gerardus_t\'_Hooft_at_Harvard.jpg',
-		'Gerardus t\' Hooft at Harvard',
+	'Wien Karlsplatz3.jpg': new WikiAsset(
+		'File:Wien Karlsplatz3.jpg',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-3.0' ),
-		api,
-		{
-			// Inter-wiki links:
-			authors: [new Author( $( '<div/>' ).html( '<a href="http://en.wikipedia.org/wiki/User:Lumidek">Lumidek</a> at <a href="http://en.wikipedia.org/wiki/">English Wikipedia</a>' ).contents() )]
-		}
+		config.custom.licenceStore.getLicence( 'cc-by-2.0-de' ),
+		'Wien Karlsplatz3',
+		// Strip "(talk)" link:
+		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Ikar.us">Ikar.us</a>' ) )],
+		null,
+		null,
+		api
 	),
-	'1950_Yankees.jpg': new Asset(
+	'Brandenburg gate sunset quadriga.jpg': new WikiAsset(
+		'File:Brandenburg gate sunset quadriga.jpg',
+		'bitmap',
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
+		'Brandenburg gate sunset quadriga',
+		// No attributes at all.
+		null,
+		null,
+		null,
+		api
+	),
+	'Gerardus_t\'_Hooft_at_Harvard.jpg': new WikiAsset(
+		'File:Gerardus_t\'_Hooft_at_Harvard.jpg',
+		'bitmap',
+		config.custom.licenceStore.getLicence( 'cc-by-3.0' ),
+		'Gerardus t\' Hooft at Harvard',
+		// Inter-wiki links:
+		[new Author( $( '<div/>' ).html( '<a href="http://en.wikipedia.org/wiki/User:Lumidek">Lumidek</a> at <a href="http://en.wikipedia.org/wiki/">English Wikipedia</a>' ).contents() )],
+		null,
+		null,
+		api
+	),
+	'1950_Yankees.jpg': new WikiAsset(
 		'File:1950_Yankees.jpg',
-		'1950 Yankees',
 		'bitmap',
 		// Unsupported CC licence CC-BY-1.0:
 		null,
-		api,
-		{
-			authors: [new Author( $( document.createTextNode( 'jcasabona' ) ) )]
-		}
-	),
-	'NatMonumFengegKapell.jpg': new Asset(
-		'File:NatMonumFengegKapell.jpg',
-		'NatMonumFengegKapell',
-		'bitmap',
-		// Unsupported licence derivative CC-BY-3.0-LU:
+		'1950 Yankees',
+		[new Author( $( document.createTextNode( 'jcasabona' ) ) )],
 		null,
-		api,
-		{
-			authors: [new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() )]
-		}
-	),
-	'"Граничар" - Туховища.JPG': new Asset(
-		// Non-Latin character set:
-		'File:"Граничар" - Туховища.JPG',
-		'"Граничар" - Туховища',
-		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-3.0' ),
-		api,
-		{
-			authors: [new Author( $( document.createTextNode( 'Ерол Шукриев' ) ) )]
-		}
-	),
-	'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg': new Asset(
-		'File:03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg',
-		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007',
-		'bitmap',
-		// Completely unsupported licence:
 		null,
 		api
 	),
-	'The_Little_Princess_(1939)_full.ogv': new Asset(
+	'NatMonumFengegKapell.jpg': new WikiAsset(
+		'File:NatMonumFengegKapell.jpg',
+		'bitmap',
+		// Unsupported licence derivative CC-BY-3.0-LU:
+		null,
+		'NatMonumFengegKapell',
+		[new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() )],
+		null,
+		null,
+		api
+	),
+	'"Граничар" - Туховища.JPG': new WikiAsset(
+		// Non-Latin character set:
+		'File:"Граничар" - Туховища.JPG',
+		'bitmap',
+		config.custom.licenceStore.getLicence( 'cc-by-3.0' ),
+		'"Граничар" - Туховища',
+		[new Author( $( document.createTextNode( 'Ерол Шукриев' ) ) )],
+		null,
+		null,
+		api
+	),
+	'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg': new WikiAsset(
+		'File:03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg',
+		'bitmap',
+		// Completely unsupported licence:
+		null,
+		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007',
+		null,
+		null,
+		null,
+		api
+	),
+	'The_Little_Princess_(1939)_full.ogv': new WikiAsset(
 		'File:The_Little_Princess_(1939)_full.ogv',
-		'The Little Princess (1939) full',
 		// Video:
 		'video',
-		api.getLicenceStore().getLicence( 'PD' ),
-		api,
-		{
-			authors: [new Author( $( document.createTextNode( 'Walter Lang/20th Century Fox' ) ) )]
-		}
+		config.custom.licenceStore.getLicence( 'PD' ),
+		'The Little Princess (1939) full',
+		[new Author( $( document.createTextNode( 'Walter Lang/20th Century Fox' ) ) )],
+		null,
+		null,
+		api
 	),
-	'05 Air from Suite in C minor.ogg': new Asset(
+	'05 Air from Suite in C minor.ogg': new WikiAsset(
 		'File:05 Air from Suite in C minor.ogg',
-		'05 Air from Suite in C minor',
 		// Audio:
 		'audio',
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
-		api,
-		{
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Bdegazio">Bdegazio</a>' ) )]
-		}
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
+		'05 Air from Suite in C minor',
+		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Bdegazio">Bdegazio</a>' ) )],
+		null,
+		null,
+		api
 	),
-	'Cox_and_box.pdf': new Asset(
+	'Cox_and_box.pdf': new WikiAsset(
 		'File:Cox_and_box.pdf',
-		'Cox and box',
 		// Office:
 		'office',
-		api.getLicenceStore().getLicence( 'PD' ),
-		api,
-		{
-			authors: [new Author( $( document.createTextNode( 'F C Burnand' ) ) )]
-		}
+		config.custom.licenceStore.getLicence( 'PD' ),
+		'Cox and box',
+		[new Author( $( document.createTextNode( 'F C Burnand' ) ) )],
+		null,
+		null,
+		api
 	),
-	'Air_France_A380_F-HPJA.jpg': new Asset(
+	'Air_France_A380_F-HPJA.jpg': new WikiAsset(
 		'File:Air_France_A380_F-HPJA.jpg',
-		'Air France A380 F-HPJA',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
-		api,
-		{
-			// Author's contains HTML where the internal user page link is not on the top-most DOM level:
-			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
-			attribution: $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' )
-		}
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
+		'Air France A380 F-HPJA',
+		// Author's contains HTML where the internal user page link is not on the top-most DOM level:
+		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
+		null,
+		$( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' ),
+		api
 	),
-	'Seilsäge.jpg': new Asset(
+	'Seilsäge.jpg': new WikiAsset(
 		// Localized namespace prefix:
 		'Datei:Seilsäge.jpg',
-		'Seilsäge',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0' ),
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
+		'Seilsäge',
+		null,
+		null,
+		null,
 		api,
 		// Local Wikipedia:
 		'//de.wikipedia.org/'
 	),
-	'Hektor_Philippi.JPG': new Asset(
+	'Hektor_Philippi.JPG': new WikiAsset(
 		// Using "File:" prefix:
 		'File:Hektor_Philippi.JPG',
-		'Hektor Philippi',
 		'bitmap',
 		// Local Wikipedia with more specific licence:
-		api.getLicenceStore().getLicence( 'cc-by-sa-3.0-de' ),
-		{
-			authors: []
-		},
-		'//de.wikipedia.org/'
-	),
-	'1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg': new Asset(
-		'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
-		'1 FC Bamberg - 1 FC Nürnberg 1901',
-		'bitmap',
-		// Public domain on local Wikipedia:
-		api.getLicenceStore().getLicence( 'PD' ),
+		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0-de' ),
+		'Hektor Philippi',
+		null,
+		null,
+		null,
 		api,
 		'//de.wikipedia.org/'
 	),
-	'Fiesta-Zuschauer Z1.jpeg': new Asset(
+	'1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg': new WikiAsset(
+		'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
+		'bitmap',
+		// Public domain on local Wikipedia:
+		config.custom.licenceStore.getLicence( 'PD' ),
+		'1 FC Bamberg - 1 FC Nürnberg 1901',
+		null,
+		null,
+		null,
+		api,
+		'//de.wikipedia.org/'
+	),
+	'Fiesta-Zuschauer Z1.jpeg': new WikiAsset(
 		'Datei:Fiesta-Zuschauer Z1.jpeg',
-		'Fiesta-Zuschauer Z1',
 		'bitmap',
 		// CC-0 licence on local Wikipedia:
-		api.getLicenceStore().getLicence( 'cc-zero' ),
+		config.custom.licenceStore.getLicence( 'cc-zero' ),
+		'Fiesta-Zuschauer Z1',
+		null,
+		null,
+		null,
 		api,
 		'//de.wikipedia.org/'
 	)
 // TODO: Edge cases
 /*
-	'File:"L\'Absinthe", par Edgar Degas (1876).jpg': new Asset(
+	'File:"L\'Absinthe", par Edgar Degas (1876).jpg': new WikiAsset(
 		'File:"L\'Absinthe", par Edgar Degas (1876).jpg',
 		'"L\'Absinthe", par Edgar Degas (1876)',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'PD' ),
+		config.custom.licenceStore.getLicence( 'PD' ),
 		api,
 		{
 			authors: // TODO
 		}
 	),
-	'Statue Andrrea Palladio Vicenza.jpg': new Asset(
+	'Statue Andrrea Palladio Vicenza.jpg': new WikiAsset(
 		'File:Statue Andrrea Palladio Vicenza.jpg',
 		'Statue Andrrea Palladio Vicenza',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'cc-zero' ),
+		config.custom.licenceStore.getLicence( 'cc-zero' ),
 		api,
 		{
 			authors: // TODO
 		}
 	),
-	'1870_Erhard_Map_of_Paris_and_Vicinity,_France_-_Geographicus_-_Paris-erhard-1870.jpg': new Asset(
+	'1870_Erhard_Map_of_Paris_and_Vicinity,_France_-_Geographicus_-_Paris-erhard-1870.jpg': new WikiAsset(
 		'File:1870_Erhard_Map_of_Paris_and_Vicinity,_France_-_Geographicus_-_Paris-erhard-1870.jpg',
 		'1870 Erhard Map of Paris and Vicinity, France - Geographicus - Paris-erhard-1870',
 		'bitmap',
-		api.getLicenceStore().getLicence( 'PD' ),
+		config.custom.licenceStore.getLicence( 'PD' ),
 		api,
 		{
 			authors: // TODO
@@ -271,12 +284,12 @@ return {
 */
 // TODO: Add support for properly scraping HTML lists:
 /*
-	'Drawing_of_a_CCTV_Camera.svg': new Asset(
+	'Drawing_of_a_CCTV_Camera.svg': new WikiAsset(
 		'File:Drawing_of_a_CCTV_Camera.svg',
 		'Drawing of a CCTV Camera',
 		// Drawing:
 		'drawing',
-		api.getLicenceStore().getLicence( 'PD' ),
+		config.custom.licenceStore.getLicence( 'PD' ),
 		api,
 		{
 			// Very complex author:

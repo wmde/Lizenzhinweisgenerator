@@ -6,12 +6,12 @@
 'use strict';
 
 define(
-	['jquery', 'app/Api', 'app/Author', 'app/LicenceStore', 'app/LICENCES', 'tests/assets'],
-	function( $, Api, Author, LicenceStore, LICENCES, testAssets ) {
+	['jquery', 'app/Api', 'app/Author', 'tests/assets'],
+	function( $, Api, Author, testAssets ) {
 
 	QUnit.module( 'Api' );
 
-	var api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+	var api = new Api( '//commons.wikimedia.org/' );
 
 	/**
 	 * Returns a nodes HTML as plain text.

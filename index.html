@@ -21,14 +21,15 @@
 				require( [
 				'jquery',
 				'app/Application',
-				'app/Api',
 				'app/LicenceStore',
-				'app/LICENCES'
-			], function( $, Application, Api, LicenceStore, LICENCES ) {
+				'app/LICENCES',
+				'dojo/_base/config'
+			], function( $, Application, LicenceStore, LICENCES, config ) {
 
 					$( document ).ready( function () {
-						var application = new Application( $( '#application' ) );
+						config.custom.licenceStore = new LicenceStore( LICENCES );
 
+						var application = new Application( $( '#application' ) );
 						application.start();
 					} );
 

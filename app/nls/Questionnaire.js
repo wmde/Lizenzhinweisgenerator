@@ -1,10 +1,9 @@
 define( {
 	root: {
-		'notes and advice': 'Notes and advice',
 		'(edited)': '(edited)',
-		'unknown': 'unknown',
-		'file-untitled': 'No Title',
-		'author-undefined': 'anonymous'
+		'notes and advice': 'Notes and advice',
+		'author-undefined': 'anonymous',
+		'file-untitled': 'No Title'
 	},
 	'de': true
 } );

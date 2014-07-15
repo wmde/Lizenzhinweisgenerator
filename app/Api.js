@@ -2,8 +2,8 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config', 'app/AjaxError'],
-	function( $, AssetPage, ImageInfo, config, AjaxError ) {
+define( ['jquery', 'app/ImageInfo', 'app/WikiAssetPage', 'dojo/_base/config', 'app/AjaxError'],
+	function( $, ImageInfo, WikiAssetPage, config, AjaxError ) {
 'use strict';
 
 /**
@@ -11,16 +11,14 @@ define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config', 'app/A
  * @constructor
  *
  * @param {string} defaultUrl
- * @param {LicenceStore} licenceStore
  *
  * @throws {Error} if a required parameter is omitted.
  */
-var Api = function( defaultUrl, licenceStore ) {
-	if( !defaultUrl || !licenceStore ) {
+var Api = function( defaultUrl ) {
+	if( !defaultUrl ) {
 		throw new Error( 'A required parameter has been omitted' );
 	}
 	this._defaultUrl = defaultUrl;
-	this._licenceStore = licenceStore;
 };
 
 $.extend( Api.prototype, {
@@ -31,23 +29,11 @@ $.extend( Api.prototype, {
 	_defaultUrl: null,
 
 	/**
-	 * @param {LicenceStore|null}
-	 */
-	_licenceStore: null,
-
-	/**
 	 * Returns the API's default URL.
 	 * @return {string}
 	 */
 	getDefaultUrl: function() {
 		return this._defaultUrl;
-	},
-
-	/**
-	 * @return {LicenceStore|null}
-	 */
-	getLicenceStore: function() {
-		return this._licenceStore;
 	},
 
 	/**
@@ -73,7 +59,7 @@ $.extend( Api.prototype, {
 
 				self._getPageTemplates( prefixedFilename, wikiUrl )
 				.done( function( templates ) {
-					var assetPage = new AssetPage(
+					var assetPage = new WikiAssetPage(
 						prefixedFilename, metaData.mediatype, $dom, templates, self, wikiUrl
 					);
 

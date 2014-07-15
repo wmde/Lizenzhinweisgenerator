@@ -25,7 +25,7 @@ define(
  */
 var Application = function( $node, options ) {
 	if( !$node ) {
-		throw new Error( 'Required parameters are nor properly defined' );
+		throw new Error( 'Required parameter(s) not defined' );
 	}
 
 	this._$node = $node;
@@ -113,7 +113,7 @@ $.extend( Application.prototype, {
 
 		var $optionContainer = $( '<div/>' ),
 			licence = asset.getLicence(),
-			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
+			renderRawText = licence && !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
 
 		this._optionContainer = new OptionContainer( $optionContainer, asset );
 

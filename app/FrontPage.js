@@ -2,28 +2,23 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define(
-	[
-		'jquery',
-		'app/InputHandler',
-		'dojo/i18n!./nls/FrontPage',
-		'templates/registry',
-		'app/ApplicationError',
-		'app/Api',
-		'app/NoApi',
-		'app/LicenceStore',
-		'app/LICENCES'
-	],
-	function(
-		$,
-		InputHandler,
-		messages,
-		templateRegistry,
-		ApplicationError,
-		Api,
-		NoApi,
-		LicenceStore,
-		LICENCES ) {
+define( [
+	'jquery',
+	'app/InputHandler',
+	'dojo/i18n!./nls/FrontPage',
+	'templates/registry',
+	'app/ApplicationError',
+	'app/Api',
+	'app/NoApi'
+], function(
+	$,
+	InputHandler,
+	messages,
+	templateRegistry,
+	ApplicationError,
+	Api,
+	NoApi
+) {
 'use strict';
 
 /**
@@ -48,7 +43,7 @@ var FrontPage = function( $node, url ) {
 
 	this._$node = $node.addClass( 'frontpage' );
 
-	document.title = messages['licence attribution generator'];
+	document.title = messages['attribution generator'];
 
 	this._render( url );
 };
@@ -91,7 +86,7 @@ $.extend( FrontPage.prototype, {
 		}
 
 		this._$node
-		.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
+		.append( $( '<h1/>' ).text( messages['attribution generator'] ) )
 		.append( $( '<div/>' ).addClass( 'frontpage-container-input' ).append( $input ) )
 		.append( $( '<button/>' ).text( messages['generate attribution'] ) );
 
@@ -186,7 +181,7 @@ $.extend( FrontPage.prototype, {
 		if( !input.match( /wiki(m|p)edia/ ) ) {
 			this._api = new NoApi();
 		} else {
-			this._api = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) );
+			this._api = new Api( '//commons.wikimedia.org/' );
 		}
 		this._inputHandler = new InputHandler( this._api );
 
@@ -222,11 +217,6 @@ $.extend( FrontPage.prototype, {
 
 		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
-			if( !asset.getLicence() ) {
-				self._displayError( new ApplicationError( 'licence-unknown' ) );
-				return;
-			}
-
 			$( self ).trigger( 'asset', [asset] );
 		} )
 		.fail( function( error ) {

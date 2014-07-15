@@ -1,7 +1,6 @@
 define( {
-	'notes and advice': 'Anmerkungen und Hinweise',
 	'(edited)': '(bearbeitet)',
-	'unknown': 'unbekannt',
-	'file-untitled': 'Ohne Titel',
-	'author-undefined': 'anonym'
+	'notes and advice': 'Anmerkungen und Hinweise',
+	'author-undefined': 'anonym',
+	'file-untitled': 'Ohne Titel'
 } );

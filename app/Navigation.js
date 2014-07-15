@@ -2,9 +2,13 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define(
-	['jquery', 'dojo/i18n!./nls/Navigation', 'templates/registry', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/AjaxError'],
-	function( $, messages, templateRegistry, Api, LicenceStore, LICENCES, AjaxError ) {
+define( [
+	'jquery',
+	'dojo/i18n!./nls/Navigation',
+	'templates/registry',
+	'app/AjaxError',
+	'dojo/_base/config'
+], function( $, messages, templateRegistry, AjaxError, config ) {
 'use strict';
 
 /**
@@ -12,15 +16,13 @@ define(
  * @constructor
  *
  * @param {jQuery} $node
- * @param {Api} api
  *
  * @throws {Error} if a required parameter is not defined.
  */
 var Navigation = function( $node ) {
 	if( !$node ) {
-		throw new Error( 'Required parameters are nor properly defined' );
+		throw new Error( 'Required parameter(s) not defined' );
 	}
-
 	this._$node = $node;
 };
 
@@ -29,11 +31,6 @@ $.extend( Navigation.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
-
-	/**
-	 * @type {Api}
-	 */
-	_api: null,
 
 	/**
 	 * Renders the global navigation bar.
@@ -158,9 +155,9 @@ $.extend( Navigation.prototype, {
 	 */
 	_createSupportedLicencesHtml: function() {
 		var $licences = $(),
-			licences = new Api( '//commons.wikimedia.org/', new LicenceStore( LICENCES ) ).getLicenceStore().getLicences();
+			licences = config.custom.licenceStore.getLicences();
 
-		for( var i = 0; i < licences.length; i++ ) {
+		for( var i = 0; i < licences.getLicences().length; i++ ) {
 
 			if( i > 0 ) {
 				$licences = $licences.add( document.createTextNode( ', ' ) );
