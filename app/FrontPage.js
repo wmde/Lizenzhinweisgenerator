@@ -48,7 +48,7 @@ var FrontPage = function( $node, url ) {
 
 	this._$node = $node.addClass( 'frontpage' );
 
-	document.title = messages['licence attribution generator'];
+	document.title = messages['attribution generator'];
 
 	this._render( url );
 };
@@ -91,7 +91,7 @@ $.extend( FrontPage.prototype, {
 		}
 
 		this._$node
-		.append( $( '<h1/>' ).text( messages['licence attribution generator'] ) )
+		.append( $( '<h1/>' ).text( messages['attribution generator'] ) )
 		.append( $( '<div/>' ).addClass( 'frontpage-container-input' ).append( $input ) )
 		.append( $( '<button/>' ).text( messages['generate attribution'] ) );
 

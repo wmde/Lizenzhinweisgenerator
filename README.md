@@ -1,4 +1,4 @@
-# Licence Attribution Generator
+# Attribution Generator
 
 This project is aimed at helping more people to build upon legally and
 to share creative works collected at Wikimedia Commons. A questionnaire
