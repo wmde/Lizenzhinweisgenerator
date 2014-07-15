@@ -113,7 +113,7 @@ $.extend( Application.prototype, {
 
 		var $optionContainer = $( '<div/>' ),
 			licence = asset.getLicence(),
-			renderRawText = !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
+			renderRawText = licence && !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
 
 		this._optionContainer = new OptionContainer( $optionContainer, asset );
 

@@ -185,6 +185,8 @@ $.extend( QuestionnaireState.prototype, {
 
 		if( licenceId ) {
 			asset.setLicence( new LicenceStore( LICENCES ).detectLicence( licenceId ) );
+		} else if( !asset.getLicence() ) {
+			asset.setLicence( new LicenceStore( LICENCES ).detectLicence( 'unknown' ) );
 		}
 
 		var customAuthor = this._getAnswer( 'form-author', 1 ),
@@ -192,15 +194,21 @@ $.extend( QuestionnaireState.prototype, {
 			customUrl = this._getAnswer( 'form-url', 1 );
 
 		// TODO: Remove messages from Questionnaire state:
-		if( ( !asset.getAuthors().length || asset.getAuthors()[0].getText() === messages['author-undefined'] ) && customAuthor ) {
+		if( customAuthor ) {
 			asset.setAuthors( [new Author( $( document.createTextNode( customAuthor ) ) )] );
+		} else if( !asset.getAuthors().length ) {
+			asset.setAuthors(
+				[new Author( $( document.createTextNode( messages['author-undefined'] ) ) )]
+			);
 		}
 
-		if( ( !asset.getTitle() || asset.getTitle() === messages['file-untitled'] ) && customTitle ) {
+		if( customTitle ) {
 			asset.setTitle( customTitle );
+		} else if( asset.getTitle() === '' ) {
+			asset.setTitle( messages['file-untitled'] );
 		}
 
-		if( ( !asset.getUrl() || asset.getUrl() === '' ) && customUrl ) {
+		if( customUrl ) {
 			asset.setUrl( customUrl );
 		}
 

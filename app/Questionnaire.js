@@ -42,15 +42,10 @@ define( [
  *       (2) {Asset}
  *
  * @throws {Error} on incorrect parameters.
- * @throws {Error} if asset does not feature a proper licence.
  */
 var Questionnaire = function( $node, asset ) {
 	if( !( $node instanceof $ ) || asset === undefined ) {
 		throw new Error( 'No proper parameters specified' );
-	}
-
-	if( !asset.getLicence() ) {
-		throw new Error( 'Asset does not feature a proper licence' );
 	}
 
 	this._$node = $node.addClass( 'questionnaire' );
@@ -103,14 +98,14 @@ $.extend( Questionnaire.prototype, {
 
 		var self = this,
 			deferred = $.Deferred(),
-			licenceId = this._asset.getLicence().getId(),
+			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
 			page = '3';
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
 			this._exit();
 			return deferred.resolve().promise();
-		} else if( licenceId === 'CC' || licenceId === 'unknown' ) {
+		} else if( licenceId === 'CC' || !licenceId ) {
 			page = '2';
 		} else if( !this._asset.getAuthors().length ) {
 			page = '9';
@@ -370,7 +365,7 @@ $.extend( Questionnaire.prototype, {
 		options = $.extend( {
 			editor: editor,
 			licenceOnly: options ? options.licenceOnly : false,
-			licenceLink: !result.fullLicence,
+			licenceLink: !result.fullLicence && result.asset.getLicence().getId() !== 'unknown',
 			format: result.format
 		}, options );
 

@@ -2,7 +2,7 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( ['jquery', 'app/Asset', 'app/Author'], function( $, Asset, Author ) {
+define( ['jquery', 'app/Author', 'app/WikiAsset'], function( $, Author, WikiAsset ) {
 'use strict';
 
 /**
@@ -66,30 +66,29 @@ $.extend( AssetPage.prototype, {
 	_api: null,
 
 	/**
-	 * @type {Asset}
+	 * @type {WikiAsset}
 	 */
 	_asset: null,
 
 	/**
 	 * Returns the asset represented by the page.
 	 *
-	 * @return {Asset}
+	 * @return {WikiAsset}
 	 */
 	getAsset: function() {
 		if( !this._asset ) {
-			this._asset = new Asset(
+			this._asset = new WikiAsset(
 				this._prefixedFilename,
+				this._mediaType,
+				this._api.getLicenceStore().detectLicence( this._templates ),
 				this._prefixedFilename
 					.replace( /^[^:]+:/ , '' )
 					.replace( /\.[^.]+$/ , '' )
 					.replace( /_/g, ' '),
-				this._mediaType,
-				this._api.getLicenceStore().detectLicence( this._templates ),
+				this._scrapeAuthors(),
+				null,
+				this._scrapeAttribution(),
 				this._api,
-				{
-					authors: this._scrapeAuthors(),
-					attribution: this._scrapeAttribution()
-				},
 				this._wikiUrl
 			);
 		}

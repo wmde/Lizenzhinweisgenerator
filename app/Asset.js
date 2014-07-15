@@ -2,64 +2,46 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( ['jquery'], function( $ ) {
+define( ['jquery', 'app/Author', 'dojo/_base/declare'], function( $, Author, declare ) {
 'use strict';
 
 /**
  * Represents an asset.
  * @constructor
  *
- * @param {string} prefixedFilename
- * @param {string} title
+ * @param {string} url
  * @param {string} mediaType
- * @param {Licence|null} licence
- * @param {Api} api
- * @param {Object} [optionalAttributes]
- * @param {string} [wikiUrl]
+ * @param {Licence|null} [licence]
+ * @param {string|null} [title]
+ * @param {Author[]|null} [authors]
  * @param {string} [url]
+ * @param {jQuery|null} [$attribution]
+ * @param {Api|null} [api]
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var Asset = function(
-	prefixedFilename, title, mediaType, licence, api, optionalAttributes, wikiUrl, url
-) {
-	if( !prefixedFilename || !title || !mediaType || ( !licence && licence !== null ) || !api ) {
-		throw new Error( 'No proper initialization parameters specified' );
-	}
+var Asset = declare( null, {
+	constructor: function( filename, mediaType, licence, title, authors, url, $attribution, api ) {
+		if( typeof filename !== 'string' || typeof mediaType !== 'string' ) {
+			throw new Error( 'No proper initialization parameters specified' );
+		}
 
-	this._prefixedFilename = prefixedFilename;
-	this._title = title;
-	this._mediaType = mediaType;
-	this._licence = licence;
-	this._api = api;
-	this._wikiUrl = wikiUrl || null;
-	this._url = url || '';
+		this._filename = filename;
+		this._mediaType = mediaType;
+		this._licence = licence || null;
+		this._title = title || '';
+		this._url = url || null;
+		this._authors = authors || [];
+		this._$attribution = $attribution || null;
+		this._api = api || null;
 
-	if( typeof optionalAttributes === 'string' ) {
-		wikiUrl = optionalAttributes;
-		optionalAttributes = null;
-	}
-
-	optionalAttributes = optionalAttributes || {};
-
-	this._authors = optionalAttributes.authors || [];
-	this._$attribution = optionalAttributes.attribution || null;
-
-	this._wikiUrl = wikiUrl || api.getDefaultUrl();
-
-	this._imageInfo = {};
-};
-
-$.extend( Asset.prototype, {
-	/**
-	 * @type {string}
-	 */
-	_prefixedFilename: null,
+		this._imageInfo = {};
+	},
 
 	/**
 	 * @type {string}
 	 */
-	_title: null,
+	_filename: null,
 
 	/**
 	 * @type {string}
@@ -72,9 +54,9 @@ $.extend( Asset.prototype, {
 	_licence: null,
 
 	/**
-	 * @type {Api}
+	 * @type {string}
 	 */
-	_api: null,
+	_title: null,
 
 	/**
 	 * @type {Author[]}
@@ -82,9 +64,19 @@ $.extend( Asset.prototype, {
 	_authors: null,
 
 	/**
+	 * @type {string}
+	 */
+	_url: null,
+
+	/**
 	 * @type {jQuery|null}
 	 */
 	_$attribution: null,
+
+	/**
+	 * @type {Api}
+	 */
+	_api: null,
 
 	/**
 	 * @type {Object}
@@ -92,78 +84,10 @@ $.extend( Asset.prototype, {
 	_imageInfo: null,
 
 	/**
-	 * @type {string}
-	 */
-	_wikiUrl: null,
-
-	/**
-	 * @type {string|null}
-	 */
-	_url: null,
-
-	/**
 	 * @return {string}
 	 */
 	getFilename: function() {
-		return this._prefixedFilename.replace( /^[^:]+:/ , '' );
-	},
-
-	/**
-	 * @return {string}
-	 */
-	getWikiUrl: function() {
-		return this._wikiUrl;
-	},
-
-	/**
-	 * @param {string|null} url
-	 *
-	 * @throws {Error} if the URL is not specified properly.
-	 */
-	setUrl: function( url ) {
-		if( typeof url !== 'string' && url !== null ) {
-			throw new Error( 'URL needs to be a string or null' );
-		}
-		this._url = url;
-	},
-
-	/**
-	 * Returns the asset's URL.
-	 * @return {string}
-	 */
-	getUrl: function() {
-		if( this._wikiUrl ) {
-			return 'http:' + this._wikiUrl + 'wiki/' + this._prefixedFilename;
-		} else {
-			if( !this._url ) {
-				return '';
-			}
-
-			if( this._url.indexOf( 'http' ) === 0 ) {
-				return this._url;
-			} else {
-				return 'http://' + this._url;
-			}
-		}
-	},
-
-	/**
-	 * @param {string} title
-	 *
-	 * @throws {Error} if the title is not of type "string".
-	 */
-	setTitle: function( title ) {
-		if( typeof title !== 'string' ) {
-			throw new Error( 'title needs to be a string' );
-		}
-		this._title = title;
-	},
-
-	/**
-	 * @return {string}
-	 */
-	getTitle: function() {
-		return this._title;
+		return this._filename;
 	},
 
 	/**
@@ -188,6 +112,55 @@ $.extend( Asset.prototype, {
 	},
 
 	/**
+	 * @param {string} title
+	 *
+	 * @throws {Error} if the title is not of type "string".
+	 */
+	setTitle: function( title ) {
+		if( typeof title !== 'string' ) {
+			throw new Error( 'title needs to be a string' );
+		}
+		this._title = title;
+	},
+
+	/**
+	 * @return {string}
+	 */
+	getTitle: function() {
+		return this._title;
+	},
+
+	/**
+	 * @param {string|null} url
+	 *
+	 * @throws {Error} if the URL is not specified properly.
+	 */
+	setUrl: function( url ) {
+		if( typeof url !== 'string' && url !== null ) {
+			throw new Error( 'URL needs to be a string or null' );
+		}
+		this._url = url;
+	},
+
+	/**
+	 * @return {string|null}
+	 */
+	getUrl: function() {
+		if( this._url === null ) {
+			return null;
+		}
+
+		return this._url.indexOf( 'http' ) === 0 ? this._url : 'http://' + this._url;
+	},
+
+	/**
+	 * @param {Author[]} authors
+	 */
+	setAuthors: function( authors ) {
+		this._authors = authors;
+	},
+
+	/**
 	 * @param {options} [options]
 	 * @return {Author[]|string}
 	 */
@@ -202,14 +175,8 @@ $.extend( Asset.prototype, {
 		$.each( this._authors, function( index, author ) {
 			authors.push( author.getText() );
 		} );
-		return authors.join( '; ' );
-	},
 
-	/**
-	 * @param {Author[]} authors
-	 */
-	setAuthors: function( authors ) {
-		this._authors = authors;
+		return authors.join( '; ' );
 	},
 
 	/**
@@ -236,7 +203,7 @@ $.extend( Asset.prototype, {
 		if( this._imageInfo[imageSize] ) {
 			deferred.resolve( this._imageInfo[imageSize] );
 		} else {
-			this._api.getImageInfo( this._prefixedFilename, imageSize, this._wikiUrl )
+			this._api.getImageInfo( this._filename, imageSize, this._wikiUrl )
 			.done( function( imageInfo ) {
 				self._imageInfo[imageSize] = imageInfo;
 				deferred.resolve( imageInfo );
@@ -268,12 +235,18 @@ $.extend( Asset.prototype, {
 			}
 		}
 
+		var haveLicences = asset.getLicence() && this.getLicence(),
+			sameLicence = !haveLicences || asset.getLicence().getId() === this.getLicence().getId();
+
 		return asset.getFilename() === this.getFilename()
 			&& asset.getTitle() === this.getTitle()
 			&& asset.getUrl() === this.getUrl()
-			&& asset.getLicence().getId() === this.getLicence().getId();
-	},
+			&& sameLicence;
+	}
 
+} );
+
+Asset.extend( {
 	/**
 	 * Clones the asset.
 	 *
@@ -281,20 +254,16 @@ $.extend( Asset.prototype, {
 	 */
 	clone: function() {
 		return new Asset(
-			this._prefixedFilename,
-			this.getTitle(),
-			this.getMediaType(),
-			this.getLicence(),
-			this._api,
-			{
-				authors: this.getAuthors(),
-				attribution: this.getAttribution()
-			},
-			this.getWikiUrl(),
-			this.getUrl()
+			this._filename,
+			this._mediaType,
+			this._licence,
+			this._title,
+			this._authors,
+			this._url,
+			this._$attribution,
+			this._api
 		);
 	}
-
 } );
 
 return Asset;

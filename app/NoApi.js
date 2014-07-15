@@ -2,26 +2,8 @@
  * @licence GNU GPL v3
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-define( [
-	'jquery',
-	'dojo/i18n!./nls/NoApi',
-	'app/ApplicationError',
-	'app/Asset',
-	'app/Author',
-	'app/ImageInfo',
-	'app/LicenceStore',
-	'app/LICENCES'
-],
-function(
-	$,
-	messages,
-	ApplicationError,
-	Asset,
-	Author,
-	ImageInfo,
-	LicenceStore,
-	LICENCES
-) {
+define( ['jquery', 'app/ApplicationError', 'app/Asset', 'app/ImageInfo'],
+function( $, ApplicationError, Asset, ImageInfo ) {
 'use strict';
 
 /**
@@ -47,20 +29,7 @@ $.extend( NoApi.prototype, {
 
 		this.getImageInfo( filename )
 		.done( function() {
-			var licence = new LicenceStore( LICENCES ).detectLicence( 'unknown' ),
-				author = new Author( $( document.createTextNode( messages['author-undefined'] ) ) );
-
-			var asset = new Asset(
-				filename,
-				messages['file-untitled'],
-				'mediatype',
-				licence,
-				self,
-				{
-					authors: [author]
-				},
-				''
-			);
+			var asset = new Asset( filename, 'mediatype', null, null, null, null, null, self );
 			deferred.resolve( asset );
 		} )
 		.fail( function( error ) {
@@ -68,13 +37,6 @@ $.extend( NoApi.prototype, {
 		} );
 
 		return deferred.promise();
-	},
-
-	/**
-	 * @return {LicenceStore|null}
-	 */
-	getLicenceStore: function() {
-		return new LicenceStore();
 	},
 
 	/**

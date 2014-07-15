@@ -222,11 +222,6 @@ $.extend( FrontPage.prototype, {
 
 		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
-			if( !asset.getLicence() ) {
-				self._displayError( new ApplicationError( 'licence-unknown' ) );
-				return;
-			}
-
 			$( self ).trigger( 'asset', [asset] );
 		} )
 		.fail( function( error ) {

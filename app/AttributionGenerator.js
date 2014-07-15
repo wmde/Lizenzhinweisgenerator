@@ -104,7 +104,7 @@ $.extend( AttributionGenerator.prototype, {
 	generate: function( raw ) {
 		var licenceId = this._asset.getLicence().getId();
 
-		if( licenceId === 'PD' || licenceId === 'cc-zero' || licenceId === 'unknown' ) {
+		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			return null;
 		}
 
@@ -120,7 +120,7 @@ $.extend( AttributionGenerator.prototype, {
 			$attribution
 			.append( $author );
 
-			if( format === 'text' && this._asset.getUrl().length > 0 ) {
+			if( format === 'text' && this._asset.getUrl() ) {
 				$attribution
 				.append( document.createTextNode( ' ' ) )
 				.append( $( '<span/>' ).addClass( 'attribution-url' )

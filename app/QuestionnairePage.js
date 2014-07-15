@@ -2,25 +2,19 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( [
-	'jquery',
-	'app/Author',
-	'app/LicenceStore',
-	'app/LICENCES',
-	'dojo/i18n!./nls/QuestionnairePage'
-], function( $, Author, LicenceStore, LICENCES, messages ) {
+define( ['jquery'], function( $ ) {
 'use strict';
 
 /**
  * Represents a questionnaire page with all logic handling.
  * The page names/numbers and the corresponding logic are based on the questionnaire "Webtool für
- * Creative Commons-Lizenzen v1".
+ * Creative Commons-Lizenzen".
  * @constructor
  *
  * @param {string} pageId
  * @param {string} html
  * @param {Asset} asset
- * @param {Object} result
+ * @param {QuestionnaireState} questionnaireState
  *
  * @event log Triggered whenever logging should occur.
  *        (1) {jQuery.Event}
@@ -191,7 +185,7 @@ $.extend( QuestionnairePage.prototype, {
 
 		if( p === '2' ) {
 			goTo = '3';
-			if( !this._asset.getAuthors().length || this._asset.getAuthors()[0].getText() === messages['author-undefined'] ) {
+			if( !this._asset.getAuthors().length ) {
 				goTo = 'form-author';
 			} else if( !this._asset.getTitle() ) {
 				goTo = 'form-title';
@@ -211,7 +205,7 @@ $.extend( QuestionnairePage.prototype, {
 			goTo = '3';
 
 			var title = this._asset.getTitle();
-			if( p === 'form-author' && ( !title || title === messages['file-untitled'] ) ) {
+			if( p === 'form-author' && !title ) {
 				goTo = 'form-title';
 			} else if( p !== 'form-url' && ( !this._asset.getUrl() || this._asset.getUrl() === '' ) ) {
 				goTo = 'form-url';

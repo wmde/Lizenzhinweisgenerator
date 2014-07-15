@@ -2,8 +2,8 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define( ['jquery', 'app/AssetPage', 'app/ImageInfo', 'dojo/_base/config', 'app/AjaxError'],
-	function( $, AssetPage, ImageInfo, config, AjaxError ) {
+define( ['jquery', 'app/ImageInfo', 'app/WikiAssetPage', 'dojo/_base/config', 'app/AjaxError'],
+	function( $, ImageInfo, WikiAssetPage, config, AjaxError ) {
 'use strict';
 
 /**
@@ -73,7 +73,7 @@ $.extend( Api.prototype, {
 
 				self._getPageTemplates( prefixedFilename, wikiUrl )
 				.done( function( templates ) {
-					var assetPage = new AssetPage(
+					var assetPage = new WikiAssetPage(
 						prefixedFilename, metaData.mediatype, $dom, templates, self, wikiUrl
 					);
 
