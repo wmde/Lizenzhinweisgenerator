@@ -11,6 +11,7 @@ define( [
 	'app/QuestionnaireState',
 	'dojo/Deferred',
 	'dojo/i18n!./nls/Questionnaire',
+	'dojo/promise/all',
 	'templates/registry',
 	'app/AjaxError'
 ], function(
@@ -21,6 +22,7 @@ define( [
 	QuestionnaireState,
 	Deferred,
 	messages,
+	all,
 	templateRegistry,
 	AjaxError
 ) {
@@ -256,7 +258,9 @@ $.extend( Questionnaire.prototype, {
 		this._$node.empty();
 
 		this._fetchPage( page )
-		.done( function( questionnairePage ) {
+		.done( function( $html ) {
+			var questionnairePage = self._createQuestionnairePage( page, $html );
+
 			self._$node.append(
 				$( '<div/>' ).addClass( 'questionnaire-contentcontainer' )
 				.append( self._generateMinimizeButton() )
@@ -290,18 +294,46 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Fetches the DOM structure of a specific page by id and adds it to preexisting DOM.
+	 * Initializes a QuestionnairePage object.
+	 *
+	 * @param {string} page
+	 * @param {jQuery} $html
+	 * @return {QuestionnairePage}
+	 */
+	_createQuestionnairePage: function( page, $html ) {
+		var self = this;
+
+		var questionnairePage = new QuestionnairePage(
+			page,
+			$html,
+			self._asset,
+			self._questionnaireState
+		);
+
+		$( questionnairePage )
+		.on( 'goto', function( event, toPage ) {
+			self._goTo( toPage );
+		} )
+		.on( 'update', function( event, state ) {
+			self._questionnaireState = state;
+			$( self ).trigger( 'update' );
+		} );
+
+		return questionnairePage;
+	},
+
+	/**
+	 * Fetches a specific page by id.
 	 *
 	 * @param {string} page
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
-	 *         - {QuestionnairePage}
+	 *         - {jQuery}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
 	_fetchPage: function( page ) {
-		var self = this,
-			deferred = $.Deferred();
+		var deferred = $.Deferred();
 
 		var ajaxOptions = {
 			url: templateRegistry.getDir( 'questionnaire' ) + page + '.html',
@@ -310,23 +342,12 @@ $.extend( Questionnaire.prototype, {
 
 		$.ajax( ajaxOptions )
 		.done( function( html ) {
-			var questionnairePage = new QuestionnairePage(
-				page,
-				html,
-				self._asset,
-				self._questionnaireState
-			);
+			var $html = $( '<div/>' )
+				.addClass( 'questionnaire-page page page-' + page )
+				.data( 'questionnaire-page', page )
+				.html( html );
 
-			$( questionnairePage )
-			.on( 'goto', function( event, toPage ) {
-				self._goTo( toPage );
-			} )
-			.on( 'update', function( event, state ) {
-				self._questionnaireState = state;
-				$( self ).trigger( 'update' );
-			} );
-
-			deferred.resolve( questionnairePage );
+			deferred.resolve( $html );
 		} )
 		.fail( function() {
 			deferred.reject( new AjaxError( 'questionnaire-page-missing', ajaxOptions ) );
@@ -465,7 +486,7 @@ $.extend( Questionnaire.prototype, {
 	},
 
 	/**
-	 * Fetches the DOM structures of one ore more template pages by ids.
+	 * Fetches the DOM structures of one ore more template pages by id(s).
 	 *
 	 * @param {string[]} pages
 	 * @return {Object} jQuery Promise
@@ -475,60 +496,28 @@ $.extend( Questionnaire.prototype, {
 	 *         - {AjaxError}
 	 */
 	_fetchPages: function( pages ) {
-		var deferreds = [$.Deferred()],
+		var deferred = new Deferred(),
+			promises = [],
 			$pages = $();
 
-		deferreds[0].resolve( $pages );
-
 		for( var i = 0; i < pages.length; i++ ) {
-			// TODO: Replace with dojo DefferdList.
-			deferreds.push( this._fetchPagesChain( deferreds[deferreds.length - 1], pages[i] ) );
+			promises.push( this._fetchPage( pages[i] ) );
 		}
 
-		return deferreds[deferreds.length - 1].promise();
-	},
+		all( promises ).then( function( $htmlSnippets ) {
+			for( var i = 0; i < $htmlSnippets.length; i++ ) {
+				$pages = $pages.add( $htmlSnippets[i] );
+			}
 
-	/**
-	 * @param {Object} deferred
-	 * @param {string} page
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {jQuery} jQuery wrapped DOM nodes of the requested pages.
-	 *         Rejected parameters:
-	 *         - {AjaxError}
-	 */
-	_fetchPagesChain: function( deferred, page ) {
-			var d = $.Deferred();
-
-		deferred.then( function( $pages ) {
-			var ajaxOptions = {
-				url: templateRegistry.getDir( 'questionnaire' ) + page + '.html',
-				dataType: 'html'
-			};
-
-			$.ajax( ajaxOptions )
-			.done( function( html ) {
-				var $content = $( '<div/>' )
-					.addClass( 'questionnaire-page page page-' + page )
-					.data( 'questionnaire-page', page )
-					.html( html );
-
-				$content.find( 'div.expandable-trigger').on( 'click', function() {
-					$( '.expandable' ).slideUp();
-					$( this ).next().slideDown();
-				} );
-
-				$pages = $pages.add( $content );
-				d.resolve( $pages );
-			} )
-			.fail( function() {
-				d.reject( new AjaxError( 'questionnaire-page-missing', ajaxOptions ) );
+			$pages.find( 'div.expandable-trigger').on( 'click', function() {
+				$( '.expandable' ).slideUp();
+				$( this ).next().slideDown();
 			} );
 
-			return d.promise();
+			deferred.resolve( $pages );
 		} );
 
-		return d;
+		return deferred;
 	},
 
 	/**

@@ -12,7 +12,7 @@ define( ['jquery'], function( $ ) {
  * @constructor
  *
  * @param {string} pageId
- * @param {string} html
+ * @param {jQuery} $page
  * @param {Asset} asset
  * @param {QuestionnaireState} questionnaireState
  *
@@ -30,10 +30,10 @@ define( ['jquery'], function( $ ) {
  *
  * @throws {Error} on incorrect parameters.
  */
-var QuestionnairePage = function( pageId, html, asset, questionnaireState ) {
+var QuestionnairePage = function( pageId, $page, asset, questionnaireState ) {
 	if(
 		typeof pageId !== 'string'
-		|| typeof html !== 'string'
+		|| !( $page instanceof $ )
 		|| asset === undefined
 		|| questionnaireState === undefined
 	) {
@@ -41,14 +41,9 @@ var QuestionnairePage = function( pageId, html, asset, questionnaireState ) {
 	}
 
 	this._pageId = pageId;
-	this._html = html;
+	this.$page = $page;
 	this._asset = asset;
 	this._questionnaireState = questionnaireState;
-
-	this.$page = $( '<div/>' )
-		.addClass( 'questionnaire-page page page-' + pageId )
-		.data( 'questionnaire-page', pageId )
-		.html( html );
 
 	this._applyFunctionality( this.$page );
 };
@@ -61,10 +56,10 @@ $.extend( QuestionnairePage.prototype, {
 	_pageId: null,
 
 	/**
-	 * Unparsed HTML.
-	 * @type {string}
+	 * Node the questionnaire page is initialized on.
+	 * @type {jQuery}
 	 */
-	_html: null,
+	$page: null,
 
 	/**
 	 * @type {Asset}
@@ -76,12 +71,6 @@ $.extend( QuestionnairePage.prototype, {
 	 * @type {QuestionnaireState}
 	 */
 	_questionnaireState: null,
-
-	/**
-	 * Node the questionnaire page is initialized on.
-	 * @type {jQuery}
-	 */
-	$page: null,
 
 	/**
 	 * Applies functionality to a page's DOM.
