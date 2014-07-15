@@ -6,6 +6,7 @@
 define( [
 	'jquery',
 	'app/AttributionGenerator',
+	'app/Author',
 	'app/QuestionnairePage',
 	'app/QuestionnaireState',
 	'dojo/Deferred',
@@ -15,6 +16,7 @@ define( [
 ], function(
 	$,
 	AttributionGenerator,
+	Author,
 	QuestionnairePage,
 	QuestionnaireState,
 	Deferred,
@@ -369,7 +371,19 @@ $.extend( Questionnaire.prototype, {
 			format: result.format
 		}, options );
 
-		var attributionGenerator = new AttributionGenerator( result.asset, options );
+		var asset = result.asset;
+
+		if( !asset.getAuthors().length ) {
+			asset.setAuthors(
+				[new Author( $( document.createTextNode( messages['author-undefined'] ) ) )]
+			);
+		}
+
+		if( asset.getTitle() === '' ) {
+			asset.setTitle( messages['file-untitled'] );
+		}
+
+		var attributionGenerator = new AttributionGenerator( asset, options );
 
 		// Return cached attribution generator for allowing external objects to check whether a
 		// change actually has occurred.

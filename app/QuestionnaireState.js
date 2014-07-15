@@ -3,8 +3,8 @@
  * @author snater.com < wikimedia@snater.com >
  */
 define(
-	['jquery', 'app/Author', 'dojo/_base/config', 'dojo/i18n!./nls/QuestionnaireState'],
-	function( $, Author, config, messages ) {
+	['jquery', 'app/Author', 'dojo/_base/config'],
+	function( $, Author, config ) {
 'use strict';
 
 /**
@@ -97,13 +97,6 @@ $.extend( QuestionnaireState.prototype, {
 	},
 
 	/**
-	 * @return {Asset}
-	 */
-	getAsset: function() {
-		return this.getResult().asset;
-	},
-
-	/**
 	 * Sets a specific value for an answer.
 	 *
 	 * @param {string} page
@@ -189,19 +182,12 @@ $.extend( QuestionnaireState.prototype, {
 			customTitle = this._getAnswer( 'form-title', 1 ),
 			customUrl = this._getAnswer( 'form-url', 1 );
 
-		// TODO: Remove messages from Questionnaire state:
 		if( customAuthor ) {
 			asset.setAuthors( [new Author( $( document.createTextNode( customAuthor ) ) )] );
-		} else if( !asset.getAuthors().length ) {
-			asset.setAuthors(
-				[new Author( $( document.createTextNode( messages['author-undefined'] ) ) )]
-			);
 		}
 
 		if( customTitle ) {
 			asset.setTitle( customTitle );
-		} else if( asset.getTitle() === '' ) {
-			asset.setTitle( messages['file-untitled'] );
 		}
 
 		if( customUrl ) {

@@ -242,7 +242,7 @@ $.extend( QuestionnairePage.prototype, {
 
 			$page.find( '.a3' ).on( 'click', function() {
 				self._log( p, 3 );
-				if( self._questionnaireState.getAsset().getLicence().isInGroup( 'cc2de' ) ) {
+				if( self._questionnaireState.getResult().asset.getLicence().isInGroup( 'cc2de' ) ) {
 					self._goTo( '7' );
 				} else {
 					self._goTo( 'result-note-privateUse' );
