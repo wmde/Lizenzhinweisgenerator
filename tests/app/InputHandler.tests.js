@@ -109,6 +109,13 @@ define(
 				file: 'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
 				wikiUrl: '//de.wikipedia.org/'
 			}
+		}, {
+			input: [
+				'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG'
+			],
+			expected: {
+				file: 'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG'
+			}
 		}
 	];
 

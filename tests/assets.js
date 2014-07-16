@@ -2,16 +2,36 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-define(
-	['jquery', 'app/Api', 'app/LicenceStore', 'app/LICENCES', 'app/WikiAsset', 'app/Author', 'dojo/_base/config'],
-	function( $, Api, LicenceStore, LICENCES, WikiAsset, Author, config ) {
+define( [
+	'jquery',
+	'app/Api',
+	'app/Asset',
+	'app/LicenceStore',
+	'app/LICENCES',
+	'app/NoApi',
+	'app/WikiAsset',
+	'app/Author',
+	'dojo/_base/config'
+],
+function( $, Api, Asset, LicenceStore, LICENCES, NoApi, WikiAsset, Author, config ) {
 'use strict';
 
 config.custom.licenceStore = new LicenceStore( LICENCES );
 
-var api = new Api( '//commons.wikimedia.org/' );
+var api = new Api( '//commons.wikimedia.org/' ),
+	noApi = new NoApi();
 
 return {
+	'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG': new Asset(
+		'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG',
+		'mediatype',
+		null,
+		null,
+		null,
+		null,
+		null,
+		noApi
+	),
 	'LRO_Tycho_Central_Peak.jpg': new WikiAsset(
 		'File:LRO_Tycho_Central_Peak.jpg',
 		'bitmap',

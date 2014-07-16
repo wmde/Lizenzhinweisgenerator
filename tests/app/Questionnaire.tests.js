@@ -5,15 +5,31 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/Questionnaire', 'app/AttributionGenerator', 'tests/assets'],
-	function( $, Questionnaire, AttributionGenerator, testAssets ) {
+define( [
+	'jquery',
+	'app/AttributionGenerator',
+	'app/Author',
+	'app/Questionnaire',
+	'dojo/_base/config',
+	'dojo/i18n!app/nls/Questionnaire',
+	'tests/assets'
+], function(
+	$,
+	AttributionGenerator,
+	Author,
+	Questionnaire,
+	config,
+	messages,
+	testAssets
+) {
 
 QUnit.module( 'Questionnaire' );
 
+var licenceStore = config.custom.licenceStore;
+
 /**
  * Object containing the test cases for the Questionnaire constructur. The "la" sub-object is used
- * to overwrite the Questionnaire's _loggedAnswers object.
+ * to overwrite the QuestionnaireState's _answers object.
  * @type {Object}
  */
 var testSets = {
@@ -232,8 +248,44 @@ var testSets = {
 	'LRO_Tycho_Central_Peak.jpg': [ {
 		la: {},
 		templates: ['result-note-pd']
+	} ],
+	'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG': [ {
+		la: {},
+		templates: ['result-note-text', 'result-restrictions'],
+		attrGenOpt: { licenceLink: false }
+	}, {
+		la: { '2': { 1: 'cc-by-3.0-de' } },
+		templates: ['result-note-text', 'result-restrictions'],
+		assetMixin: {
+			licence: licenceStore.getLicence( 'cc-by-3.0-de' )
+		}
+	}, {
+		la: { '2': { 1: 'cc-by-3.0-de' }, 'form-author': { 1: 'Test Author' } },
+		templates: ['result-note-text', 'result-restrictions'],
+		assetMixin: {
+			licence: licenceStore.getLicence( 'cc-by-3.0-de' ),
+			authors: [new Author( $( document.createTextNode( 'Test Author' ) ) )]
+		}
 	} ]
 };
+
+/**
+ * @param {Asset} asset
+ * @param {Object} [mixin]
+ * @return {Asset}
+ */
+function assetMixin( asset, mixin ) {
+	if( !mixin ) {
+		return asset;
+	}
+	if( mixin.licence ) {
+		asset.setLicence( mixin.licence );
+	}
+	if( mixin.authors ) {
+		asset.setAuthors( mixin.authors );
+	}
+	return asset;
+}
 
 QUnit.test( 'start()', function( assert ) {
 	var questionnaire;
@@ -243,18 +295,22 @@ QUnit.test( 'start()', function( assert ) {
 
 		QUnit.stop();
 
+		var title = testAsset.getTitle();
+		if( title === '' ) {
+			title = testAsset.getFilename();
+		}
+
 		questionnaire.start()
 		.done( function() {
 			assert.ok(
 				true,
-				'(' + testAsset.getTitle() + ') Started questionnaire.'
+				'(' + title + ') Started questionnaire.'
 			);
 		} )
 		.fail( function( message ) {
 			assert.ok(
 				false,
-				'(' + testAsset.getTitle() + ') Failed starting questionnaire with error "'
-					+ message + '".'
+				'(' + title + ') Failed starting questionnaire with error "' + message + '".'
 			);
 		} )
 		.always( function() {
@@ -270,7 +326,14 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 	function assertProperTemplateUsage( testAsset, testCase ) {
 		var deferred = $.Deferred();
 
-		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' );
+		testAsset = assetMixin( testAsset, testCase.assetMixin );
+
+		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' ),
+			title = testAsset.getTitle();
+
+		if( title === '' ) {
+			title = testAsset.getFilename();
+		}
 
 		// Circumvent applying functionality to the raw HTML pages to be able to compare expected
 		// and resulting HTML easily:
@@ -301,7 +364,7 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 
 				assert.ok(
 					!error,
-					'(' + testAsset.getTitle() + ') Using expected templates ('
+					'(' + title + ') Using expected templates ('
 						+ testCase.templates.toString() + ').'
 				);
 
@@ -309,7 +372,7 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 			.fail( function( message ) {
 				assert.ok(
 					false,
-					'(' + testAsset.getTitle() + ') Failed generating supplement '
+					'(' + title + ') Failed generating supplement '
 						+ 'with error "' + message + '".'
 				);
 			} )
@@ -321,8 +384,7 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 		.fail( function( message ) {
 			assert.ok(
 				false,
-				'(' + testAsset.getTitle() + ') Failed starting questionnaire with error "'
-					+ message + '".'
+				'(' + title + ') Failed starting questionnaire with error "' + message + '".'
 			);
 
 			deferred.resolve();
@@ -339,7 +401,7 @@ QUnit.test( 'generateSupplement()', function( assert ) {
 	 */
 	function pushToTestStack( testStack, testAsset, testCase ) {
 		testStack.push( function() {
-			return assertProperTemplateUsage( testAsset, testCase );
+			return assertProperTemplateUsage( testAsset.clone(), testCase );
 		} );
 		return testStack;
 	}
@@ -400,24 +462,44 @@ QUnit.test( 'getAttributionGenerator()', function( assert ) {
 	function assertProperAttributionGenerator( testAsset, testCase ) {
 		var deferred = $.Deferred();
 
-		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' );
+		testAsset = assetMixin( testAsset, testCase.assetMixin );
+
+		var questionnaire = new Questionnaire( $( '<div/>' ), testAsset, '..' ),
+			title = testAsset.getTitle();
+
+		if( title === '' ) {
+			title = testAsset.getFilename();
+		}
 
 		questionnaire.start().done( function() {
 			questionnaire._questionnaireState._answers = testCase.la;
+
+			if( !testAsset.getLicence() ) {
+				testAsset.setLicence( config.custom.licenceStore.getLicence( 'unknown' ) );
+			}
+
+			if( !testAsset.getAuthors().length ) {
+				testAsset.setAuthors(
+					[new Author( $( document.createTextNode( messages['author-undefined'] ) ) )]
+				);
+			}
+
+			if( testAsset.getTitle() === '' ) {
+				testAsset.setTitle( messages['file-untitled'] );
+			}
 
 			assert.ok(
 				questionnaire.getAttributionGenerator().equals(
 					new AttributionGenerator( testAsset, testCase.attrGenOpt )
 				),
-				'(' + testAsset.getTitle() + ') Validated AttributionGenerator.'
+				'(' + title + ') Validated AttributionGenerator.'
 			);
 
 		} )
 		.fail( function( message ) {
 			assert.ok(
 				false,
-				'(' + testAsset.getTitle() + ') Failed starting questionnaire with error "'
-					+ message + '".'
+				'(' + title + ') Failed starting questionnaire with error "' + message + '".'
 			);
 
 			deferred.resolve();
@@ -437,7 +519,7 @@ QUnit.test( 'getAttributionGenerator()', function( assert ) {
 	 */
 	function pushToTestStack( testStack, testAsset, testCase ) {
 		testStack.push( function() {
-			return assertProperAttributionGenerator( testAsset, testCase );
+			return assertProperAttributionGenerator( testAsset.clone(), testCase );
 		} );
 		return testStack;
 	}

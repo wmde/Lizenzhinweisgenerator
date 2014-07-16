@@ -6,8 +6,8 @@
 'use strict';
 
 define(
-	['jquery', 'app/Api', 'app/Author', 'tests/assets'],
-	function( $, Api, Author, testAssets ) {
+	['jquery', 'app/Api', 'app/Author', 'app/WikiAsset', 'tests/assets'],
+	function( $, Api, Author, WikiAsset, testAssets ) {
 
 	QUnit.module( 'Api' );
 
@@ -26,6 +26,10 @@ define(
 	QUnit.test( 'Check scraped asset', function( assert ) {
 
 		$.each( testAssets, function( filename, testAsset ) {
+
+			if( !( testAsset instanceof WikiAsset ) ) {
+				return true;
+			}
 
 			QUnit.stop();
 
