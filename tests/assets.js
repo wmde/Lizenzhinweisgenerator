@@ -135,7 +135,7 @@ return {
 		'File:1950_Yankees.jpg',
 		'bitmap',
 		// Unsupported CC licence CC-BY-1.0:
-		null,
+		config.custom.licenceStore.getLicence( 'cc' ),
 		'1950 Yankees',
 		[new Author( $( document.createTextNode( 'jcasabona' ) ) )],
 		null,
@@ -146,7 +146,7 @@ return {
 		'File:NatMonumFengegKapell.jpg',
 		'bitmap',
 		// Unsupported licence derivative CC-BY-3.0-LU:
-		null,
+		config.custom.licenceStore.getLicence( 'cc' ),
 		'NatMonumFengegKapell',
 		[new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() )],
 		null,
@@ -167,7 +167,7 @@ return {
 	'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg': new WikiAsset(
 		'File:03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg',
 		'bitmap',
-		// Completely unsupported licence:
+		// Licence not detectable:
 		null,
 		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007',
 		null,

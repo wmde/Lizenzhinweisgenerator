@@ -9,7 +9,8 @@ define( [
 	'templates/registry',
 	'app/ApplicationError',
 	'app/Api',
-	'app/NoApi'
+	'app/NoApi',
+	'app/WikiAsset'
 ], function(
 	$,
 	InputHandler,
@@ -17,7 +18,8 @@ define( [
 	templateRegistry,
 	ApplicationError,
 	Api,
-	NoApi
+	NoApi,
+	WikiAsset
 ) {
 'use strict';
 
@@ -217,6 +219,10 @@ $.extend( FrontPage.prototype, {
 
 		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
+			if( asset instanceof WikiAsset && asset.getLicence().isInGroup( 'unsupported' ) ) {
+				self._displayError( new ApplicationError( 'licence-unsupported' ) );
+				return;
+			}
 			$( self ).trigger( 'asset', [asset] );
 		} )
 		.fail( function( error ) {
