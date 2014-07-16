@@ -178,7 +178,7 @@ $.extend( FrontPage.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-		if( !input.match( /wiki(m|p)edia/ ) ) {
+		if( !input.match( /wiki(m|p)edia\.org/ ) ) {
 			this._api = new NoApi();
 		} else {
 			this._api = new Api( '//commons.wikimedia.org/' );
