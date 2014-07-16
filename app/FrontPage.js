@@ -4,20 +4,22 @@
  */
 define( [
 	'jquery',
-	'app/InputHandler',
+	'dojo/_base/config',
 	'dojo/i18n!./nls/FrontPage',
 	'templates/registry',
 	'app/ApplicationError',
 	'app/Api',
+	'app/InputHandler',
 	'app/NoApi',
 	'app/WikiAsset'
 ], function(
 	$,
-	InputHandler,
+	config,
 	messages,
 	templateRegistry,
 	ApplicationError,
 	Api,
+	InputHandler,
 	NoApi,
 	WikiAsset
 ) {
@@ -219,9 +221,16 @@ $.extend( FrontPage.prototype, {
 
 		self._api.getAsset( prefixedFilename, wikiUrl )
 		.done( function( asset ) {
-			if( asset instanceof WikiAsset && asset.getLicence().isInGroup( 'unsupported' ) ) {
-				self._displayError( new ApplicationError( 'licence-unsupported' ) );
-				return;
+			if( asset instanceof WikiAsset ) {
+				if( asset.getLicence().isInGroup( 'unsupported' ) ) {
+					self._displayError( new ApplicationError( 'licence-unsupported' ) );
+					return;
+				} else if(
+					$.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1
+				) {
+					self._displayError( new ApplicationError( 'mediatype-unsupported' ) );
+					return;
+				}
 			}
 			$( self ).trigger( 'asset', [asset] );
 		} )

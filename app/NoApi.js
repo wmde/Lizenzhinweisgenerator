@@ -29,7 +29,7 @@ $.extend( NoApi.prototype, {
 
 		this.getImageInfo( filename )
 		.done( function() {
-			var asset = new Asset( filename, 'mediatype', null, null, null, null, null, self );
+			var asset = new Asset( filename, 'unknown', null, null, null, null, null, self );
 			deferred.resolve( asset );
 		} )
 		.fail( function( error ) {
