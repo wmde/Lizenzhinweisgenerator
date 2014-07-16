@@ -174,8 +174,10 @@ $.extend( QuestionnaireState.prototype, {
 
 		if( licenceId ) {
 			asset.setLicence( config.custom.licenceStore.detectLicence( licenceId ) );
-		} else if( !asset.getLicence() ) {
-			asset.setLicence( config.custom.licenceStore.detectLicence( 'unknown' ) );
+		}
+
+		if( !asset.getLicence() ) {
+			asset.setLicence( config.custom.licenceStore.getLicence( 'unknown' ) );
 		}
 
 		var customAuthor = this._getAnswer( 'form-author', 1 ),

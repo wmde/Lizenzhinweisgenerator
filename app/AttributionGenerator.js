@@ -188,7 +188,7 @@ $.extend( AttributionGenerator.prototype, {
 		var licence = this._asset.getLicence(),
 			$licence = $( '<span/>' ).addClass( 'attribution-licence' );
 
-		if( !licenceLink ) {
+		if( !licenceLink || !licence.getUrl() ) {
 			return $licence.text( licence.getName() );
 		}
 
