@@ -157,7 +157,7 @@ $.extend( Navigation.prototype, {
 		var $licences = $(),
 			licences = config.custom.licenceStore.getLicences();
 
-		for( var i = 0; i < licences.getLicences().length; i++ ) {
+		for( var i = 0; i < licences.length; i++ ) {
 
 			if( i > 0 ) {
 				$licences = $licences.add( document.createTextNode( ', ' ) );
