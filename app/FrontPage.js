@@ -223,7 +223,7 @@ $.extend( FrontPage.prototype, {
 		.done( function( asset ) {
 			if( asset instanceof WikiAsset ) {
 				if( asset.getLicence() !== null && asset.getLicence().isInGroup( 'unsupported' ) ) {
-					self._displayError(new ApplicationError('licence-unsupported'));
+					self._displayError( new ApplicationError( 'licence-unsupported' ) );
 					return;
 				} else if( asset.getLicence() === null ) {
 					self._displayError( new ApplicationError( 'licence-not-recognized' ) );
