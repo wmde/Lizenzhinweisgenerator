@@ -85,6 +85,12 @@ $.extend( Questionnaire.prototype, {
 	_navigationCache: null,
 
 	/**
+	 * Saves the current position in the navigationCache to navigate backwards and forwards.
+	 * @type {Object}
+	 */
+	_navigationState: null,
+
+	/**
 	 * @type {AttributionGenerator|null}
 	 */
 	_attributionGenerator: null,
@@ -98,10 +104,33 @@ $.extend( Questionnaire.prototype, {
 	 *         - {AjaxError}
 	 */
 	start: function() {
+                var self = this;
 		this._loggedAnswers = {};
 		this._loggedStrings = {};
 
 		this._navigationCache = [];
+                this._navigationState = 0;
+                
+                //cf. set initial history state
+                History.pushState( { nr: this._navigationState }, '', '?state=0' );
+            
+                //cf. add event listener for history state changes
+                History.Adapter.bind( window, 'statechange', function() {
+                        var State = History.getState(),
+                            newNavigationState = State.data.nr;
+
+                        console.log( 'self._navigationCache', JSON.stringify( self._navigationCache ) );
+                        console.log( 'newNavigationState', newNavigationState );
+                        
+                        if( typeof newNavigationState === 'undefined' || newNavigationState < self._navigationState ) {
+                                self._navigateBack();
+                        } else if ( self._navigationState < self._navigationCache.length - 1 ) {
+                                self._navigateForward()
+                        } else {
+                                //cf. new page in path
+                        }
+                        console.log( 'self._navigationState', self._navigationState );                        
+                });
 
 		var deferred = $.Deferred(),
 			licenceId = this._asset.getLicence().getId(),
@@ -148,7 +177,8 @@ $.extend( Questionnaire.prototype, {
 
 		if( navigationPathPosition !== -1 && movingBack ) {
 			// Navigating backwards.
-			this._navigationCache.splice( navigationPathPosition );
+                        // christoph.fischer
+			//this._navigationCache.splice( navigationPathPosition );
 			this._loggedAnswers = this._navigationCache[navigationPathPosition]
 				? this._navigationCache[navigationPathPosition].loggedAnswers
 				: {};
@@ -477,20 +507,46 @@ $.extend( Questionnaire.prototype, {
 			.addClass( 'questionnaire-back' )
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
-		$backButton.on( 'click', function() {
-			if( self._navigationCache.length === 0 ) {
-				$( self ).trigger( 'back', [self._asset] );
-			} else {
-				self._goTo( self._navigationCache[self._navigationCache.length - 1].page, true )
-				.done( function() {
-					$( self ).trigger( 'update' );
-				} );
-			}
+		$backButton.on( 'click', function() {			
+                        History.back();
 		} );
 
 		return $backButton;
 	},
 
+	/**
+	 * Navigates one step forward using the cache.
+	 * christoph.fischer
+	 */
+	_navigateForward: function() {
+		var self = this;
+		self._navigationState++;
+                
+		self._goTo( self._navigationCache[self._navigationState].page )
+		.done( function() {
+			$( self ).trigger( 'update' );
+		} );
+	},
+
+	/**
+	 * Navigates one step back using the cache.
+	 * christoph.fischer
+	 */
+	_navigateBack: function() {
+		var self = this;
+		self._navigationState--;
+                
+		if( self._navigationState === -1 ) {
+			$( self ).trigger( 'back', [self._asset] );
+		} else {
+			self._goTo( self._navigationCache[self._navigationState].page, true )
+			.done( function() {
+				$( self ).trigger( 'update' );
+			} );
+		}
+                ;
+	},
+	
 	/**
 	 * Creates the "minimize" button.
 	 *
@@ -1094,12 +1150,9 @@ $.extend( Questionnaire.prototype, {
 		this._loggedAnswers[page][answer] = ( value ) ? value : true;
 
 		if( cacheNavigation === undefined || cacheNavigation === true ) {
-			this._navigationCache.push( {
-				page: page,
-				loggedAnswers: $.extend( {}, this._loggedAnswers )
-			} );
+                    //cf. deprecated
 		}
-
+                                
 		if( typeof value === 'string' ) {
 			if( !this._loggedStrings[page] ) {
 				this._loggedStrings[page] = {};
@@ -1110,6 +1163,38 @@ $.extend( Questionnaire.prototype, {
 			this._loggedStrings[page][answer] = value;
 		}
 	},
+
+	/**
+	 * Updates the navigation after logging an answer.
+	 *
+	 * @param {string} page
+         * @param {string} toPage
+	 */
+        _updateNavigation: function( page, toPage ) {
+                //christoph.fischer
+                var updatedNavigationEntry = {
+                            page: page,
+                            loggedAnswers: $.extend( {}, this._loggedAnswers )
+                    },
+                    nextNavigationEntry = {
+                            page: toPage,
+                            loggedAnswers: ({}, {})
+                    };
+
+
+                this._navigationCache.splice(  this._navigationState );
+
+                if( this._navigationCache.length === 0 ) {
+                    this._navigationCache.push( updatedNavigationEntry );
+                } else {
+                    this._navigationCache[this._navigationState] = updatedNavigationEntry;
+                }
+
+                this._navigationCache.push( nextNavigationEntry );
+
+                this._navigationState++;                        
+                History.pushState({ nr: this._navigationState }, "", "?state=" + this._navigationState);
+        },
 
 	/**
 	 * Short-cut that logs an answer and triggers going to some page.
@@ -1123,7 +1208,8 @@ $.extend( Questionnaire.prototype, {
 		var self = this;
 
 		$page.find( '.a' + answer ).on( 'click', function() {
-			self._log( currentPage, answer );
+			self._log( currentPage, toPage, answer );
+                        self._updateNavigation( currentPage, toPage );
 			self._goToAndUpdate( toPage );
 		} );
 
@@ -1139,7 +1225,7 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_goToAndUpdate: function( toPage ) {
 		var self = this;
-
+		
 		this._goTo( toPage )
 		.done( function() {
 			$( self ).trigger( 'update' );
