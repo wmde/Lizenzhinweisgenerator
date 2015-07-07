@@ -78,6 +78,8 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_navigationCache: null,
 
+	_currentStateIndex: null,
+
 	/**
 	 * The most current questionnaire state.
 	 * @type {QuestionnaireState|null}
@@ -101,6 +103,7 @@ $.extend( Questionnaire.prototype, {
 	 */
 	start: function() {
 		this._navigationCache = [];
+		this._currentStateIndex = -1;
 
 		var self = this,
 			deferred = $.Deferred(),
@@ -147,14 +150,18 @@ $.extend( Questionnaire.prototype, {
 	 *         - {AjaxError}
 	 */
 	_goTo: function( toPage ) {
-		var self = this;
+		var self = this,
+			nextIndex = this._currentStateIndex + 1;
 
-		if( this._questionnaireState ) {
-			this._navigationCache.push( this._questionnaireState.clone() );
-		} else {
-			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
-			this._navigationCache.push( this._questionnaireState.clone() );
+		if ( nextIndex < this._navigationCache.length ) {
+			this._navigationCache.splice( nextIndex );
 		}
+		if ( !this._questionnaireState ) {
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
+		}
+
+		this._navigationCache.push( this._questionnaireState.clone() );
+		this._currentStateIndex = nextIndex;
 		back.addToHistory( this._questionnaireState.clone() );
 
 		return this._animateToPage( toPage )
@@ -176,7 +183,8 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_goBack: function() {
 		var self = this,
-			previousState = this._navigationCache.pop();
+			previousState = this._navigationCache[ this._currentStateIndex ];
+		this._currentStateIndex = Math.max( this._currentStateIndex - 1, -1);
 
 		return this._animateToPage( previousState.getPageId(), true )
 		.done( function( questionnairePage ) {
