@@ -15,17 +15,19 @@ define(
  *
  * @param {string} pageId
  * @param {Asset} asset
+ * @param {Questionnaire} questionnaire
  * @param {QuestionnaireState} [previousState]
  *
  * @throws {Error} on incorrect parameters.
  */
-var QuestionnaireState = function( pageId, asset, previousState ) {
+var QuestionnaireState = function( pageId, asset, questionnaire, previousState ) {
 	if( typeof pageId !== 'string' || asset === undefined ) {
 		throw new Error( 'Improperly specified parameters' );
 	}
 
 	this._pageId = pageId;
 	this._asset = asset;
+	this._questionnaire = questionnaire;
 
 	// Copy all previous state info to be able to consider all answers when generating a result:
 	this._answers = previousState ? $.extend( {}, previousState._answers ) : {};
@@ -45,6 +47,12 @@ $.extend( QuestionnaireState.prototype, {
 	_asset: null,
 
 	/**
+	 * Related Questionnaire object
+	 * @type {Questionnaire}
+	 */
+	_questionnaire: null,
+
+	/**
 	 * Selected/specified answers indexed by page numbers.
 	 * @type {Object}
 	 */
@@ -56,7 +64,7 @@ $.extend( QuestionnaireState.prototype, {
 	 * @return {QuestionnaireState}
 	 */
 	clone: function() {
-		var clone = new QuestionnaireState( this._pageId, this._asset );
+		var clone = new QuestionnaireState( this._pageId, this._asset, this._questionnaire );
 		clone._answers = $.extend( {}, this._answers );
 		return clone;
 	},

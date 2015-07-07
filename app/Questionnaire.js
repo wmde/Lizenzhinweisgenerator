@@ -106,7 +106,7 @@ $.extend( Questionnaire.prototype, {
 			page = '3';
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
-			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._exit();
 			return deferred.resolve().promise();
 		} else if( licenceId === 'CC' || !licenceId ) {
@@ -148,7 +148,7 @@ $.extend( Questionnaire.prototype, {
 		if( this._questionnaireState ) {
 			this._navigationCache.push( this._questionnaireState.clone() );
 		} else {
-			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._navigationCache.push( this._questionnaireState.clone() );
 		}
 
