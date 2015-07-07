@@ -430,14 +430,7 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			if( self._navigationCache.length === 1 ) {
-				$( self ).trigger( 'back', [self._asset] );
-			} else {
-				self._goBack()
-				.done( function() {
-					$( self ).trigger( 'update' );
-				} );
-			}
+			self.goBackAction();
 		} );
 
 		return $backButton;
@@ -592,8 +585,22 @@ $.extend( Questionnaire.prototype, {
 		} );
 
 		return deferred.promise();
-	}
+	},
 
+	/**
+	 * Handles clicking the back button
+	 */
+	goBackAction: function() {
+		var self = this;
+		if( this._navigationCache.length === 1 ) {
+			$( this ).trigger( 'back', [this._asset] );
+		} else {
+			this._goBack()
+			.done( function() {
+				$( self ).trigger( 'update' );
+			} );
+		}
+	}
 } );
 
 return Questionnaire;
