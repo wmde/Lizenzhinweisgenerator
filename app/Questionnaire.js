@@ -9,6 +9,7 @@ define( [
 	'app/Author',
 	'app/QuestionnairePage',
 	'app/QuestionnaireState',
+	'dojo/back',
 	'dojo/Deferred',
 	'dojo/i18n!./nls/Questionnaire',
 	'dojo/promise/all',
@@ -20,6 +21,7 @@ define( [
 	Author,
 	QuestionnairePage,
 	QuestionnaireState,
+	back,
 	Deferred,
 	messages,
 	all,
@@ -105,6 +107,8 @@ $.extend( Questionnaire.prototype, {
 			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
 			page = '3';
 
+		back.setInitialState( this._questionnaireState );
+
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._exit();
@@ -151,6 +155,7 @@ $.extend( Questionnaire.prototype, {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._navigationCache.push( this._questionnaireState.clone() );
 		}
+		back.addToHistory( this._questionnaireState.clone() );
 
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {

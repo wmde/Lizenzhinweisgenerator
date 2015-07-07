@@ -226,8 +226,14 @@ $.extend( QuestionnaireState.prototype, {
 	_getAnswer: function( page, answerId ) {
 		var pageAnswers = this._answers[page];
 		return pageAnswers && pageAnswers[answerId] ? pageAnswers[answerId] : false;
-	}
+	},
 
+	/**
+	 * Handles clicking browser's back button
+	 */
+	back: function() {
+		this._questionnaire.goBackAction();
+	}
 } );
 
 return QuestionnaireState;
