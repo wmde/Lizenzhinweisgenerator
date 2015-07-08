@@ -255,6 +255,13 @@ $.extend( QuestionnaireState.prototype, {
 	 */
 	back: function() {
 		this._questionnaire.goBackAction();
+	},
+
+	/**
+	 * Handles clicking browser's forward button
+	 */
+	forward: function() {
+		this._questionnaire.goForwardAction();
 	}
 } );
 

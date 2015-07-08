@@ -610,6 +610,26 @@ $.extend( Questionnaire.prototype, {
 				$( self ).trigger( 'update' );
 			} );
 		}
+	},
+
+	/**
+	 * Handles clicking browser's forward button
+	 */
+	goForwardAction: function() {
+		var self = this,
+			nextState, page, answerId;
+		nextState = this._navigationCache[ this._currentStateIndex + 1 ];
+		this._questionnaireState = nextState.clone();
+		page = nextState.getPageId();
+		answerId = nextState.getSelectedAnswer( page );
+		this._fetchPage( page )
+		.done( function( $html ) {
+			var questionnairePage = self._createQuestionnairePage( page, $html );
+			var nextPageId = questionnairePage.getNextPageId( answerId );
+			if ( nextPageId !== null ) {
+				$( questionnairePage ).trigger( 'goto', [ nextPageId ] );
+			}
+		} );
 	}
 } );
 
