@@ -602,7 +602,7 @@ $.extend( Questionnaire.prototype, {
 	 */
 	goBackAction: function() {
 		var self = this;
-		if( this._navigationCache.length === 1 ) {
+		if ( this._currentStateIndex === 0 ) {
 			$( this ).trigger( 'back', [this._asset] );
 		} else {
 			this._goBack()
