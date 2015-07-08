@@ -149,6 +149,95 @@ $.extend( QuestionnairePage.prototype, {
 		} );
 	},
 
+	getNextPageId: function( answerId ) {
+		answerId = typeof answerId !== 'undefined' ? answerId : 0;
+		switch ( this._pageId ) {
+			case '2':
+				if ( !this._asset.getAuthors().length ) {
+					return 'form-author';
+				} else if ( !this._asset.getTitle() ) {
+					return 'form-title';
+				} else if ( !this._asset.getUrl() ) {
+					return 'form-url';
+				}
+				if ( answerId === 9 ) {
+					return 'result-note-cc0';
+				}
+				if ( answerId === 10 ) {
+					return '15';
+				}
+				return '3';
+			case 'form-author':
+			case 'form-title':
+			case 'form-url':
+				if ( this._pageId === 'form-author' && !this._asset.getTitle() ) {
+					return 'form-title';
+				} else if ( this._pageId !== 'form-url' && ( !this._asset.getUrl() || this._asset.getUrl() === '' ) ) {
+					return 'form-url';
+				}
+				return '3';
+			case '3':
+				if ( answerId === 1 || answerId === 2 ) {
+					return '7';
+				}
+				if ( answerId === 3 ) {
+					if (this._questionnaireState.getResult().asset.getLicence().isInGroup('cc2de')) {
+						return '7';
+					}
+					return 'result-note-privateUse';
+				}
+				if ( answerId === 4 ) {
+					return '5';
+				}
+				if ( answerId === 5 ) {
+					return '6';
+				}
+				break;
+			case '5':
+				if ( answerId === 1 ) {
+					return '3'
+				}
+				if ( answerId === 2 ) {
+					return '5a';
+				}
+				break;
+			case '7':
+				return this._questionnaireState.getResult().useCase === 'print' ? '8' : '12a';
+			case '8':
+				if ( answerId === 1 || answerId === 2 ) {
+					return '12a';
+				}
+				break;
+			case '9':
+				if ( answerId === 1 || answerId === 2 ) {
+					return '3';
+				}
+				break;
+			case '12a':
+				if ( answerId === 1 ) {
+					return 'result-success';
+				}
+				if ( answerId === 2 ) {
+					return '12b';
+				}
+				break;
+			case '12b':
+				if ( answerId === 1 ) {
+					return '13';
+				}
+				if ( answerId === 2 ) {
+					return '12c';
+				}
+				break;
+			case '13':
+				if ( answerId === 1 ) {
+					return 'result-success';
+				}
+				break;
+		}
+		return null;
+	},
+
 	/**
 	 * Applies logic of a specific page to a node.
 	 *
@@ -173,32 +262,18 @@ $.extend( QuestionnairePage.prototype, {
 		};
 
 		if( p === '2' ) {
-			goTo = '3';
-			if( !this._asset.getAuthors().length ) {
-				goTo = 'form-author';
-			} else if( !this._asset.getTitle() ) {
-				goTo = 'form-title';
-			} else if( !this._asset.getUrl() ) {
-				goTo = 'form-url';
-			}
+			goTo = this.getNextPageId();
 
 			$page.find( '.a1' ).on( 'click', function() {
 				self._log( p, 1, $( this ).data( 'licenceId' ) );
 				self._goTo( goTo );
 			} );
 
-			$page = this._applyLogAndGoTo( $page, p, 9, 'result-note-cc0' );
-			$page = this._applyLogAndGoTo( $page, p, 10, '15' );
+			$page = this._applyLogAndGoTo( $page, p, 9, this.getNextPageId( 9 ) );
+			$page = this._applyLogAndGoTo( $page, p, 10, this.getNextPageId( 10 ) );
 
 		} else if( p === 'form-author' || p === 'form-title' || p === 'form-url' ) {
-			goTo = '3';
-
-			var title = this._asset.getTitle();
-			if( p === 'form-author' && !title ) {
-				goTo = 'form-title';
-			} else if( p !== 'form-url' && ( !this._asset.getUrl() || this._asset.getUrl() === '' ) ) {
-				goTo = 'form-url';
-			}
+			goTo = this.getNextPageId();
 
 			$input = $page.find( 'input.a1' );
 
@@ -226,35 +301,31 @@ $.extend( QuestionnairePage.prototype, {
 			} );
 
 		} else if( p === '3' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, '7' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '7' );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
+			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 
 			$page.find( '.a3' ).on( 'click', function() {
 				self._log( p, 3 );
-				if( self._questionnaireState.getResult().asset.getLicence().isInGroup( 'cc2de' ) ) {
-					self._goTo( '7' );
-				} else {
-					self._goTo( 'result-note-privateUse' );
-				}
+				self._goTo( self.getNextPageId( 3 ) );
 			} );
 
 			if( this._questionnaireState.getResult().attributionAlthoughExceptionalUse ) {
 				$page = this._applyDisabled( $page, 4 );
 			} else {
-				$page = this._applyLogAndGoTo( $page, p, 4, '5' );
+				$page = this._applyLogAndGoTo( $page, p, 4, this.getNextPageId( 4 ) );
 			}
 
-			$page = this._applyLogAndGoTo( $page, p, 5, '6' );
+			$page = this._applyLogAndGoTo( $page, p, 5, this.getNextPageId( 5 ) );
 		} else if( p === '5') {
-			$page = this._applyLogAndGoTo( $page, p, 1, '3' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '5a' );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
+			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '7' ) {
-			goTo = this._questionnaireState.getResult().useCase === 'print' ? '8' : '12a';
+			goTo = this.getNextPageId();
 			$page = this._applyLogAndGoTo( $page, p, 1, goTo );
 			$page = this._applyLogAndGoTo( $page, p, 2, goTo );
 		} else if( p === '8' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, '12a' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '12a' );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
+			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '9' ) {
 
 			$input = $page.find( 'input.a1' );
@@ -267,27 +338,27 @@ $.extend( QuestionnairePage.prototype, {
 				if( event.keyCode === 13 ) {
 					event.preventDefault();
 					evaluateInput( $input, p );
-					self._goTo( '3' );
+					self._goTo( self.getNextPageId( 1 ) );
 				}
 			} );
 
 			$page.find( 'a.a1' ).on( 'click', function() {
 				evaluateInput( $input, p );
-				self._goTo( '3' );
+				self._goTo( self.getNextPageId( 1 ) );
 			} );
 
 			$page.find( '.a2' ).on( 'click', function() {
 				$input.val( '' );
 				evaluateInput( $input, p );
-				self._goTo( '3' );
+				self._goTo( self.getNextPageId( 2 ) );
 			} );
 
 		} else if( p === '12a' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, 'result-success' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '12b' );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
+			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '12b' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, '13' );
-			$page = this._applyLogAndGoTo( $page, p, 2, '12c' );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1) );
+			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '13' ) {
 
 			$input = $page.find( 'input.a1' );
@@ -300,13 +371,13 @@ $.extend( QuestionnairePage.prototype, {
 				if( event.keyCode === 13 ) {
 					event.preventDefault();
 					evaluateInput( $input, p );
-					self._goTo( 'result-success' );
+					self._goTo( self.getNextPageId( 1 ) );
 				}
 			} );
 
 			$page.find( 'a.a1' ).on( 'click', function() {
 				evaluateInput( $input, p );
-				self._goTo( 'result-success' );
+				self._goTo( self.getNextPageId( 1 ) );
 			} );
 		}
 
