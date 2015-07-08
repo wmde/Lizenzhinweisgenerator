@@ -229,6 +229,28 @@ $.extend( QuestionnaireState.prototype, {
 	},
 
 	/**
+	 * Returns an identifier of the selected answer on the given page, or null if no answer has been selected.
+	 *
+	 * @param page
+	 * @return {string|null}
+	 */
+	getSelectedAnswer: function( page ) {
+		if( !this._answers[ page ] ) {
+			return null;
+		}
+
+		var selectedAnswer = null;
+		$.each( this._answers[ page ], function( answerId, value ) {
+			if( typeof value === 'boolean' && value === true ) {
+				selectedAnswer = answerId;
+				return false;
+			}
+		} );
+
+		return selectedAnswer;
+	},
+
+	/**
 	 * Handles clicking browser's back button
 	 */
 	back: function() {
