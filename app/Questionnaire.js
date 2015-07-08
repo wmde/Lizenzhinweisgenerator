@@ -191,9 +191,6 @@ $.extend( Questionnaire.prototype, {
 			self._questionnaireState = previousState.clone();
 			questionnairePage.applyState( previousState );
 			self._questionnaireState.setPageId( previousState.getPageId() );
-			// Delete boolean (page progressive) answers to have (re)set text input reflected in
-			// attribution:
-			self._questionnaireState.deleteBooleanAnswers( previousState.getPageId() );
 			$( self ).trigger( 'update' );
 		} );
 	},
