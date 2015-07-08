@@ -144,25 +144,6 @@ $.extend( QuestionnaireState.prototype, {
 	},
 
 	/**
-	 * Deletes all boolean (page progressive) answers of a particular page.
-	 *
-	 * @param {string} page
-	 */
-	deleteBooleanAnswers: function( page ) {
-		var self = this;
-
-		if( !this._answers[page] ) {
-			return;
-		}
-
-		$.each( this._answers[page], function( answerId, value ) {
-			if( typeof value === 'boolean' ) {
-				delete self._answers[page][answerId];
-			}
-		} );
-	},
-
-	/**
 	 * Adds a page with with given identifier to the list of pages that should not be considered while generating the result
 	 *
 	 * @param {string} page
