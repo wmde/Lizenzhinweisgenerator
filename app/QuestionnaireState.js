@@ -242,7 +242,7 @@ $.extend( QuestionnaireState.prototype, {
 		var selectedAnswer = null;
 		$.each( this._answers[ page ], function( answerId, value ) {
 			if( typeof value === 'boolean' && value === true ) {
-				selectedAnswer = answerId;
+				selectedAnswer = parseInt( answerId );
 				return false;
 			}
 		} );
