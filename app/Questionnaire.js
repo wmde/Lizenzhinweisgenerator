@@ -167,6 +167,7 @@ $.extend( Questionnaire.prototype, {
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
+			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
 			self._questionnaireState.setPageId( toPage );
 			questionnairePage.applyState( self._questionnaireState );
 		} );
@@ -191,6 +192,7 @@ $.extend( Questionnaire.prototype, {
 			self._questionnaireState = previousState.clone();
 			questionnairePage.applyState( previousState );
 			self._questionnaireState.setPageId( previousState.getPageId() );
+			self._questionnaireState.addPageToExcluded( previousState.getPageId() );
 			$( self ).trigger( 'update' );
 		} );
 	},

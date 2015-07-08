@@ -31,6 +31,8 @@ var QuestionnaireState = function( pageId, asset, questionnaire, previousState )
 
 	// Copy all previous state info to be able to consider all answers when generating a result:
 	this._answers = previousState ? $.extend( {}, previousState._answers ) : {};
+
+	this._pagesToExcludeFromResult = previousState ? previousState._pagesToExcludeFromResult.slice() : [];
 };
 
 $.extend( QuestionnaireState.prototype, {
@@ -57,6 +59,12 @@ $.extend( QuestionnaireState.prototype, {
 	 * @type {Object}
 	 */
 	_answers: null,
+
+	/**
+	 * Identifiers of pages that should not be included in the result (e.g. pages that user have selected some value on
+	 * but then moved back
+	 */
+	_pagesToExcludeFromResult: null,
 
 	/**
 	 * Clones the state.
@@ -155,6 +163,43 @@ $.extend( QuestionnaireState.prototype, {
 	},
 
 	/**
+	 * Adds a page with with given identifier to the list of pages that should not be considered while generating the result
+	 *
+	 * @param {string} page
+	 */
+	addPageToExcluded: function( page ) {
+		if( !this._answers[page] ) {
+			return;
+		}
+		this._pagesToExcludeFromResult.push( page );
+	},
+
+	/**
+	 * Remove a page with the given identifier from the list of pages that should not be considered while generating the result
+	 *
+	 * @param {string} page
+	 */
+	removePageFromExcluded: function( page ) {
+
+		var index = $.inArray( page, this._pagesToExcludeFromResult );
+
+		if ( index === -1) {
+			return;
+		}
+		 this._pagesToExcludeFromResult.splice( index, 1 );
+	},
+
+	/**
+	 * Checks whether page with the given identifier should be considered in generating the result
+	 *
+	 * @param {string} page
+	 * @return {boolean}
+	 */
+	_includeInResult: function( page ) {
+		return $.inArray( page, this._pagesToExcludeFromResult ) === -1;
+	},
+
+	/**
 	 * Returns a result object containing processable attributes of the evaluated current answer
 	 * set.
 	 *
@@ -225,7 +270,7 @@ $.extend( QuestionnaireState.prototype, {
 	 */
 	_getAnswer: function( page, answerId ) {
 		var pageAnswers = this._answers[page];
-		return pageAnswers && pageAnswers[answerId] ? pageAnswers[answerId] : false;
+		return pageAnswers && pageAnswers[answerId] && this._includeInResult( page ) ? pageAnswers[answerId] : false;
 	},
 
 	/**
