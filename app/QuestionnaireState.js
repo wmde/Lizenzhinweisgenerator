@@ -128,6 +128,11 @@ $.extend( QuestionnaireState.prototype, {
 			this._answers[page] = {};
 		}
 
+		// remove any other answer for the given page (e.g. when going back in the questionnaire and changing the answer)
+		if ( this.getSelectedAnswer( page ) !== null ) {
+			this.deleteValue( page, this.getSelectedAnswer( page ) );
+		}
+
 		this._answers[page][answer] = value;
 	},
 
