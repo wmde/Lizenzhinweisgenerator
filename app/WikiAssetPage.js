@@ -188,7 +188,7 @@ $.extend( WikiAssetPage.prototype, {
 			$nodes = $nodes.not( $nodes.eq( 0 ) );
 		}
 
-		if( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
+		while( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
 			$nodes = $nodes.not( $nodes.eq( $nodes.length - 1 ) );
 		}
 
