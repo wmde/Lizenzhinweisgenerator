@@ -121,6 +121,11 @@ $.extend( Application.prototype, {
 
 		var $questionnaire = $( '<div/>' );
 		this._questionnaire = new Questionnaire( $questionnaire, asset );
+		$( this._questionnaire )
+		.on( 'restart', function() {
+			self._regenerateQuestionnaire();
+		} );
+
 		this._addEventHandlers( this._questionnaire );
 
 		var $optionContainer = $( '<div/>' ),
@@ -143,6 +148,32 @@ $.extend( Application.prototype, {
 		.append( $optionContainer );
 
 		this._questionnaire.start().done( function() {
+			self._optionContainer.render();
+
+			// Evaluate initial state to reflect the default attribution:
+			self._preview.update(
+				self._questionnaire.getAttributionGenerator(),
+				self._questionnaire.generateSupplement(),
+				self._getImageSize()
+			).done( function() {
+				self._optionContainer.setAttributionGenerator(
+					self._questionnaire.getAttributionGenerator()
+				);
+			} );
+		} );
+	},
+
+	_regenerateQuestionnaire: function() {
+		var self = this;
+
+		this._$node
+		.empty()
+		.append( this._navigation.create() )
+		.append( this._preview._$node )
+		.append( this._questionnaire._$node )
+		.append( this._optionContainer._$node );
+
+		this._questionnaire.restartQuestionnaire().done( function() {
 			self._optionContainer.render();
 
 			// Evaluate initial state to reflect the default attribution:

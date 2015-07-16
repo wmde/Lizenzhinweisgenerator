@@ -108,21 +108,12 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			deferred = $.Deferred(),
 			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
-			page = '3';
+			page = this._getStartPage();
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._exit();
 			return deferred.resolve().promise();
-		} else if( licenceId === 'CC' || !licenceId ) {
-			page = '2';
-		} else if( !this._asset.getAuthors().length ) {
-			page = '9';
-		} else if(
-			!this._asset.getLicence().isInGroup( 'cc4' ) && !this._asset.getTitle().length ) {
-			page = '10';
-		} else if( !this._asset.getUrl().length ) {
-			page = '11';
 		}
 
 		this._goTo( page )
@@ -135,6 +126,43 @@ $.extend( Questionnaire.prototype, {
 		} );
 
 		return deferred.promise();
+	},
+
+	restartQuestionnaire: function() {
+		var self = this,
+			deferred = $.Deferred(),
+			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
+			page = this._getStartPage();
+		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
+			this._exit();
+			return deferred.resolve().promise();
+		}
+		this._goTo( page )
+		.done( function() {
+			deferred.resolve();
+			$( self ).trigger( 'update' );
+		} )
+		.fail( function( error ) {
+			deferred.reject( error );
+		} );
+
+		return deferred.promise();
+	},
+
+	_getStartPage: function() {
+		var licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null;
+
+		if( licenceId === 'CC' || !licenceId ) {
+			return '2';
+		} else if( !this._asset.getAuthors().length ) {
+			return '9';
+		} else if( !this._asset.getLicence().isInGroup( 'cc4' ) && !this._asset.getTitle().length ) {
+			return '10';
+		} else if( !this._asset.getUrl().length ) {
+			return '11';
+		}
+		return '3';
 	},
 
 	/**
@@ -603,6 +631,7 @@ $.extend( Questionnaire.prototype, {
 	goBackAction: function() {
 		var self = this;
 		if ( this._currentStateIndex === 0 ) {
+			this._currentStateIndex = -1;
 			$( this ).trigger( 'back', [this._asset] );
 		} else {
 			this._goBack()
@@ -618,6 +647,11 @@ $.extend( Questionnaire.prototype, {
 	goForwardAction: function() {
 		var self = this,
 			nextState, page, answerId;
+
+		if ( this._currentStateIndex === -1 ) {
+			$( self).trigger( 'restart' );
+			return;
+		}
 		nextState = this._navigationCache[ this._currentStateIndex + 1 ];
 		this._questionnaireState = nextState.clone();
 		page = nextState.getPageId();
