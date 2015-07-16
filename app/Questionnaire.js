@@ -188,11 +188,11 @@ $.extend( Questionnaire.prototype, {
 
 		this._navigationCache.push( this._questionnaireState.clone() );
 		this._currentStateIndex = nextIndex;
-		back.addToHistory( this._questionnaireState.clone() );
 
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
+			back.addToHistory( self._questionnaireState.clone() );
 			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
 			self._questionnaireState.setPageId( toPage );
 			questionnairePage.applyState( self._questionnaireState );
