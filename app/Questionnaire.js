@@ -179,24 +179,50 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			nextIndex = this._currentStateIndex + 1;
 
-		if ( nextIndex < this._navigationCache.length ) {
+		var goingNewPath = this._isTakingNewPath( nextIndex );
+
+		if ( nextIndex < this._navigationCache.length && goingNewPath ) {
 			this._navigationCache.splice( nextIndex );
 		}
 		if ( !this._questionnaireState ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 		}
 
-		this._navigationCache.push( this._questionnaireState.clone() );
+		if ( goingNewPath ) {
+			this._navigationCache.push( this._questionnaireState.clone() );
+		}
 		this._currentStateIndex = nextIndex;
 
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
-			back.addToHistory( self._questionnaireState.clone() );
+			if ( goingNewPath ) {
+				back.addToHistory( self._questionnaireState.clone() );
+			}
 			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
 			self._questionnaireState.setPageId( toPage );
 			questionnairePage.applyState( self._questionnaireState );
 		} );
+	},
+
+	/**
+	 * Checks whether the answers given at the current point are taking user to another path than the given questionnaire state
+	 *
+	 * @param {number} index of the state to compare with
+	 * @return {boolean}
+	 */
+	_isTakingNewPath: function( index ) {
+		var pageId, currentAnswer, stateAnswer;
+
+		if ( index < this._navigationCache.length ) {
+			pageId = this._questionnaireState.getPageId();
+			currentAnswer = this._questionnaireState.getSelectedAnswer( pageId );
+			stateAnswer = this._navigationCache[ index ].getSelectedAnswer( this._questionnaireState.getPageId() );
+			if ( currentAnswer === stateAnswer ) {
+				return false;
+			}
+		}
+		return true;
 	},
 
 	/**
