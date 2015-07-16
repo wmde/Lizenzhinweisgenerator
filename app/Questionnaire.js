@@ -471,7 +471,7 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			self.goBackAction();
+			back.goBack();
 		} );
 
 		return $backButton;
