@@ -73,7 +73,7 @@ $.extend( QuestionnaireState.prototype, {
 	 */
 	clone: function() {
 		var clone = new QuestionnaireState( this._pageId, this._asset, this._questionnaire );
-		clone._answers = $.extend( {}, this._answers );
+		clone._answers = $.extend( true, {}, this._answers );
 		return clone;
 	},
 
