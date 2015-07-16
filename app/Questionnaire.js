@@ -110,8 +110,6 @@ $.extend( Questionnaire.prototype, {
 			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
 			page = '3';
 
-		back.setInitialState( this._questionnaireState );
-
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._exit();

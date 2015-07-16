@@ -9,9 +9,10 @@ define(
 		'app/FrontPage',
 		'app/Preview',
 		'app/Questionnaire',
-		'app/OptionContainer'
+		'app/OptionContainer',
+		'dojo/back'
 	],
-	function( $, Navigation, FrontPage, Preview, Questionnaire, OptionContainer ) {
+	function( $, Navigation, FrontPage, Preview, Questionnaire, OptionContainer, back ) {
 'use strict';
 
 /**
@@ -90,6 +91,17 @@ $.extend( Application.prototype, {
 		.on( 'asset', function( event, asset ) {
 			self._renderApplicationPage( asset );
 		} );
+
+		if ( this._questionnaire === null ) {
+			var initialState = {
+				back: function () {
+					self._questionnaire._currentStateIndex = -1;
+					$( self._questionnaire ).trigger( 'back', [ self._questionnaire._asset ] );
+				}
+			};
+			back.setInitialState( initialState );
+			back.addToHistory( initialState );
+		}
 
 		this._$node
 		.append( this._navigation.create( false ) )
