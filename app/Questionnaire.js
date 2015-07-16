@@ -211,6 +211,9 @@ $.extend( Questionnaire.prototype, {
 	_goBack: function() {
 		var self = this,
 			previousState = this._navigationCache[ this._currentStateIndex ];
+		if ( previousState === undefined ) {
+			return;
+		}
 		this._currentStateIndex = Math.max( this._currentStateIndex - 1, -1);
 
 		return this._animateToPage( previousState.getPageId(), true )
