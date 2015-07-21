@@ -169,13 +169,14 @@ $.extend( Questionnaire.prototype, {
 	 * Default page movement.
 	 *
 	 * @param {string} toPage
+	 * @param {boolean} usedForward
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {QuestionnairePage}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
-	_goTo: function( toPage ) {
+	_goTo: function( toPage, usedForward ) {
 		var self = this,
 			nextIndex = this._currentStateIndex + 1;
 
@@ -198,6 +199,11 @@ $.extend( Questionnaire.prototype, {
 
 			if ( goingNewPath ) {
 				back.addToHistory( self._questionnaireState.clone() );
+			} else if ( !usedForward ) {
+				//when choosing the same path by clicking an answer also reset forward history
+				//TODO better solution e.g. remove one state from history stack
+				back.addToHistory( self._questionnaireState.clone() );
+				return;
 			}
 			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
 			self._questionnaireState.setPageId( toPage );
@@ -378,8 +384,8 @@ $.extend( Questionnaire.prototype, {
 		);
 
 		$( questionnairePage )
-		.on( 'goto', function( event, toPage ) {
-			self._goTo( toPage );
+		.on( 'goto', function( event, toPage, usedForward ) {
+			self._goTo( toPage, usedForward );
 		} )
 		.on( 'update', function( event, state ) {
 			self._questionnaireState = state;
@@ -690,7 +696,7 @@ $.extend( Questionnaire.prototype, {
 			var questionnairePage = self._createQuestionnairePage( page, $html );
 			var nextPageId = questionnairePage.getNextPageId( answerId );
 			if ( nextPageId !== null ) {
-				$( questionnairePage ).trigger( 'goto', [ nextPageId ] );
+				$( questionnairePage ).trigger( 'goto', [ nextPageId, true ] );
 			}
 		} );
 	}
