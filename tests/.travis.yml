@@ -1,0 +1,10 @@
+language: node_js
+
+node_js:
+  - '0.10'
+
+sudo: false
+
+install: travis_retry npm install --save-dev node-qunit-phantomjs
+
+script: ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs ./tests/index.html
