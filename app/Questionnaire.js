@@ -138,7 +138,7 @@ $.extend( Questionnaire.prototype, {
 			this._exit();
 			return deferred.resolve().promise();
 		}
-		this._goTo( page )
+		this._goTo( page, true )
 		.done( function() {
 			deferred.resolve();
 			$( self ).trigger( 'update' );
