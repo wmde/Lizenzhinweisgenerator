@@ -180,16 +180,19 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			nextIndex = this._currentStateIndex + 1;
 
-		var goingNewPath = this._isTakingNewPath( nextIndex );
+		//Reset forward history when taking new path.
+		//When choosing the same path by clicking an answer also reset forward history
+		//TODO better solution e.g. remove one state from history stack
+		var clearForwardHistory = this._isTakingNewPath( nextIndex ) || !usedForward;
 
-		if ( nextIndex < this._navigationCache.length && goingNewPath ) {
+		if ( nextIndex < this._navigationCache.length && clearForwardHistory ) {
 			this._navigationCache.splice( nextIndex );
 		}
 		if ( !this._questionnaireState ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 		}
 
-		if ( goingNewPath ) {
+		if ( clearForwardHistory ) {
 			this._navigationCache.push( this._questionnaireState.clone() );
 		}
 		this._currentStateIndex = nextIndex;
@@ -197,13 +200,8 @@ $.extend( Questionnaire.prototype, {
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
-			if ( goingNewPath ) {
+			if ( clearForwardHistory ) {
 				back.addToHistory( self._questionnaireState.clone() );
-			} else if ( !usedForward ) {
-				//when choosing the same path by clicking an answer also reset forward history
-				//TODO better solution e.g. remove one state from history stack
-				back.addToHistory( self._questionnaireState.clone() );
-				return;
 			}
 			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
 			self._questionnaireState.setPageId( toPage );
