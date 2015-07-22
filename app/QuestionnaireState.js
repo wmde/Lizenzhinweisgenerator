@@ -15,20 +15,24 @@ define(
  *
  * @param {string} pageId
  * @param {Asset} asset
+ * @param {Questionnaire} questionnaire
  * @param {QuestionnaireState} [previousState]
  *
  * @throws {Error} on incorrect parameters.
  */
-var QuestionnaireState = function( pageId, asset, previousState ) {
+var QuestionnaireState = function( pageId, asset, questionnaire, previousState ) {
 	if( typeof pageId !== 'string' || asset === undefined ) {
 		throw new Error( 'Improperly specified parameters' );
 	}
 
 	this._pageId = pageId;
 	this._asset = asset;
+	this._questionnaire = questionnaire;
 
 	// Copy all previous state info to be able to consider all answers when generating a result:
 	this._answers = previousState ? $.extend( {}, previousState._answers ) : {};
+
+	this._pagesToExcludeFromResult = previousState ? previousState._pagesToExcludeFromResult.slice() : [];
 };
 
 $.extend( QuestionnaireState.prototype, {
@@ -45,10 +49,22 @@ $.extend( QuestionnaireState.prototype, {
 	_asset: null,
 
 	/**
+	 * Related Questionnaire object
+	 * @type {Questionnaire}
+	 */
+	_questionnaire: null,
+
+	/**
 	 * Selected/specified answers indexed by page numbers.
 	 * @type {Object}
 	 */
 	_answers: null,
+
+	/**
+	 * Identifiers of pages that should not be included in the result (e.g. pages that user have selected some value on
+	 * but then moved back
+	 */
+	_pagesToExcludeFromResult: null,
 
 	/**
 	 * Clones the state.
@@ -56,8 +72,8 @@ $.extend( QuestionnaireState.prototype, {
 	 * @return {QuestionnaireState}
 	 */
 	clone: function() {
-		var clone = new QuestionnaireState( this._pageId, this._asset );
-		clone._answers = $.extend( {}, this._answers );
+		var clone = new QuestionnaireState( this._pageId, this._asset, this._questionnaire );
+		clone._answers = $.extend( true, {}, this._answers );
 		return clone;
 	},
 
@@ -112,6 +128,11 @@ $.extend( QuestionnaireState.prototype, {
 			this._answers[page] = {};
 		}
 
+		// remove any other answer for the given page (e.g. when going back in the questionnaire and changing the answer)
+		if ( this.getSelectedAnswer( page ) !== null ) {
+			this.deleteValue( page, this.getSelectedAnswer( page ) );
+		}
+
 		this._answers[page][answer] = value;
 	},
 
@@ -128,22 +149,40 @@ $.extend( QuestionnaireState.prototype, {
 	},
 
 	/**
-	 * Deletes all boolean (page progressive) answers of a particular page.
+	 * Adds a page with with given identifier to the list of pages that should not be considered while generating the result
 	 *
 	 * @param {string} page
 	 */
-	deleteBooleanAnswers: function( page ) {
-		var self = this;
-
+	addPageToExcluded: function( page ) {
 		if( !this._answers[page] ) {
 			return;
 		}
+		this._pagesToExcludeFromResult.push( page );
+	},
 
-		$.each( this._answers[page], function( answerId, value ) {
-			if( typeof value === 'boolean' ) {
-				delete self._answers[page][answerId];
-			}
-		} );
+	/**
+	 * Remove a page with the given identifier from the list of pages that should not be considered while generating the result
+	 *
+	 * @param {string} page
+	 */
+	removePageFromExcluded: function( page ) {
+
+		var index = $.inArray( page, this._pagesToExcludeFromResult );
+
+		if ( index === -1) {
+			return;
+		}
+		 this._pagesToExcludeFromResult.splice( index, 1 );
+	},
+
+	/**
+	 * Checks whether page with the given identifier should be considered in generating the result
+	 *
+	 * @param {string} page
+	 * @return {boolean}
+	 */
+	_includeInResult: function( page ) {
+		return $.inArray( page, this._pagesToExcludeFromResult ) === -1;
 	},
 
 	/**
@@ -217,9 +256,44 @@ $.extend( QuestionnaireState.prototype, {
 	 */
 	_getAnswer: function( page, answerId ) {
 		var pageAnswers = this._answers[page];
-		return pageAnswers && pageAnswers[answerId] ? pageAnswers[answerId] : false;
-	}
+		return pageAnswers && pageAnswers[answerId] && this._includeInResult( page ) ? pageAnswers[answerId] : false;
+	},
 
+	/**
+	 * Returns an identifier of the selected answer on the given page, or null if no answer has been selected.
+	 *
+	 * @param page
+	 * @return {string|null}
+	 */
+	getSelectedAnswer: function( page ) {
+		if( !this._answers[ page ] ) {
+			return null;
+		}
+
+		var selectedAnswer = null;
+		$.each( this._answers[ page ], function( answerId, value ) {
+			if( typeof value === 'boolean' && value === true ) {
+				selectedAnswer = parseInt( answerId );
+				return false;
+			}
+		} );
+
+		return selectedAnswer;
+	},
+
+	/**
+	 * Handles clicking browser's back button
+	 */
+	back: function() {
+		this._questionnaire.goBackAction();
+	},
+
+	/**
+	 * Handles clicking browser's forward button
+	 */
+	forward: function() {
+		this._questionnaire.goForwardAction();
+	}
 } );
 
 return QuestionnaireState;

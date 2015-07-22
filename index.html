@@ -23,8 +23,11 @@
 				'app/Application',
 				'app/LicenceStore',
 				'app/LICENCES',
-				'dojo/_base/config'
-			], function( $, Application, LicenceStore, LICENCES, config ) {
+				'dojo/_base/config',
+				'dojo/back'
+			], function( $, Application, LicenceStore, LICENCES, config, back ) {
+
+					back.init();
 
 					$( document ).ready( function () {
 						config.custom.licenceStore = new LicenceStore( LICENCES );

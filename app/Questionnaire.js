@@ -9,6 +9,7 @@ define( [
 	'app/Author',
 	'app/QuestionnairePage',
 	'app/QuestionnaireState',
+	'dojo/back',
 	'dojo/Deferred',
 	'dojo/i18n!./nls/Questionnaire',
 	'dojo/promise/all',
@@ -20,6 +21,7 @@ define( [
 	Author,
 	QuestionnairePage,
 	QuestionnaireState,
+	back,
 	Deferred,
 	messages,
 	all,
@@ -76,6 +78,8 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_navigationCache: null,
 
+	_currentStateIndex: null,
+
 	/**
 	 * The most current questionnaire state.
 	 * @type {QuestionnaireState|null}
@@ -99,25 +103,17 @@ $.extend( Questionnaire.prototype, {
 	 */
 	start: function() {
 		this._navigationCache = [];
+		this._currentStateIndex = -1;
 
 		var self = this,
 			deferred = $.Deferred(),
 			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
-			page = '3';
+			page = this._getStartPage();
 
 		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
-			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 			this._exit();
 			return deferred.resolve().promise();
-		} else if( licenceId === 'CC' || !licenceId ) {
-			page = '2';
-		} else if( !this._asset.getAuthors().length ) {
-			page = '9';
-		} else if(
-			!this._asset.getLicence().isInGroup( 'cc4' ) && !this._asset.getTitle().length ) {
-			page = '10';
-		} else if( !this._asset.getUrl().length ) {
-			page = '11';
 		}
 
 		this._goTo( page )
@@ -132,32 +128,105 @@ $.extend( Questionnaire.prototype, {
 		return deferred.promise();
 	},
 
+	restartQuestionnaire: function() {
+		var self = this,
+			deferred = $.Deferred(),
+			licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null,
+			page = this._getStartPage();
+		if( licenceId === 'PD' || licenceId === 'cc-zero' ) {
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
+			this._exit();
+			return deferred.resolve().promise();
+		}
+		this._goTo( page, true )
+		.done( function() {
+			deferred.resolve();
+			$( self ).trigger( 'update' );
+		} )
+		.fail( function( error ) {
+			deferred.reject( error );
+		} );
+
+		return deferred.promise();
+	},
+
+	_getStartPage: function() {
+		var licenceId = this._asset.getLicence() ? this._asset.getLicence().getId() : null;
+
+		if( licenceId === 'CC' || !licenceId ) {
+			return '2';
+		} else if( !this._asset.getAuthors().length ) {
+			return '9';
+		} else if( !this._asset.getLicence().isInGroup( 'cc4' ) && !this._asset.getTitle().length ) {
+			return '10';
+		} else if( !this._asset.getUrl().length ) {
+			return '11';
+		}
+		return '3';
+	},
+
 	/**
 	 * Default page movement.
 	 *
 	 * @param {string} toPage
+	 * @param {boolean} usedForward
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {QuestionnairePage}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
-	_goTo: function( toPage ) {
-		var self = this;
+	_goTo: function( toPage, usedForward ) {
+		var self = this,
+			nextIndex = this._currentStateIndex + 1;
 
-		if( this._questionnaireState ) {
-			this._navigationCache.push( this._questionnaireState.clone() );
-		} else {
-			this._questionnaireState = new QuestionnaireState( 'init', this._asset );
+		//Reset forward history when taking new path.
+		//When choosing the same path by clicking an answer also reset forward history
+		//TODO better solution e.g. remove one state from history stack
+		var clearForwardHistory = this._isTakingNewPath( nextIndex ) || !usedForward;
+
+		if ( nextIndex < this._navigationCache.length && clearForwardHistory ) {
+			this._navigationCache.splice( nextIndex );
+		}
+		if ( !this._questionnaireState ) {
+			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
+		}
+
+		if ( clearForwardHistory ) {
 			this._navigationCache.push( this._questionnaireState.clone() );
 		}
+		this._currentStateIndex = nextIndex;
 
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
+			if ( clearForwardHistory ) {
+				back.addToHistory( self._questionnaireState.clone() );
+			}
+			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
 			self._questionnaireState.setPageId( toPage );
 			questionnairePage.applyState( self._questionnaireState );
 		} );
+	},
+
+	/**
+	 * Checks whether the answers given at the current point are taking user to another path than the given questionnaire state
+	 *
+	 * @param {number} index of the state to compare with
+	 * @return {boolean}
+	 */
+	_isTakingNewPath: function( index ) {
+		var pageId, currentAnswer, stateAnswer;
+
+		if ( index < this._navigationCache.length ) {
+			pageId = this._questionnaireState.getPageId();
+			currentAnswer = this._questionnaireState.getSelectedAnswer( pageId );
+			stateAnswer = this._navigationCache[ index ].getSelectedAnswer( this._questionnaireState.getPageId() );
+			if ( currentAnswer === stateAnswer ) {
+				return false;
+			}
+		}
+		return true;
 	},
 
 	/**
@@ -171,16 +240,18 @@ $.extend( Questionnaire.prototype, {
 	 */
 	_goBack: function() {
 		var self = this,
-			previousState = this._navigationCache.pop();
+			previousState = this._navigationCache[ this._currentStateIndex ];
+		if ( previousState === undefined ) {
+			return;
+		}
+		this._currentStateIndex = Math.max( this._currentStateIndex - 1, -1);
 
 		return this._animateToPage( previousState.getPageId(), true )
 		.done( function( questionnairePage ) {
 			self._questionnaireState = previousState.clone();
 			questionnairePage.applyState( previousState );
 			self._questionnaireState.setPageId( previousState.getPageId() );
-			// Delete boolean (page progressive) answers to have (re)set text input reflected in
-			// attribution:
-			self._questionnaireState.deleteBooleanAnswers( previousState.getPageId() );
+			self._questionnaireState.addPageToExcluded( previousState.getPageId() );
 			$( self ).trigger( 'update' );
 		} );
 	},
@@ -311,8 +382,8 @@ $.extend( Questionnaire.prototype, {
 		);
 
 		$( questionnairePage )
-		.on( 'goto', function( event, toPage ) {
-			self._goTo( toPage );
+		.on( 'goto', function( event, toPage, usedForward ) {
+			self._goTo( toPage, usedForward );
 		} )
 		.on( 'update', function( event, state ) {
 			self._questionnaireState = state;
@@ -430,14 +501,7 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			if( self._navigationCache.length === 1 ) {
-				$( self ).trigger( 'back', [self._asset] );
-			} else {
-				self._goBack()
-				.done( function() {
-					$( self ).trigger( 'update' );
-				} );
-			}
+			history.back();
 		} );
 
 		return $backButton;
@@ -592,8 +656,48 @@ $.extend( Questionnaire.prototype, {
 		} );
 
 		return deferred.promise();
-	}
+	},
 
+	/**
+	 * Handles clicking the back button
+	 */
+	goBackAction: function() {
+		var self = this;
+		if ( this._currentStateIndex === 0 ) {
+			this._currentStateIndex = -1;
+			$( this ).trigger( 'back', [this._asset] );
+		} else {
+			this._goBack()
+			.done( function() {
+				$( self ).trigger( 'update' );
+			} );
+		}
+	},
+
+	/**
+	 * Handles clicking browser's forward button
+	 */
+	goForwardAction: function() {
+		var self = this,
+			nextState, page, answerId;
+
+		if ( this._currentStateIndex === -1 ) {
+			$( self).trigger( 'restart' );
+			return;
+		}
+		nextState = this._navigationCache[ this._currentStateIndex + 1 ];
+		this._questionnaireState = nextState.clone();
+		page = nextState.getPageId();
+		answerId = nextState.getSelectedAnswer( page );
+		this._fetchPage( page )
+		.done( function( $html ) {
+			var questionnairePage = self._createQuestionnairePage( page, $html );
+			var nextPageId = questionnairePage.getNextPageId( answerId );
+			if ( nextPageId !== null ) {
+				$( questionnairePage ).trigger( 'goto', [ nextPageId, true ] );
+			}
+		} );
+	}
 } );
 
 return Questionnaire;
