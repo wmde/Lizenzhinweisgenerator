@@ -138,7 +138,7 @@ $.extend( Questionnaire.prototype, {
 			this._exit();
 			return deferred.resolve().promise();
 		}
-		this._goTo( page )
+		this._goTo( page, true )
 		.done( function() {
 			deferred.resolve();
 			$( self ).trigger( 'update' );
@@ -169,26 +169,30 @@ $.extend( Questionnaire.prototype, {
 	 * Default page movement.
 	 *
 	 * @param {string} toPage
+	 * @param {boolean} usedForward
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {QuestionnairePage}
 	 *         Rejected parameters:
 	 *         - {AjaxError}
 	 */
-	_goTo: function( toPage ) {
+	_goTo: function( toPage, usedForward ) {
 		var self = this,
 			nextIndex = this._currentStateIndex + 1;
 
-		var goingNewPath = this._isTakingNewPath( nextIndex );
+		//Reset forward history when taking new path.
+		//When choosing the same path by clicking an answer also reset forward history
+		//TODO better solution e.g. remove one state from history stack
+		var clearForwardHistory = this._isTakingNewPath( nextIndex ) || !usedForward;
 
-		if ( nextIndex < this._navigationCache.length && goingNewPath ) {
+		if ( nextIndex < this._navigationCache.length && clearForwardHistory ) {
 			this._navigationCache.splice( nextIndex );
 		}
 		if ( !this._questionnaireState ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 		}
 
-		if ( goingNewPath ) {
+		if ( clearForwardHistory ) {
 			this._navigationCache.push( this._questionnaireState.clone() );
 		}
 		this._currentStateIndex = nextIndex;
@@ -196,7 +200,7 @@ $.extend( Questionnaire.prototype, {
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
-			if ( goingNewPath ) {
+			if ( clearForwardHistory ) {
 				back.addToHistory( self._questionnaireState.clone() );
 			}
 			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
@@ -378,8 +382,8 @@ $.extend( Questionnaire.prototype, {
 		);
 
 		$( questionnairePage )
-		.on( 'goto', function( event, toPage ) {
-			self._goTo( toPage );
+		.on( 'goto', function( event, toPage, usedForward ) {
+			self._goTo( toPage, usedForward );
 		} )
 		.on( 'update', function( event, state ) {
 			self._questionnaireState = state;
@@ -497,7 +501,7 @@ $.extend( Questionnaire.prototype, {
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
 		$backButton.on( 'click', function() {
-			back.goBack();
+			history.back();
 		} );
 
 		return $backButton;
@@ -690,7 +694,7 @@ $.extend( Questionnaire.prototype, {
 			var questionnairePage = self._createQuestionnairePage( page, $html );
 			var nextPageId = questionnairePage.getNextPageId( answerId );
 			if ( nextPageId !== null ) {
-				$( questionnairePage ).trigger( 'goto', [ nextPageId ] );
+				$( questionnairePage ).trigger( 'goto', [ nextPageId, true ] );
 			}
 		} );
 	}
