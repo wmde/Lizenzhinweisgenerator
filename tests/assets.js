@@ -70,7 +70,7 @@ return {
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
 		// Complex author:
-		[new Author( $( '<div/>' ).html( '©&nbsp;<a href="http://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.roletschek.de">Fahrradtechnik und Fotografie</a>' ).contents() )],
+		[new Author( $( '<div/>' ).html( '©&nbsp;<a href="http://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a>' ).contents() )],
 		null,
 		null,
 		api
@@ -170,7 +170,7 @@ return {
 		// Licence not detectable:
 		null,
 		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007',
-		null,
+		[ new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:G.dallorto">G.dallorto</a>' ) ) ],
 		null,
 		null,
 		api
@@ -225,7 +225,7 @@ return {
 		'bitmap',
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Seilsäge',
-		null,
+		[ new Author( $( '<p>Reiner Flassig\n</p>' ) ) ],
 		null,
 		null,
 		api,
@@ -239,7 +239,7 @@ return {
 		// Local Wikipedia with more specific licence:
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0-de' ),
 		'Hektor Philippi',
-		null,
+		[ new Author( $( '<p>Reinhard Philippi <a href="/wiki/Benutzer:Reinhardphilippi">Reinhardphilippi</a> 15:37, 21. Aug. 2008 (CEST)\n</p>' ) ) ],
 		null,
 		null,
 		api,
@@ -251,7 +251,7 @@ return {
 		// Public domain on local Wikipedia:
 		config.custom.licenceStore.getLicence( 'PD' ),
 		'1 FC Bamberg - 1 FC Nürnberg 1901',
-		null,
+		[ new Author( $( '<p>unbekannt\n</p>' ) ) ],
 		null,
 		null,
 		api,
@@ -263,7 +263,7 @@ return {
 		// CC-0 licence on local Wikipedia:
 		config.custom.licenceStore.getLicence( 'cc-zero' ),
 		'Fiesta-Zuschauer Z1',
-		null,
+		[ new Author( $( '<p>Ziegler175\n</p>' ) ) ],
 		null,
 		null,
 		api,

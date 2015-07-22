@@ -139,9 +139,20 @@ $.extend( WikiAssetPage.prototype, {
 			}
 		} );
 
+		$author = this._removeVcardDivs( $author );
+
 		$author = this._trimNodeList( $author );
 
 		return [new Author( $author )];
+	},
+
+	/**
+	 * Remove div nodes belonging to class 'vcard'.
+	 * @param {jQuery} $nodes
+	 * @return {jQuery}
+	 */
+	_removeVcardDivs: function( $nodes ) {
+		return $nodes.filter( function( i, node ) { return node.nodeName !== 'DIV' || $( node ).attr( 'class' ) !== 'vcard'; } );
 	},
 
 	/**
@@ -188,7 +199,7 @@ $.extend( WikiAssetPage.prototype, {
 			$nodes = $nodes.not( $nodes.eq( 0 ) );
 		}
 
-		if( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
+		while( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
 			$nodes = $nodes.not( $nodes.eq( $nodes.length - 1 ) );
 		}
 
