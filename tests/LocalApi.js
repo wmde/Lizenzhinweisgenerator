@@ -56,6 +56,8 @@ var LocalApi = declare(Api, {
 			return this._getLocalFilename( title[0], property, params );
 		}
 
+		title = this._escapeUrlCharacters( title );
+
 		subdirectory = this._getSubdirectory( property, params );
 		return this._dataDirectory + '/' + subdirectory + '/' + this._removeNamespace( title ) + '.json';
 	},
@@ -68,6 +70,17 @@ var LocalApi = declare(Api, {
 	 */
 	_removeNamespace: function( title ) {
 		return title.replace( /^[^:]+:/ , '' );
+	},
+
+	/**
+	 * Replaces characters having special meaning in URLs to their "safe" equivalents, so pages with titles
+	 * containing these characters could be loaded properly.
+	 *
+	 * @param {string} title
+	 * @return {string}
+	 */
+	_escapeUrlCharacters: function( title ) {
+		return title.replace( '?', '%3F' );
 	},
 
 	/**
