@@ -79,10 +79,15 @@ var LocalApi = declare(Api, {
 	 * @return {string}
 	 */
 	_getSubdirectory: function( property, params ) {
-		if ( property === 'imageinfo' && params.iiprop === 'mediatype|url' ) {
-			return 'metadata';
+		if ( property === 'imageinfo' ) {
+			if ( params.iiprop === 'mediatype|url' ) {
+				return 'metadata';
+			}
+			if ( params.iiurlwidth === 300 ) {
+				return "imageinfo";
+			}
 		}
-		if ( property === 'templates' || property === 'revisions' ) {
+		if ( property === 'templates' || property === 'revisions' || property === 'images' ) {
 			return property;
 		}
 	},
