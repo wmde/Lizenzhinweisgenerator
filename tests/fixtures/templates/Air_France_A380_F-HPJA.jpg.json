@@ -1,0 +1,315 @@
+{
+    "pageid": 17330926,
+    "ns": 6,
+    "title": "File:Air France A380 F-HPJA.jpg",
+    "templates": [
+        {
+            "ns": 10,
+            "title": "Template:Assessment"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/Blank"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/category"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/commons"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/commons/featured"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/images"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/images/left"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/images/right"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/translate/en"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/translate/lang"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/wikipedia"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Assessments/wmf"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Autotranslate"
+        },
+        {
+            "ns": 10,
+            "title": "Template:CC-Layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Cc-by-sa-3.0"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Cc-by-sa-layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:City"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Date"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Description"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Dir"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Edit"
+        },
+        {
+            "ns": 10,
+            "title": "Template:En"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Expiry"
+        },
+        {
+            "ns": 10,
+            "title": "Template:FNO"
+        },
+        {
+            "ns": 10,
+            "title": "Template:FPC/"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Fallback"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Fi"
+        },
+        {
+            "ns": 10,
+            "title": "Template:File namespace only"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Fr"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Hidden"
+        },
+        {
+            "ns": 10,
+            "title": "Template:I18n/location"
+        },
+        {
+            "ns": 10,
+            "title": "Template:ISOdate"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Iffile"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Ifimage"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Infobar-Layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Infobox aircraft image"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Infobox aircraft image/i18n"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Infobox template tag"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Information field"
+        },
+        {
+            "ns": 10,
+            "title": "Template:IsNum"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Lang"
+        },
+        {
+            "ns": 10,
+            "title": "Template:LangSwitch"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:License template tag"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Location"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Location dec"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Ls"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Multilingual description"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Namespace only"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Occupation"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Occupation/en"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Own"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Parse source"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Photo Information"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Photo Information/en"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Photo Information/layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Photograph"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Picture of the day"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Picture of the day/desc"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Picture of the day/en"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Picture of the day/layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (de)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (en)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (es)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (hu)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (it)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (ka)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (ko)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (nl)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (ru)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd/2012-12-17 (zh-hans)"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Potd description"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Ru"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Self"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Str left"
+        },
+        {
+            "ns": 10,
+            "title": "Template:W"
+        }
+    ]
+}

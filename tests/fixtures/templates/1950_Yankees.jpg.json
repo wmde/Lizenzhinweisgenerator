@@ -1,0 +1,51 @@
+{
+    "pageid": 17475162,
+    "ns": 6,
+    "title": "File:1950 Yankees.jpg",
+    "templates": [
+        {
+            "ns": 10,
+            "title": "Template:CC-Layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Cc-by-1.0"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Cc-by-layout"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Description"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Dir"
+        },
+        {
+            "ns": 10,
+            "title": "Template:En"
+        },
+        {
+            "ns": 10,
+            "title": "Template:ISOdate"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Information"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Information/author processing"
+        },
+        {
+            "ns": 10,
+            "title": "Template:License template tag"
+        },
+        {
+            "ns": 10,
+            "title": "Template:Parse source"
+        }
+    ]
+}
