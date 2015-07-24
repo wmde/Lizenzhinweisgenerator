@@ -97,7 +97,7 @@ var LocalApi = declare(Api, {
 				return 'metadata';
 			}
 			if ( params.iiurlwidth === 300 ) {
-				return "imageinfo";
+				return 'imageinfo';
 			}
 		}
 		if ( property === 'templates' || property === 'revisions' || property === 'images' ) {
