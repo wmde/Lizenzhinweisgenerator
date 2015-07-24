@@ -183,16 +183,16 @@ $.extend( InputHandler.prototype, {
 			title;
 
 		if( url.indexOf( 'commons.wikimedia.org/' ) !== -1 ) {
-			wikiUrl = '//commons.wikimedia.org/';
+			wikiUrl = 'https://commons.wikimedia.org/';
 			title = this._extractFilename( url );
 		} else if( regExp0.test( url ) ) {
 			matches = url.match( regExp0 );
 			var domain = ( matches[1] === 'commons' ) ? 'wikimedia' : 'wikipedia';
-			wikiUrl = '//' + matches[1] + '.' + domain + '.org/';
+			wikiUrl = 'https://' + matches[1] + '.' + domain + '.org/';
 			title = this._extractFilename( url );
 		} else if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
-			wikiUrl = '//' + matches[1] + '/';
+			wikiUrl = 'https://' + matches[1] + '/';
 
 			title = url.indexOf( 'title=' ) !== -1
 				? url.match( /title=([^&]+)/i )[1]
@@ -200,7 +200,7 @@ $.extend( InputHandler.prototype, {
 
 		} else if( regExp2.test( url ) ) {
 			matches = url.match( regExp2 );
-			wikiUrl = '//' + matches[1] + '.wikipedia.org/';
+			wikiUrl = 'https://' + matches[1] + '.wikipedia.org/';
 			title = this._extractFilename( url );
 		}
 

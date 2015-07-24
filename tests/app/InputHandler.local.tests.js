@@ -26,7 +26,7 @@ define(
 			],
 			expected: {
 				file: 'File:Helene_Fischer_2010.jpg',
-				wikiUrl: '//commons.wikimedia.org/'
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}, {
 			input: [
@@ -34,7 +34,7 @@ define(
 			],
 			expected: {
 				file: 'File:Helene_Fischer_2010.jpg',
-				wikiUrl: '//commons.wikimedia.org/'
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}, {
 			input: [
@@ -47,7 +47,7 @@ define(
 			],
 			expected: {
 				file: 'File:JapaneseToiletControlPanel.jpg',
-				wikiUrl: '//commons.wikimedia.org/'
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}, {
 			input: [
@@ -60,7 +60,7 @@ define(
 			],
 			expected: {
 				file: 'File:Gerardus_t\'_Hooft_at_Harvard.jpg',
-				wikiUrl: '//commons.wikimedia.org/'
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}, {
 			input: [
@@ -72,7 +72,7 @@ define(
 			],
 			expected: {
 				file: 'File:"Граничар"_-_Туховища.JPG',
-				wikiUrl: '//commons.wikimedia.org/'
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}, {
 			input: [
@@ -80,7 +80,7 @@ define(
 			],
 			expected: {
 				file: 'File:"Граничар"_-_Туховища.JPG',
-				wikiUrl: '//commons.wikimedia.org/'
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}, {
 			input: [
@@ -94,7 +94,7 @@ define(
 			],
 			expected: {
 				file: 'File:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
-				wikiUrl: '//de.wikipedia.org/'
+				wikiUrl: 'https://de.wikipedia.org/'
 			}
 		}, {
 			input: [
@@ -107,7 +107,7 @@ define(
 			],
 			expected: {
 				file: 'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
-				wikiUrl: '//de.wikipedia.org/'
+				wikiUrl: 'https://de.wikipedia.org/'
 			}
 		}, {
 			input: [
@@ -177,7 +177,7 @@ define(
 					'http://en.wikipedia.org/wiki/%3F_(film)'
 				],
 				expected: {
-					wikiUrl: '//en.wikipedia.org/'
+					wikiUrl: 'https://en.wikipedia.org/'
 				}
 			},{
 				input: [
@@ -191,7 +191,7 @@ define(
 					'de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de'
 				],
 				expected: {
-					wikiUrl: '//de.wikipedia.org/'
+					wikiUrl: 'https://de.wikipedia.org/'
 				}
 			}
 		];

@@ -230,7 +230,7 @@ return {
 		null,
 		api,
 		// Local Wikipedia:
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	),
 	'Hektor_Philippi.JPG': new WikiAsset(
 		// Using "File:" prefix:
@@ -243,7 +243,7 @@ return {
 		null,
 		null,
 		api,
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	),
 	'1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg': new WikiAsset(
 		'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
@@ -255,7 +255,7 @@ return {
 		null,
 		null,
 		api,
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	),
 	'Fiesta-Zuschauer Z1.jpeg': new WikiAsset(
 		'Datei:Fiesta-Zuschauer Z1.jpeg',
@@ -267,7 +267,7 @@ return {
 		null,
 		null,
 		api,
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	)
 // TODO: Edge cases
 /*
