@@ -11,7 +11,7 @@ define(
 
 	QUnit.module( 'Api' );
 
-	var api = new Api( '//commons.wikimedia.org/' );
+	var api = new Api( 'https://commons.wikimedia.org/' );
 
 	/**
 	 * Returns a nodes HTML as plain text.
