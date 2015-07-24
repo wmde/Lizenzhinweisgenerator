@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>QUnit tests</title>
+	<link rel="stylesheet" href="../lib/qunit/qunit-1.18.0.css">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script src="../lib/qunit/qunit-1.18.0.js"></script>
+<script src="../dojoConfig.js"></script>
+<script>
+	( function( dojoConfig, QUnit ) {
+		QUnit.config.autoload = false;
+		QUnit.config.autostart = false;
+
+		dojoConfig.baseUrl = '../';
+		dojoConfig.locale = 'de';
+	}( dojoConfig, QUnit ) );
+</script>
+<script src="../lib/dojo/dojo.js"></script>
+<script>
+	( function( require ) {
+		require( [
+			'tests/app/Api.tests',
+			'tests/app/InputHandler.tests'
+		], function() {
+			QUnit.load();
+			QUnit.start();
+		} );
+	}( require ) );
+</script>
+
+</body>
+</html>
