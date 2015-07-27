@@ -21,16 +21,16 @@ var testCasesDefinitions = {
 	}],
 	'Helene Fischer 2010.jpg': [{
 		expected: {
-			raw: $( document.createTextNode( 'Fleyx24 (http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
-			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
-			html: $( '<div class="attribution"><span class="attribution-author"><a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
+			raw: $( document.createTextNode( 'Fleyx24 (https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
+			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
+			html: $( '<div class="attribution"><span class="attribution-author"><a href="https://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
 		}
 	}, {
 		options: { editor: 'edited by Editor' },
 		expected: {
-			raw: $( document.createTextNode( 'Fleyx24 (http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, edited by Editor, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
-			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
-			html: $( '<div class="attribution"><span class="attribution-author"><a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
+			raw: $( document.createTextNode( 'Fleyx24 (https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, edited by Editor, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
+			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
+			html: $( '<div class="attribution"><span class="attribution-author"><a href="https://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
 		}
 	}, {
 		options: { licenceOnly: true },
@@ -42,9 +42,9 @@ var testCasesDefinitions = {
 	}, {
 		options: { licenceLink: false },
 		expected: {
-			raw: $( document.createTextNode( 'Fleyx24 (http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, CC BY-SA 3.0' ) ),
-			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' ),
-			html: $( '<div class="attribution"><span class="attribution-author"><a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' )
+			raw: $( document.createTextNode( 'Fleyx24 (https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, CC BY-SA 3.0' ) ),
+			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' ),
+			html: $( '<div class="attribution"><span class="attribution-author"><a href="https://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' )
 		}
 	}, {
 		options: { editor: 'edited by Editor', licenceOnly: true },
@@ -56,9 +56,9 @@ var testCasesDefinitions = {
 	}, {
 		options: { editor: 'edited by Editor', licenceLink: false },
 		expected: {
-			raw: $( document.createTextNode( 'Fleyx24 (http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, edited by Editor, CC BY-SA 3.0' ) ),
-			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' ),
-			html: $( '<div class="attribution"><span class="attribution-author"><a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="http://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' )
+			raw: $( document.createTextNode( 'Fleyx24 (https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg), „Helene Fischer 2010“, edited by Editor, CC BY-SA 3.0' ) ),
+			text: $( '<div class="attribution"><span class="attribution-author">Fleyx24</span> <span class="attribution-url">(https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg)</span>, <span class="attribution-title">„Helene Fischer 2010“</span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' ),
+			html: $( '<div class="attribution"><span class="attribution-author"><a href="https://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a></span>, <span class="attribution-title"><a href="https://commons.wikimedia.org/wiki/File:Helene Fischer 2010.jpg">„Helene Fischer 2010“</a></span>, <span class="attribution-editor">edited by Editor</span>, <span class="attribution-licence">CC BY-SA 3.0</span></div>' )
 		}
 	}, {
 		options: { licenceOnly: true, licenceLink: false },
@@ -70,9 +70,9 @@ var testCasesDefinitions = {
 	}],
 	'JapaneseToiletControlPanel.jpg': [{
 		expected: {
-			raw: $( document.createTextNode( 'Chris 73 / Wikimedia Commons (http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg), „JapaneseToiletControlPanel“, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
-			text: $( '<div class="attribution">Chris 73 / Wikimedia Commons <span class="attribution-url">(http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg)</span>, <span class="attribution-title">„JapaneseToiletControlPanel“</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
-			html: $( '<div class="attribution"><a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>, <span class="attribution-title"><a href="http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg">„JapaneseToiletControlPanel“</a></span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
+			raw: $( document.createTextNode( 'Chris 73 / Wikimedia Commons (https://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg), „JapaneseToiletControlPanel“, http://creativecommons.org/licenses/by-sa/3.0/legalcode/' ) ),
+			text: $( '<div class="attribution">Chris 73 / Wikimedia Commons <span class="attribution-url">(https://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg)</span>, <span class="attribution-title">„JapaneseToiletControlPanel“</span>, <span class="attribution-licence">http://creativecommons.org/licenses/by-sa/3.0/legalcode/</span></div>' ),
+			html: $( '<div class="attribution"><a href="https://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>, <span class="attribution-title"><a href="https://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg">„JapaneseToiletControlPanel“</a></span>, <span class="attribution-licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/legalcode/">CC BY-SA 3.0</a></span></div>' )
 		}
 	}],
 	'1871_Proclamation_of_the_German_Empire.jpg': [{
