@@ -26,7 +26,15 @@ Coding style adheres to the [Wikibase coding conventions](http://www.mediawiki.o
 
 ### Testing
 
-QUnit tests are located in the <code>tests</code> directory. Before merging changes, tests should be run by accessing <code>/tests/index.html</code> in a browser.
+QUnit tests are located in the <code>tests</code> directory. Before merging changes, tests should be run by accessing <code>/tests/index.html</code> in a browser or from command line using [qunit-phantomjs-runner](https://github.com/jonkemp/qunit-phantomjs-runner):
+```bash
+phantomjs path/to/runner.js ./tests/index.html
+```
+
+There are tests for methods making calls to Commons API included in `tests/api-tests.html`. When running tests with `qunit-phantomjs-runner`, default timeout (5 seconds) may be hit. Use higher timeout value in such case (e.g. 10 seconds):
+```bash
+phantomjs path/to/runner.js ./tests/api-tests.html 10
+```
 
 ### Reporting Issues
 

@@ -18,7 +18,7 @@ function( $, Api, Asset, LicenceStore, LICENCES, NoApi, WikiAsset, Author, confi
 
 config.custom.licenceStore = new LicenceStore( LICENCES );
 
-var api = new Api( '//commons.wikimedia.org/' ),
+var api = new Api( 'https://commons.wikimedia.org/' ),
 	noApi = new NoApi();
 
 return {
@@ -47,7 +47,7 @@ return {
 		'bitmap',
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Helene Fischer 2010',
-		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a>' ) )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Fleyx24">Fleyx24</a>' ) )],
 		null,
 		null,
 		api
@@ -57,10 +57,10 @@ return {
 		'bitmap',
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'JapaneseToiletControlPanel',
-		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a>' ) )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a>' ) )],
 		null,
 		// Complex attribution and attribution differs from author:
-		$( '<a href="http://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>' ),
+		$( '<a href="https://commons.wikimedia.org/wiki/User:Chris_73">Chris 73</a> / <a href="http://commons.wikimedia.org/">Wikimedia Commons</a>' ),
 		api
 	),
 	'13-09-29-nordfriesisches-wattenmeer-RalfR-15.jpg': new WikiAsset(
@@ -70,7 +70,7 @@ return {
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
 		// Complex author:
-		[new Author( $( '<div/>' ).html( '©&nbsp;<a href="http://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a>' ).contents() )],
+		[new Author( $( '<div/>' ).html( '©&nbsp;<a href="https://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a>' ).contents() )],
 		null,
 		null,
 		api
@@ -92,10 +92,10 @@ return {
 		// Features additional newer CC-BY-SA licence, preferring non-SA licence:
 		config.custom.licenceStore.getLicence( 'cc-by-2.0-de' ),
 		'Inisheer Gardens 2002 dry-stone walls',
-		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ) )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ) )],
 		null,
 		// Simple attribution:
-		$( '<a href="http://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ),
+		$( '<a href="https://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ),
 		api
 	),
 	'Wien Karlsplatz3.jpg': new WikiAsset(
@@ -104,7 +104,7 @@ return {
 		config.custom.licenceStore.getLicence( 'cc-by-2.0-de' ),
 		'Wien Karlsplatz3',
 		// Strip "(talk)" link:
-		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Ikar.us">Ikar.us</a>' ) )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Ikar.us">Ikar.us</a>' ) )],
 		null,
 		null,
 		api
@@ -126,7 +126,7 @@ return {
 		config.custom.licenceStore.getLicence( 'cc-by-3.0' ),
 		'Gerardus t\' Hooft at Harvard',
 		// Inter-wiki links:
-		[new Author( $( '<div/>' ).html( '<a href="http://en.wikipedia.org/wiki/User:Lumidek">Lumidek</a> at <a href="http://en.wikipedia.org/wiki/">English Wikipedia</a>' ).contents() )],
+		[new Author( $( '<div/>' ).html( '<a href="https://en.wikipedia.org/wiki/User:Lumidek">Lumidek</a> at <a href="https://en.wikipedia.org/wiki/">English Wikipedia</a>' ).contents() )],
 		null,
 		null,
 		api
@@ -148,7 +148,7 @@ return {
 		// Unsupported licence derivative CC-BY-3.0-LU:
 		config.custom.licenceStore.getLicence( 'cc' ),
 		'NatMonumFengegKapell',
-		[new Author( $( '<div/>' ).html( '<a href="http://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() )],
+		[new Author( $( '<div/>' ).html( '<a href="https://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() )],
 		null,
 		null,
 		api
@@ -170,7 +170,7 @@ return {
 		// Licence not detectable:
 		null,
 		'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007',
-		[ new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:G.dallorto">G.dallorto</a>' ) ) ],
+		[ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:G.dallorto">G.dallorto</a>' ) ) ],
 		null,
 		null,
 		api
@@ -192,7 +192,7 @@ return {
 		'audio',
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'05 Air from Suite in C minor',
-		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Bdegazio">Bdegazio</a>' ) )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Bdegazio">Bdegazio</a>' ) )],
 		null,
 		null,
 		api
@@ -214,9 +214,9 @@ return {
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Air France A380 F-HPJA',
 		// Author's contains HTML where the internal user page link is not on the top-most DOM level:
-		[new Author( $( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
 		null,
-		$( '<a href="http://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' ),
+		$( '<a href="https://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' ),
 		api
 	),
 	'Seilsäge.jpg': new WikiAsset(
@@ -230,7 +230,7 @@ return {
 		null,
 		api,
 		// Local Wikipedia:
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	),
 	'Hektor_Philippi.JPG': new WikiAsset(
 		// Using "File:" prefix:
@@ -243,7 +243,7 @@ return {
 		null,
 		null,
 		api,
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	),
 	'1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg': new WikiAsset(
 		'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
@@ -255,7 +255,7 @@ return {
 		null,
 		null,
 		api,
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	),
 	'Fiesta-Zuschauer Z1.jpeg': new WikiAsset(
 		'Datei:Fiesta-Zuschauer Z1.jpeg',
@@ -267,7 +267,7 @@ return {
 		null,
 		null,
 		api,
-		'//de.wikipedia.org/'
+		'https://de.wikipedia.org/'
 	)
 // TODO: Edge cases
 /*

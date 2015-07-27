@@ -5,6 +5,6 @@ node_js:
 
 sudo: false
 
-install: travis_retry npm install --save-dev node-qunit-phantomjs
+install: travis_retry npm install --save-dev qunit-phantomjs-runner
 
-script: ./node_modules/node-qunit-phantomjs/bin/node-qunit-phantomjs ./tests/travis-tests.html
+script: phantomjs ./node_modules/qunit-phantomjs-runner/runner.js ./tests/index.html

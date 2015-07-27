@@ -63,7 +63,8 @@ var WikiAsset = declare( Asset, {
 	 * @return {string}
 	 */
 	getUrl: function() {
-		return 'http:' + ( this._wikiUrl || this._api.getDefaultUrl() ) + 'wiki/' + this._filename;
+		var url = ( this._wikiUrl || this._api.getDefaultUrl() ) + 'wiki/' + this._filename;
+		return url.indexOf( 'http' ) === 0 ? url : 'https://' + url;
 	},
 
 	/**

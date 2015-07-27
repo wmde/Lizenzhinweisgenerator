@@ -172,12 +172,12 @@ $.extend( WikiAssetPage.prototype, {
 			if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
 				href = href.replace(
 					/^\/w\/index\.php\?title\=([^&]+).*$/,
-					'http://commons.wikimedia.org/wiki/$1'
+					'https://commons.wikimedia.org/wiki/$1'
 				);
 			} else if( href.indexOf( '/wiki/User:' ) === 0 ) {
-				href = 'http://commons.wikimedia.org' + href;
+				href = 'https://commons.wikimedia.org' + href;
 			} else if( href.indexOf( '//' ) === 0 ) {
-				href = 'http:' + href;
+				href = 'https:' + href;
 			}
 
 			$node.attr( 'href', href );
