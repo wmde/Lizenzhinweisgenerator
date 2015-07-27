@@ -27,7 +27,7 @@ define(
 
 		$.each( testCases, function ( filename, testCase ) {
 			var asset = testAssets[filename];
-			assert.ok( asset.getUrl(), testCase.expected, 'URL "' + asset.getUrl() + '" matches.' )
+			assert.ok( asset.getUrl(), testCase.expected, 'URL "' + asset.getUrl() + '" matches.' );
 		} );
 
 	} );

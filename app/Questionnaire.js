@@ -495,8 +495,7 @@ $.extend( Questionnaire.prototype, {
 	 * @triggers back
 	 */
 	_generateBackButton: function() {
-		var self = this,
-			$backButton = $( '<div/>' )
+		var $backButton = $( '<div/>' )
 			.addClass( 'questionnaire-back' )
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 

@@ -195,7 +195,7 @@ $.extend( QuestionnairePage.prototype, {
 				break;
 			case '5':
 				if ( answerId === 1 ) {
-					return '3'
+					return '3';
 				}
 				if ( answerId === 2 ) {
 					return '5a';
