@@ -27,3 +27,7 @@ Coding style adheres to the [Wikibase coding conventions](http://www.mediawiki.o
 ### Testing
 
 QUnit tests are located in the <code>tests</code> directory. Before merging changes, tests should be run by accessing <code>/tests/index.html</code> in a browser.
+
+### Reporting Issues
+
+Please file al new bug reports and feature requests on [Phabricator](https://phabricator.wikimedia.org/maniphest/task/create/?projects=tcb-team,attribution-generator&title=%5BAG%5D).
