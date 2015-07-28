@@ -18,6 +18,7 @@
 	"disallowDanglingUnderscores": null,
 	"requireSpacesInsideArrayBrackets": null,
 	"requireDotNotation": null,
+	"disallowQuotedKeysInObjects": null,
 
 	"requireMultipleVarDecl": null // switch to onevar once fixed?
 }
