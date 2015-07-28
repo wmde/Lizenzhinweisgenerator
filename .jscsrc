@@ -13,5 +13,11 @@
 	],
 	"disallowSpacesInFunctionExpression": {
 		"beforeOpeningRoundBrace": true
-	}
+	},
+
+	"disallowDanglingUnderscores": null,
+	"requireSpacesInsideArrayBrackets": null,
+	"requireDotNotation": null,
+
+	"requireMultipleVarDecl": null // switch to onevar once fixed?
 }
