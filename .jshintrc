@@ -22,9 +22,5 @@
 	// Environment
 	"browser": true,
 	"dojo": true,
-
-	// Globals
-	"globals": {
-		"QUnit": false
-	}
+	"qunit": true
 }
