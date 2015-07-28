@@ -24,9 +24,6 @@
 	"browser": true,
 	"dojo": true,
 
-	// Legacy:
-	"onevar": false,
-
 	// Globals
 	"globals": {
 		"QUnit": false
