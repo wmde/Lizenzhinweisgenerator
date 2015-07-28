@@ -92,9 +92,9 @@ $.extend( Application.prototype, {
 			self._renderApplicationPage( asset );
 		} );
 
-		if ( this._questionnaire === null ) {
+		if( this._questionnaire === null ) {
 			var initialState = {
-				back: function () {
+				back: function() {
 					self._questionnaire._currentStateIndex = -1;
 					$( self._questionnaire ).trigger( 'back', [ self._questionnaire._asset ] );
 				}
@@ -130,7 +130,7 @@ $.extend( Application.prototype, {
 
 		var $optionContainer = $( '<div/>' ),
 			licence = asset.getLicence(),
-			renderRawText = licence && !licence.isInGroup( 'pd') && !licence.isInGroup( 'cc0' );
+			renderRawText = licence && !licence.isInGroup( 'pd' ) && !licence.isInGroup( 'cc0' );
 
 		this._optionContainer = new OptionContainer( $optionContainer, asset );
 
@@ -209,7 +209,7 @@ $.extend( Application.prototype, {
 						self._questionnaire.getAttributionGenerator()
 					);
 
-				} else if ( instance instanceof OptionContainer ) {
+				} else if( instance instanceof OptionContainer ) {
 					self._optionContainer.getOption( 'htmlCode' )
 					.setImageHtml( $attributedImageFrame.clone() );
 				}

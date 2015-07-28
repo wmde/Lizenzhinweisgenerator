@@ -47,7 +47,7 @@ var WikiAsset = declare( Asset, {
 	 * @return {string}
 	 */
 	getFilename: function() {
-		return this._filename.replace( /^[^:]+:/ , '' );
+		return this._filename.replace( /^[^:]+:/, '' );
 	},
 
 	/**

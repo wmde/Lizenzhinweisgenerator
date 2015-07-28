@@ -140,7 +140,7 @@ $.extend( Api.prototype, {
 
 			var templates = [];
 			$.each( page.templates, function( i, template ) {
-				templates.push( template.title.replace( /^[^:]+:/ , '' ) );
+				templates.push( template.title.replace( /^[^:]+:/, '' ) );
 			} );
 
 			deferred.resolve( templates );

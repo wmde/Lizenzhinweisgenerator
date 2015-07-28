@@ -129,7 +129,7 @@ $.extend( QuestionnaireState.prototype, {
 		}
 
 		// remove any other answer for the given page (e.g. when going back in the questionnaire and changing the answer)
-		if ( this.getSelectedAnswer( page ) !== null ) {
+		if( this.getSelectedAnswer( page ) !== null ) {
 			this.deleteValue( page, this.getSelectedAnswer( page ) );
 		}
 
@@ -169,10 +169,10 @@ $.extend( QuestionnaireState.prototype, {
 
 		var index = $.inArray( page, this._pagesToExcludeFromResult );
 
-		if ( index === -1) {
+		if( index === -1 ) {
 			return;
 		}
-		 this._pagesToExcludeFromResult.splice( index, 1 );
+		this._pagesToExcludeFromResult.splice( index, 1 );
 	},
 
 	/**
