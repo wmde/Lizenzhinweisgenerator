@@ -14,7 +14,6 @@
 
 	// Relaxing options
 	"laxbreak": true,
-	"laxcomma": false,
 	"scripturl": true,
 	"shadow": true,
 	"sub": true,
