@@ -1,3 +1,17 @@
 {
-	"preset": "wikimedia"
+	"preset": "wikimedia",
+
+	"disallowSpaceAfterKeywords": [
+		"catch",
+		"for",
+		"if",
+		"switch",
+		"while"
+	],
+	"requireSpaceAfterKeywords": [
+		"else"
+	],
+	"disallowSpacesInFunctionExpression": {
+		"beforeOpeningRoundBrace": true
+	}
 }
