@@ -20,5 +20,10 @@
 	"requireDotNotation": null,
 	"disallowQuotedKeysInObjects": null,
 
-	"requireMultipleVarDecl": null // switch to onevar once fixed?
+	"requireMultipleVarDecl": null, // switch to onevar once fixed?
+
+	"excludeFiles": [
+		"node_modules/**",
+		"lib/**"
+	]
 }
