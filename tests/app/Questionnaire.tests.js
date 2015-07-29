@@ -74,7 +74,7 @@ define( [
 			la: { '3': { 4: true }, '5': { 1: true } }, // restart
 			templates: ['result-note-text', 'result-restrictions']
 		}, {
-			la: { '3': { 4: true }, '5': { 2: true } }, //exit
+			la: { '3': { 4: true }, '5': { 2: true } }, // exit
 			templates: ['result-note-text', 'result-restrictions']
 		},
 		// 3rd level:

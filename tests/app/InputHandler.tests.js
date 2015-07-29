@@ -177,7 +177,7 @@ define( ['jquery', 'app/InputHandler', 'app/Api', 'app/ImageInfo'], function( $,
 				expected: {
 					wikiUrl: 'https://en.wikipedia.org/'
 				}
-			},{
+			}, {
 				input: [
 					'http://de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern',
 					'http://de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern?uselang=en',

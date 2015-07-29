@@ -23,7 +23,7 @@ define( ['jquery', 'app/WikiAsset', 'tests/assets'], function( $, WikiAsset, tes
 			}
 		};
 
-		$.each( testCases, function ( filename, testCase ) {
+		$.each( testCases, function( filename, testCase ) {
 			var asset = testAssets[filename];
 			assert.ok( asset.getUrl(), testCase.expected, 'URL "' + asset.getUrl() + '" matches.' );
 		} );
