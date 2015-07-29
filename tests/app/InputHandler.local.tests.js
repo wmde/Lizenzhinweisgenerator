@@ -5,9 +5,12 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/ImageInfo', 'app/InputHandler', 'tests/LocalApi'],
-	function( $, ImageInfo, InputHandler, LocalApi ) {
+define( [
+	'jquery', 'app/ImageInfo', 'app/InputHandler', 'tests/LocalApi'
+],
+function(
+	$, ImageInfo, InputHandler, LocalApi
+) {
 
 	QUnit.module( 'InputHandler' );
 
@@ -179,7 +182,7 @@ define(
 				expected: {
 					wikiUrl: 'https://en.wikipedia.org/'
 				}
-			},{
+			}, {
 				input: [
 					'http://de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern',
 					'http://de.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern?uselang=en',

@@ -5,9 +5,7 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/WikiAsset', 'tests/assets'],
-	function( $, WikiAsset, testAssets ) {
+define( ['jquery', 'app/WikiAsset', 'tests/assets'], function( $, WikiAsset, testAssets ) {
 
 	QUnit.module( 'WikiAsset' );
 
@@ -25,9 +23,9 @@ define(
 			}
 		};
 
-		$.each( testCases, function ( filename, testCase ) {
+		$.each( testCases, function( filename, testCase ) {
 			var asset = testAssets[filename];
-			assert.ok( asset.getUrl(), testCase.expected, 'URL "' + asset.getUrl() + '" matches.' )
+			assert.ok( asset.getUrl(), testCase.expected, 'URL "' + asset.getUrl() + '" matches.' );
 		} );
 
 	} );

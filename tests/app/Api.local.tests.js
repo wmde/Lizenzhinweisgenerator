@@ -5,9 +5,12 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/Author', 'tests/LocalApi', 'app/WikiAsset', 'tests/assets'],
-	function( $, Author, LocalApi, WikiAsset, testAssets ) {
+define( [
+	'jquery', 'app/Author', 'tests/LocalApi', 'app/WikiAsset', 'tests/assets'
+],
+function(
+	$, Author, LocalApi, WikiAsset, testAssets
+) {
 
 	QUnit.module( 'Api local' );
 
@@ -23,9 +26,9 @@ define(
 		return $node ? $( '<div/>' ).append( $node ).html() : null;
 	}
 
-	QUnit.test( 'Check scraped asset', function ( assert ) {
+	QUnit.test( 'Check scraped asset', function( assert ) {
 
-		$.each( testAssets, function ( filename, testAsset ) {
+		$.each( testAssets, function( filename, testAsset ) {
 			if( !( testAsset instanceof WikiAsset ) ) {
 				return true;
 			}

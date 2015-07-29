@@ -91,9 +91,9 @@ $.extend( WikiAssetPage.prototype, {
 				this._mediaType,
 				config.custom.licenceStore.detectLicence( this._templates ),
 				this._prefixedFilename
-					.replace( /^[^:]+:/ , '' )
-					.replace( /\.[^.]+$/ , '' )
-					.replace( /_/g, ' '),
+					.replace( /^[^:]+:/, '' )
+					.replace( /\.[^.]+$/, '' )
+					.replace( /_/g, ' ' ),
 				this._scrapeAuthors(),
 				null,
 				this._scrapeAttribution(),

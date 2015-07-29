@@ -151,86 +151,86 @@ $.extend( QuestionnairePage.prototype, {
 
 	getNextPageId: function( answerId ) {
 		answerId = typeof answerId !== 'undefined' ? answerId : 0;
-		switch ( this._pageId ) {
+		switch( this._pageId ) {
 			case '2':
-				if ( !this._asset.getAuthors().length ) {
+				if( !this._asset.getAuthors().length ) {
 					return 'form-author';
-				} else if ( !this._asset.getTitle() ) {
+				} else if( !this._asset.getTitle() ) {
 					return 'form-title';
-				} else if ( !this._asset.getUrl() ) {
+				} else if( !this._asset.getUrl() ) {
 					return 'form-url';
 				}
-				if ( answerId === 9 ) {
+				if( answerId === 9 ) {
 					return 'result-note-cc0';
 				}
-				if ( answerId === 10 ) {
+				if( answerId === 10 ) {
 					return '15';
 				}
 				return '3';
 			case 'form-author':
 			case 'form-title':
 			case 'form-url':
-				if ( this._pageId === 'form-author' && !this._asset.getTitle() ) {
+				if( this._pageId === 'form-author' && !this._asset.getTitle() ) {
 					return 'form-title';
-				} else if ( this._pageId !== 'form-url' && ( !this._asset.getUrl() || this._asset.getUrl() === '' ) ) {
+				} else if( this._pageId !== 'form-url' && ( !this._asset.getUrl() || this._asset.getUrl() === '' ) ) {
 					return 'form-url';
 				}
 				return '3';
 			case '3':
-				if ( answerId === 1 || answerId === 2 ) {
+				if( answerId === 1 || answerId === 2 ) {
 					return '7';
 				}
-				if ( answerId === 3 ) {
-					if (this._questionnaireState.getResult().asset.getLicence().isInGroup('cc2de')) {
+				if( answerId === 3 ) {
+					if( this._questionnaireState.getResult().asset.getLicence().isInGroup( 'cc2de' ) ) {
 						return '7';
 					}
 					return 'result-note-privateUse';
 				}
-				if ( answerId === 4 ) {
+				if( answerId === 4 ) {
 					return '5';
 				}
-				if ( answerId === 5 ) {
+				if( answerId === 5 ) {
 					return '6';
 				}
 				break;
 			case '5':
-				if ( answerId === 1 ) {
-					return '3'
+				if( answerId === 1 ) {
+					return '3';
 				}
-				if ( answerId === 2 ) {
+				if( answerId === 2 ) {
 					return '5a';
 				}
 				break;
 			case '7':
 				return this._questionnaireState.getResult().useCase === 'print' ? '8' : '12a';
 			case '8':
-				if ( answerId === 1 || answerId === 2 ) {
+				if( answerId === 1 || answerId === 2 ) {
 					return '12a';
 				}
 				break;
 			case '9':
-				if ( answerId === 1 || answerId === 2 ) {
+				if( answerId === 1 || answerId === 2 ) {
 					return '3';
 				}
 				break;
 			case '12a':
-				if ( answerId === 1 ) {
+				if( answerId === 1 ) {
 					return 'result-success';
 				}
-				if ( answerId === 2 ) {
+				if( answerId === 2 ) {
 					return '12b';
 				}
 				break;
 			case '12b':
-				if ( answerId === 1 ) {
+				if( answerId === 1 ) {
 					return '13';
 				}
-				if ( answerId === 2 ) {
+				if( answerId === 2 ) {
 					return '12c';
 				}
 				break;
 			case '13':
-				if ( answerId === 1 ) {
+				if( answerId === 1 ) {
 					return 'result-success';
 				}
 				break;
@@ -316,7 +316,7 @@ $.extend( QuestionnairePage.prototype, {
 			}
 
 			$page = this._applyLogAndGoTo( $page, p, 5, this.getNextPageId( 5 ) );
-		} else if( p === '5') {
+		} else if( p === '5' ) {
 			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
 			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '7' ) {
@@ -332,7 +332,7 @@ $.extend( QuestionnairePage.prototype, {
 
 			$input
 			.on( 'keyup', function() {
-					evaluateInput( $input, p );
+				evaluateInput( $input, p );
 			} )
 			.on( 'keypress', function( event ) {
 				if( event.keyCode === 13 ) {
@@ -357,7 +357,7 @@ $.extend( QuestionnairePage.prototype, {
 			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
 			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '12b' ) {
-			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1) );
+			$page = this._applyLogAndGoTo( $page, p, 1, this.getNextPageId( 1 ) );
 			$page = this._applyLogAndGoTo( $page, p, 2, this.getNextPageId( 2 ) );
 		} else if( p === '13' ) {
 

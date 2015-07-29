@@ -180,19 +180,19 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			nextIndex = this._currentStateIndex + 1;
 
-		//Reset forward history when taking new path.
-		//When choosing the same path by clicking an answer also reset forward history
-		//TODO better solution e.g. remove one state from history stack
+		// Reset forward history when taking new path.
+		// When choosing the same path by clicking an answer also reset forward history
+		// TODO better solution e.g. remove one state from history stack
 		var clearForwardHistory = this._isTakingNewPath( nextIndex ) || !usedForward;
 
-		if ( nextIndex < this._navigationCache.length && clearForwardHistory ) {
+		if( nextIndex < this._navigationCache.length && clearForwardHistory ) {
 			this._navigationCache.splice( nextIndex );
 		}
-		if ( !this._questionnaireState ) {
+		if( !this._questionnaireState ) {
 			this._questionnaireState = new QuestionnaireState( 'init', this._asset, this );
 		}
 
-		if ( clearForwardHistory ) {
+		if( clearForwardHistory ) {
 			this._navigationCache.push( this._questionnaireState.clone() );
 		}
 		this._currentStateIndex = nextIndex;
@@ -200,7 +200,7 @@ $.extend( Questionnaire.prototype, {
 		return this._animateToPage( toPage )
 		.then( function( questionnairePage ) {
 
-			if ( clearForwardHistory ) {
+			if( clearForwardHistory ) {
 				back.addToHistory( self._questionnaireState.clone() );
 			}
 			self._questionnaireState.removePageFromExcluded( self._questionnaireState.getPageId() );
@@ -218,11 +218,11 @@ $.extend( Questionnaire.prototype, {
 	_isTakingNewPath: function( index ) {
 		var pageId, currentAnswer, stateAnswer;
 
-		if ( index < this._navigationCache.length ) {
+		if( index < this._navigationCache.length ) {
 			pageId = this._questionnaireState.getPageId();
 			currentAnswer = this._questionnaireState.getSelectedAnswer( pageId );
 			stateAnswer = this._navigationCache[ index ].getSelectedAnswer( this._questionnaireState.getPageId() );
-			if ( currentAnswer === stateAnswer ) {
+			if( currentAnswer === stateAnswer ) {
 				return false;
 			}
 		}
@@ -241,10 +241,10 @@ $.extend( Questionnaire.prototype, {
 	_goBack: function() {
 		var self = this,
 			previousState = this._navigationCache[ this._currentStateIndex ];
-		if ( previousState === undefined ) {
+		if( previousState === undefined ) {
 			return;
 		}
-		this._currentStateIndex = Math.max( this._currentStateIndex - 1, -1);
+		this._currentStateIndex = Math.max( this._currentStateIndex - 1, -1 );
 
 		return this._animateToPage( previousState.getPageId(), true )
 		.done( function( questionnairePage ) {
@@ -495,8 +495,7 @@ $.extend( Questionnaire.prototype, {
 	 * @triggers back
 	 */
 	_generateBackButton: function() {
-		var self = this,
-			$backButton = $( '<div/>' )
+		var $backButton = $( '<div/>' )
 			.addClass( 'questionnaire-back' )
 			.append( $( '<a/>' ).addClass( 'button' ).html( '&#9664;' ) );
 
@@ -536,7 +535,7 @@ $.extend( Questionnaire.prototype, {
 		var marginLeft = minimize ? this._$node.width() - 100 : 0;
 
 		this._$node.stop().animate( {
-			'marginLeft': marginLeft === 0 ? '0' : ( marginLeft * - 1 ) + 'px'
+			'marginLeft': marginLeft === 0 ? '0' : ( marginLeft * -1 ) + 'px'
 		}, 'fast' );
 
 		this._$node.find( '.questionnaire-back' ).stop().animate( {
@@ -573,7 +572,7 @@ $.extend( Questionnaire.prototype, {
 				$pages = $pages.add( $htmlSnippets[i] );
 			}
 
-			$pages.find( 'div.expandable-trigger').on( 'click', function() {
+			$pages.find( 'div.expandable-trigger' ).on( 'click', function() {
 				$( '.expandable' ).slideUp();
 				$( this ).next().slideDown();
 			} );
@@ -663,7 +662,7 @@ $.extend( Questionnaire.prototype, {
 	 */
 	goBackAction: function() {
 		var self = this;
-		if ( this._currentStateIndex === 0 ) {
+		if( this._currentStateIndex === 0 ) {
 			this._currentStateIndex = -1;
 			$( this ).trigger( 'back', [this._asset] );
 		} else {
@@ -681,8 +680,8 @@ $.extend( Questionnaire.prototype, {
 		var self = this,
 			nextState, page, answerId;
 
-		if ( this._currentStateIndex === -1 ) {
-			$( self).trigger( 'restart' );
+		if( this._currentStateIndex === -1 ) {
+			$( self ).trigger( 'restart' );
 			return;
 		}
 		nextState = this._navigationCache[ this._currentStateIndex + 1 ];
@@ -693,7 +692,7 @@ $.extend( Questionnaire.prototype, {
 		.done( function( $html ) {
 			var questionnairePage = self._createQuestionnairePage( page, $html );
 			var nextPageId = questionnairePage.getNextPageId( answerId );
-			if ( nextPageId !== null ) {
+			if( nextPageId !== null ) {
 				$( questionnairePage ).trigger( 'goto', [ nextPageId, true ] );
 			}
 		} );

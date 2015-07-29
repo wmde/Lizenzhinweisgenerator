@@ -114,8 +114,7 @@ $.extend( Preview.prototype, {
 	 * @return {jQuery}
 	 */
 	_attributedImageHtml: function( imageInfo ) {
-		var html = ''
-			+ '<div class="attributed-image-frame"><div class="attributed-image">'
+		var html = '<div class="attributed-image-frame"><div class="attributed-image">'
 			+ '<a href="' + imageInfo.getDescriptionUrl() + '">'
 			+ '<img border="0" src="' + imageInfo.getThumbnail().url + '"/>'
 			+ '</a>'

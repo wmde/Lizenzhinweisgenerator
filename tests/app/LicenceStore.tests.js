@@ -15,7 +15,7 @@ define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
 			detectable: [
 				['PD NASA']
 			]
-		},{
+		}, {
 			licence: new Licence( 'cc-by-3.0', ['cc', 'cc3'], 'CC BY 3.0', /^CC-BY-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-3.0 link' ),
 			detectable: [
 				['CC-BY-SA-3.0', 'CC-BY-3.0']

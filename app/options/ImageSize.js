@@ -72,7 +72,6 @@ $.extend( ImageSize.prototype, Option.prototype, {
 		} );
 	}
 
-
 } );
 
 return ImageSize;

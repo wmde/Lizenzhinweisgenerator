@@ -5,9 +5,12 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/Api', 'app/Author', 'app/WikiAsset', 'tests/assets'],
-	function( $, Api, Author, WikiAsset, testAssets ) {
+define( [
+	'jquery', 'app/Api', 'app/Author', 'app/WikiAsset', 'tests/assets'
+],
+function(
+	$, Api, Author, WikiAsset, testAssets
+) {
 
 	QUnit.module( 'Api' );
 

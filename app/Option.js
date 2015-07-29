@@ -90,7 +90,7 @@ $.extend( Option.prototype, {
 			return;
 		}
 
-		if( this._$underlay.is( ':visible' ) ){
+		if( this._$underlay.is( ':visible' ) ) {
 			this._$underlay.hide();
 		} else {
 			this._$underlay.show();

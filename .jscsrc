@@ -1,0 +1,34 @@
+{
+	"preset": "wikimedia",
+
+	"disallowSpaceAfterKeywords": [
+		"catch",
+		"for",
+		"if",
+		"switch",
+		"while"
+	],
+	"requireSpaceAfterKeywords": [
+		"else"
+	],
+	"disallowSpacesInFunctionExpression": {
+		"beforeOpeningRoundBrace": true
+	},
+
+	"disallowDanglingUnderscores": null,
+	"requireSpacesInsideBrackets": null,
+	"requireDotNotation": null,
+	"disallowQuotedKeysInObjects": null,
+
+	"requireMultipleVarDecl": null, // switch to onevar once fixed?
+	"requireVarDeclFirst": null, // remove once fixed
+
+	"jsDoc": {
+		"checkTypes": "strictNativeCase"
+	},
+
+	"excludeFiles": [
+		"node_modules/**",
+		"lib/**"
+	]
+}

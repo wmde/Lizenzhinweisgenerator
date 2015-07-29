@@ -1,26 +1,19 @@
 {
 	// Enforcing options
 	"bitwise": false,
-	"camelcase": true,
 	"curly": true,
 	"eqeqeq": true,
 	"forin": false,
 	"freeze": true,
-	"immed": true,
 	"latedef": true,
-	"newcap": true,
 	"noarg": true,
-	"noempty": true,
 	"nonew": true,
-	"quotmark": "single",
 	"strict": true,
-	"trailing": true,
 	"undef": true,
 	"unused": "vars",
 
 	// Relaxing options
 	"laxbreak": true,
-	"laxcomma": false,
 	"scripturl": true,
 	"shadow": true,
 	"sub": true,
@@ -29,12 +22,5 @@
 	// Environment
 	"browser": true,
 	"dojo": true,
-
-	// Legacy:
-	"onevar": false,
-
-	// Globals
-	"globals": {
-		"QUnit": false
-	}
+	"qunit": true
 }
