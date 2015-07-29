@@ -5,9 +5,7 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/WikiAsset', 'tests/assets'],
-	function( $, WikiAsset, testAssets ) {
+define( ['jquery', 'app/WikiAsset', 'tests/assets'], function( $, WikiAsset, testAssets ) {
 
 	QUnit.module( 'WikiAsset' );
 

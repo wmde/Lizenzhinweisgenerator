@@ -5,9 +5,7 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/AttributionGenerator', 'tests/assets'],
-	function( $, AttributionGenerator, testAssets ) {
+define( ['jquery', 'app/AttributionGenerator', 'tests/assets'], function( $, AttributionGenerator, testAssets ) {
 
 QUnit.module( 'AttributionGenerator' );
 

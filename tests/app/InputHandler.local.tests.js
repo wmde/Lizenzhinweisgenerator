@@ -5,9 +5,12 @@
 ( function( QUnit ) {
 'use strict';
 
-define(
-	['jquery', 'app/ImageInfo', 'app/InputHandler', 'tests/LocalApi'],
-	function( $, ImageInfo, InputHandler, LocalApi ) {
+define( [
+	'jquery', 'app/ImageInfo', 'app/InputHandler', 'tests/LocalApi'
+],
+function(
+	$, ImageInfo, InputHandler, LocalApi
+) {
 
 	QUnit.module( 'InputHandler' );
 
