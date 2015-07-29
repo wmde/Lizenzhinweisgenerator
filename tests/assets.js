@@ -214,7 +214,7 @@ return {
 		config.custom.licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Air France A380 F-HPJA',
 		// Author's contains HTML where the internal user page link is not on the top-most DOM level:
-		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>') )],
+		[new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' ) )],
 		null,
 		$( '<a href="https://commons.wikimedia.org/wiki/User:Jovianeye">Joe Ravi</a>' ),
 		api
@@ -269,8 +269,8 @@ return {
 		api,
 		'https://de.wikipedia.org/'
 	)
-// TODO: Edge cases
-/*
+	// TODO: Edge cases
+	/*
 	'File:"L\'Absinthe", par Edgar Degas (1876).jpg': new WikiAsset(
 		'File:"L\'Absinthe", par Edgar Degas (1876).jpg',
 		'"L\'Absinthe", par Edgar Degas (1876)',
@@ -301,9 +301,9 @@ return {
 			authors: // TODO
 		}
 	),
-*/
-// TODO: Add support for properly scraping HTML lists:
-/*
+	*/
+	// TODO: Add support for properly scraping HTML lists:
+	/*
 	'Drawing_of_a_CCTV_Camera.svg': new WikiAsset(
 		'File:Drawing_of_a_CCTV_Camera.svg',
 		'Drawing of a CCTV Camera',
@@ -316,7 +316,7 @@ return {
 			authors: [new Author( $( '<a href="http://commons.wikimedia.org/wiki/File:Drawing_of_a_CCTV_Camera.JPG">Drawing_of_a_CCTV_Camera.JPG</a>: <a href="http://commons.wikimedia.org/wiki/User_talk:Think_outside_the_box">Think outside the box</a> | derivative work: <a href="http://commons.wikimedia.org/wiki/User:PhoneixS">PhoneixS</a>' ) )]
 		}
 	),
-*/
+	*/
 };
 
 } );

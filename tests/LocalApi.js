@@ -13,7 +13,7 @@ define( ['jquery', 'app/Api', 'dojo/_base/declare', 'app/AjaxError'],
  *
  * @param {string} dataDirectory Directory containing API response data
  */
-var LocalApi = declare(Api, {
+var LocalApi = declare( Api, {
 	constructor: function( dataDirectory ) {
 		this._dataDirectory = dataDirectory;
 	},
@@ -52,7 +52,7 @@ var LocalApi = declare(Api, {
 	_getLocalFilename: function( title, property, params ) {
 		var subdirectory;
 
-		if ( $.isArray( title ) ) {
+		if( $.isArray( title ) ) {
 			return this._getLocalFilename( title[0], property, params );
 		}
 
@@ -69,7 +69,7 @@ var LocalApi = declare(Api, {
 	 * @return {string}
 	 */
 	_removeNamespace: function( title ) {
-		return title.replace( /^[^:]+:/ , '' );
+		return title.replace( /^[^:]+:/, '' );
 	},
 
 	/**
@@ -92,15 +92,15 @@ var LocalApi = declare(Api, {
 	 * @return {string}
 	 */
 	_getSubdirectory: function( property, params ) {
-		if ( property === 'imageinfo' ) {
-			if ( params.iiprop === 'mediatype|url' ) {
+		if( property === 'imageinfo' ) {
+			if( params.iiprop === 'mediatype|url' ) {
 				return 'metadata';
 			}
-			if ( params.iiurlwidth === 300 ) {
+			if( params.iiurlwidth === 300 ) {
 				return 'imageinfo';
 			}
 		}
-		if ( property === 'templates' || property === 'revisions' || property === 'images' ) {
+		if( property === 'templates' || property === 'revisions' || property === 'images' ) {
 			return property;
 		}
 	},
