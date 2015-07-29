@@ -3,7 +3,7 @@
  * @author snater.com < wikimedia@snater.com >
  */
 define( ['dojo/_base/config'], function( config ) {
-'use strict';
+	'use strict';
 
 	/**
 	 * Languages/locales that have full template support. (It is assumed that there is no point in
