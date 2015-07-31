@@ -38,4 +38,4 @@ phantomjs path/to/runner.js ./tests/api-tests.html 10
 
 ### Reporting Issues
 
-Please file al new bug reports and feature requests on [Phabricator](https://phabricator.wikimedia.org/maniphest/task/create/?projects=tcb-team,attribution-generator&title=%5BAG%5D).
+Please file all new bug reports and feature requests on [Phabricator](https://phabricator.wikimedia.org/maniphest/task/create/?projects=tcb-team,attribution-generator&title=%5BAG%5D).
