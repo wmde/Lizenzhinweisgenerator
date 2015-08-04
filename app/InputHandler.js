@@ -149,23 +149,27 @@ $.extend( InputHandler.prototype, {
 			forcePrefix = true;
 		}
 
-		var key = 'wiki/';
-		var keyLoc = url.indexOf( key );
 		var filename;
 
-		if( keyLoc === -1 ) {
-			var segments = url.split( '/' );
-			filename = ( $.inArray( 'thumb', segments ) !== -1 )
-				? segments[segments.length - 2]
-				: segments[segments.length - 1];
+		var mediaKey = '#mediaviewer/';
+		var mediaKeyLoc = url.indexOf( mediaKey );
+
+		var fileKey = 'File:';
+		var fileKeyLoc = url.indexOf( fileKey );
+
+		if( mediaKeyLoc !== -1 ) {
+			filename = url.substr( mediaKeyLoc + mediaKey.length );
+		} else if( fileKeyLoc !== -1 ) {
+			filename = url.substr( fileKeyLoc );
 		} else {
-			var originalFileName = url.substr( keyLoc + key.length );
+			var key = 'wiki/';
+			var keyLoc = url.indexOf( key );
 
-			var mediaKey = '#mediaviewer/';
-			var mediaKeyLoc = originalFileName.indexOf( mediaKey );
-
-			if( mediaKeyLoc !== -1 ) {
-				filename = originalFileName.substr( mediaKeyLoc + mediaKey.length );
+			if( keyLoc === -1 ) {
+				var segments = url.split( '/' );
+				filename = ( $.inArray( 'thumb', segments ) !== -1 )
+					? segments[segments.length - 2]
+					: segments[segments.length - 1];
 			} else {
 				filename = url.substr( keyLoc + key.length );
 			}
