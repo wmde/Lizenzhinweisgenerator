@@ -149,11 +149,27 @@ $.extend( InputHandler.prototype, {
 			forcePrefix = true;
 		}
 
-		var segments = url.split( '/' );
+		var key = 'wiki/';
+		var keyLoc = url.indexOf( key );
+		var filename;
 
-		var filename = ( $.inArray( 'thumb', segments ) !== -1 )
-			? segments[segments.length - 2]
-			: segments[segments.length - 1];
+		if( keyLoc === -1 ) {
+			var segments = url.split( '/' );
+			filename = ( $.inArray( 'thumb', segments ) !== -1 )
+				? segments[segments.length - 2]
+				: segments[segments.length - 1];
+		} else {
+			var originalFileName = url.substr( keyLoc + key.length );
+
+			var mediaKey = '#mediaviewer/';
+			var mediaKeyLoc = originalFileName.indexOf( mediaKey );
+
+			if( mediaKeyLoc !== -1 ) {
+				filename = originalFileName.substr( mediaKeyLoc + mediaKey.length );
+			} else {
+				filename = url.substr( keyLoc + key.length );
+			}
+		}
 
 		if( filename.indexOf( 'title=' ) !== -1 ) {
 			var matches = filename.match( /title=([^&]+)/i );
