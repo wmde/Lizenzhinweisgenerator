@@ -144,12 +144,12 @@ $.extend( InputHandler.prototype, {
 	 *        Default: true
 	 * @return {string}
 	 */
-	_extractFilename: function( url, forcePrefix ) {
+	_extractPageTitle: function( url, forcePrefix ) {
 		if( forcePrefix === undefined ) {
 			forcePrefix = true;
 		}
 
-		var filename = this._findFilename( url );
+		var filename = this._extractFilename( url );
 
 		var prefixedFilename = decodeURIComponent( filename );
 		if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
@@ -159,7 +159,13 @@ $.extend( InputHandler.prototype, {
 		return prefixedFilename;
 	},
 
-	_findFilename: function( url ) {
+	/**
+	 * Extracts filename or mediawiki page title
+	 *
+	 * @param {string} url
+	 * @return {string}
+	 */
+	_extractFilename: function( url ) {
 		var filename;
 
 		var mediaViewerKey = '#mediaviewer/';
@@ -215,24 +221,24 @@ $.extend( InputHandler.prototype, {
 
 		if( url.indexOf( 'commons.wikimedia.org/' ) !== -1 ) {
 			wikiUrl = 'https://commons.wikimedia.org/';
-			title = this._extractFilename( url );
+			title = this._extractPageTitle( url );
 		} else if( regExp0.test( url ) ) {
 			matches = url.match( regExp0 );
 			var domain = ( matches[1] === 'commons' ) ? 'wikimedia' : 'wikipedia';
 			wikiUrl = 'https://' + matches[1] + '.' + domain + '.org/';
-			title = this._extractFilename( url );
+			title = this._extractPageTitle( url );
 		} else if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
 			wikiUrl = 'https://' + matches[1] + '/';
 
 			title = url.indexOf( 'title=' ) !== -1
 				? url.match( /title=([^&]+)/i )[1]
-				: this._extractFilename( url.replace( /\?.+$/, '' ), false );
+				: this._extractPageTitle( url.replace( /\?.+$/, '' ), false );
 
 		} else if( regExp2.test( url ) ) {
 			matches = url.match( regExp2 );
 			wikiUrl = 'https://' + matches[1] + '.wikipedia.org/';
-			title = this._extractFilename( url );
+			title = this._extractPageTitle( url );
 		}
 
 		return {
