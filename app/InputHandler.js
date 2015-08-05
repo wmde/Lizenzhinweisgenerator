@@ -151,11 +151,6 @@ $.extend( InputHandler.prototype, {
 
 		var filename = this._findFilename( url );
 
-		if( filename.indexOf( 'title=' ) !== -1 ) {
-			var matches = filename.match( /title=([^&]+)/i );
-			filename = matches[1];
-		}
-
 		var prefixedFilename = decodeURIComponent( filename );
 		if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
 			prefixedFilename = 'File:' + prefixedFilename;
@@ -167,7 +162,15 @@ $.extend( InputHandler.prototype, {
 	_findFilename: function( url ) {
 		var filename;
 
-		var mediaKey = '#mediaviewer/';
+		var mediaViewerKey = '#mediaviewer/';
+		var mediaViewerKeyLoc = url.indexOf( mediaViewerKey );
+
+		if( mediaViewerKeyLoc !== -1 ) {
+			filename = url.substr( mediaViewerKeyLoc + mediaViewerKey.length );
+			return filename;
+		}
+
+		var mediaKey = '#/media/';
 		var mediaKeyLoc = url.indexOf( mediaKey );
 
 		if( mediaKeyLoc !== -1 ) {
@@ -175,11 +178,9 @@ $.extend( InputHandler.prototype, {
 			return filename;
 		}
 
-		var fileKey = 'File:';
-		var fileKeyLoc = url.indexOf( fileKey );
-
-		if( fileKeyLoc !== -1 ) {
-			filename = url.substr( fileKeyLoc );
+		if( url.indexOf( 'title=' ) !== -1 ) {
+			var matches = url.match( /title=([^&]+)/i );
+			filename = matches[1];
 			return filename;
 		}
 
