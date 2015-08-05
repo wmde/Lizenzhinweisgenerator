@@ -149,39 +149,7 @@ $.extend( InputHandler.prototype, {
 			forcePrefix = true;
 		}
 
-		function getFilename( url ) {
-			var mediaKey = '#mediaviewer/';
-			var mediaKeyLoc = url.indexOf( mediaKey );
-
-			if( mediaKeyLoc !== -1 ) {
-				filename = url.substr( mediaKeyLoc + mediaKey.length );
-				return filename;
-			}
-
-			var fileKey = 'File:';
-			var fileKeyLoc = url.indexOf( fileKey );
-
-			if( fileKeyLoc !== -1 ) {
-				filename = url.substr( fileKeyLoc );
-				return filename;
-			}
-
-			var key = 'wiki/';
-			var keyLoc = url.indexOf( key );
-
-			if( keyLoc !== -1 ) {
-				filename = url.substr( keyLoc + key.length );
-				return filename;
-			}
-
-			var segments = url.split( '/' );
-			filename = ( $.inArray( 'thumb', segments ) !== -1 )
-				? segments[segments.length - 2]
-				: segments[segments.length - 1];
-			return filename;
-		}
-
-		var filename = getFilename( url );
+		var filename = this._findFilename( url );
 
 		if( filename.indexOf( 'title=' ) !== -1 ) {
 			var matches = filename.match( /title=([^&]+)/i );
@@ -194,6 +162,40 @@ $.extend( InputHandler.prototype, {
 		}
 
 		return prefixedFilename;
+	},
+
+	_findFilename: function( url ) {
+		var filename;
+
+		var mediaKey = '#mediaviewer/';
+		var mediaKeyLoc = url.indexOf( mediaKey );
+
+		if( mediaKeyLoc !== -1 ) {
+			filename = url.substr( mediaKeyLoc + mediaKey.length );
+			return filename;
+		}
+
+		var fileKey = 'File:';
+		var fileKeyLoc = url.indexOf( fileKey );
+
+		if( fileKeyLoc !== -1 ) {
+			filename = url.substr( fileKeyLoc );
+			return filename;
+		}
+
+		var key = 'wiki/';
+		var keyLoc = url.indexOf( key );
+
+		if( keyLoc !== -1 ) {
+			filename = url.substr( keyLoc + key.length );
+			return filename;
+		}
+
+		var segments = url.split( '/' );
+		filename = ( $.inArray( 'thumb', segments ) !== -1 )
+			? segments[segments.length - 2]
+			: segments[segments.length - 1];
+		return filename;
 	},
 
 	/**
