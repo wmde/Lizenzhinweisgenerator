@@ -109,6 +109,14 @@ define( ['jquery', 'app/InputHandler', 'app/Api', 'app/ImageInfo'], function( $,
 			}
 		}, {
 			input: [
+				'https://de.wikipedia.org/wiki/Commodore_Plus/4#/media/File:Commodore_Plus_4_Knurri.png'
+			],
+			expected: {
+				file: 'File:Commodore_Plus_4_Knurri.png',
+				wikiUrl: 'https://commons.wikimedia.org/'
+			}
+		}, {
+			input: [
 				'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG'
 			],
 			expected: {
