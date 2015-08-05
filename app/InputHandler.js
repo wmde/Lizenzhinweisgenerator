@@ -144,28 +144,66 @@ $.extend( InputHandler.prototype, {
 	 *        Default: true
 	 * @return {string}
 	 */
-	_extractFilename: function( url, forcePrefix ) {
+	_extractPageTitle: function( url, forcePrefix ) {
+		var filename,
+			prefixedFilename;
+
 		if( forcePrefix === undefined ) {
 			forcePrefix = true;
 		}
 
-		var segments = url.split( '/' );
+		filename = this._extractFilename( url );
 
-		var filename = ( $.inArray( 'thumb', segments ) !== -1 )
-			? segments[segments.length - 2]
-			: segments[segments.length - 1];
-
-		if( filename.indexOf( 'title=' ) !== -1 ) {
-			var matches = filename.match( /title=([^&]+)/i );
-			filename = matches[1];
-		}
-
-		var prefixedFilename = decodeURIComponent( filename );
+		prefixedFilename = decodeURIComponent( filename );
 		if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
 			prefixedFilename = 'File:' + prefixedFilename;
 		}
 
 		return prefixedFilename;
+	},
+
+	/**
+	 * Extracts filename or mediawiki page title
+	 *
+	 * @param {string} url
+	 * @return {string}
+	 */
+	_extractFilename: function( url ) {
+		var key,
+			keyLoc,
+			matches,
+			segments;
+
+		key = '#mediaviewer/';
+		keyLoc = url.indexOf( key );
+
+		if( keyLoc !== -1 ) {
+			return url.substr( keyLoc + key.length );
+		}
+
+		key = '#/media/';
+		keyLoc = url.indexOf( key );
+
+		if( keyLoc !== -1 ) {
+			return url.substr( keyLoc + key.length );
+		}
+
+		if( url.indexOf( 'title=' ) !== -1 ) {
+			matches = url.match( /title=([^&]+)/i );
+			return matches[1];
+		}
+
+		key = 'wiki/';
+		keyLoc = url.indexOf( key );
+
+		if( keyLoc !== -1 ) {
+			return url.substr( keyLoc + key.length );
+		}
+
+		segments = url.split( '/' );
+		return ( $.inArray( 'thumb', segments ) !== -1 )
+			? segments[segments.length - 2]
+			: segments[segments.length - 1];
 	},
 
 	/**
@@ -184,24 +222,24 @@ $.extend( InputHandler.prototype, {
 
 		if( url.indexOf( 'commons.wikimedia.org/' ) !== -1 ) {
 			wikiUrl = 'https://commons.wikimedia.org/';
-			title = this._extractFilename( url );
+			title = this._extractPageTitle( url );
 		} else if( regExp0.test( url ) ) {
 			matches = url.match( regExp0 );
 			var domain = ( matches[1] === 'commons' ) ? 'wikimedia' : 'wikipedia';
 			wikiUrl = 'https://' + matches[1] + '.' + domain + '.org/';
-			title = this._extractFilename( url );
+			title = this._extractPageTitle( url );
 		} else if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
 			wikiUrl = 'https://' + matches[1] + '/';
 
 			title = url.indexOf( 'title=' ) !== -1
 				? url.match( /title=([^&]+)/i )[1]
-				: this._extractFilename( url.replace( /\?.+$/, '' ), false );
+				: this._extractPageTitle( url.replace( /\?.+$/, '' ), false );
 
 		} else if( regExp2.test( url ) ) {
 			matches = url.match( regExp2 );
 			wikiUrl = 'https://' + matches[1] + '.wikipedia.org/';
-			title = this._extractFilename( url );
+			title = this._extractPageTitle( url );
 		}
 
 		return {
