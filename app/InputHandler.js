@@ -145,13 +145,16 @@ $.extend( InputHandler.prototype, {
 	 * @return {string}
 	 */
 	_extractPageTitle: function( url, forcePrefix ) {
+		var filename,
+			prefixedFilename;
+
 		if( forcePrefix === undefined ) {
 			forcePrefix = true;
 		}
 
-		var filename = this._extractFilename( url );
+		filename = this._extractFilename( url );
 
-		var prefixedFilename = decodeURIComponent( filename );
+		prefixedFilename = decodeURIComponent( filename );
 		if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
 			prefixedFilename = 'File:' + prefixedFilename;
 		}
@@ -166,43 +169,41 @@ $.extend( InputHandler.prototype, {
 	 * @return {string}
 	 */
 	_extractFilename: function( url ) {
-		var filename;
+		var key,
+			keyLoc,
+			matches,
+			segments;
 
-		var mediaViewerKey = '#mediaviewer/';
-		var mediaViewerKeyLoc = url.indexOf( mediaViewerKey );
+		key = '#mediaviewer/';
+		keyLoc = url.indexOf( key );
 
-		if( mediaViewerKeyLoc !== -1 ) {
-			filename = url.substr( mediaViewerKeyLoc + mediaViewerKey.length );
-			return filename;
+		if( keyLoc !== -1 ) {
+			return url.substr( keyLoc + key.length );
 		}
 
-		var mediaKey = '#/media/';
-		var mediaKeyLoc = url.indexOf( mediaKey );
+		key = '#/media/';
+		keyLoc = url.indexOf( key );
 
-		if( mediaKeyLoc !== -1 ) {
-			filename = url.substr( mediaKeyLoc + mediaKey.length );
-			return filename;
+		if( keyLoc !== -1 ) {
+			return url.substr( keyLoc + key.length );
 		}
 
 		if( url.indexOf( 'title=' ) !== -1 ) {
-			var matches = url.match( /title=([^&]+)/i );
-			filename = matches[1];
-			return filename;
+			matches = url.match( /title=([^&]+)/i );
+			return matches[1];
 		}
 
-		var key = 'wiki/';
-		var keyLoc = url.indexOf( key );
+		key = 'wiki/';
+		keyLoc = url.indexOf( key );
 
 		if( keyLoc !== -1 ) {
-			filename = url.substr( keyLoc + key.length );
-			return filename;
+			return url.substr( keyLoc + key.length );
 		}
 
-		var segments = url.split( '/' );
-		filename = ( $.inArray( 'thumb', segments ) !== -1 )
+		segments = url.split( '/' );
+		return ( $.inArray( 'thumb', segments ) !== -1 )
 			? segments[segments.length - 2]
 			: segments[segments.length - 1];
-		return filename;
 	},
 
 	/**
