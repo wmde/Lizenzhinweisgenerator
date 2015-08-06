@@ -195,6 +195,9 @@ $.extend( WikiAssetPage.prototype, {
 	 * @return {jQuery}
 	 */
 	_trimNodeList: function( $nodes ) {
+		if( $nodes.length === 0 ) {
+			return $nodes;
+		}
 		if( $.trim( $nodes.eq( 0 ).text() ) === '' ) {
 			$nodes = $nodes.not( $nodes.eq( 0 ) );
 		}
