@@ -158,7 +158,7 @@ $.extend( AttributionGenerator.prototype, {
 		// Prefer attribution over author:
 		var $attribution = this._asset.getAttribution();
 		if( $attribution ) {
-			if( $attribution.length && $attribution.text().length !== 0 ) {
+			if( $attribution.length && $attribution.text().length ) {
 				return format === 'html' ? $attribution : $attribution.text();
 			}
 		}
