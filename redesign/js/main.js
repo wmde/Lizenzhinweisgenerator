@@ -1,4 +1,6 @@
 ( function( $ ) {
+	'use strict';
+
 	$( '#how-it-works-button' ).click( function() {
 		$( '#how-it-works-screen' ).slideDown();
 	} );
