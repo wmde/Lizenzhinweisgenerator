@@ -1,0 +1,126 @@
+body {
+  font-size: 15.5pt;
+}
+
+.green-btn {
+  background-color: #97b314;
+  padding: 5px 15px;
+  height: 42px;
+  border: 0;
+}
+.green-btn:hover {
+  background-color: #008752;
+}
+
+.wikimedia-logo img {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  height: 80px;
+  width: 80px;
+}
+
+.screen {
+  position: relative;
+  height: 100vh;
+}
+
+.landing-screen {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/8/87/Amanhecer_no_Hercules_--.jpg");
+  background-size: auto 100vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+}
+
+a {
+  color: #dce4e8;
+}
+a:hover {
+  color: #fff;
+}
+
+.wrapper {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+.bottom-wrapper {
+  margin-top: 66vh;
+}
+.top-wrapper {
+  margin-top: 33vh;
+}
+
+.heading {
+  height: 120px; /* should not be hardcoded? :/ */
+  margin-top: -60px;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 20px 25px;
+}
+.heading h1, .heading h2 {
+  padding: 0;
+  margin: 0;
+}
+.heading h1 {
+  font-size: 40.5pt;
+}
+.heading h2 {
+  font-size: 15pt;
+  font-weight: normal;
+}
+
+.how-it-works {
+  margin-top: 40px;
+}
+
+.attribution {
+  color: #dce4e8;
+  background-color: #636466;
+  font-size: 12pt;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 5px 0 20px;
+  bottom: 62px;
+  position: absolute;
+}
+
+#file-form {
+  margin-top: -21px;
+}
+#file-form input, #file-form button {
+  vertical-align: middle;
+}
+#file-form input {
+  font-size: 14pt;
+  color: #bfbfbf;
+  line-height: 30px;
+  width: 680px;
+  padding: 6px;
+  border: 0;
+}
+#file-form ::-moz-placeholder {
+  color: #777;
+}
+
+.bottom-menu {
+  background-color: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  height: 42px;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+}
+.bottom-menu li {
+  list-style-type: none;
+  display: inline-block;
+}
+.bottom-menu li a {
+  display: block;
+  padding: 6px 15px;
+}
