@@ -2,6 +2,10 @@ body {
   font-size: 15.5pt;
 }
 
+.display-none {
+  display: none;
+}
+
 .green-btn {
   background-color: #97b314;
   padding: 5px 15px;
@@ -35,6 +39,17 @@ body {
   background-color: #000;
   color: #fff;
   text-align: center;
+}
+
+.how-it-works-screen {
+  background-color: #dce4e8;
+  height: 80vh;
+}
+.how-it-works-screen .col-sm-3 {
+  text-align: center;
+}
+.how-it-works-screen .close {
+  margin: 15px 20px;
 }
 
 a {

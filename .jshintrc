@@ -22,5 +22,6 @@
 	// Environment
 	"browser": true,
 	"dojo": true,
-	"qunit": true
+	"qunit": true,
+	"jquery": true
 }
