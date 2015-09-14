@@ -39,6 +39,7 @@ body {
 
 .green-btn {
   background-color: #97b314;
+  color: #fff;
   padding: 5px 15px;
   height: 42px;
   border: 0;
@@ -152,6 +153,10 @@ a:hover {
 }
 #file-form ::-moz-placeholder {
   color: #777;
+}
+
+.feedback-form label {
+  font-weight: normal;
 }
 
 .bottom-menu {
