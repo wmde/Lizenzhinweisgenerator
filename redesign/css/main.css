@@ -52,8 +52,9 @@ body {
   margin: 15px 20px;
 }
 
-a {
+a, a:focus, a:active {
   color: #dce4e8;
+  outline: none;
 }
 a:hover {
   color: #fff;
