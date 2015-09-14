@@ -1,5 +1,5 @@
 body {
-  font-size: 15.5pt;
+  font-size: 14.5pt;
 }
 
 .display-none {
@@ -22,7 +22,7 @@ body {
   padding: 0;
 }
 .ag-modal .modal-title {
-  font-size: 15.5pt;
+  font-size: 14.5pt;
   line-height: 42px;
 }
 .ag-modal .close {
@@ -55,7 +55,6 @@ body {
   right: 0;
   margin: 20px;
   height: 80px;
-  width: 80px;
 }
 
 .screen {
@@ -64,7 +63,7 @@ body {
 }
 
 .landing-screen {
-  background-size: auto 100vh;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-color: #000;
@@ -115,10 +114,11 @@ a:hover {
   margin: 0;
 }
 .heading h1 {
-  font-size: 40.5pt;
+  font-size: 39.5pt;
+  font-weight: bold;
 }
 .heading h2 {
-  font-size: 15pt;
+  font-size: 15.2pt;
   font-weight: normal;
 }
 
@@ -129,7 +129,8 @@ a:hover {
 .attribution {
   color: #dce4e8;
   background-color: #636466;
-  font-size: 12pt;
+  font-style: italic;
+  font-size: 11pt;
   height: 20px;
   line-height: 20px;
   padding: 0 5px 0 20px;
@@ -144,11 +145,11 @@ a:hover {
   vertical-align: middle;
 }
 #file-form input {
-  font-size: 14pt;
+  font-size: 13pt;
   color: #bfbfbf;
   line-height: 30px;
   width: 680px;
-  padding: 6px;
+  padding: 6px 12px;
   border: 0;
 }
 #file-form ::-moz-placeholder {
