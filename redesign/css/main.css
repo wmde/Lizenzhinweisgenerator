@@ -6,6 +6,37 @@ body {
   display: none;
 }
 
+.modal-backdrop {
+  background-color: #fff;
+}
+.ag-modal .modal-content {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.ag-modal .modal-header {
+  height: 42px;
+  text-align: center;
+  background-color: #97b314;
+  color: #fff;
+  padding: 0;
+}
+.ag-modal .modal-title {
+  font-size: 15.5pt;
+  line-height: 42px;
+}
+.ag-modal .close {
+  opacity: 1;
+  color: #fff;
+  text-shadow: none;
+  font-weight: normal;
+  line-height: 42px;
+  margin-right: 10px;
+}
+.ag-modal .modal-body {
+  padding: 10% 15%;
+}
+
 .green-btn {
   background-color: #97b314;
   padding: 5px 15px;
@@ -17,7 +48,7 @@ body {
 }
 
 .wikimedia-logo img {
-  z-index: 9999;
+  z-index: 1000;
   position: fixed;
   top: 0;
   right: 0;
@@ -52,8 +83,9 @@ body {
   margin: 15px 20px;
 }
 
-a {
+a, a:focus, a:active {
   color: #dce4e8;
+  outline: none;
 }
 a:hover {
   color: #fff;
