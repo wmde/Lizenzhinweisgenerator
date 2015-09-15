@@ -2,9 +2,9 @@
 	'use strict';
 
 	var controller = new ScrollMagic.Controller(),
-			$logo = $( '#wikimedia-logo' ),
-			logoOffsetTop = $logo.offset().top,
-			landingScreenHeight = $( '#landing-screen' ).height();
+		$logo = $( '#wikimedia-logo' ),
+		logoOffsetTop = $logo.offset().top,
+		landingScreenHeight = $( '#landing-screen' ).height();
 
 	new ScrollMagic.Scene( {
 		duration: function() {
