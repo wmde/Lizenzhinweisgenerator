@@ -159,6 +159,9 @@ a:hover {
 .feedback-form label {
   font-weight: normal;
 }
+.feedback-form .form-control {
+  color: #636466;
+}
 
 .bottom-menu {
   background-color: rgba(0, 0, 0, 0.25);
