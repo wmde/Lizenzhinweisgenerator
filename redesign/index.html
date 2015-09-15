@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <div class="wikimedia-logo">
-      <img src="images/wmde_logo.svg" alt="Wikimedia Deutschland" />
-    </div>
-
     <div class="container-fluid how-it-works-screen display-none" id="how-it-works-screen">
       <div class="row">
         <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -46,6 +42,7 @@
     </div>
 
     <div class="screen landing-screen" id="landing-screen">
+      <img id="wikimedia-logo" src="images/wmde_logo.svg" alt="Wikimedia Deutschland" />
       <div class="clearfix"></div>
 
       <div class="wrapper top-wrapper">
@@ -142,10 +139,15 @@
         </div>
       </div>
     </div>
+    <div class="screen">
+      <!-- TODO: Remove me! -->
+    </div>
 
     <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/ScrollMagic.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/background.js"></script>
+    <script src="js/scrolling_effects.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

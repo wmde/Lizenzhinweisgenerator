@@ -23,5 +23,8 @@
 	"browser": true,
 	"dojo": true,
 	"qunit": true,
-	"jquery": true
+	"jquery": true,
+	"globals": {
+		"ScrollMagic": false
+	}
 }
