@@ -54,6 +54,7 @@ body {
   top: 20px;
   right: 20px;
   height: 80px;
+  width: 98px;
 }
 
 .screen {
@@ -93,9 +94,6 @@ a:hover {
   position: absolute;
   width: 100%;
   text-align: center;
-}
-.bottom-wrapper {
-  margin-top: 66vh;
 }
 .top-wrapper {
   margin-top: 33vh;
@@ -138,7 +136,11 @@ a:hover {
 }
 
 #file-form {
-  margin-top: -21px;
+  position: absolute;
+  margin-top: 42px;
+  height: 42px;
+  width: 100%;
+  z-index: 1000;
 }
 #file-form input, #file-form button {
   vertical-align: middle;
