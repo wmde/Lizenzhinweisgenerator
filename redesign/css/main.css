@@ -136,10 +136,11 @@ a:hover {
 }
 
 #file-form {
-  margin-top: -21px;
   position: absolute;
-  top: 66vh;
+  margin-top: 42px;
+  height: 42px;
   width: 100%;
+  z-index: 1000;
 }
 #file-form input, #file-form button {
   vertical-align: middle;

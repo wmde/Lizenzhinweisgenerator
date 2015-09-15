@@ -17,4 +17,14 @@
 	} )
 	.setPin( '#wikimedia-logo' )
 	.addTo( controller );
+
+	var textboxOffset = ( 2 * $( '#how-it-works-screen' ).height() ) - landingScreenHeight;
+	new ScrollMagic.Scene( {
+		triggerElement: '#landing-screen',
+		offset: -textboxOffset,
+		triggerHook: 0,
+		duration: landingScreenHeight - ( 82 * 1.5 )
+	} )
+	.setPin( '#file-form' )
+	.addTo( controller );
 }( jQuery, ScrollMagic ) );
