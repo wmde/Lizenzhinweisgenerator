@@ -27,4 +27,13 @@
 	} )
 	.setPin( '#file-form' )
 	.addTo( controller );
+
+	new ScrollMagic.Scene( {
+		triggerElement: '#landing-screen',
+		triggerHook: 0,
+		offset: -landingScreenHeight / 2,
+		duration: landingScreenHeight / 2
+	} )
+	.setTween( '.top-wrapper', { opacity: 1 } )
+	.addTo( controller );
 }( jQuery, ScrollMagic ) );

@@ -97,6 +97,7 @@ a:hover {
 }
 .top-wrapper {
   margin-top: 33vh;
+  opacity: 0;
 }
 
 .heading {
