@@ -1,11 +1,28 @@
 ( function( $ ) {
 	'use strict';
 
+	var $howItWorks = $( '#how-it-works-screen' ),
+		$body = $( 'body' );
 	$( '#how-it-works-button' ).click( function() {
-		$( '#how-it-works-screen' ).slideDown();
+		$howItWorks.show();
+		$body
+			.scrollTop( $howItWorks.height() )
+			.animate( {
+				scrollTop: 0
+			}, 700
+		);
 	} );
 
 	$( '#how-it-works-screen .close' ).click( function() {
-		$( '#how-it-works-screen' ).slideUp();
+		$body.animate(
+			{
+				scrollTop: $howItWorks.height()
+			},
+			700,
+			function() {
+				$howItWorks.hide();
+				$body.scrollTop( 0 );
+			}
+		);
 	} );
 }( jQuery ) );
