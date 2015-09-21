@@ -25,6 +25,9 @@
 	"qunit": true,
 	"jquery": true,
 	"globals": {
-		"ScrollMagic": false
+		"ScrollMagic": false,
+		"TweenMax": false,
+		"TimelineMax": false,
+		"Linear": false
 	}
 }
