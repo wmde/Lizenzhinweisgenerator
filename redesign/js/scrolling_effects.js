@@ -1,39 +1,65 @@
 ( function( $, ScrollMagic ) {
 	'use strict';
 
-	var controller = new ScrollMagic.Controller(),
-		$logo = $( '#wikimedia-logo' ),
-		logoOffsetTop = $logo.offset().top,
-		landingScreenHeight = $( '#landing-screen' ).height();
+	var controller = new ScrollMagic.Controller();
 
-	new ScrollMagic.Scene( {
-		duration: function() {
-			var height = $logo.height() + ( 2 * logoOffsetTop );
+	var fadeHeadingUp = TweenMax.fromTo(
+		'.top-wrapper',
+		1,
+		{ opacity: 0, top: '15%' },
+		{ opacity: 1, top: 0 }
+	);
+	var moveTextboxUp = TweenMax.fromTo(
+		'#file-form',
+		1,
+		{ top: 0 },
+		{ top: '60%', ease: Linear.easeNone }
+	);
 
-			return landingScreenHeight - height;
-		},
+	var upTweens = new TimelineMax();
+	upTweens.add( [ fadeHeadingUp, moveTextboxUp ] );
+
+	var upSceneOffset = function() {
+		return $( '#landing-screen' ).height() / 5;
+	};
+
+	var up = new ScrollMagic.Scene( {
 		triggerElement: '#landing-screen',
-		offset: landingScreenHeight / 2
+		triggerHook: 'onEnter',
+		offset: upSceneOffset(),
+		duration: '80%'
 	} )
-	.setPin( '#wikimedia-logo' )
-	.addTo( controller );
+	.setTween( upTweens );
 
-	var textboxOffset = ( 2 * $( '#how-it-works-screen' ).height() ) - landingScreenHeight;
-	new ScrollMagic.Scene( {
-		triggerElement: '#landing-screen',
-		offset: -textboxOffset,
-		triggerHook: 0,
-		duration: landingScreenHeight - ( 82 * 1.5 )
-	} )
-	.setPin( '#file-form' )
-	.addTo( controller );
+	$( window ).resize( function() {
+		up.offset( upSceneOffset() );
+	} );
 
-	new ScrollMagic.Scene( {
+	var moveTextboxDown = TweenMax.to(
+		'#file-form',
+		1,
+		{ top: '100%', marginTop: '-82px' }
+	);
+	var fadeHeadingDown = TweenMax.to(
+		'.top-wrapper',
+		1,
+		{ marginTop: '20vh', opacity: 0 }
+	);
+	var fadeAttributionDown = TweenMax.to(
+		'.attribution',
+		1,
+		{ bottom: '20%', opacity: 0 }
+	);
+
+	var downTweens = new TimelineMax();
+	downTweens.add( [ fadeHeadingDown, moveTextboxDown, fadeAttributionDown ] );
+
+	var down = new ScrollMagic.Scene( {
 		triggerElement: '#landing-screen',
-		triggerHook: 0,
-		offset: -landingScreenHeight / 2,
-		duration: landingScreenHeight / 2
+		triggerHook: 'onLeave',
+		duration: '80%'
 	} )
-	.setTween( '.top-wrapper', { opacity: 1 } )
-	.addTo( controller );
+	.setTween( downTweens );
+
+	controller.addScene( [ up, down ] );
 }( jQuery, ScrollMagic ) );

@@ -97,7 +97,6 @@ a:hover {
 }
 .top-wrapper {
   margin-top: 33vh;
-  opacity: 0;
 }
 
 .heading {
@@ -138,6 +137,7 @@ a:hover {
 
 #file-form {
   position: absolute;
+  top: 60%;
   margin-top: 42px;
   height: 42px;
   width: 100%;
