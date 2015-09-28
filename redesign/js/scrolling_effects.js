@@ -22,7 +22,7 @@
 	var up = new ScrollMagic.Scene( {
 		triggerElement: '#landing-screen',
 		triggerHook: 'onEnter',
-		offset: '200%', // Shouldn't it be 20%? whyyyyy
+		offset: $( '#landing-screen' ).height() / 5,
 		duration: '80%'
 	} )
 	.setTween( upTweens );
