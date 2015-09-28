@@ -19,13 +19,21 @@
 	var upTweens = new TimelineMax();
 	upTweens.add( [ fadeHeadingUp, moveTextboxUp ] );
 
+	var upSceneOffset = function() {
+		return $( '#landing-screen' ).height() / 5;
+	};
+
 	var up = new ScrollMagic.Scene( {
 		triggerElement: '#landing-screen',
 		triggerHook: 'onEnter',
-		offset: $( '#landing-screen' ).height() / 5,
+		offset: upSceneOffset(),
 		duration: '80%'
 	} )
 	.setTween( upTweens );
+
+	$( window ).resize( function() {
+		up.offset( upSceneOffset() );
+	} );
 
 	var moveTextboxDown = TweenMax.to(
 		'#file-form',
