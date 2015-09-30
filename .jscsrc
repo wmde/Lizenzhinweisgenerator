@@ -28,7 +28,7 @@
 	},
 
 	"excludeFiles": [
-		"node_modules/**",
+		"**/node_modules/**",
 		"lib/**",
 		"**/*.min.js"
 	]
