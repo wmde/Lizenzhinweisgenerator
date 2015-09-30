@@ -1,6 +1,8 @@
 <?php
 namespace AttributionGenerator\Actions;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class FeedbackAction {
 	private $app;
 	private $errors = [];
@@ -47,9 +49,12 @@ class FeedbackAction {
 		if ( empty( $this->errors ) ) {
 			return json_encode( $this->success(), JSON_UNESCAPED_UNICODE );
 		} else {
-			return json_encode(
-				[ 'errors' => $this->errors ],
-				JSON_UNESCAPED_UNICODE
+			return new Response(
+				json_encode(
+					[ 'errors' => $this->errors ],
+					JSON_UNESCAPED_UNICODE
+				),
+				400
 			);
 		}
 	}

@@ -35,6 +35,7 @@ class FeedbackActionTest extends WebTestCase {
 			'feedback' => 'Yay!',
 		] );
 
+		$this->assertFalse( $client->getResponse()->isOk() );
 		$this->assertContains( 'Alle Felder des Feedback-Formulars müssen ausgefüllt werden', $client->getResponse()->getContent() );
 	}
 
@@ -44,6 +45,7 @@ class FeedbackActionTest extends WebTestCase {
 			'feedback' => '',
 		] );
 
+		$this->assertFalse( $client->getResponse()->isOk() );
 		$this->assertContains( 'Alle Felder des Feedback-Formulars müssen ausgefüllt werden', $client->getResponse()->getContent() );
 	}
 }
