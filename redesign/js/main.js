@@ -1,51 +1,57 @@
-( function( $ ) {
-	'use strict';
+'use strict';
 
-	var $howItWorks = $( '#how-it-works-screen' ),
-		$body = $( 'body' );
-	$( '#how-it-works-button' ).click( function() {
-		$howItWorks.show();
-		$body
-			.scrollTop( $howItWorks.height() )
-			.animate( {
-				scrollTop: 0
-			}, 700
-		);
-	} );
+var $ = require( 'jquery' );
+window.$ = window.jQuery = $; // needed for bootstrap
+require( 'bootstrap' );
+require( './scrolling_effects' );
+require( './background' );
 
-	$( '#how-it-works-screen .close' ).click( function() {
-		$body.animate(
-			{
-				scrollTop: $howItWorks.height()
-			},
-			700,
-			function() {
-				$howItWorks.hide();
-				$body.scrollTop( 0 );
-			}
-		);
-	} );
+var $howItWorks = $( '#how-it-works-screen' ),
+	$body = $( 'body' );
 
-	var bootstrapAlert = function( type, message ) {
-		$( '#alert-placeholder' ).html(
-			'<div class="alert ag-alert alert-'
-			+ type
-			+ ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'
-			+ message
-			+ '</span></div>'
-		);
-	};
+$( '#how-it-works-button' ).click( function() {
+	$howItWorks.show();
+	$body
+		.scrollTop( $howItWorks.height() )
+		.animate( {
+			scrollTop: 0
+		}, 700
+	);
+} );
 
-	var $feedbackForm = $( '#feedback-form' ),
-		baseUrl = '//' + location.host + location.pathname;
-	$feedbackForm.submit( function( e ) {
-		$.post(
-			baseUrl + '../backend/web/index.php/feedback',
-			{
-				name: $feedbackForm.find( 'input[name="name"]' ).val(),
-				feedback: $feedbackForm.find( 'textarea' ).val()
-			}
-		)
+$( '#how-it-works-screen .close' ).click( function() {
+	$body.animate(
+		{
+			scrollTop: $howItWorks.height()
+		},
+		700,
+		function() {
+			$howItWorks.hide();
+			$body.scrollTop( 0 );
+		}
+	);
+} );
+
+var bootstrapAlert = function( type, message ) {
+	$( '#alert-placeholder' ).html(
+		'<div class="alert ag-alert alert-'
+		+ type
+		+ ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'
+		+ message
+		+ '</span></div>'
+	);
+};
+
+var $feedbackForm = $( '#feedback-form' ),
+	baseUrl = '//' + location.host + location.pathname;
+$feedbackForm.submit( function( e ) {
+	$.post(
+		baseUrl + '../backend/web/index.php/feedback',
+		{
+			name: $feedbackForm.find( 'input[name="name"]' ).val(),
+			feedback: $feedbackForm.find( 'textarea' ).val()
+		}
+	)
 		.done( function( response ) {
 			bootstrapAlert( 'success', $.parseJSON( response ).message );
 			$( '#feedback-modal' ).modal( 'hide' );
@@ -60,6 +66,5 @@
 			}
 		} );
 
-		e.preventDefault();
-	} );
-}( jQuery ) );
+	e.preventDefault();
+} );
