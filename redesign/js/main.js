@@ -40,7 +40,7 @@
 		baseUrl = '//' + location.host + location.pathname;
 	$feedbackForm.submit( function( e ) {
 		$.post(
-			baseUrl + '../backend/web/feedback',
+			baseUrl + '../backend/web/index.php/feedback',
 			{
 				name: $feedbackForm.find( 'input[name="name"]' ).val(),
 				feedback: $feedbackForm.find( 'textarea' ).val()
