@@ -12,13 +12,6 @@
   "browser": {
     "scrollmagic-gsap": "scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap"
   },
-  "browserify-shim": {
-    "bootstrap": {
-      "depends": [
-        "jquery:jQuery"
-      ]
-    }
-  },
   "devDependencies": {
     "browserify": "^11.2.0",
     "uglify-js": "^2.4.24",
