@@ -4,11 +4,30 @@
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "build": "browserify js/main.js -o js/bundle.js"
+    "build": "browserify js/main.js | uglifyjs -c > js/bundle.min.js",
+    "watch": "watchify js/main.js -o js/bundle.min.js"
   },
   "author": "",
   "license": "GPL-2.0",
+  "browser": {
+    "scrollmagic-gsap": "scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap"
+  },
+  "browserify-shim": {
+    "bootstrap": {
+      "depends": [
+        "jquery:jQuery"
+      ]
+    }
+  },
   "devDependencies": {
-    "browserify": "^11.2.0"
+    "browserify": "^11.2.0",
+    "uglify-js": "^2.4.24",
+    "watchify": "^3.4.0"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "gsap": "^1.18.0",
+    "jquery": "^2.1.4",
+    "scrollmagic": "^2.0.5"
   }
 }
