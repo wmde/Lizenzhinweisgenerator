@@ -1,0 +1,14 @@
+{
+  "name": "attribution-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/main.js",
+  "scripts": {
+    "build": "browserify js/main.js -o js/bundle.js"
+  },
+  "author": "",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "browserify": "^11.2.0"
+  }
+}
