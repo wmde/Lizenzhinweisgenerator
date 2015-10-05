@@ -1,6 +1,9 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	FileForm = require('./app/FileForm');
+
+new FileForm($('#file-form'));
 window.$ = window.jQuery = $; // needed for bootstrap
 require( 'bootstrap' );
 require( './scrolling_effects' );
