@@ -2,9 +2,13 @@
  * @licence GNU GPL v3
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-var $ = require( 'jquery' ),
-	ApplicationError = require( './ApplicationError' );
+
 'use strict';
+
+var $ = require( 'jquery' ),
+	ApplicationError = require( './ApplicationError' ),
+	Asset = require( './Asset' ),
+	ImageInfo = require( './ImageInfo' );
 
 /**
  * Handler for simple file names.

@@ -5,8 +5,7 @@
 
 'use strict';
 
-var $ = require( 'jquery' ),
-	Author = require( './Author' );
+var $ = require( 'jquery' );
 
 /**
  * Represents an asset.

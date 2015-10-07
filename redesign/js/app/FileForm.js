@@ -5,12 +5,11 @@ var $ = require( 'jquery' ),
 	NoApi = require( './NoApi' ),
 	InputHandler = require( './InputHandler' ),
 	ApplicationError = require( './ApplicationError' ),
-	WikiAsset = require( './WikiAsset' );
+	WikiAsset = require( './WikiAsset' ),
+	config = require( '../config.json' );
 
 var FileForm = function( $node ) {
 	this._$node = $node;
-
-	$node.submit( $.proxy( this._submit, this ) );
 };
 
 $.extend( FileForm.prototype, {
@@ -18,6 +17,13 @@ $.extend( FileForm.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
+
+	/**
+	 * Initializes the submit event listener
+	 */
+	init: function() {
+		this._$node.submit( $.proxy( this._submit, this ) );
+	},
 
 	_submit: function( e ) {
 		e.preventDefault();
@@ -88,7 +94,7 @@ $.extend( FileForm.prototype, {
 						self._displayError( new ApplicationError( 'licence-not-recognized' ) );
 						return;
 					} else if(
-						$.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1
+						$.inArray( asset.getMediaType(), config.supportedMediaTypes ) === -1
 					) {
 						self._displayError( new ApplicationError( 'mediatype-unsupported' ) );
 						return;
@@ -111,7 +117,7 @@ $.extend( FileForm.prototype, {
 	 */
 	_displayError: function( error ) {
 		// FIXME: Use the bootstrap error thing.
-		alert( error.getMessage() );
+		console.log( error.getMessage() );
 	},
 
 	/**

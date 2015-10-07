@@ -7,7 +7,8 @@
 var $ = require( 'jquery' ),
 	config = require( '../config.json' ),
 	ImageInfo = require( './ImageInfo' ),
-	WikiAssetPage = require( './WikiAssetPage' );
+	WikiAssetPage = require( './WikiAssetPage' ),
+	ApplicationError = require( './ApplicationError' );
 
 /**
  * Commons API Handler.
@@ -48,7 +49,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {Asset}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	getAsset: function( prefixedFilename, wikiUrl ) {
 		var self = this,
@@ -93,7 +94,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {jQuery} Page content DOM
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_getPageContent: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -104,7 +105,7 @@ $.extend( Api.prototype, {
 		} )
 			.done( function( page, ajaxOptions ) {
 				if( !page.revisions || page.revisions.length === 0 || !page.revisions[ 0 ][ '*' ] ) {
-					deferred.reject( new AjaxError( 'revision-invalid', ajaxOptions ) );
+					deferred.reject( new ApplicationError( 'revision-invalid' ) );
 					return;
 				}
 
@@ -126,7 +127,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {string[]}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_getPageTemplates: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -137,7 +138,7 @@ $.extend( Api.prototype, {
 		} )
 			.done( function( page, ajaxOptions ) {
 				if( !page.templates ) {
-					deferred.reject( new AjaxError( 'templates-missing', ajaxOptions ) );
+					deferred.reject( new ApplicationError( 'templates-missing' ) );
 					return;
 				}
 
@@ -165,7 +166,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {ImageInfo}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	getImageInfo: function( prefixedFilename, size, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -177,7 +178,7 @@ $.extend( Api.prototype, {
 		} )
 			.done( function( page, ajaxOptions ) {
 				if( !page.imageinfo || page.imageinfo[ 0 ].length === 0 ) {
-					deferred.reject( new AjaxError( 'imageinfo-missing', ajaxOptions ) );
+					deferred.reject( new ApplicationError( 'imageinfo-missing' ) );
 					return;
 				}
 				deferred.resolve( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[ 0 ] ) );
@@ -198,7 +199,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {Object}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_getMetaData: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -222,7 +223,7 @@ $.extend( Api.prototype, {
 					return;
 				}
 
-				deferred.reject( new AjaxError( 'mediatype-missing', ajaxOptions ) );
+				deferred.reject( new ApplicationError( 'mediatype-missing' ) );
 			} )
 			.fail( function( error ) {
 				deferred.reject( error );
@@ -244,7 +245,7 @@ $.extend( Api.prototype, {
 	 *         - {ImageInfo[]|string}
 	 *         - {string}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	getWikipediaPageImageInfo: function( title, wikiUrl ) {
 		var self = this,
@@ -287,7 +288,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {string[]}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_getWikipediaPageImages: function( title, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -324,7 +325,7 @@ $.extend( Api.prototype, {
 	 *         Resolved parameters:
 	 *         - {ImageInfo[]}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_getWikipediaImageInfos: function( imageTitles, wikiUrl ) {
 		var deferred = $.Deferred();
@@ -375,7 +376,7 @@ $.extend( Api.prototype, {
 	 *         - {Object[]}
 	 *         - {Object} Options $.ajax() has been initiated with
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_query: function( title, property, wikiUrl, params ) {
 		var deferred = $.Deferred();
@@ -398,7 +399,7 @@ $.extend( Api.prototype, {
 		$.ajax( ajaxOptions )
 			.done( function( response ) {
 				if( response.query === undefined || response.query.pages === undefined ) {
-					deferred.reject( new AjaxError( 'response-unexpected', ajaxOptions ) );
+					deferred.reject( new ApplicationError( 'response-unexpected' ) );
 					return;
 				}
 
@@ -423,15 +424,15 @@ $.extend( Api.prototype, {
 				} else if( pages.length > 0 ) {
 					deferred.resolve( pages, ajaxOptions );
 				} else if( errorCode ) {
-					deferred.reject( new AjaxError( errorCode, ajaxOptions ) );
+					deferred.reject( new ApplicationError( errorCode ) );
 				} else {
-					deferred.reject( new AjaxError( 'response-corrupted', ajaxOptions ) );
+					deferred.reject( new ApplicationError( 'response-corrupted' ) );
 				}
 			} )
 			.fail( function() {
 				// Since there is no error handling for jsonp requests, the error is a timeout in any
 				// and it does not make any sense to analyze the jqXHR object.
-				deferred.reject( new AjaxError( '*', ajaxOptions ) );
+				deferred.reject( new ApplicationError( '*' ) );
 			} );
 
 		return deferred.promise();
