@@ -3,7 +3,7 @@
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 var $ = require( 'jquery' ),
-	ApplicationError = require('./ApplicationError');
+	ApplicationError = require( './ApplicationError' );
 'use strict';
 
 /**

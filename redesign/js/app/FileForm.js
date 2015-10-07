@@ -41,7 +41,7 @@ $.extend( FileForm.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-		if ( !input.match( /wiki(m|p)edia\.org/ ) ) {
+		if( !input.match( /wiki(m|p)edia\.org/ ) ) {
 			this._api = new NoApi();
 		} else {
 			this._api = new Api( 'https://commons.wikimedia.org/' );
@@ -50,7 +50,7 @@ $.extend( FileForm.prototype, {
 
 		this._inputHandler.getFilename( input )
 			.done( function( filenameOrImageInfos, wikiUrl ) {
-				if ( typeof filenameOrImageInfos === 'string' ) {
+				if( typeof filenameOrImageInfos === 'string' ) {
 					self._processFilename( filenameOrImageInfos, wikiUrl );
 					deferred.resolve( filenameOrImageInfos );
 				} else {
@@ -80,14 +80,14 @@ $.extend( FileForm.prototype, {
 
 		self._api.getAsset( prefixedFilename, wikiUrl )
 			.done( function( asset ) {
-				if ( asset instanceof WikiAsset ) {
-					if ( asset.getLicence() !== null && asset.getLicence().isInGroup( 'unsupported' ) ) {
+				if( asset instanceof WikiAsset ) {
+					if( asset.getLicence() !== null && asset.getLicence().isInGroup( 'unsupported' ) ) {
 						self._displayError( new ApplicationError( 'licence-unsupported' ) );
 						return;
-					} else if ( asset.getLicence() === null ) {
+					} else if( asset.getLicence() === null ) {
 						self._displayError( new ApplicationError( 'licence-not-recognized' ) );
 						return;
-					} else if (
+					} else if(
 						$.inArray( asset.getMediaType(), config.custom.supportedMediaTypes ) === -1
 					) {
 						self._displayError( new ApplicationError( 'mediatype-unsupported' ) );

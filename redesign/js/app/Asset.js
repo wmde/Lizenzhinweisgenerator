@@ -5,8 +5,8 @@
 
 'use strict';
 
-var $ = require('jquery' ),
-	Author = require('./Author' );
+var $ = require( 'jquery' ),
+	Author = require( './Author' );
 
 /**
  * Represents an asset.
@@ -203,17 +203,17 @@ $.extend( Asset.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
-		if( this._imageInfo[imageSize] ) {
-			deferred.resolve( this._imageInfo[imageSize] );
+		if( this._imageInfo[ imageSize ] ) {
+			deferred.resolve( this._imageInfo[ imageSize ] );
 		} else {
 			this._api.getImageInfo( this._filename, imageSize, this._wikiUrl )
-			.done( function( imageInfo ) {
-				self._imageInfo[imageSize] = imageInfo;
-				deferred.resolve( imageInfo );
-			} )
-			.fail( function( error ) {
-				deferred.reject( error );
-			} );
+				.done( function( imageInfo ) {
+					self._imageInfo[ imageSize ] = imageInfo;
+					deferred.resolve( imageInfo );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
 		}
 
 		return deferred.promise();
@@ -233,7 +233,7 @@ $.extend( Asset.prototype, {
 		}
 
 		for( var i = 0; i < this._authors.length; i++ ) {
-			if( authors[i].getText() !== this._authors[i].getText() ) {
+			if( authors[ i ].getText() !== this._authors[ i ].getText() ) {
 				return false;
 			}
 		}

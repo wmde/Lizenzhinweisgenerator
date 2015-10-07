@@ -213,7 +213,7 @@ $.extend( Api.prototype, {
 					return;
 				}
 
-				for ( var i = 0; i < page.imageinfo.length; i++ ) {
+				for( var i = 0; i < page.imageinfo.length; i++ ) {
 					var metaData = page.imageinfo[ i ];
 					if( metaData.mediatype ) {
 						metaData.mediatype = metaData.mediatype.toLowerCase();
@@ -302,7 +302,7 @@ $.extend( Api.prototype, {
 			.done( function( page ) {
 				var imageTitles = [];
 
-				for ( var i = 0; i < page.images.length; i++ ) {
+				for( var i = 0; i < page.images.length; i++ ) {
 					imageTitles.push( page.images[ i ].title );
 				}
 

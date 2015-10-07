@@ -4,8 +4,8 @@
  */
 'use strict';
 
-var $ = require('jquery' ),
-	ApplicationError = require('./ApplicationError');
+var $ = require( 'jquery' ),
+	ApplicationError = require( './ApplicationError' );
 
 /**
  * Returns a filename by analyzing input.
@@ -49,18 +49,18 @@ $.extend( InputHandler.prototype, {
 
 		if( input instanceof $.Event ) {
 			this._getUrlFromEvent( input )
-			.done( function( url ) {
-				self._evaluate( url )
-				.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
-					deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
+				.done( function( url ) {
+					self._evaluate( url )
+						.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
+							deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
+						} )
+						.fail( function( error ) {
+							deferred.reject( error );
+						} );
 				} )
 				.fail( function( error ) {
 					deferred.reject( error );
 				} );
-			} )
-			.fail( function( error ) {
-				deferred.reject( error );
-			} );
 		} else if( typeof input === 'string' ) {
 			return this._evaluate( input );
 		} else {
@@ -90,10 +90,10 @@ $.extend( InputHandler.prototype, {
 
 		if(
 			event.dataTransfer.items !== undefined
-			&& event.dataTransfer.items[0] !== undefined
-			&& event.dataTransfer.items[0].getAsString !== undefined
+			&& event.dataTransfer.items[ 0 ] !== undefined
+			&& event.dataTransfer.items[ 0 ].getAsString !== undefined
 		) {
-			event.dataTransfer.items[0].getAsString( function( url ) {
+			event.dataTransfer.items[ 0 ].getAsString( function( url ) {
 				deferred.resolve( url );
 			} );
 		} else {
@@ -125,7 +125,7 @@ $.extend( InputHandler.prototype, {
 		if(
 			url.indexOf( '.wikipedia.org/w' ) !== -1
 			|| url.indexOf( 'upload.wikimedia.org/wikipedia/' ) !== -1
-				&& url.indexOf( '/wikipedia/commons/' ) === -1
+			&& url.indexOf( '/wikipedia/commons/' ) === -1
 		) {
 			return this._getWikipediaPageImagesFileInfo( url );
 		} else if( url.indexOf( '.wikimedia.org/' ) !== -1 ) {
@@ -192,7 +192,7 @@ $.extend( InputHandler.prototype, {
 
 		if( url.indexOf( 'title=' ) !== -1 ) {
 			matches = url.match( /title=([^&]+)/i );
-			return matches[1];
+			return matches[ 1 ];
 		}
 
 		key = 'wiki/';
@@ -204,8 +204,8 @@ $.extend( InputHandler.prototype, {
 
 		segments = url.split( '/' );
 		return ( $.inArray( 'thumb', segments ) !== -1 )
-			? segments[segments.length - 2]
-			: segments[segments.length - 1];
+			? segments[ segments.length - 2 ]
+			: segments[ segments.length - 1 ];
 	},
 
 	/**
@@ -227,20 +227,20 @@ $.extend( InputHandler.prototype, {
 			title = this._extractPageTitle( url );
 		} else if( regExp0.test( url ) ) {
 			matches = url.match( regExp0 );
-			var domain = ( matches[1] === 'commons' ) ? 'wikimedia' : 'wikipedia';
-			wikiUrl = 'https://' + matches[1] + '.' + domain + '.org/';
+			var domain = ( matches[ 1 ] === 'commons' ) ? 'wikimedia' : 'wikipedia';
+			wikiUrl = 'https://' + matches[ 1 ] + '.' + domain + '.org/';
 			title = this._extractPageTitle( url );
 		} else if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
-			wikiUrl = 'https://' + matches[1] + '/';
+			wikiUrl = 'https://' + matches[ 1 ] + '/';
 
 			title = url.indexOf( 'title=' ) !== -1
-				? url.match( /title=([^&]+)/i )[1]
+				? url.match( /title=([^&]+)/i )[ 1 ]
 				: this._extractPageTitle( url.replace( /\?.+$/, '' ), false );
 
 		} else if( regExp2.test( url ) ) {
 			matches = url.match( regExp2 );
-			wikiUrl = 'https://' + matches[1] + '.wikipedia.org/';
+			wikiUrl = 'https://' + matches[ 1 ] + '.wikipedia.org/';
 			title = this._extractPageTitle( url );
 		}
 
@@ -275,19 +275,19 @@ $.extend( InputHandler.prototype, {
 		}
 
 		this._api.getWikipediaPageImageInfo( decodeURI( urlInfo.title ), wikiUrl )
-		.done( function( prefixedFilenameOrImageInfos, url ) {
-			// Overwrite initial information if the asset is not stored in the local Wiki:
-			var evaluatedUrlInfo = self._splitUrl( url );
-			if( evaluatedUrlInfo.wikiUrl !== wikiUrl ) {
-				urlInfo = self._splitUrl( url );
-				deferred.resolve( urlInfo.title, urlInfo.wikiUrl );
-			} else {
-				deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
-			}
-		} )
-		.fail( function( error ) {
-			deferred.reject( error );
-		} );
+			.done( function( prefixedFilenameOrImageInfos, url ) {
+				// Overwrite initial information if the asset is not stored in the local Wiki:
+				var evaluatedUrlInfo = self._splitUrl( url );
+				if( evaluatedUrlInfo.wikiUrl !== wikiUrl ) {
+					urlInfo = self._splitUrl( url );
+					deferred.resolve( urlInfo.title, urlInfo.wikiUrl );
+				} else {
+					deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
+				}
+			} )
+			.fail( function( error ) {
+				deferred.reject( error );
+			} );
 
 		return deferred.promise();
 	}

@@ -4,8 +4,8 @@
  */
 /* jshint strict: false */
 
-var $ = require('jquery' ),
-	Asset = require('./Asset' );
+var $ = require( 'jquery' ),
+	Asset = require( './Asset' );
 
 /**
  * Represents an asset.
@@ -24,8 +24,7 @@ var $ = require('jquery' ),
  * @throws {Error} if a required parameter is not defined.
  */
 var WikiAsset = $.extend( Asset, {
-	constructor: function(
-		filename,
+	constructor: function( filename,
 		mediaType,
 		licence,
 		title,
@@ -33,8 +32,7 @@ var WikiAsset = $.extend( Asset, {
 		url,
 		$attribution,
 		api,
-		wikiUrl
-	) {
+		wikiUrl ) {
 		this._wikiUrl = wikiUrl || null;
 	},
 

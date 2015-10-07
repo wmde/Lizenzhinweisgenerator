@@ -23,11 +23,11 @@ var $ = require( 'jquery' ),
  * @throws {Error} if a required parameter is not specified.
  */
 var WikiAssetPage = function( prefixedFilename,
-							  mediaType,
-							  $dom,
-							  templates,
-							  api,
-							  wikiUrl ) {
+	mediaType,
+	$dom,
+	templates,
+	api,
+	wikiUrl ) {
 	if( !prefixedFilename || !mediaType || !$dom || !templates || !api ) {
 		throw new Error( 'Unable to instantiate object' );
 	}
@@ -208,7 +208,7 @@ $.extend( WikiAssetPage.prototype, {
 			$nodes = $nodes.not( $nodes.eq( 0 ) );
 		}
 
-		while ( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
+		while( $.trim( $nodes.eq( $nodes.length - 1 ).text() ) === '' ) {
 			$nodes = $nodes.not( $nodes.eq( $nodes.length - 1 ) );
 		}
 
