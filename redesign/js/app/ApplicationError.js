@@ -35,7 +35,7 @@ $.extend( ApplicationError.prototype, {
 	 */
 	getMessage: function() {
 		// FIXME: make this work with the i18n error messages
-		return 'Error.';
+		return 'Error: ' + this._code;
 	}
 
 } );
