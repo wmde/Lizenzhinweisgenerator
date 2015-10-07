@@ -6,7 +6,8 @@
 
 var $ = require( 'jquery' ),
 	config = require( '../config.json' ),
-	ImageInfo = require( './ImageInfo' );
+	ImageInfo = require( './ImageInfo' ),
+	WikiAssetPage = require( './WikiAssetPage' );
 
 /**
  * Commons API Handler.

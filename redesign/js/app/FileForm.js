@@ -3,7 +3,9 @@
 var $ = require( 'jquery' ),
 	Api = require( './Api' ),
 	NoApi = require( './NoApi' ),
-	InputHandler = require( './InputHandler' );
+	InputHandler = require( './InputHandler' ),
+	ApplicationError = require( './ApplicationError' ),
+	WikiAsset = require( './WikiAsset' );
 
 var FileForm = function( $node ) {
 	this._$node = $node;
