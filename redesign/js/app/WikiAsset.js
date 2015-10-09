@@ -32,7 +32,7 @@ var WikiAsset = function( filename,
 	$attribution,
 	api,
 	wikiUrl ) {
-	Asset.call(this, filename, mediaType, licence, title, authors, url, $attribution, api);
+	Asset.call( this, filename, mediaType, licence, title, authors, url, $attribution, api );
 	this._wikiUrl = wikiUrl || null;
 };
 
