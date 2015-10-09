@@ -5,6 +5,7 @@
   "main": "js/main.js",
   "scripts": {
     "build": "browserify js/main.js | uglifyjs -c > js/bundle.min.js",
+    "build-test": "browserify tests/tests.js > tests/tests.bundle.js",
     "watch": "watchify js/main.js -o js/bundle.min.js"
   },
   "author": "",
@@ -14,6 +15,7 @@
   },
   "devDependencies": {
     "browserify": "^11.2.0",
+    "qunitjs": "^1.19.0",
     "uglify-js": "^2.4.24",
     "watchify": "^3.4.0"
   },
