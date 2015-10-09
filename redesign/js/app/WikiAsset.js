@@ -23,18 +23,20 @@ var $ = require( 'jquery' ),
  *
  * @throws {Error} if a required parameter is not defined.
  */
-var WikiAsset = $.extend( Asset, {
-	constructor: function( filename,
-		mediaType,
-		licence,
-		title,
-		authors,
-		url,
-		$attribution,
-		api,
-		wikiUrl ) {
-		this._wikiUrl = wikiUrl || null;
-	},
+var WikiAsset = function( filename,
+	mediaType,
+	licence,
+	title,
+	authors,
+	url,
+	$attribution,
+	api,
+	wikiUrl ) {
+	Asset.call(this, filename, mediaType, licence, title, authors, url, $attribution, api);
+	this._wikiUrl = wikiUrl || null;
+};
+
+$.extend( WikiAsset.prototype, Asset.prototype, {
 
 	/**
 	 * @type {string}
