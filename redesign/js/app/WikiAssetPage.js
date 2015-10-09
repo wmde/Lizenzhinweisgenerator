@@ -7,7 +7,10 @@
 
 var $ = require( 'jquery' ),
 	Author = require( './Author' ),
-	WikiAsset = require( './WikiAsset' );
+	WikiAsset = require( './WikiAsset' ),
+	LicenceStore = require( './LicenceStore' ),
+	LICENCES = require( './LICENCES' ),
+	licenceStore = new LicenceStore( LICENCES );
 
 /**
  * Represents a Commons asset page.
@@ -105,7 +108,7 @@ $.extend( WikiAssetPage.prototype, {
 	},
 
 	_detectLicence: function() {
-		return null; // FIXME: determine the actual licence...
+		return licenceStore.detectLicence( this._templates );
 	},
 
 	/**
