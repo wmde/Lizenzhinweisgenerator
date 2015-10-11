@@ -5,10 +5,8 @@
 
 'use strict';
 
-var QUnit = require( 'qunitjs' ),
-	$ = require( 'jquery' ),
+var $ = require( 'jquery' ),
 	Api = require( '../../js/app/Api' ),
-	Author = require( '../../js/app/Author' ),
 	testAssets = require( '../assets' ),
 	WikiAsset = require( '../../js/app/WikiAsset' );
 
