@@ -9,6 +9,9 @@ var $ = require( 'jquery' ),
 	config = require( '../config.json' ),
 	ImageSuggestionView = require( './views/ImageSuggestionView' );
 
+window.jQuery = $; // needed for justifiedGallery
+require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
+
 var FileForm = function( $node, $resultsPage ) {
 	this._$node = $node;
 	this._$resultsPage = $resultsPage;
@@ -137,6 +140,8 @@ $.extend( FileForm.prototype, {
 		$.each( imageInfos, function( _, image ) {
 			self._$resultsPage.append( new ImageSuggestionView( image ).render() );
 		} );
+
+		this._$resultsPage.justifiedGallery( { margins: 3, rowHeight: 200 } );
 	}
 } );
 
