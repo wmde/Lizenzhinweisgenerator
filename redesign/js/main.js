@@ -1,10 +1,15 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	FileForm = require( './app/FileForm' );
+
 window.$ = window.jQuery = $; // needed for bootstrap
 require( 'bootstrap' );
 require( './scrolling_effects' );
 require( './background' );
+
+var fileForm = new FileForm( $( '#file-form' ) );
+fileForm.init();
 
 var $howItWorks = $( '#how-it-works-screen' ),
 	$body = $( 'body' );

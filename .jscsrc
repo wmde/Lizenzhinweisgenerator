@@ -30,6 +30,7 @@
 	"excludeFiles": [
 		"**/node_modules/**",
 		"lib/**",
-		"**/*.min.js"
+		"**/*.min.js",
+		"**/*.bundle.js"
 	]
 }
