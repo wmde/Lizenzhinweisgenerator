@@ -12,7 +12,7 @@ var $ = require( 'jquery' ),
 
 QUnit.module( 'InputHandler' );
 
-var api = new LocalApi( 'fixtures' );
+var api = new LocalApi( '../../tests/fixtures' );
 
 var testCases = [
 	{
@@ -227,10 +227,10 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 					+ 'input "' + currentInput + '".'
 				);
 			} )
-			.fail( function( message ) {
+			.fail( function( error ) {
 				assert.ok(
 					false,
-					'Parsing input "' + currentInput + '" failed with message "' + message
+					'Parsing input "' + currentInput + '" failed with message "' + error.getMessage()
 					+ '".'
 				);
 			} )
