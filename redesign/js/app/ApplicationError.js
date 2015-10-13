@@ -4,7 +4,8 @@
  */
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	Messages = require( './Messages' );
 
 /**
  * Application Error
@@ -34,8 +35,7 @@ $.extend( ApplicationError.prototype, {
 	 * @return {string}
 	 */
 	getMessage: function() {
-		// FIXME: make this work with the i18n error messages
-		return 'Error: ' + this._code;
+		return Messages.t( 'error.' + this._code );
 	}
 
 } );
