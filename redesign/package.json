@@ -23,6 +23,7 @@
     "bootstrap": "^3.3.5",
     "gsap": "^1.18.0",
     "jquery": "^2.1.4",
+    "node-polyglot": "^0.4.3",
     "scrollmagic": "^2.0.5"
   }
 }
