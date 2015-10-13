@@ -4,9 +4,9 @@
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "build": "browserify js/main.js | uglifyjs -c > js/bundle.min.js",
+    "build": "browserify -t hbsfy js/main.js | uglifyjs -c > js/bundle.min.js",
     "build-test": "browserify tests/tests.js > tests/tests.bundle.js",
-    "watch": "watchify js/main.js -o js/bundle.min.js"
+    "watch": "watchify -t hbsfy js/main.js -o js/bundle.min.js"
   },
   "author": "",
   "license": "GPL-2.0",
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "browserify": "^11.2.0",
+    "hbsfy": "^2.4.1",
     "qunitjs": "^1.19.0",
     "uglify-js": "^2.4.24",
     "watchify": "^3.4.0"
@@ -22,6 +23,7 @@
   "dependencies": {
     "bootstrap": "^3.3.5",
     "gsap": "^1.18.0",
+    "handlebars": "^4.0.3",
     "jquery": "^2.1.4",
     "node-polyglot": "^0.4.3",
     "scrollmagic": "^2.0.5"
