@@ -194,10 +194,9 @@ a:hover {
   min-height: 100vh;
   height: auto;
 }
-#results-screen .image-suggestion {
-  padding: 5px;
-  border: 3px solid #fff;
+#results-screen a {
+  box-sizing: border-box;
 }
-#results-screen .image-suggestion:hover {
-  border-color: #ff0000;
+#results-screen a:hover {
+  border: 3px solid #f00;
 }
