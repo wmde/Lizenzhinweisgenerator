@@ -1,5 +1,6 @@
 body {
   font-size: 14.5pt;
+  padding-bottom: 42px;
 }
 
 .display-none {
@@ -189,6 +190,10 @@ a:hover {
   padding: 6px 15px;
 }
 
+#results-screen {
+  min-height: 100vh;
+  height: auto;
+}
 #results-screen .image-suggestion {
   padding: 5px;
   border: 3px solid #fff;
