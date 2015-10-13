@@ -178,6 +178,7 @@ a:hover {
   bottom: 0;
   width: 100%;
   text-align: right;
+  z-index: 1;
 }
 .bottom-menu li {
   list-style-type: none;
