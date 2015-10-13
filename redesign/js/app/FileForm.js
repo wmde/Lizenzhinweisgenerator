@@ -6,10 +6,12 @@ var $ = require( 'jquery' ),
 	InputHandler = require( './InputHandler' ),
 	ApplicationError = require( './ApplicationError' ),
 	WikiAsset = require( './WikiAsset' ),
-	config = require( '../config.json' );
+	config = require( '../config.json' ),
+	ImageSuggestionView = require( './views/ImageSuggestionView' );
 
-var FileForm = function( $node ) {
+var FileForm = function( $node, $resultsPage ) {
 	this._$node = $node;
+	this._$resultsPage = $resultsPage;
 };
 
 $.extend( FileForm.prototype, {
@@ -17,6 +19,11 @@ $.extend( FileForm.prototype, {
 	 * @type {jQuery}
 	 */
 	_$node: null,
+
+	/**
+	 * @type {jQuery}
+	 */
+	_$resultsPage: null,
 
 	/**
 	 * Initializes the submit event listener
@@ -126,8 +133,10 @@ $.extend( FileForm.prototype, {
 	 * @param {ImageInfo[]} imageInfos
 	 */
 	_renderSuggestions: function( imageInfos ) {
-		// FIXME: Render images here
-		console.log( imageInfos );
+		var self = this;
+		$.each( imageInfos, function( _, image ) {
+			self._$resultsPage.append( new ImageSuggestionView( image ).render() );
+		} );
 	}
 } );
 
