@@ -8,7 +8,7 @@ require( 'bootstrap' );
 require( './scrolling_effects' );
 require( './background' );
 
-var fileForm = new FileForm( $( '#file-form' ) );
+var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
 fileForm.init();
 
 var $howItWorks = $( '#how-it-works-screen' ),
