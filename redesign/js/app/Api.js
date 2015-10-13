@@ -432,7 +432,7 @@ $.extend( Api.prototype, {
 			.fail( function() {
 				// Since there is no error handling for jsonp requests, the error is a timeout in any
 				// and it does not make any sense to analyze the jqXHR object.
-				deferred.reject( new ApplicationError( '*' ) );
+				deferred.reject( new ApplicationError( 'generic-error' ) );
 			} );
 
 		return deferred.promise();
