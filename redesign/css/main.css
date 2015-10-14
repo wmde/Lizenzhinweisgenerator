@@ -2,6 +2,10 @@ body {
   font-size: 14.5pt;
   padding-bottom: 42px;
 }
+textarea, input {
+  outline: 0;
+  box-shadow: 0;
+}
 
 .display-none {
   display: none;
