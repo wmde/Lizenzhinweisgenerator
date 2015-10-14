@@ -159,6 +159,8 @@ $.extend( FileForm.prototype, {
 	 */
 	_renderSuggestions: function( imageInfos ) {
 		var self = this;
+
+		this._$resultsPage.html( '' );
 		$.each( imageInfos, function( _, image ) {
 			self._$resultsPage.append( new ImageSuggestionView( image ).render() );
 		} );
