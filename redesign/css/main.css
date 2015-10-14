@@ -2,6 +2,11 @@ body {
   font-size: 14.5pt;
   padding-bottom: 42px;
 }
+textarea, input, .form-control:focus {
+  outline: 0;
+  box-shadow: 0;
+  -webkit-box-shadow: none;
+}
 
 .display-none {
   display: none;

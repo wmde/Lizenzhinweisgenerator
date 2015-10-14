@@ -41,6 +41,17 @@ $.extend( FileForm.prototype, {
 	},
 
 	/**
+	 * Smoothly scrolls down to the results page
+	 */
+	_scrollToResults: function() {
+		var inputHeight = 42;
+
+		$( 'body' ).animate( {
+			scrollTop: this._$resultsPage.offset().top - 3 * inputHeight
+		}, 700 );
+	},
+
+	/**
 	 * Evaluates any given input using the input handler.
 	 *
 	 * @param {string} input
@@ -70,7 +81,7 @@ $.extend( FileForm.prototype, {
 					self._processFilename( filenameOrImageInfos, wikiUrl );
 					deferred.resolve( filenameOrImageInfos );
 				} else {
-					self._renderSuggestions( filenameOrImageInfos );
+					self._showResults( filenameOrImageInfos );
 				}
 			} )
 			.fail( function( error ) {
@@ -81,6 +92,17 @@ $.extend( FileForm.prototype, {
 			} );
 
 		return deferred;
+	},
+
+	/**
+	 * Starts the results animation and renders the picture selection
+	 *
+	 * @param {ImageInfo[]} imageInfos
+	 */
+	_showResults: function( imageInfos ) {
+		this._$node.find( 'input' ).val( '' );
+		this._scrollToResults();
+		this._renderSuggestions( imageInfos );
 	},
 
 	/**
