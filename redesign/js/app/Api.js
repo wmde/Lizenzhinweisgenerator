@@ -338,7 +338,6 @@ $.extend( Api.prototype, {
 		var params = {
 			iiprop: 'url',
 			iilimit: 1,
-			iiurlwidth: 300,
 			iiurlheight: 300
 		};
 
