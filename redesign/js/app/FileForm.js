@@ -100,7 +100,6 @@ $.extend( FileForm.prototype, {
 	 * @param {ImageInfo[]} imageInfos
 	 */
 	_showResults: function( imageInfos ) {
-		this._$node.find( 'input' ).val( '' );
 		this._scrollToResults();
 		this._renderSuggestions( imageInfos );
 	},
