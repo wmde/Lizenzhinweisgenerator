@@ -20,11 +20,13 @@ body {
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  background: transparent;
 }
 .ag-modal .modal-header {
   height: 42px;
   text-align: center;
   background-color: #97b314;
+  border-radius: 3px 3px 0 0;
   color: #fff;
   padding: 0;
 }
@@ -43,12 +45,16 @@ body {
 .ag-modal .modal-body {
   padding: 10% 15%;
 }
+.ag-modal .modal-body, .ag-modal .modal-footer {
+  background: #fff;
+}
 
 .green-btn {
   background-color: #97b314;
   color: #fff;
   padding: 5px 15px;
   height: 42px;
+  border-radius: 3px;
   border: 0;
 }
 .green-btn:hover {
@@ -112,6 +118,7 @@ a:hover {
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.25);
   padding: 20px 25px;
+  border-radius: 3px;
 }
 .heading h1, .heading h2 {
   padding: 0;
@@ -140,6 +147,7 @@ a:hover {
   padding: 0 5px 0 20px;
   bottom: 62px;
   position: absolute;
+  border-radius: 0 3px 3px 0;
 }
 
 #file-form {
@@ -160,6 +168,10 @@ a:hover {
   width: 680px;
   padding: 6px 12px;
   border: 0;
+  border-radius: 3px 0 0 3px;
+}
+#file-form button {
+  border-radius: 0 3px 3px 0;
 }
 #file-form ::-moz-placeholder {
   color: #777;
