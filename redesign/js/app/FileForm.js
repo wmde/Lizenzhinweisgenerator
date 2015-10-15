@@ -151,7 +151,7 @@ $.extend( FileForm.prototype, {
 	_showAsset: function( asset ) {
 		var self = this;
 
-		asset.getImageInfo()
+		asset.getImageInfo(400)
 			.done( function( imageInfo ) {
 				var dialogue = new Dialogue( asset, imageInfo );
 				self._$resultsPage.after( dialogue.show() );

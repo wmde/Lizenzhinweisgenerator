@@ -15,7 +15,7 @@ $.extend( DialogueView.prototype, {
 
 	render: function() {
 		return template( {
-			image: this._imageInfo.getUrl()
+			image: this._imageInfo.getThumbnail().url
 		} );
 	}
 } );
