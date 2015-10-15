@@ -37,8 +37,10 @@ $.extend( FileForm.prototype, {
 	},
 
 	_submit: function( e ) {
-		e.preventDefault();
+		this._$resultsPage.hide();
+		this._$resultsPage.hide();
 		this._evaluateInput( this._$node.find( 'input' ).val() );
+		e.preventDefault();
 	},
 
 	/**
@@ -46,9 +48,12 @@ $.extend( FileForm.prototype, {
 	 */
 	_scrollToResults: function() {
 		var inputHeight = 42;
+		this._scrollTo( this._$resultsPage.offset().top - 3 * inputHeight );
+	},
 
+	_scrollTo: function( position ) {
 		$( 'body' ).animate( {
-			scrollTop: this._$resultsPage.offset().top - 3 * inputHeight
+			scrollTop: position
 		}, 700 );
 	},
 
@@ -101,6 +106,7 @@ $.extend( FileForm.prototype, {
 	 * @param {ImageInfo[]} imageInfos
 	 */
 	_showResults: function( imageInfos ) {
+		this._$resultsPage.show();
 		this._scrollToResults();
 		this._renderSuggestions( imageInfos );
 	},
@@ -153,8 +159,9 @@ $.extend( FileForm.prototype, {
 
 		asset.getImageInfo( 400 )
 			.done( function( imageInfo ) {
-				var dialogue = new Dialogue( asset, imageInfo );
-				self._$resultsPage.after( dialogue.show() );
+				var $dialogue = $( new Dialogue( asset, imageInfo ).show() );
+				self._$resultsPage.after( $dialogue );
+				self._scrollTo( $dialogue.offset().top );
 			} )
 			.fail( function( error ) {
 				self._displayError( error );
