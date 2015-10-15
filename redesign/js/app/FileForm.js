@@ -151,7 +151,7 @@ $.extend( FileForm.prototype, {
 	_showAsset: function( asset ) {
 		var self = this;
 
-		asset.getImageInfo(400)
+		asset.getImageInfo( 400 )
 			.done( function( imageInfo ) {
 				var dialogue = new Dialogue( asset, imageInfo );
 				self._$resultsPage.after( dialogue.show() );
@@ -181,10 +181,25 @@ $.extend( FileForm.prototype, {
 
 		this._$resultsPage.html( '' );
 		$.each( imageInfos, function( _, image ) {
-			self._$resultsPage.append( new ImageSuggestionView( image ).render() );
+			self._appendSuggestion( image );
 		} );
 
 		this._$resultsPage.justifiedGallery( { margins: 3, rowHeight: 200 } );
+	},
+
+	/**
+	 * Appends a suggestion to the $_resultsPage
+	 * @param imageInfo
+	 */
+	_appendSuggestion: function( imageInfo ) {
+		var $suggestion = $( new ImageSuggestionView( imageInfo ).render() ),
+			self = this;
+
+		$suggestion.on( 'click', function( e ) {
+			self._evaluateInput( imageInfo.getDescriptionUrl() );
+			e.preventDefault();
+		} );
+		self._$resultsPage.append( $suggestion );
 	}
 } );
 
