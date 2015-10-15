@@ -217,3 +217,20 @@ a:hover {
 #results-screen a:hover {
   border: 3px solid #f00;
 }
+
+.dialogue-screen {
+  overflow: hidden;
+}
+.dialogue-screen .dialogue {
+  float: left;
+}
+.dialogue-screen .image-wrapper {
+  width: 40vw;
+  float: left;
+  background-color: rgb(238, 242, 244);
+  text-align: right;
+}
+.dialogue-screen .image-preview {
+  border-bottom: 99999px solid rgb(221, 229, 233);
+  max-width: 100%;
+}

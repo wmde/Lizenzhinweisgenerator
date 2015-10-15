@@ -7,7 +7,8 @@ var $ = require( 'jquery' ),
 	ApplicationError = require( './ApplicationError' ),
 	WikiAsset = require( './WikiAsset' ),
 	config = require( '../config.json' ),
-	ImageSuggestionView = require( './views/ImageSuggestionView' );
+	ImageSuggestionView = require( './views/ImageSuggestionView' ),
+	Dialogue = require( './Dialogue' );
 
 window.jQuery = $; // needed for justifiedGallery
 require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
@@ -36,8 +37,10 @@ $.extend( FileForm.prototype, {
 	},
 
 	_submit: function( e ) {
-		e.preventDefault();
+		this._$resultsPage.hide();
+		this._$resultsPage.hide();
 		this._evaluateInput( this._$node.find( 'input' ).val() );
+		e.preventDefault();
 	},
 
 	/**
@@ -45,9 +48,12 @@ $.extend( FileForm.prototype, {
 	 */
 	_scrollToResults: function() {
 		var inputHeight = 42;
+		this._scrollTo( this._$resultsPage.offset().top - 3 * inputHeight );
+	},
 
+	_scrollTo: function( position ) {
 		$( 'body' ).animate( {
-			scrollTop: this._$resultsPage.offset().top - 3 * inputHeight
+			scrollTop: position
 		}, 700 );
 	},
 
@@ -100,6 +106,7 @@ $.extend( FileForm.prototype, {
 	 * @param {ImageInfo[]} imageInfos
 	 */
 	_showResults: function( imageInfos ) {
+		this._$resultsPage.show();
 		this._scrollToResults();
 		this._renderSuggestions( imageInfos );
 	},
@@ -131,13 +138,33 @@ $.extend( FileForm.prototype, {
 						return;
 					}
 				}
-				$( self ).trigger( 'asset', [ asset ] );
+
+				self._showAsset( asset );
 			} )
 			.fail( function( error ) {
 				self._displayError( error );
 			} )
 			.always( function() {
 				self._$node.find( 'input' ).removeClass( 'loading' );
+			} );
+	},
+
+	/**
+	 * Loads asset information and starts the dialogue on the next screen
+	 *
+	 * @param {Asset} asset
+	 */
+	_showAsset: function( asset ) {
+		var self = this;
+
+		asset.getImageInfo( 400 )
+			.done( function( imageInfo ) {
+				var $dialogue = $( new Dialogue( asset, imageInfo ).show() );
+				self._$resultsPage.after( $dialogue );
+				self._scrollTo( $dialogue.offset().top );
+			} )
+			.fail( function( error ) {
+				self._displayError( error );
 			} );
 	},
 
@@ -161,10 +188,25 @@ $.extend( FileForm.prototype, {
 
 		this._$resultsPage.html( '' );
 		$.each( imageInfos, function( _, image ) {
-			self._$resultsPage.append( new ImageSuggestionView( image ).render() );
+			self._appendSuggestion( image );
 		} );
 
 		this._$resultsPage.justifiedGallery( { margins: 3, rowHeight: 200 } );
+	},
+
+	/**
+	 * Appends a suggestion to the $_resultsPage
+	 * @param imageInfo
+	 */
+	_appendSuggestion: function( imageInfo ) {
+		var $suggestion = $( new ImageSuggestionView( imageInfo ).render() ),
+			self = this;
+
+		$suggestion.on( 'click', function( e ) {
+			self._evaluateInput( imageInfo.getDescriptionUrl() );
+			e.preventDefault();
+		} );
+		self._$resultsPage.append( $suggestion );
 	}
 } );
 
