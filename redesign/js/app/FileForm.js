@@ -7,7 +7,8 @@ var $ = require( 'jquery' ),
 	ApplicationError = require( './ApplicationError' ),
 	WikiAsset = require( './WikiAsset' ),
 	config = require( '../config.json' ),
-	ImageSuggestionView = require( './views/ImageSuggestionView' );
+	ImageSuggestionView = require( './views/ImageSuggestionView' ),
+	Dialogue = require( './Dialogue' );
 
 window.jQuery = $; // needed for justifiedGallery
 require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
@@ -131,13 +132,32 @@ $.extend( FileForm.prototype, {
 						return;
 					}
 				}
-				$( self ).trigger( 'asset', [ asset ] );
+
+				self._showAsset( asset );
 			} )
 			.fail( function( error ) {
 				self._displayError( error );
 			} )
 			.always( function() {
 				self._$node.find( 'input' ).removeClass( 'loading' );
+			} );
+	},
+
+	/**
+	 * Loads asset information and starts the dialogue on the next screen
+	 *
+	 * @param {Asset} asset
+	 */
+	_showAsset: function( asset ) {
+		var self = this;
+
+		asset.getImageInfo()
+			.done( function( imageInfo ) {
+				var dialogue = new Dialogue( asset, imageInfo );
+				self._$resultsPage.after( dialogue.show() );
+			} )
+			.fail( function( error ) {
+				self._displayError( error );
 			} );
 	},
 
