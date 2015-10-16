@@ -236,6 +236,11 @@ a:hover {
 .dialogue-screen .image-preview-tail {
   height: 999999px;
   background-color: rgb(221, 229, 233);
-  text-align: right;
+  text-align: center;
   float: right;
+}
+.dialogue-screen #image-download-button {
+  margin-top: 20px;
+  font-size: small;
+  height: initial;
 }
