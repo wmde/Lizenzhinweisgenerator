@@ -174,8 +174,15 @@ $.extend( FileForm.prototype, {
 	 * @param {ApplicationError} error
 	 */
 	_displayError: function( error ) {
-		// FIXME: Use the bootstrap error thing.
 		console.log( error.getMessage() );
+
+		var $fileFormAlert = $( '#file-form-alert' );
+		var $fileFormAlertPlaceholder = document.getElementById( 'file-form-alert-placeholder' );
+		while( $fileFormAlertPlaceholder.firstChild ) {
+			$fileFormAlertPlaceholder.removeChild( $fileFormAlertPlaceholder.firstChild );
+		}
+		$fileFormAlertPlaceholder.appendChild( document.createTextNode( error.getMessage() ) );
+		$fileFormAlert.show();
 	},
 
 	/**
