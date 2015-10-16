@@ -182,7 +182,18 @@ $.extend( FileForm.prototype, {
 			$fileFormAlertPlaceholder.removeChild( $fileFormAlertPlaceholder.firstChild );
 		}
 		$fileFormAlertPlaceholder.appendChild( document.createTextNode( error.getMessage() ) );
+
+		// TODO animation slide in
 		$fileFormAlert.show();
+	},
+
+	/**
+	 * Displays an error on the front-page.
+	 */
+	_dismissError: function() {
+		var $fileFormAlert = $( '#file-form-alert' );
+		// TODO animation slide out
+		$fileFormAlert.hide();
 	},
 
 	/**

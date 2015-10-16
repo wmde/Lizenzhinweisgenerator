@@ -37,6 +37,11 @@ $( '#how-it-works-screen .close' ).click( function() {
 	);
 } );
 
+$( '#file-form-input' ).on( 'input', function() {
+	// TODO only dismiss if error is present
+	fileForm._dismissError();
+} );
+
 var bootstrapAlert = function( type, message ) {
 	$( '#alert-placeholder' ).html(
 		'<div class="alert ag-alert alert-'
