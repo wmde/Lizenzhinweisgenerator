@@ -244,3 +244,9 @@ a:hover {
   font-size: small;
   height: initial;
 }
+
+.dialogue-screen #image-download-button .glyphicon {
+  margin-right: 8px;
+  height: 15px;
+  width: 15px;
+}
