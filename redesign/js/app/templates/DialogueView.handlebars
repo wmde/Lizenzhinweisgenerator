@@ -1,8 +1,10 @@
 <div class="screen dialogue-screen">
 	<div style="height: {{imageHeight}}px" class="image-wrapper">
-		<img src="{{image}}" class="image-preview">
+		<img src="{{thumbUrl}}" class="image-preview">
 		<div style="width: {{imageWidth}}px" class="image-preview-tail">
-			<button class="green-btn" id="image-download-button">Download</button>
+			<a href="{{url}}" download="">
+				<button class="green-btn" id="image-download-button">Download</button>
+			</a>
 		</div>
 	</div>
 

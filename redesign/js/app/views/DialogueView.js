@@ -16,7 +16,8 @@ $.extend( DialogueView.prototype, {
 	render: function() {
 		$( '.dialogue-screen' ).remove();
 		return template( {
-			image: this._imageInfo.getThumbnail().url,
+			url: this._imageInfo.getUrl(),
+			thumbUrl: this._imageInfo.getThumbnail().url,
 			imageHeight: this._imageInfo.getThumbnail().height,
 			imageWidth: this._imageInfo.getThumbnail().width
 		} );
