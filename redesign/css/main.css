@@ -231,6 +231,11 @@ a:hover {
   text-align: right;
 }
 .dialogue-screen .image-preview {
-  border-bottom: 99999px solid rgb(221, 229, 233);
   max-width: 100%;
+}
+.dialogue-screen .image-preview-tail {
+  height: 999999px;
+  background-color: rgb(221, 229, 233);
+  text-align: right;
+  float: right;
 }

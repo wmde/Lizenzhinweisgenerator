@@ -17,7 +17,8 @@ $.extend( DialogueView.prototype, {
 		$( '.dialogue-screen' ).remove();
 		return template( {
 			image: this._imageInfo.getThumbnail().url,
-			imageHeight: this._imageInfo.getThumbnail().height
+			imageHeight: this._imageInfo.getThumbnail().height,
+			imageWidth: this._imageInfo.getThumbnail().width
 		} );
 	}
 } );
