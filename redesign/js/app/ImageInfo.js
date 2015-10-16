@@ -66,11 +66,11 @@ $.extend( ImageInfo.prototype, {
 	 * @return {string}
 	 */
 	getPrettySize: function() {
-		var sizeOf = function (a,b,c,d,e){
-			return (b=Math,c=b.log,d=1024,e=c(a)/c(d)|0,a/b.pow(d,e)).toFixed(2)
-				+' '+(e?'KMGTPEZY'[--e]+'B':'Bytes')
+		var sizeOf = function( a,b,c,d,e ) {
+			return ( b = Math, c = b.log, d = 1024, e = c( a ) / c( d ) | 0, a / b.pow( d, e ) ).toFixed( 2 )
+				+ ' ' + ( e ? 'KMGTPEZY'[--e] + 'B' : 'Bytes' );
 		};
-		return sizeOf(this._size);
+		return sizeOf( this._size );
 	},
 
 	/**
