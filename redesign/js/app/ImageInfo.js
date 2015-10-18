@@ -13,14 +13,16 @@ var $ = require( 'jquery' );
  *
  * @param {string} url
  * @param {string} descriptionUrl
+ * @param {int} size The image's size in bytes
  * @param {Object} [thumbnail]
  */
-var ImageInfo = function( url, descriptionUrl, thumbnail ) {
+var ImageInfo = function( url, descriptionUrl, size, thumbnail ) {
 	if( !url || !descriptionUrl ) {
 		throw new Error( 'Required parameters are not specified correctly' );
 	}
 	this._url = url;
 	this._descriptionUrl = descriptionUrl;
+	this._size = size;
 	this._thumbnail = thumbnail || null;
 };
 
@@ -36,6 +38,12 @@ $.extend( ImageInfo.prototype, {
 	_descriptionUrl: null,
 
 	/**
+	 * The image's size in bytes
+	 * @type {int}
+	 */
+	_size: null,
+
+	/**
 	 * @type {Object|null}
 	 */
 	_thumbnail: null,
@@ -45,6 +53,24 @@ $.extend( ImageInfo.prototype, {
 	 */
 	getUrl: function() {
 		return this._url;
+	},
+
+	/**
+	 * @return {int}
+	 */
+	getSize: function() {
+		return this._size;
+	},
+
+	/**
+	 * @return {string}
+	 */
+	getPrettySize: function() {
+		var sizeOf = function( a,b,c,d,e ) {
+			return ( b = Math, c = b.log, d = 1024, e = c( a ) / c( d ) | 0, a / b.pow( d, e ) ).toFixed( 2 )
+				+ ' ' + ( e ? 'KMGTPEZY'[--e] + 'B' : 'Bytes' );
+		};
+		return sizeOf( this._size );
 	},
 
 	/**
@@ -73,6 +99,7 @@ ImageInfo.newFromMediaWikiImageInfoJson = function( imageinfo ) {
 	return new ImageInfo(
 		imageinfo.url,
 		imageinfo.descriptionurl,
+		imageinfo.size,
 		{
 			url: imageinfo.thumburl || null,
 			width: imageinfo.thumbwidth || null,

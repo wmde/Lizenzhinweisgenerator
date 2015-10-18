@@ -172,7 +172,7 @@ $.extend( Api.prototype, {
 		var deferred = $.Deferred();
 
 		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
-			iiprop: 'url',
+			iiprop: 'url|size',
 			iiurlwidth: size,
 			iiurlheight: size
 		} )

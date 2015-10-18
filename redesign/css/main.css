@@ -231,6 +231,22 @@ a:hover {
   text-align: right;
 }
 .dialogue-screen .image-preview {
-  border-bottom: 99999px solid rgb(221, 229, 233);
   max-width: 100%;
+}
+.dialogue-screen .image-preview-tail {
+  height: 999999px;
+  background-color: rgb(221, 229, 233);
+  text-align: center;
+  float: right;
+}
+.dialogue-screen #image-download-button {
+  margin-top: 13px;
+  font-size: small;
+  height: initial;
+}
+
+.dialogue-screen #image-download-button .glyphicon {
+  margin-right: 8px;
+  height: 15px;
+  width: 15px;
 }
