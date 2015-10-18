@@ -265,6 +265,46 @@ a:hover {
   font-size: small;
   height: initial;
 }
+.dialogue-screen .dialogue-header {
+  color: #b4b4b4;
+  border-top: 1px solid #b4b4b4;
+  text-align: center;
+  margin-top: 1em;
+}
+.dialogue-header span {
+  padding: 5px;
+  background: #fff;
+  position: relative;
+  top: -0.5em;
+}
+.dialogue-bubble {
+  background: #97b314;
+}
+.dialogue-bubble h2 {
+  color: #4b590a;
+  font-size: 14.5pt;
+  margin-top: 0;
+  border-bottom: 1px solid #4b590a;
+}
+.dialogue-bubble .triangle {
+  margin-top: 10px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-right: 20px solid #97b314;
+  border-bottom: 10px solid transparent;
+  float: left;
+}
+.dialogue-bubble .bubble-content {
+  float: left;
+  min-width: 200px;
+  background: #97b314;
+  border-radius: 2px;
+  padding: 10px;
+}
+.dialogue-bubble .bubble-text {
+  color: #fff;
+}
 
 .dialogue-screen #image-download-button .glyphicon {
   margin-right: 8px;

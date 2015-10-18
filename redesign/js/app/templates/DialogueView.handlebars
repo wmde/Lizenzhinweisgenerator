@@ -1,4 +1,8 @@
 <div class="screen dialogue-screen">
+	<div class="dialogue-header">
+		<span>Dialogue Header</span>
+	</div>
+
 	<div style="height: {{imageHeight}}px" class="image-wrapper">
 		<img src="{{thumbUrl}}" class="image-preview">
 		<div style="width: {{imageWidth}}px" class="image-preview-tail">
@@ -11,6 +15,17 @@
 	</div>
 
 	<div class="dialogue">
-		Dialogue goes here.
+		<div class="dialogue-bubble">
+			<div class="triangle"></div>
+
+			<div class="bubble-content">
+				<h2 class="bubble-header">
+					Bubble heading.
+				</h2>
+				<div class="bubble-text">
+					Hello. This is text.
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
