@@ -176,24 +176,15 @@ $.extend( FileForm.prototype, {
 	_displayError: function( error ) {
 		console.log( error.getMessage() );
 
-		var $fileFormAlert = $( '#file-form-alert' );
-		var $fileFormAlertPlaceholder = document.getElementById( 'file-form-alert-placeholder' );
-		while( $fileFormAlertPlaceholder.firstChild ) {
-			$fileFormAlertPlaceholder.removeChild( $fileFormAlertPlaceholder.firstChild );
-		}
-		$fileFormAlertPlaceholder.appendChild( document.createTextNode( error.getMessage() ) );
-
-		// TODO animation slide in
-		$fileFormAlert.show();
+		$( '#file-form-alert' ).slideDown();
+		$( '#file-form-alert-placeholder' ).text( error.getMessage() );
 	},
 
 	/**
 	 * Displays an error on the front-page.
 	 */
 	_dismissError: function() {
-		var $fileFormAlert = $( '#file-form-alert' );
-		// TODO animation slide out
-		$fileFormAlert.hide();
+		$( '#file-form-alert' ).slideUp();
 	},
 
 	/**
