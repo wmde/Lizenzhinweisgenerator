@@ -98,7 +98,7 @@ $.extend( LocalApi.prototype, Api.prototype, {
 			if( params.iiprop === 'mediatype|url' ) {
 				return 'metadata';
 			}
-			if( params.iiurlwidth === 300 ) {
+			if( params.iiurlwidth === 300 || params.iiurlheight === 300 ) {
 				return 'imageinfo';
 			}
 		}
