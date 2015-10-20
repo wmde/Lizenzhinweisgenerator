@@ -315,6 +315,10 @@ a:hover {
   -moz-column-gap: 40px;
   column-gap: 40px;
 }
+.dialogue-bubble .bubble-text p {
+  break-after: column;
+  -webkit-column-break-after: always;
+}
 
 .dialogue-screen #image-download-button .glyphicon {
   margin-right: 8px;
