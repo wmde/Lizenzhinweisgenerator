@@ -242,9 +242,6 @@ a:hover {
 .dialogue-screen {
   overflow: hidden;
 }
-.dialogue-screen .dialogue {
-  float: left;
-}
 .dialogue-screen .image-wrapper {
   width: 40vw;
   float: left;
