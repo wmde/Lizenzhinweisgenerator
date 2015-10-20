@@ -6,6 +6,12 @@
       "licence-unsupported": "Leider wird die ermittelte Lizenz des Bildes von dieser Anwendung nicht unterstützt.",
       "url-invalid": "Die angegebene Internetadresse konnte nicht verarbeitet werden.",
       "licence-not-recognized": "Es tut uns leid, aber dieses Bild wird aufgrund des Lizenzformats derzeit noch nicht unterstützt."
+    },
+    "dialogue": {
+      "public-domain-picture": "Dieses Bild ist gemeinfrei. Es ist keine Lizenzangabe nötig.",
+      "no-attribution-needed": "Keine Lizenzangabe nötig",
+      "adjust-attribution-for-usage": "Lizenzhinweis an die Nutzung anpassen",
+      "public-domain-text": "Bei der Nutzung von Werken, die als gemeinfrei gekennzeichnet sind, bestehen keine Lizenzpflichten. Sie können in jeder beliebigen Form genutzt werden, ohne dass Hinweise auf den Urheber oder die Lizensierung gemacht werden müssen."
     }
   }
 }

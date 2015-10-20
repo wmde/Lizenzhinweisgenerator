@@ -23,7 +23,7 @@ $.extend( Dialogue.prototype, {
 	 * Loads the required asset data and shows the initial dialogue screen
 	 */
 	show: function() {
-		return new DialogueView( this._imageInfo ).render();
+		return new DialogueView( this._imageInfo, this._asset ).render();
 	}
 } );
 
