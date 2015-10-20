@@ -242,9 +242,6 @@ a:hover {
 .dialogue-screen {
   overflow: hidden;
 }
-.dialogue-screen .dialogue {
-  float: left;
-}
 .dialogue-screen .image-wrapper {
   width: 40vw;
   float: left;
@@ -278,7 +275,8 @@ a:hover {
   top: -0.5em;
 }
 .dialogue-bubble {
-  background: #97b314;
+  white-space: nowrap;
+  width: 60vw;
 }
 .dialogue-bubble h2 {
   color: #4b590a;
@@ -287,23 +285,36 @@ a:hover {
   border-bottom: 1px solid #4b590a;
 }
 .dialogue-bubble .triangle {
+  display: inline-block;
+  float: left;
   margin-top: 10px;
   width: 0;
   height: 0;
   border-top: 10px solid transparent;
   border-right: 20px solid #97b314;
   border-bottom: 10px solid transparent;
-  float: left;
 }
 .dialogue-bubble .bubble-content {
-  float: left;
+  display: inline-block;
+  white-space: normal;
   min-width: 200px;
   background: #97b314;
   border-radius: 2px;
   padding: 10px;
+  margin-right: 25px;
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  -webkit-column-gap: 40px;
+  -moz-column-gap: 40px;
+  column-gap: 40px;
+}
+.dialogue-bubble .bubble-text p {
+  break-after: column;
+  -webkit-column-break-after: always;
 }
 
 .dialogue-screen #image-download-button .glyphicon {
