@@ -46,17 +46,18 @@ $.extend( DialogueView.prototype, {
 	/**
 	 * Renders information about Public Domain Licence if the picture was under PD or starts the dialogue
 	 *
-	 * @returns {String} The dialogue screen html
+	 * @returns {string} The dialogue screen html
 	 */
 	render: function() {
+		var title, dialogue;
 		$( '.dialogue-screen' ).remove();
 
 		if( this._asset.getLicence().isInGroup( 'pd' ) ) {
-			var title = Messages.t( 'dialogue.no-attribution-needed' ),
-				dialogue = this._renderPublicLicenceDialogue();
+			title = Messages.t( 'dialogue.no-attribution-needed' );
+			dialogue = this._renderPublicLicenceDialogue();
 		} else {
-			var title = Messages.t( 'dialogue.adjust-attribution-for-usage' ),
-				dialogue = this._renderDialogueStart();
+			title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
+			dialogue = this._renderDialogueStart();
 		}
 
 		return template( {
