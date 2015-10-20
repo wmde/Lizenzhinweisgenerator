@@ -8,7 +8,7 @@ var $ = require( 'jquery' ),
 	WikiAsset = require( './WikiAsset' ),
 	config = require( '../config.json' ),
 	ImageSuggestionView = require( './views/ImageSuggestionView' ),
-	Dialogue = require( './Dialogue' );
+	DialogueScreen = require( './views/DialogueScreen' );
 
 window.jQuery = $; // needed for justifiedGallery
 require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
@@ -159,7 +159,7 @@ $.extend( FileForm.prototype, {
 
 		asset.getImageInfo( 400 )
 			.done( function( imageInfo ) {
-				var $dialogue = $( new Dialogue( asset, imageInfo ).show() );
+				var $dialogue = $( new DialogueScreen( imageInfo, asset ).render() );
 				self._$resultsPage.after( $dialogue );
 				self._scrollTo( $dialogue.offset().top );
 			} )
