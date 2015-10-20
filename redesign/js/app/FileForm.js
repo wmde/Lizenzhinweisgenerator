@@ -176,14 +176,16 @@ $.extend( FileForm.prototype, {
 	_displayError: function( error ) {
 		console.log( error.getMessage() );
 
-		$( '#file-form-alert' ).slideDown();
 		$( '#file-form-alert-placeholder' ).text( error.getMessage() );
+		$( '#file-form-input' ).css( 'color', '#bf311a' );
+		$( '#file-form-alert' ).slideDown();
 	},
 
 	/**
 	 * Displays an error on the front-page.
 	 */
 	_dismissError: function() {
+		$( '#file-form-input' ).removeAttr( 'style' );
 		$( '#file-form-alert' ).slideUp();
 	},
 
