@@ -67,26 +67,6 @@ function(
 			}
 		}, {
 			input: [
-				'http://commons.wikimedia.org/wiki/File:%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG',
-				'http://commons.wikimedia.org/w/index.php?title=File:%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG',
-				'http://upload.wikimedia.org/wikipedia/commons/9/9c/%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG',
-				'http://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG/640px-%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG',
-				'http://commons.wikimedia.org/wiki/File:%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG#mediaviewer/File:%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG'
-			],
-			expected: {
-				file: 'File:"Граничар"_-_Туховища.JPG',
-				wikiUrl: 'https://commons.wikimedia.org/'
-			}
-		}, {
-			input: [
-				'http://bg.wikipedia.org/wiki/%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0#mediaviewer/%D0%A4%D0%B0%D0%B9%D0%BB:%22%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B0%D1%80%22_-_%D0%A2%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D1%89%D0%B0.JPG'
-			],
-			expected: {
-				file: 'File:"Граничар"_-_Туховища.JPG',
-				wikiUrl: 'https://commons.wikimedia.org/'
-			}
-		}, {
-			input: [
 				'http://de.wikipedia.org/wiki/File:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
 				'de.wikipedia.org/wiki/File:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
 				'http://de.wikipedia.org/w/index.php?title=File:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
@@ -184,8 +164,7 @@ function(
 			{
 				input: [
 					'http://en.wikipedia.org/wiki/K%C3%B6nigsberg,_Bavaria',
-					'http://en.wikipedia.org/w/index.php?title=K%C3%B6nigsberg,_Bavaria',
-					'http://en.wikipedia.org/wiki/%3F_(film)'
+					'http://en.wikipedia.org/w/index.php?title=K%C3%B6nigsberg,_Bavaria'
 				],
 				expected: {
 					wikiUrl: 'https://en.wikipedia.org/'

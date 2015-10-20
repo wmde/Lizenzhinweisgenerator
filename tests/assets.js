@@ -153,17 +153,6 @@ return {
 		null,
 		api
 	),
-	'"Граничар" - Туховища.JPG': new WikiAsset(
-		// Non-Latin character set:
-		'File:"Граничар" - Туховища.JPG',
-		'bitmap',
-		config.custom.licenceStore.getLicence( 'cc-by-3.0' ),
-		'"Граничар" - Туховища',
-		[new Author( $( document.createTextNode( 'Ерол Шукриев' ) ) )],
-		null,
-		null,
-		api
-	),
 	'03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg': new WikiAsset(
 		'File:03602 - Monti, Gaetano - Allegoria (1832) - Porta Venezia, Milano - Foto Giovanni Dall\'Orto 23-Jun-2007.jpg',
 		'bitmap',
