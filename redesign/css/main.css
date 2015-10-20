@@ -177,9 +177,30 @@ a:hover {
 }
 #file-form button {
   border-radius: 0 3px 3px 0;
+  width: 66px;
+}
+#file-form-input-wrapper {
+  display: inline-block;
 }
 #file-form ::-moz-placeholder {
   color: #777;
+}
+#file-form-alert {
+  position: absolute;
+  margin-left: -373px;
+  margin-top: 5px;
+  padding: 5px 15px 10px;
+  width: 746px;
+  left: 50%;
+  background-color: #bf311a;
+  text-align: left;
+}
+#file-form-alert .glyphicon {
+  width: 30px;
+  height: 25px;
+}
+#file-form-alert-placeholder {
+  font-size: 10pt;
 }
 
 .feedback-form label {
