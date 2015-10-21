@@ -1,8 +1,6 @@
 'use strict';
 
-var $ = require( 'jquery' ),
-	dialogueTemplate = require( '../templates/Dialogue.handlebars' ),
-	Messages = require( '../Messages' );
+var $ = require( 'jquery' );
 
 var AttributionDialogueView = function() {
 };
