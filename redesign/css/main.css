@@ -283,9 +283,6 @@ a:hover {
   float: left;
   width: 50vw;
 }
-.dialogue-bubble {
-  white-space: nowrap;
-}
 .dialogue-bubble h2 {
   color: #4b590a;
   font-size: 14.5pt;
@@ -293,7 +290,6 @@ a:hover {
   border-bottom: 1px solid #4b590a;
 }
 .dialogue-bubble .triangle {
-  display: inline-block;
   float: left;
   margin-top: 10px;
   width: 0;
@@ -303,13 +299,11 @@ a:hover {
   border-bottom: 10px solid transparent;
 }
 .dialogue-bubble .bubble-content {
-  display: inline-block;
-  white-space: normal;
   min-width: 200px;
   background: #97b314;
   border-radius: 2px;
   padding: 10px;
-  margin-right: 25px;
+  margin: 0 25px 0 20px;
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
