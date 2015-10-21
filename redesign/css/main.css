@@ -242,16 +242,21 @@ a:hover {
 .dialogue-screen {
   overflow: hidden;
 }
+.dialogue-screen .image-preview {
+  width: 40vw;
+  float: left;
+}
 .dialogue-screen .image-wrapper {
   width: 40vw;
   float: left;
   background-color: rgb(238, 242, 244);
   text-align: right;
 }
-.dialogue-screen .image-preview {
-  max-width: 100%;
+.dialogue-screen .image-thumbnail, .dialogue-screen .image-thumbnail-tail {
+  margin-left: 10vw;
+  max-width: 30vw;
 }
-.dialogue-screen .image-preview-tail {
+.dialogue-screen .image-thumbnail-tail {
   height: 999999px;
   background-color: rgb(221, 229, 233);
   text-align: center;
@@ -274,9 +279,12 @@ a:hover {
   position: relative;
   top: -0.5em;
 }
+.dialogue-screen .dialogue {
+  float: left;
+  width: 50vw;
+}
 .dialogue-bubble {
   white-space: nowrap;
-  width: 60vw;
 }
 .dialogue-bubble h2 {
   color: #4b590a;
