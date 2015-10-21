@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	dialogueTemplate = require( '../templates/Dialogue.handlebars' ),
-	Messages = require( '../Messages' );
+	Messages = require( '../Messages' ),
+	buttonTemplate = require( '../templates/SmallButton.handlebars' );
 
 var PublicDomainDialogueView = function() {
 };
@@ -16,7 +17,12 @@ $.extend( PublicDomainDialogueView.prototype, {
 	},
 
 	_showPublicDomainInformation: function() {
-		return '"more information" button goes here.';
+		return $( '<div class="more-information"/>' )
+			.html( buttonTemplate( {
+				content: '<img class="cc-logo" src="http://mirrors.creativecommons.org/presskit/icons/cc.svg">'
+				+ Messages.t( 'dialogue.more-information' ),
+				target: 'https://wiki.creativecommons.org/wiki/Public_domain'
+			} ) );
 	},
 
 	/**

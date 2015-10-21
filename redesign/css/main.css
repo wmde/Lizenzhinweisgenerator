@@ -318,6 +318,14 @@ a:hover {
   break-after: column;
   -webkit-column-break-after: always;
 }
+.dialogue-screen .more-information {
+  text-align: center;
+  margin-top: 20px;
+}
+.dialogue-screen .cc-logo {
+  width: 15px;
+  margin-right: 5px;
+}
 
 .dialogue-screen #image-download-button .glyphicon {
   margin-right: 8px;
