@@ -262,7 +262,7 @@ a:hover {
   text-align: center;
   float: right;
 }
-.dialogue-screen #image-download-button {
+.green-btn.small-btn {
   margin-top: 13px;
   font-size: small;
   height: initial;
