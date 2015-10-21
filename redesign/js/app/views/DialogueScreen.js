@@ -2,8 +2,9 @@
 
 var $ = require( 'jquery' ),
 	template = require( '../templates/DialogueScreen.handlebars' ),
-	dialogueTemplate = require( '../templates/Dialogue.handlebars' ),
 	imagePreviewTemplate = require( '../templates/ImagePreview.handlebars' ),
+	PublicDomainDialogueView = require( './PublicDomainDialogueView' ),
+	AttributionDialogueView = require( './AttributionDialogueView' ),
 	Messages = require( '../Messages' );
 
 var DialogueView = function( imageInfo, asset ) {
@@ -27,44 +28,31 @@ $.extend( DialogueView.prototype, {
 			url: this._imageInfo.getUrl(),
 			size: this._imageInfo.getPrettySize(),
 			thumbUrl: this._imageInfo.getThumbnail().url,
-			imageHeight: this._imageInfo.getThumbnail().height,
 			imageWidth: this._imageInfo.getThumbnail().width
-		} );
-	},
-
-	_renderDialogueStart: function() {
-		return 'Dialogue goes here.'; // TODO: Should start the real dialogue
-	},
-
-	_renderPublicLicenceDialogue: function() {
-		return dialogueTemplate( {
-			title: Messages.t( 'dialogue.public-domain-picture' ),
-			content: Messages.t( 'dialogue.public-domain-text' )
 		} );
 	},
 
 	/**
 	 * Renders information about Public Domain Licence if the picture was under PD or starts the dialogue
 	 *
-	 * @returns {string} The dialogue screen html
+	 * @param {jQuery} $screen
 	 */
-	render: function() {
+	render: function( $screen ) {
 		var title, dialogue;
-		$( '.dialogue-screen' ).remove();
 
 		if( this._asset.getLicence().isInGroup( 'pd' ) ) {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
-			dialogue = this._renderPublicLicenceDialogue();
+			dialogue = new PublicDomainDialogueView;
 		} else {
 			title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
-			dialogue = this._renderDialogueStart();
+			dialogue = new AttributionDialogueView;
 		}
 
-		return template( {
+		$screen.html( template( {
 			title: title,
-			imagePreview: this._renderImagePreview(),
-			dialogue: dialogue
-		} );
+			imagePreview: this._renderImagePreview()
+		} ) );
+		dialogue.render( $screen.find( '.dialogue' ) );
 	}
 } );
 

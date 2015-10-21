@@ -159,9 +159,12 @@ $.extend( FileForm.prototype, {
 
 		asset.getImageInfo( 400 )
 			.done( function( imageInfo ) {
-				var $dialogue = $( new DialogueScreen( imageInfo, asset ).render() );
-				self._$resultsPage.after( $dialogue );
-				self._scrollTo( $dialogue.offset().top );
+				$( '.dialogue-screen' ).remove();
+				var $dialogueScreen = $( '<div class="screen dialogue-screen"/>' );
+				self._$resultsPage.after( $dialogueScreen );
+
+				new DialogueScreen( imageInfo, asset ).render( $dialogueScreen );
+				self._scrollTo( $dialogueScreen.offset().top );
 			} )
 			.fail( function( error ) {
 				self._displayError( error );

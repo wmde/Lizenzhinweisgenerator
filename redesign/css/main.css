@@ -242,22 +242,27 @@ a:hover {
 .dialogue-screen {
   overflow: hidden;
 }
+.dialogue-screen .image-preview {
+  width: 40vw;
+  float: left;
+}
 .dialogue-screen .image-wrapper {
   width: 40vw;
   float: left;
   background-color: rgb(238, 242, 244);
   text-align: right;
 }
-.dialogue-screen .image-preview {
-  max-width: 100%;
+.dialogue-screen .image-thumbnail, .dialogue-screen .image-thumbnail-tail {
+  margin-left: 10vw;
+  max-width: 30vw;
 }
-.dialogue-screen .image-preview-tail {
+.dialogue-screen .image-thumbnail-tail {
   height: 999999px;
   background-color: rgb(221, 229, 233);
   text-align: center;
   float: right;
 }
-.dialogue-screen #image-download-button {
+.green-btn.small-btn {
   margin-top: 13px;
   font-size: small;
   height: initial;
@@ -274,9 +279,9 @@ a:hover {
   position: relative;
   top: -0.5em;
 }
-.dialogue-bubble {
-  white-space: nowrap;
-  width: 60vw;
+.dialogue-screen .dialogue {
+  float: left;
+  width: 50vw;
 }
 .dialogue-bubble h2 {
   color: #4b590a;
@@ -285,7 +290,6 @@ a:hover {
   border-bottom: 1px solid #4b590a;
 }
 .dialogue-bubble .triangle {
-  display: inline-block;
   float: left;
   margin-top: 10px;
   width: 0;
@@ -295,13 +299,11 @@ a:hover {
   border-bottom: 10px solid transparent;
 }
 .dialogue-bubble .bubble-content {
-  display: inline-block;
-  white-space: normal;
   min-width: 200px;
   background: #97b314;
   border-radius: 2px;
   padding: 10px;
-  margin-right: 25px;
+  margin: 0 25px 0 20px;
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
@@ -315,6 +317,14 @@ a:hover {
 .dialogue-bubble .bubble-text p {
   break-after: column;
   -webkit-column-break-after: always;
+}
+.dialogue-screen .more-information {
+  text-align: center;
+  margin-top: 20px;
+}
+.dialogue-screen .cc-logo {
+  width: 15px;
+  margin-right: 5px;
 }
 
 .dialogue-screen #image-download-button .glyphicon {
