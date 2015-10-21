@@ -45,11 +45,10 @@ $.extend( DialogueView.prototype, {
 	/**
 	 * Renders information about Public Domain Licence if the picture was under PD or starts the dialogue
 	 *
-	 * @returns {string} The dialogue screen html
+	 * @param {jQuery} $screen
 	 */
-	render: function() {
+	render: function( $screen ) {
 		var title, dialogue;
-		$( '.dialogue-screen' ).remove();
 
 		if( this._asset.getLicence().isInGroup( 'pd' ) ) {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
@@ -59,11 +58,11 @@ $.extend( DialogueView.prototype, {
 			dialogue = this._renderDialogueStart();
 		}
 
-		return template( {
+		$screen.html( template( {
 			title: title,
 			imagePreview: this._renderImagePreview(),
 			dialogue: dialogue
-		} );
+		} ) );
 	}
 } );
 
