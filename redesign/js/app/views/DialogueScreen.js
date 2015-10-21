@@ -2,8 +2,9 @@
 
 var $ = require( 'jquery' ),
 	template = require( '../templates/DialogueScreen.handlebars' ),
-	dialogueTemplate = require( '../templates/Dialogue.handlebars' ),
 	imagePreviewTemplate = require( '../templates/ImagePreview.handlebars' ),
+	PublicDomainDialogueView = require( './PublicDomainDialogueView' ),
+	AttributionDialogueView = require( './AttributionDialogueView' ),
 	Messages = require( '../Messages' );
 
 var DialogueView = function( imageInfo, asset ) {
@@ -31,17 +32,6 @@ $.extend( DialogueView.prototype, {
 		} );
 	},
 
-	_renderDialogueStart: function() {
-		return 'Dialogue goes here.'; // TODO: Should start the real dialogue
-	},
-
-	_renderPublicLicenceDialogue: function() {
-		return dialogueTemplate( {
-			title: Messages.t( 'dialogue.public-domain-picture' ),
-			content: Messages.t( 'dialogue.public-domain-text' )
-		} );
-	},
-
 	/**
 	 * Renders information about Public Domain Licence if the picture was under PD or starts the dialogue
 	 *
@@ -52,17 +42,17 @@ $.extend( DialogueView.prototype, {
 
 		if( this._asset.getLicence().isInGroup( 'pd' ) ) {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
-			dialogue = this._renderPublicLicenceDialogue();
+			dialogue = new PublicDomainDialogueView;
 		} else {
 			title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
-			dialogue = this._renderDialogueStart();
+			dialogue = new AttributionDialogueView;
 		}
 
 		$screen.html( template( {
 			title: title,
-			imagePreview: this._renderImagePreview(),
-			dialogue: dialogue
+			imagePreview: this._renderImagePreview()
 		} ) );
+		dialogue.render( $screen.find( '.dialogue' ) );
 	}
 } );
 
