@@ -66,15 +66,6 @@ textarea, input, .form-control:focus {
   background-color: #008752;
 }
 
-#wikimedia-logo {
-  z-index: 1000;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  height: 80px;
-  width: 98px;
-}
-
 .screen {
   position: relative;
   height: 100vh;
@@ -213,10 +204,10 @@ a:hover {
 .bottom-menu {
   background-color: rgba(0, 0, 0, 0.25);
   position: fixed;
-  height: 42px;
+  height: 50px;
   bottom: 0;
   width: 100%;
-  text-align: right;
+  text-align: center;
   z-index: 1;
 }
 .bottom-menu li {
@@ -225,7 +216,14 @@ a:hover {
 }
 .bottom-menu li a {
   display: block;
-  padding: 6px 15px;
+  padding: 10px 15px;
+}
+#wikimedia-logo {
+  width: 118px;
+  margin: 8px 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 #results-screen {
