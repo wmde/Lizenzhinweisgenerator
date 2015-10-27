@@ -3,13 +3,14 @@
 var $ = require( 'jquery' );
 
 var Dialogue = function() {
+	this._steps = [];
 };
 
 $.extend( Dialogue.prototype, {
 	/**
 	 * @type {DialogueStep[]}
 	 */
-	_steps: [],
+	_steps: null,
 
 	/**
 	 * @param {DialogueStep} step
