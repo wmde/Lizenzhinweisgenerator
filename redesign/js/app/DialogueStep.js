@@ -2,8 +2,14 @@
 
 var $ = require( 'jquery' );
 
-var DialogueStep = function( name ) {
+/**
+ * @param {string} name
+ * @param {Dialogue} dialogue
+ * @constructor
+ */
+var DialogueStep = function( name, dialogue ) {
 	this._name = name;
+	this._dialogue = dialogue;
 };
 
 $.extend( DialogueStep.prototype, {
@@ -11,6 +17,11 @@ $.extend( DialogueStep.prototype, {
 	 * @type {string}
 	 */
 	_name: null,
+
+	/**
+	 * @type {Dialogue}
+	 */
+	_dialogue: null,
 
 	/**
 	 * @type {Object}
@@ -27,6 +38,7 @@ $.extend( DialogueStep.prototype, {
 	 */
 	complete: function( data ) {
 		this._data = data;
+		this._dialogue.completeStep( this );
 	},
 
 	/**
