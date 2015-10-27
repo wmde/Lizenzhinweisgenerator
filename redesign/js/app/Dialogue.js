@@ -30,6 +30,13 @@ $.extend( Dialogue.prototype, {
 	 */
 	completeStep: function( step ) {
 		this._data[ step.getName() ] = step.getData();
+	},
+
+	/**
+	 * @returns {Object}
+	 */
+	getData: function() {
+		return this._data;
 	}
 } );
 
