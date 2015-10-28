@@ -7,9 +7,8 @@ var $ = require( 'jquery' );
  * @param {Dialogue} dialogue
  * @constructor
  */
-var DialogueStep = function( name, dialogue ) {
+var DialogueStep = function( name ) {
 	this._name = name;
-	this._dialogue = dialogue;
 };
 
 $.extend( DialogueStep.prototype, {
@@ -27,6 +26,13 @@ $.extend( DialogueStep.prototype, {
 	 * @type {Object}
 	 */
 	_data: null,
+
+	/**
+	 * @param {Dialogue} dialogue
+	 */
+	setDialogue: function( dialogue ) {
+		this._dialogue = dialogue;
+	},
 
 	getName: function() {
 		return this._name;

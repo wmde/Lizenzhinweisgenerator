@@ -16,6 +16,15 @@ QUnit.test( 'can contain steps', function( assert ) {
 	assert.equal( dialogue._steps.length, 2 );
 } );
 
+QUnit.test( 'addStep connects step and dialogue', function( assert ) {
+	var dialogue = new Dialogue,
+		step = new DialogueStep( 'test1' );
+
+	assert.notOk( step._dialogue );
+	dialogue.addStep( step );
+	assert.ok( step._dialogue );
+} );
+
 QUnit.test( 'getData should return data from all completed steps', function( assert ) {
 	var dialogue = new Dialogue,
 		step1 = new DialogueStep( 'test1', dialogue ),

@@ -22,6 +22,7 @@ $.extend( Dialogue.prototype, {
 	 * @param {DialogueStep} step
 	 */
 	addStep: function( step ) {
+		step.setDialogue( this );
 		this._steps.push( step );
 	},
 

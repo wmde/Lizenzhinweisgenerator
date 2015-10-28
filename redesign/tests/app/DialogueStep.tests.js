@@ -10,14 +10,18 @@ QUnit.test( 'should have a name', function( assert ) {
 } );
 
 QUnit.test( 'should contain data once completed', function( assert ) {
-	var step = new DialogueStep( 'test', new Dialogue() );
+	var step = new DialogueStep( 'test' );
+
+	new Dialogue().addStep( step );
 	step.complete( { foo: 'bar' } );
 	assert.ok( step._data, '_data attribute contained data' );
 } );
 
 QUnit.test( 'should make data accessible', function( assert ) {
 	var data = { foo: 'bar' },
-		step = new DialogueStep( 'test', new Dialogue() );
+		step = new DialogueStep( 'test' );
+
+	new Dialogue().addStep( step );
 	step.complete( data );
 	assert.equal( data, step.getData() );
 } );
