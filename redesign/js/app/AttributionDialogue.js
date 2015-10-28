@@ -1,6 +1,7 @@
 'use strict';
 
-var Dialogue = require( './Dialogue' ),
+var $ = require( 'jquery' ),
+	Dialogue = require( './Dialogue' ),
 	DialogueStep = require( './DialogueStep' );
 
 /**
@@ -8,15 +9,24 @@ var Dialogue = require( './Dialogue' ),
  * @constructor
  */
 var AttributionDialogue = function( author ) {
-	var dialogue = new Dialogue();
-	dialogue.addStep( new DialogueStep( 'typeOfUse' ) );
-	if( !author ) {
-		dialogue.addStep( new DialogueStep( 'author' ) );
-	}
-	dialogue.addStep( new DialogueStep( 'compilation' ) );
-	dialogue.addStep( new DialogueStep( 'editing' ) );
-
-	this._dialogue = dialogue;
+	Dialogue.call( this );
+	this._author = author;
 };
+
+$.extend( AttributionDialogue.prototype, Dialogue.prototype, {
+	/**
+	 * @type {string}
+	 */
+	_author: null,
+
+	init: function() {
+		this.addStep( new DialogueStep( 'typeOfUse' ) );
+		if( !this._author ) {
+			this.addStep( new DialogueStep( 'author' ) );
+		}
+		this.addStep( new DialogueStep( 'compilation' ) );
+		this.addStep( new DialogueStep( 'editing' ) );
+	}
+} );
 
 module.exports = AttributionDialogue;
