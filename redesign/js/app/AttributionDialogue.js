@@ -26,6 +26,21 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 		}
 		this.addStep( new DialogueStep( 'compilation' ) );
 		this.addStep( new DialogueStep( 'editing' ) );
+	},
+
+	completeStep: function( step ) {
+		Dialogue.prototype.completeStep.call( this, step );
+
+		var data = step.getData();
+		if( step.getName() === 'editing' && data['edited'] ) {
+			this._addEditingSteps();
+		}
+	},
+
+	_addEditingSteps: function() {
+		this.addStep( new DialogueStep( 'change' ) );
+		this.addStep( new DialogueStep( 'creator' ) );
+		this.addStep( new DialogueStep( 'licence' ) );
 	}
 } );
 
