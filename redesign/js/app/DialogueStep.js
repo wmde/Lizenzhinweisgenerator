@@ -4,7 +4,6 @@ var $ = require( 'jquery' );
 
 /**
  * @param {string} name
- * @param {Dialogue} dialogue
  * @constructor
  */
 var DialogueStep = function( name ) {
@@ -39,7 +38,6 @@ $.extend( DialogueStep.prototype, {
 	},
 
 	/**
-	 *
 	 * @param {Object} data - data collected from the dialogue step's form
 	 */
 	complete: function( data ) {
