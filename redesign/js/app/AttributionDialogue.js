@@ -3,10 +3,16 @@
 var Dialogue = require( './Dialogue' ),
 	DialogueStep = require( './DialogueStep' );
 
-var AttributionDialogue = function() {
+/**
+ * @param {string|null} author
+ * @constructor
+ */
+var AttributionDialogue = function( author ) {
 	var dialogue = new Dialogue();
 	dialogue.addStep( new DialogueStep( 'typeOfUse' ) );
-	dialogue.addStep( new DialogueStep( 'author' ) );
+	if( !author ) {
+		dialogue.addStep( new DialogueStep( 'author' ) );
+	}
 	dialogue.addStep( new DialogueStep( 'compilation' ) );
 	dialogue.addStep( new DialogueStep( 'editing' ) );
 
