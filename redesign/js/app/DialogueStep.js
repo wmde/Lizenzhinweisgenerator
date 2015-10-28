@@ -4,10 +4,12 @@ var $ = require( 'jquery' );
 
 /**
  * @param {string} name
+ * @param {DialogueStepView} view
  * @constructor
  */
-var DialogueStep = function( name ) {
+var DialogueStep = function( name, view ) {
 	this._name = name;
+	this._view = view;
 };
 
 $.extend( DialogueStep.prototype, {
@@ -25,6 +27,11 @@ $.extend( DialogueStep.prototype, {
 	 * @type {Object}
 	 */
 	_data: null,
+
+	/**
+	 * @type {DialogueStepView
+	 */
+	_view: null,
 
 	/**
 	 * @param {Dialogue} dialogue
@@ -50,6 +57,13 @@ $.extend( DialogueStep.prototype, {
 	 */
 	getData: function() {
 		return this._data;
+	},
+
+	/**
+	 * @returns {jQuery}
+	 */
+	render: function() {
+		return this._view.render();
 	}
 } );
 
