@@ -1,15 +1,16 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	DialogueStepView = require( './views/DialogueStepView' );
 
 /**
  * @param {string} name
- * @param {DialogueStepView} view
+ * @param {Handlebars} template
  * @constructor
  */
-var DialogueStep = function( name, view ) {
+var DialogueStep = function( name, template ) {
 	this._name = name;
-	this._view = view;
+	this._view = new DialogueStepView( template );
 };
 
 $.extend( DialogueStep.prototype, {

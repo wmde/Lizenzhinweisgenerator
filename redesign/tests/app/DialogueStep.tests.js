@@ -39,6 +39,6 @@ QUnit.test( 'should push its data to its Dialogue on completion', function( asse
 } );
 
 QUnit.test( 'render should return a jQuery object', function( assert ) {
-	var step = new DialogueStep( 'test', new DialogueStepView( Handlebars.compile( 'hi' ) ) );
+	var step = new DialogueStep( 'test', Handlebars.compile( 'hi' ) );
 	assert.ok( step.render() instanceof $ );
 } );
