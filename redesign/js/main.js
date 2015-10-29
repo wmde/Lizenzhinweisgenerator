@@ -5,6 +5,7 @@ var $ = require( 'jquery' ),
 
 window.$ = window.jQuery = $; // needed for bootstrap
 require( 'bootstrap' );
+require( './view_helpers' )
 require( './scrolling_effects' );
 require( './background' );
 
