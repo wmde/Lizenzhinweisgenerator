@@ -20,7 +20,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	_author: null,
 
 	init: function() {
-		this.addStep( new DialogueStep( 'typeOfUse' ) );
+		this.addStep( new DialogueStep( 'typeOfUse', require( './templates/TypeOfUseStep.handlebars' ) ) );
 		if( !this._author ) {
 			this.addStep( new DialogueStep( 'author' ) );
 		}
@@ -32,7 +32,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 		Dialogue.prototype.completeStep.call( this, step );
 
 		var data = step.getData();
-		if( step.getName() === 'editing' && data['edited'] ) {
+		if( step.getName() === 'editing' && data[ 'edited' ] ) {
 			this._addEditingSteps();
 		}
 	},

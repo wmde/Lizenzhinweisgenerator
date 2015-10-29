@@ -2,7 +2,8 @@
 
 QUnit.module( 'AttributionDialogue' );
 
-var AttributionDialogue = require( '../../js/app/AttributionDialogue' );
+var AttributionDialogue = require( '../../js/app/AttributionDialogue' ),
+	Messages = require( '../../js/app/Messages' );
 
 QUnit.test( 'should have 4 steps by default', function( assert ) {
 	var dialogue = new AttributionDialogue();
@@ -37,4 +38,11 @@ QUnit.test( 'should not add 3 more steps when not editing', function( assert ) {
 	var initialNumber = dialogue._steps.length;
 	completeEditingStep( dialogue, { edited: false } );
 	assert.equal( dialogue._steps.length, initialNumber );
+} );
+
+QUnit.test( 'Steps content', function( assert ) {
+	var dialogue = new AttributionDialogue();
+	dialogue.init();
+
+	assert.ok( dialogue.currentStep().render().text().indexOf( Messages.t( 'dialogue.type-of-use' ) ) > -1 );
 } );

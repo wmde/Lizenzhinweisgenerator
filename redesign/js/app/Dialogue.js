@@ -47,7 +47,6 @@ $.extend( Dialogue.prototype, {
 		return this._data;
 	},
 
-
 	/**
 	 * @returns {DialogueStep}
 	 */
