@@ -29,8 +29,11 @@ $.extend( AttributionDialogueView.prototype, {
 		return form;
 	},
 
-	_submit: function( e, $form ) {
-		this._dialogue.currentStep().complete( this._formValuesToObj( $form.serializeArray() ) );
+	_submit: function( e, $dialogue ) {
+		this._dialogue.currentStep().complete( this._formValuesToObj(
+			$dialogue.find( 'form' ).serializeArray()
+		) );
+		this.render( $dialogue );
 		e.preventDefault();
 	},
 
@@ -45,7 +48,7 @@ $.extend( AttributionDialogueView.prototype, {
 			$( this ).closest( 'form' ).submit();
 		} );
 		$step.find( 'form' ).submit( function( e ) {
-			self._submit( e, $( this ) );
+			self._submit( e, $dialogue );
 		} );
 
 		$dialogue.html( $step );
