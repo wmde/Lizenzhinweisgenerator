@@ -40,9 +40,20 @@ QUnit.test( 'should not add 3 more steps when not editing', function( assert ) {
 	assert.equal( dialogue._steps.length, initialNumber );
 } );
 
+function currentStepContains( dialogue, message ) {
+	return dialogue
+			.currentStep()
+			.render()
+			.text()
+			.indexOf( Messages.t( message ) ) > -1;
+}
+
 QUnit.test( 'Steps content', function( assert ) {
 	var dialogue = new AttributionDialogue();
 	dialogue.init();
 
-	assert.ok( dialogue.currentStep().render().text().indexOf( Messages.t( 'dialogue.type-of-use' ) ) > -1 );
+	assert.ok( currentStepContains( dialogue, 'dialogue.type-of-use-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.author-headline' ) );
 } );

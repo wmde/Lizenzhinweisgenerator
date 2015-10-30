@@ -22,7 +22,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	init: function() {
 		this.addStep( new DialogueStep( 'typeOfUse', require( './templates/TypeOfUseStep.handlebars' ) ) );
 		if( !this._author ) {
-			this.addStep( new DialogueStep( 'author' ) );
+			this.addStep( new DialogueStep( 'author', require( './templates/AuthorStep.handlebars' ) ) );
 		}
 		this.addStep( new DialogueStep( 'compilation' ) );
 		this.addStep( new DialogueStep( 'editing' ) );
