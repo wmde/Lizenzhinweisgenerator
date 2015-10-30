@@ -1,10 +1,12 @@
-<form class="immediate-submit">
-	{{translate 'dialogue.type-of-use-headline'}}
+<div>
+	<form class="immediate-submit">
+		{{translate 'dialogue.type-of-use-headline'}}
 
-	<label>
-		<input type="radio"> {{translate 'dialogue.answer-print'}}
-	</label>
-	<label>
-		<input type="radio"> {{translate 'dialogue.answer-online'}}
-	</label>
-</form>
+		<label>
+			<input type="radio" name="type" value="print"> {{translate 'dialogue.answer-print'}}
+		</label>
+		<label>
+			<input type="radio" name="type" value="online"> {{translate 'dialogue.answer-online'}}
+		</label>
+	</form>
+</div>
