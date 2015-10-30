@@ -38,9 +38,9 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	},
 
 	_addEditingSteps: function() {
-		this.addStep( new DialogueStep( 'change' ) );
-		this.addStep( new DialogueStep( 'creator' ) );
-		this.addStep( new DialogueStep( 'licence' ) );
+		this.addStep( new DialogueStep( 'change', require( './templates/ChangeStep.handlebars' ) ) );
+		this.addStep( new DialogueStep( 'creator', require( './templates/CreatorStep.handlebars' ) ) );
+		this.addStep( new DialogueStep( 'licence', require( './templates/LicenceStep.handlebars' ) ) );
 	}
 } );
 

@@ -63,4 +63,13 @@ QUnit.test( 'Steps content', function( assert ) {
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.editing-headline' ) );
 	dialogue.currentStep().complete( { edited: true } );
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.change-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.creator-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.licence-headline' ) );
+	dialogue.currentStep().complete();
 } );
