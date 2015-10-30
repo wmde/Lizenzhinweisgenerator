@@ -10,7 +10,7 @@ var $ = require( 'jquery' ),
  */
 var DialogueStep = function( name, template ) {
 	this._name = name;
-	this._view = new DialogueStepView( this, template );
+	this._view = new DialogueStepView( template );
 };
 
 $.extend( DialogueStep.prototype, {
