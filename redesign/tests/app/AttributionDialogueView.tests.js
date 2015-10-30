@@ -41,3 +41,47 @@ QUnit.test( 'submitting the form should renders second step', function( assert )
 	assert.ok( dialogueContains( $dialogue, 'dialogue.author-headline' ) );
 	assert.notOk( dialogueContains( $dialogue, 'dialogue.type-of-use-headline' ) );
 } );
+
+QUnit.test( 'Dialogue walkthrough', function( assert ) {
+	var $dialogue = $( '<div/>' ),
+		dialogue = new AttributionDialogueView();
+	dialogue.render( $dialogue );
+
+	// Type of Use Step
+	$dialogue.find( 'input:radio' )[ 1 ].click();
+	assert.equal( dialogue._dialogue.getData()[ 'typeOfUse' ][ 'type' ], 'online' );
+
+	// Author Step
+	assert.equal( $dialogue.find( 'input:radio' ).length, 1 );
+	assert.equal( $dialogue.find( 'input:text' ).length, 1 );
+
+	$dialogue.find( 'input:text' ).val( 'Blah' );
+	$dialogue.find( 'button' ).click();
+	assert.equal( dialogue._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
+
+	// Compilation Step
+	assert.equal( $dialogue.find( 'input:radio' ).length, 2 );
+
+	$dialogue.find( 'input:radio' )[ 0 ].click();
+	assert.equal( dialogue._dialogue.getData()[ 'compilation' ][ 'compilation' ], 'true' );
+
+	// Editing Step
+	assert.equal( $dialogue.find( 'input:radio' ).length, 2 );
+
+	$dialogue.find( 'input:radio' )[ 0 ].click();
+	assert.equal( dialogue._dialogue.getData()[ 'editing' ][ 'edited' ], 'true' );
+
+	// Change Substep
+	assert.equal( $dialogue.find( 'input:text' ).length, 1 );
+
+	$dialogue.find( 'input:text' ).val( 'cropped' );
+	$dialogue.find( 'button' ).click();
+	assert.equal( dialogue._dialogue.getData()[ 'change' ][ 'change' ], 'cropped' );
+
+	// Creator Substep
+	assert.equal( $dialogue.find( 'input:text' ).length, 1 );
+
+	$dialogue.find( 'input:text' ).val( 'Meh' );
+	$dialogue.find( 'button' ).click();
+	assert.equal( dialogue._dialogue.getData()[ 'creator' ][ 'name' ], 'Meh' );
+} );

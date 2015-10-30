@@ -1,3 +1,12 @@
-<div class="">
-	{{translate 'dialogue.editing-headline'}}
+<div>
+	<form class="immediate-submit">
+		{{translate 'dialogue.editing-headline'}}
+
+		<label>
+			<input type="radio" name="edited" value="true"> {{translate 'dialogue.answer-edited'}}
+		</label>
+		<label>
+			<input type="radio" name="edited" value="false"> {{translate 'dialogue.answer-not-edited'}}
+		</label>
+	</form>
 </div>
