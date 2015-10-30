@@ -33,6 +33,13 @@ $.extend( Dialogue.prototype, {
 	},
 
 	/**
+	 * @param {int} n
+	 */
+	setStep: function(n) {
+		this._currentStep = n;
+	},
+
+	/**
 	 * @param {DialogueStep} step
 	 */
 	completeStep: function( step ) {

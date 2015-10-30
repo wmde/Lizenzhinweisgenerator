@@ -53,3 +53,10 @@ QUnit.test( 'completing a step should increment the current step pointer', funct
 	step1.complete( {} );
 	assert.equal( dialogue.currentStep().getName(), 'second' );
 } );
+
+QUnit.test( 'setStep sets current step pointer', function( assert ) {
+	var dialogue = new Dialogue();
+	dialogue.setStep( 3 );
+
+	assert.equal( dialogue._currentStep, 3 );
+} );
