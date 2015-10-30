@@ -56,4 +56,8 @@ QUnit.test( 'Steps content', function( assert ) {
 	dialogue.currentStep().complete();
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.author-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.compilation-headline' ) );
+	dialogue.currentStep().complete();
 } );
