@@ -60,4 +60,7 @@ QUnit.test( 'Steps content', function( assert ) {
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.compilation-headline' ) );
 	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.editing-headline' ) );
+	dialogue.currentStep().complete( { edited: true } );
 } );

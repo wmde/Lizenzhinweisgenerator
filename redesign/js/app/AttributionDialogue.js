@@ -25,7 +25,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 			this.addStep( new DialogueStep( 'author', require( './templates/AuthorStep.handlebars' ) ) );
 		}
 		this.addStep( new DialogueStep( 'compilation', require( './templates/CompilationStep.handlebars' ) ) );
-		this.addStep( new DialogueStep( 'editing' ) );
+		this.addStep( new DialogueStep( 'editing', require( './templates/EditingStep.handlebars' ) ) );
 	},
 
 	completeStep: function( step ) {
