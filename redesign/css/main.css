@@ -305,6 +305,8 @@ a:hover {
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
+}
+.dialogue-bubble .bubble-columns {
   -webkit-column-count: 2;
   -moz-column-count: 2;
   column-count: 2;
@@ -312,7 +314,7 @@ a:hover {
   -moz-column-gap: 40px;
   column-gap: 40px;
 }
-.dialogue-bubble .bubble-text p {
+.dialogue-bubble .bubble-columns p {
   break-after: column;
   -webkit-column-break-after: always;
 }
