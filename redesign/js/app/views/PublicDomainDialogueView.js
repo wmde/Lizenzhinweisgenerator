@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require( 'jquery' ),
-	dialogueTemplate = require( '../templates/Dialogue.handlebars' ),
+	publicDomainTemplate = require( '../templates/PublicDomain.handlebars' ),
 	Messages = require( '../Messages' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' );
 
@@ -10,10 +10,7 @@ var PublicDomainDialogueView = function() {
 
 $.extend( PublicDomainDialogueView.prototype, {
 	_renderPublicLicenceDialogue: function() {
-		return dialogueTemplate( {
-			title: Messages.t( 'dialogue.public-domain-picture' ),
-			content: Messages.t( 'dialogue.public-domain-text' )
-		} );
+		return publicDomainTemplate();
 	},
 
 	_showPublicDomainInformation: function() {

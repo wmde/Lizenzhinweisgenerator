@@ -6,3 +6,5 @@ var Handlebars = require( 'hbsfy/runtime' ),
 Handlebars.registerHelper( 'translate', function( s ) {
 	return Messages.t( s );
 } );
+
+Handlebars.registerPartial( 'dialogueBubble', require( './app/templates/Dialogue.handlebars' ) );
