@@ -55,7 +55,7 @@ QUnit.test( 'submitting the form should renders second step', function( assert )
 QUnit.test( 'Author Step', function( assert ) {
 	var dialogue = renderDialogueAtStep( 1 );
 
-	assert.equal( dialogue.dom.find( 'input:radio' ).length, 1 );
+	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 1 );
 	assert.equal( dialogue.dom.find( 'input:text' ).length, 1 );
 } );
 
