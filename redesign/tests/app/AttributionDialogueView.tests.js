@@ -71,6 +71,13 @@ QUnit.test( 'Compilation Step', function( assert ) {
 	var dialogue = renderDialogueAtStep( 2 );
 
 	assert.equal( dialogue.dom.find( 'input:radio' ).length, 2 );
+
+	dialogue.dom.find( 'input:radio' )[ 0 ].click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'compilation' ][ 'compilation' ], 'true' );
+
+	dialogue = renderDialogueAtStep( 2 );
+	dialogue.dom.find( 'input:radio' )[ 1 ].click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'compilation' ][ 'compilation' ], 'false' );
 } );
 
 QUnit.test( 'Editing Step', function( assert ) {
