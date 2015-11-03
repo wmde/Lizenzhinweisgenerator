@@ -44,7 +44,7 @@ $.extend( AttributionDialogueView.prototype, {
 		var $step = this._dialogue.currentStep().render(),
 			self = this;
 
-		$step.find( '.immediate-submit input:radio, .immediate-submit input:checkbox' ).click( function() {
+		$step.find( '.immediate-submit input:checkbox' ).click( function() {
 			$( this ).closest( 'form' ).submit();
 		} );
 		$step.find( 'form' ).submit( function( e ) {
