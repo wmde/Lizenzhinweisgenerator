@@ -306,6 +306,29 @@ a:hover {
 .dialogue-bubble .bubble-text {
   color: #fff;
 }
+.dialogue-bubble input[type=text] {
+  border-radius: 2px 0 0 2px;
+  width: 75%;
+  border: 0;
+  color: #000;
+  padding: 8px 10px;
+}
+.dialogue-bubble button.green-btn, .dialogue-bubble input[type=text] {
+  height: 28px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+.dialogue-bubble button.green-btn {
+  border: 1px solid #fff;
+  border-left: 0;
+  height: 28px;
+  opacity: 0.5;
+}
+.dialogue-bubble button.green-btn:hover {
+  opacity: 1;
+  background: inherit;
+}
+
 .dialogue-bubble label {
   display: block;
   font-weight: normal;

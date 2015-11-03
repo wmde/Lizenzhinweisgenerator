@@ -17,7 +17,10 @@
       "author-headline": "Wie lautet der Name bzw. die Namen des Ursprungsautors oder der Rechteinhaber?",
       "compilation-headline": "Wie möchten Sie das Werk veröffentlichen?",
       "answer-print": "In einem Druckerzeugnis.",
-      "answer-online": "Online."
+      "answer-online": "Online.",
+      "author-label": "Bitte tragen Sie die Informationen hier ein und geben Sie auch, wenn vorhanden, Zuschreibungen an Dritte (z.B. „sponsored by XY“) mit in das Textfeld ein:",
+      "next": "Weiter",
+      "answer-no-author": "Es sind keine Informationen dazu angegeben."
     }
   }
 }
