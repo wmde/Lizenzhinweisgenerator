@@ -57,6 +57,14 @@ QUnit.test( 'Author Step', function( assert ) {
 
 	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 1 );
 	assert.equal( dialogue.dom.find( 'input:text' ).length, 1 );
+
+	dialogue.dom.find( 'input:checkbox' ).click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'author' ][ 'no-author' ], 'true' );
+
+	dialogue = renderDialogueAtStep( 1 );
+	dialogue.dom.find( 'input:text' ).val( 'Blah' );
+	dialogue.dom.find( 'button' ).click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
 } );
 
 QUnit.test( 'Compilation Step', function( assert ) {
