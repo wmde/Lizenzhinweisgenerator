@@ -6,6 +6,8 @@ var $ = require( 'jquery' ),
 	AttributionDialogueView = require( '../../js/app/views/AttributionDialogueView' ),
 	Messages = require( '../../js/app/Messages' );
 
+$.fx.off = true;
+
 function dialogueContains( $dialogue, message ) {
 	return $dialogue.text().indexOf( Messages.t( message ) ) > -1;
 }

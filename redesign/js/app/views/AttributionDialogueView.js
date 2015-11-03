@@ -30,10 +30,15 @@ $.extend( AttributionDialogueView.prototype, {
 	},
 
 	_submit: function( e, $dialogue ) {
+		var self = this;
+
 		this._dialogue.currentStep().complete( this._formValuesToObj(
 			$dialogue.find( 'form' ).serializeArray()
 		) );
-		this.render( $dialogue );
+		$dialogue.animate( { opacity: 0 }, 500, function() {
+			self.render( $dialogue );
+			$dialogue.animate( { opacity: 1 }, 500 );
+		} );
 		e.preventDefault();
 	},
 
