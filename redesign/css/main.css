@@ -306,6 +306,10 @@ a:hover {
 .dialogue-bubble .bubble-text {
   color: #fff;
 }
+.dialogue-bubble label {
+  display: block;
+  font-weight: normal;
+}
 .dialogue-bubble .bubble-columns {
   -webkit-column-count: 2;
   -moz-column-count: 2;
