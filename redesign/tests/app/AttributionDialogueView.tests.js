@@ -84,18 +84,33 @@ QUnit.test( 'Editing Step', function( assert ) {
 	var dialogue = renderDialogueAtStep( 3 );
 
 	assert.equal( dialogue.dom.find( 'input:radio' ).length, 2 );
+
+	dialogue.dom.find( 'input:radio' )[ 0 ].click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'editing' ][ 'edited' ], 'true' );
+
+	dialogue = renderDialogueAtStep( 3 );
+	dialogue.dom.find( 'input:radio' )[ 1 ].click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'editing' ][ 'edited' ], 'false' );
 } );
 
 QUnit.test( 'Change Step', function( assert ) {
 	var dialogue = renderDialogueAtStep( 4 );
 
 	assert.equal( dialogue.dom.find( 'input:text' ).length, 1 );
+
+	dialogue.dom.find( 'input:text' ).val( 'cropped' );
+	dialogue.dom.find( 'button' ).click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'change' ][ 'change' ], 'cropped' );
 } );
 
 QUnit.test( 'Creator Step', function( assert ) {
 	var dialogue = renderDialogueAtStep( 5 );
 
 	assert.equal( dialogue.dom.find( 'input:text' ).length, 1 );
+
+	dialogue.dom.find( 'input:text' ).val( 'Meh' );
+	dialogue.dom.find( 'button' ).click();
+	assert.equal( dialogue.view._dialogue.getData()[ 'creator' ][ 'name' ], 'Meh' );
 } );
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {
