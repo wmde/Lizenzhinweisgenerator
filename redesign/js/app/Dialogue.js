@@ -35,7 +35,7 @@ $.extend( Dialogue.prototype, {
 	/**
 	 * @param {int} n
 	 */
-	setStep: function(n) {
+	setStep: function( n ) {
 		this._currentStep = n;
 	},
 

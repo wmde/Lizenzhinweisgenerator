@@ -4,7 +4,6 @@ QUnit.module( 'DialogueStep' );
 
 var DialogueStep = require( '../../js/app/DialogueStep' ),
 	Dialogue = require( '../../js/app/Dialogue' ),
-	DialogueStepView = require( '../../js/app/views/DialogueStepView' ),
 	Handlebars = require( 'handlebars' ),
 	$ = require( 'jquery' );
 

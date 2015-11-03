@@ -3,7 +3,7 @@
 var $ = require( 'jquery' );
 
 /**
- * @param {Handlebars()} template
+ * @param {Function} template
  * @constructor
  */
 var DialogueStepView = function( template ) {
@@ -12,7 +12,7 @@ var DialogueStepView = function( template ) {
 
 $.extend( DialogueStepView.prototype, {
 	/**
-	 * @type {Handlebars()}
+	 * @type {Function}
 	 */
 	_template: null,
 
