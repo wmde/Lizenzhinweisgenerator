@@ -20,7 +20,9 @@
       "answer-online": "Online.",
       "author-label": "Bitte tragen Sie die Informationen hier ein und geben Sie auch, wenn vorhanden, Zuschreibungen an Dritte (z.B. „sponsored by XY“) mit in das Textfeld ein:",
       "next": "Weiter",
-      "answer-no-author": "Es sind keine Informationen dazu angegeben."
+      "answer-no-author": "Es sind keine Informationen dazu angegeben.",
+      "answer-compilation": "Zusammen mit anderen Werken.",
+      "answer-no-compilation": "Einzeln."
     }
   }
 }
