@@ -16,13 +16,16 @@
       "type-of-use-headline": "Wie möchten Sie das Werk nutzen?",
       "author-headline": "Wie lautet der Name bzw. die Namen des Ursprungsautors oder der Rechteinhaber?",
       "compilation-headline": "Wie möchten Sie das Werk veröffentlichen?",
+      "editing-headline": "Haben Sie das Werk bearbeitet?",
       "answer-print": "In einem Druckerzeugnis.",
       "answer-online": "Online.",
       "author-label": "Bitte tragen Sie die Informationen hier ein und geben Sie auch, wenn vorhanden, Zuschreibungen an Dritte (z.B. „sponsored by XY“) mit in das Textfeld ein:",
       "next": "Weiter",
       "answer-no-author": "Es sind keine Informationen dazu angegeben.",
       "answer-compilation": "Zusammen mit anderen Werken.",
-      "answer-no-compilation": "Einzeln."
+      "answer-no-compilation": "Einzeln.",
+      "answer-edited": "Ja.",
+      "answer-not-edited": "Nein, ich möchte das Werk in seiner ursprünglichen Form nutzen."
     }
   }
 }
