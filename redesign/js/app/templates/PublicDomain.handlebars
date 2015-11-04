@@ -1,5 +1,11 @@
-{{#>dialogueBubble title='dialogue.public-domain-picture'}}
-	<div class="bubble-columns">
-		{{{translate 'dialogue.public-domain-text'}}}
-	</div>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		{{translate 'dialogue.public-domain-picture'}}
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<div class="bubble-columns">
+			{{{translate 'dialogue.public-domain-text'}}}
+		</div>
+	{{/inline}}
 {{/dialogueBubble}}

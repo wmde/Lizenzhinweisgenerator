@@ -1,14 +1,20 @@
-{{#>dialogueBubble title='dialogue.author-headline'}}
-	<form class="immediate-submit">
-		<p>{{translate 'dialogue.author-label'}}</p>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		{{translate 'dialogue.author-headline'}}
+	{{/inline}}
 
-		<div class="form-group">
-			<input type="text" name="author"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
-		</div>
+	{{#*inline 'content'}}
+		<form class="immediate-submit">
+			<p>{{translate 'dialogue.author-label'}}</p>
 
-		<label>
-			<input type="checkbox" name="no-author" value="true">
-			{{translate 'dialogue.answer-no-author'}}
-		</label>
-	</form>
+			<div class="form-group">
+				<input type="text" name="author"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+			</div>
+
+			<label>
+				<input type="checkbox" name="no-author" value="true">
+				{{translate 'dialogue.answer-no-author'}}
+			</label>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}

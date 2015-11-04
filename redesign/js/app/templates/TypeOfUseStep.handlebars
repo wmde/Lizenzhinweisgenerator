@@ -1,10 +1,16 @@
-{{#>dialogueBubble title='dialogue.type-of-use-headline'}}
-	<form class="immediate-submit">
-		<label>
-			<input type="checkbox" name="type" value="print"> {{translate 'dialogue.answer-print'}}
-		</label>
-		<label>
-			<input type="checkbox" name="type" value="online"> {{translate 'dialogue.answer-online'}}
-		</label>
-	</form>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		{{translate 'dialogue.type-of-use-headline'}}
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form class="immediate-submit">
+			<label>
+				<input type="checkbox" name="type" value="print"> {{translate 'dialogue.answer-print'}}
+			</label>
+			<label>
+				<input type="checkbox" name="type" value="online"> {{translate 'dialogue.answer-online'}}
+			</label>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}

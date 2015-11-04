@@ -1,5 +1,11 @@
-{{#>dialogueBubble title='dialogue.creator-headline'}}
-	<form>
-		<input type="text" name="name"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
-	</form>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		{{translate 'dialogue.creator-headline'}}
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form>
+			<input type="text" name="name"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}

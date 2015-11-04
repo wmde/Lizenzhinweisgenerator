@@ -1,10 +1,16 @@
-{{#>dialogueBubble title='dialogue.editing-headline'}}
-	<form class="immediate-submit">
-		<label>
-			<input type="checkbox" name="edited" value="true"> {{translate 'dialogue.answer-edited'}}
-		</label>
-		<label>
-			<input type="checkbox" name="edited" value="false"> {{translate 'dialogue.answer-not-edited'}}
-		</label>
-	</form>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		{{translate 'dialogue.editing-headline'}}
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form class="immediate-submit">
+			<label>
+				<input type="checkbox" name="edited" value="true"> {{translate 'dialogue.answer-edited'}}
+			</label>
+			<label>
+				<input type="checkbox" name="edited" value="false"> {{translate 'dialogue.answer-not-edited'}}
+			</label>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}
