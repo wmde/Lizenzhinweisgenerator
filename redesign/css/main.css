@@ -159,7 +159,7 @@ a:hover {
 }
 #file-form input {
   font-size: 13pt;
-  color: #bfbfbf;
+  color: #000;
   line-height: 30px;
   width: 680px;
   padding: 6px 12px;
