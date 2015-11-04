@@ -28,7 +28,7 @@ QUnit.test( 'should add 3 more steps for editing', function( assert ) {
 	var dialogue = new AttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
-	completeEditingStep( dialogue, { edited: true } );
+	completeEditingStep( dialogue, { edited: 'true' } );
 	assert.equal( dialogue._steps.length, initialNumber + 3 );
 } );
 
@@ -36,7 +36,7 @@ QUnit.test( 'should not add 3 more steps when not editing', function( assert ) {
 	var dialogue = new AttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
-	completeEditingStep( dialogue, { edited: false } );
+	completeEditingStep( dialogue, { edited: 'false' } );
 	assert.equal( dialogue._steps.length, initialNumber );
 } );
 
@@ -62,7 +62,7 @@ QUnit.test( 'Steps content', function( assert ) {
 	dialogue.currentStep().complete();
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.editing-headline' ) );
-	dialogue.currentStep().complete( { edited: true } );
+	dialogue.currentStep().complete( { edited: 'true' } );
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.change-headline' ) );
 	dialogue.currentStep().complete();

@@ -29,7 +29,9 @@ QUnit.test( 'first step has two checkboxes', function( assert ) {
 function renderDialogueAtStep( n ) {
 	var $dialogue = $( '<div/>' ),
 		dialogue = new AttributionDialogueView();
-	dialogue._dialogue._addEditingSteps();
+	if( n > 3 ) {
+		dialogue._dialogue._addEditingSteps();
+	}
 	dialogue._dialogue.setStep( n );
 	dialogue.render( $dialogue );
 

@@ -32,7 +32,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 		Dialogue.prototype.completeStep.call( this, step );
 
 		var data = step.getData();
-		if( step.getName() === 'editing' && data[ 'edited' ] ) {
+		if( step.getName() === 'editing' && data[ 'edited' ] === 'true' ) {
 			this._addEditingSteps();
 		}
 	},
