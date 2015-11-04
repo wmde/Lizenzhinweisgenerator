@@ -8,3 +8,4 @@ Handlebars.registerHelper( 'translate', function( s ) {
 } );
 
 Handlebars.registerPartial( 'dialogueBubble', require( './app/templates/Dialogue.handlebars' ) );
+Handlebars.registerPartial( 'questionMark', require( './app/templates/QuestionMark.handlebars' ) );

@@ -51,6 +51,12 @@ $.extend( AttributionDialogueView.prototype, {
 		return new DoneView().render();
 	},
 
+	_toggleQuestionMark: function() {
+		$( this )
+			.toggleClass( 'active' )
+			.siblings( '.question-mark-content' ).toggle();
+	},
+
 	/**
 	 * @param {jQuery} $dialogue
 	 */
@@ -64,6 +70,7 @@ $.extend( AttributionDialogueView.prototype, {
 		$content.find( 'form' ).submit( function( e ) {
 			self._submit( e, $dialogue );
 		} );
+		$content.find( '.question-mark' ).click( this._toggleQuestionMark );
 
 		$dialogue.html( $content );
 	}

@@ -328,7 +328,21 @@ a:hover {
   opacity: 1;
   background: inherit;
 }
-
+.dialogue-bubble .question-mark {
+  border: 0;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 100%;
+}
+.dialogue-bubble h2 .question-mark {
+  background: #4b590a;
+  color: #97b314;
+}
+.dialogue-bubble .question-mark-content {
+  margin-top: 10px;
+  display: none;
+  font-size: 14px;
+}
 .dialogue-bubble label {
   display: block;
   font-weight: normal;
