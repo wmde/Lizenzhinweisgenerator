@@ -4,7 +4,8 @@ QUnit.module( 'AttributionDialogueView' );
 
 var $ = require( 'jquery' ),
 	AttributionDialogueView = require( '../../js/app/views/AttributionDialogueView' ),
-	Messages = require( '../../js/app/Messages' );
+	Messages = require( '../../js/app/Messages' ),
+	Asset = require( '../../js/app/Asset' );
 
 $.fx.off = true;
 
@@ -14,21 +15,21 @@ function dialogueContains( $dialogue, message ) {
 
 QUnit.test( 'render should show the first step', function( assert ) {
 	var $dialogue = $( '<div/>' );
-	new AttributionDialogueView().render( $dialogue );
+	new AttributionDialogueView( new Asset( '', '', null, null, [] ) ).render( $dialogue );
 
 	assert.ok( dialogueContains( $dialogue, 'dialogue.type-of-use-headline' ) );
 } );
 
 QUnit.test( 'first step has two checkboxes', function( assert ) {
 	var $dialogue = $( '<div/>' );
-	new AttributionDialogueView().render( $dialogue );
+	new AttributionDialogueView( new Asset( '', '', null, null, [] ) ).render( $dialogue );
 
 	assert.equal( $dialogue.find( 'input[type="checkbox"]' ).length, 2 );
 } );
 
 function renderDialogueAtStep( n ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = new AttributionDialogueView();
+		dialogue = new AttributionDialogueView( new Asset( '', '', null, null, [] ) );
 	if( n > 3 ) {
 		dialogue._dialogue._addEditingSteps();
 	}
@@ -40,7 +41,7 @@ function renderDialogueAtStep( n ) {
 
 QUnit.test( 'clicking a checkbox on first step submits and saves data', function( assert ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = new AttributionDialogueView();
+		dialogue = new AttributionDialogueView( new Asset( '', '', null, null, [] ) );
 	dialogue.render( $dialogue );
 
 	$dialogue.find( 'input:checkbox' )[ 0 ].click();
@@ -49,7 +50,7 @@ QUnit.test( 'clicking a checkbox on first step submits and saves data', function
 
 QUnit.test( 'submitting the form should renders second step', function( assert ) {
 	var $dialogue = $( '<div/>' );
-	new AttributionDialogueView().render( $dialogue );
+	new AttributionDialogueView( new Asset( '', '', null, null, [] ) ).render( $dialogue );
 
 	$dialogue.find( 'input[type="checkbox"]' )[ 0 ].click();
 	assert.ok( dialogueContains( $dialogue, 'dialogue.author-headline' ) );
@@ -119,7 +120,7 @@ QUnit.test( 'Creator Step', function( assert ) {
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = new AttributionDialogueView();
+		dialogue = new AttributionDialogueView( new Asset( '', '', null, null, [] ) );
 	dialogue.render( $dialogue );
 
 	// Type of Use Step
