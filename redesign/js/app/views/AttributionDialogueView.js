@@ -1,7 +1,8 @@
 'use strict';
 
 var $ = require( 'jquery' ),
-	AttributionDialogue = require( '../AttributionDialogue' );
+	AttributionDialogue = require( '../AttributionDialogue' ),
+	DoneView = require( './DoneView' );
 
 var AttributionDialogueView = function() {
 	this._dialogue = new AttributionDialogue();
@@ -42,21 +43,29 @@ $.extend( AttributionDialogueView.prototype, {
 		e.preventDefault();
 	},
 
+	_nextStepOrDone: function() {
+		if( this._dialogue.currentStep() ) {
+			return this._dialogue.currentStep().render();
+		}
+
+		return new DoneView().render();
+	},
+
 	/**
 	 * @param {jQuery} $dialogue
 	 */
 	render: function( $dialogue ) {
-		var $step = this._dialogue.currentStep().render(),
+		var $content = this._nextStepOrDone(),
 			self = this;
 
-		$step.find( '.immediate-submit input:checkbox' ).click( function() {
+		$content.find( '.immediate-submit input:checkbox' ).click( function() {
 			$( this ).closest( 'form' ).submit();
 		} );
-		$step.find( 'form' ).submit( function( e ) {
+		$content.find( 'form' ).submit( function( e ) {
 			self._submit( e, $dialogue );
 		} );
 
-		$dialogue.html( $step );
+		$dialogue.html( $content );
 	}
 } );
 

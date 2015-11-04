@@ -152,3 +152,9 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	assert.equal( dialogue._dialogue.getData()[ 'change' ][ 'change' ], 'cropped' );
 	assert.equal( dialogue._dialogue.getData()[ 'creator' ][ 'name' ], 'Meh' );
 } );
+
+QUnit.test( 'show done after completing last step', function( assert ) {
+	var dialogue = renderDialogueAtStep( 3 );
+	dialogue.dom.find( 'input:checkbox' )[ 1 ].click();
+	assert.ok( dialogueContains( dialogue.dom, 'dialogue.done-headline' ) );
+} );
