@@ -1,13 +1,16 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	DialogueStepView = require( './views/DialogueStepView' );
 
 /**
  * @param {string} name
+ * @param {Handlebars} template
  * @constructor
  */
-var DialogueStep = function( name ) {
+var DialogueStep = function( name, template ) {
 	this._name = name;
+	this._view = new DialogueStepView( template );
 };
 
 $.extend( DialogueStep.prototype, {
@@ -25,6 +28,11 @@ $.extend( DialogueStep.prototype, {
 	 * @type {Object}
 	 */
 	_data: null,
+
+	/**
+	 * @type {DialogueStepView
+	 */
+	_view: null,
 
 	/**
 	 * @param {Dialogue} dialogue
@@ -50,6 +58,13 @@ $.extend( DialogueStep.prototype, {
 	 */
 	getData: function() {
 		return this._data;
+	},
+
+	/**
+	 * @returns {jQuery}
+	 */
+	render: function() {
+		return this._view.render();
 	}
 } );
 

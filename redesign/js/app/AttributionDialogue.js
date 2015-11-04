@@ -20,27 +20,27 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	_author: null,
 
 	init: function() {
-		this.addStep( new DialogueStep( 'typeOfUse' ) );
+		this.addStep( new DialogueStep( 'typeOfUse', require( './templates/TypeOfUseStep.handlebars' ) ) );
 		if( !this._author ) {
-			this.addStep( new DialogueStep( 'author' ) );
+			this.addStep( new DialogueStep( 'author', require( './templates/AuthorStep.handlebars' ) ) );
 		}
-		this.addStep( new DialogueStep( 'compilation' ) );
-		this.addStep( new DialogueStep( 'editing' ) );
+		this.addStep( new DialogueStep( 'compilation', require( './templates/CompilationStep.handlebars' ) ) );
+		this.addStep( new DialogueStep( 'editing', require( './templates/EditingStep.handlebars' ) ) );
 	},
 
 	completeStep: function( step ) {
 		Dialogue.prototype.completeStep.call( this, step );
 
 		var data = step.getData();
-		if( step.getName() === 'editing' && data['edited'] ) {
+		if( step.getName() === 'editing' && data[ 'edited' ] === 'true' ) {
 			this._addEditingSteps();
 		}
 	},
 
 	_addEditingSteps: function() {
-		this.addStep( new DialogueStep( 'change' ) );
-		this.addStep( new DialogueStep( 'creator' ) );
-		this.addStep( new DialogueStep( 'licence' ) );
+		this.addStep( new DialogueStep( 'change', require( './templates/ChangeStep.handlebars' ) ) );
+		this.addStep( new DialogueStep( 'creator', require( './templates/CreatorStep.handlebars' ) ) );
+		this.addStep( new DialogueStep( 'licence', require( './templates/LicenceStep.handlebars' ) ) );
 	}
 } );
 

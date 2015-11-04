@@ -3,7 +3,9 @@
 QUnit.module( 'DialogueStep' );
 
 var DialogueStep = require( '../../js/app/DialogueStep' ),
-	Dialogue = require( '../../js/app/Dialogue' );
+	Dialogue = require( '../../js/app/Dialogue' ),
+	Handlebars = require( 'handlebars' ),
+	$ = require( 'jquery' );
 
 QUnit.test( 'should have a name', function( assert ) {
 	assert.equal( new DialogueStep( 'typeOfUse', new Dialogue() ).getName(), 'typeOfUse' );
@@ -33,4 +35,9 @@ QUnit.test( 'should push its data to its Dialogue on completion', function( asse
 	dialogue.addStep( step );
 	step.complete( { foo: 'bar' } );
 	assert.equal( step._data, dialogue._data[ step.getName() ] );
+} );
+
+QUnit.test( 'render should return a jQuery object', function( assert ) {
+	var step = new DialogueStep( 'test', Handlebars.compile( 'hi' ) );
+	assert.ok( step.render() instanceof $ );
 } );

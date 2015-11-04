@@ -1,16 +1,71 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	AttributionDialogue = require( '../AttributionDialogue' ),
+	DoneView = require( './DoneView' );
 
 var AttributionDialogueView = function() {
+	this._dialogue = new AttributionDialogue();
+	this._dialogue.init();
 };
 
 $.extend( AttributionDialogueView.prototype, {
 	/**
+	 * @type {AttributionDialogue}
+	 */
+	_dialogue: null,
+
+	/**
+	 * Turns a $form.serializeArray return value into an object
+	 * @param {Object[]} formValues
+	 * @returns {{}}
+	 * @private
+	 */
+	_formValuesToObj: function( formValues ) {
+		var form = {};
+		$.each( formValues, function() {
+			form[ this.name ] = this.value;
+		} );
+
+		return form;
+	},
+
+	_submit: function( e, $dialogue ) {
+		var self = this;
+
+		this._dialogue.currentStep().complete( this._formValuesToObj(
+			$dialogue.find( 'form' ).serializeArray()
+		) );
+		$dialogue.animate( { opacity: 0 }, 500, function() {
+			self.render( $dialogue );
+			$dialogue.animate( { opacity: 1 }, 500 );
+		} );
+		e.preventDefault();
+	},
+
+	_nextStepOrDone: function() {
+		if( this._dialogue.currentStep() ) {
+			return this._dialogue.currentStep().render();
+		}
+
+		return new DoneView().render();
+	},
+
+	/**
 	 * @param {jQuery} $dialogue
 	 */
 	render: function( $dialogue ) {
-		$dialogue.html( 'Dialogue goes here!' );
+		var $content = this._nextStepOrDone(),
+			self = this;
+
+		$content.find( '.immediate-submit input:checkbox' ).click( function() {
+			$( this ).closest( 'form' ).submit();
+		} );
+		$content.find( 'form' ).submit( function( e ) {
+			self._submit( e, $dialogue );
+		} );
+
+		$dialogue.html( $content );
 	}
 } );
 

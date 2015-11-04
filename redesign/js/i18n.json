@@ -12,7 +12,23 @@
       "no-attribution-needed": "Keine Lizenzangabe nötig",
       "more-information": "weitere Informationen",
       "adjust-attribution-for-usage": "Lizenzhinweis an die Nutzung anpassen",
-      "public-domain-text": "<p>Bei der Nutzung von Werken, die als gemeinfrei gekennzeichnet sind, bestehen keine Lizenzpflichten. Sie können in jeder beliebigen Form genutzt werden, ohne dass Hinweise auf den Urheber oder die Lizensierung gemacht werden müssen.</p><p>Laut deutschem Urheberrecht hält der Urheber allerdings einen nicht verzichtbaren Kern an Rechten. Wir raten deshalb davon ab, sich die Urheberschaft an dem Werk anzumaßen oder es in einer Weise zu benutzen, die den Ruf des Urhebers schädigt.</p>"
+      "public-domain-text": "<p>Bei der Nutzung von Werken, die als gemeinfrei gekennzeichnet sind, bestehen keine Lizenzpflichten. Sie können in jeder beliebigen Form genutzt werden, ohne dass Hinweise auf den Urheber oder die Lizensierung gemacht werden müssen.</p><p>Laut deutschem Urheberrecht hält der Urheber allerdings einen nicht verzichtbaren Kern an Rechten. Wir raten deshalb davon ab, sich die Urheberschaft an dem Werk anzumaßen oder es in einer Weise zu benutzen, die den Ruf des Urhebers schädigt.</p>",
+      "type-of-use-headline": "Wie möchten Sie das Werk nutzen?",
+      "author-headline": "Wie lautet der Name bzw. die Namen des Ursprungsautors oder der Rechteinhaber?",
+      "compilation-headline": "Wie möchten Sie das Werk veröffentlichen?",
+      "editing-headline": "Haben Sie das Werk bearbeitet?",
+      "change-headline": "Was genau haben Sie am Werk verändert?",
+      "creator-headline": "Wie möchten Sie als Urheber oder Urheberin Ihrer Änderungen genannt werden?",
+      "done-headline": "Geschafft!",
+      "answer-print": "In einem Druckerzeugnis.",
+      "answer-online": "Online.",
+      "author-label": "Bitte tragen Sie die Informationen hier ein und geben Sie auch, wenn vorhanden, Zuschreibungen an Dritte (z.B. „sponsored by XY“) mit in das Textfeld ein:",
+      "next": "Weiter",
+      "answer-no-author": "Es sind keine Informationen dazu angegeben.",
+      "answer-compilation": "Zusammen mit anderen Werken.",
+      "answer-no-compilation": "Einzeln.",
+      "answer-edited": "Ja.",
+      "answer-not-edited": "Nein, ich möchte das Werk in seiner ursprünglichen Form nutzen."
     }
   }
 }

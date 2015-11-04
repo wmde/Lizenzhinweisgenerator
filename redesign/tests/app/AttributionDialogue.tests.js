@@ -2,7 +2,8 @@
 
 QUnit.module( 'AttributionDialogue' );
 
-var AttributionDialogue = require( '../../js/app/AttributionDialogue' );
+var AttributionDialogue = require( '../../js/app/AttributionDialogue' ),
+	Messages = require( '../../js/app/Messages' );
 
 QUnit.test( 'should have 4 steps by default', function( assert ) {
 	var dialogue = new AttributionDialogue();
@@ -27,7 +28,7 @@ QUnit.test( 'should add 3 more steps for editing', function( assert ) {
 	var dialogue = new AttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
-	completeEditingStep( dialogue, { edited: true } );
+	completeEditingStep( dialogue, { edited: 'true' } );
 	assert.equal( dialogue._steps.length, initialNumber + 3 );
 } );
 
@@ -35,6 +36,40 @@ QUnit.test( 'should not add 3 more steps when not editing', function( assert ) {
 	var dialogue = new AttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
-	completeEditingStep( dialogue, { edited: false } );
+	completeEditingStep( dialogue, { edited: 'false' } );
 	assert.equal( dialogue._steps.length, initialNumber );
+} );
+
+function currentStepContains( dialogue, message ) {
+	return dialogue
+			.currentStep()
+			.render()
+			.text()
+			.indexOf( Messages.t( message ) ) > -1;
+}
+
+QUnit.test( 'Steps content', function( assert ) {
+	var dialogue = new AttributionDialogue();
+	dialogue.init();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.type-of-use-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.author-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.compilation-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.editing-headline' ) );
+	dialogue.currentStep().complete( { edited: 'true' } );
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.change-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.creator-headline' ) );
+	dialogue.currentStep().complete();
+
+	assert.ok( currentStepContains( dialogue, 'dialogue.licence-headline' ) );
+	dialogue.currentStep().complete();
 } );
