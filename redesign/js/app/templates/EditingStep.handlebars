@@ -5,12 +5,19 @@
 
 	{{#*inline 'content'}}
 		<form class="immediate-submit">
-			<label>
-				<input type="checkbox" name="edited" value="true"> {{translate 'dialogue.answer-edited'}}
-			</label>
-			<label>
-				<input type="checkbox" name="edited" value="false"> {{translate 'dialogue.answer-not-edited'}}
-			</label>
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="edited" value="true">
+					{{translate 'dialogue.answer-edited'}}
+				</label>
+			</div>
+
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="edited" value="false">
+					{{translate 'dialogue.answer-not-edited'}}
+				</label>
+			</div>
 		</form>
 	{{/inline}}
 {{/dialogueBubble}}

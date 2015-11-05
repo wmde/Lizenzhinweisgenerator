@@ -344,8 +344,10 @@ a:hover {
   font-size: 14px;
 }
 .dialogue-bubble label {
-  display: block;
   font-weight: normal;
+}
+.dialogue-bubble .form-group {
+  margin: 5px 0;
 }
 .dialogue-bubble .bubble-columns {
   -webkit-column-count: 2;

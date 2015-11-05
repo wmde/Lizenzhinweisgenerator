@@ -5,12 +5,19 @@
 
 	{{#*inline 'content'}}
 		<form class="immediate-submit">
-			<label>
-				<input type="checkbox" name="compilation" value="true"> {{translate 'dialogue.answer-compilation'}}
-			</label>
-			<label>
-				<input type="checkbox" name="compilation" value="false"> {{translate 'dialogue.answer-no-compilation'}}
-			</label>
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="compilation" value="true">
+					{{translate 'dialogue.answer-compilation'}}
+				</label>
+			</div>
+
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="compilation" value="false">
+					{{translate 'dialogue.answer-no-compilation'}}
+				</label>
+			</div>
 		</form>
 	{{/inline}}
 {{/dialogueBubble}}
