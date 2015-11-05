@@ -1,13 +1,16 @@
 'use strict';
 
 var $ = require( 'jquery' ),
-	FileForm = require( './app/FileForm' );
+	FileForm = require( './app/FileForm' ),
+	config = require( './config.json' ),
+	piwik = require( 'piwik' ).setup( config.piwikUrl, config.piwikToken );
 
 window.$ = window.jQuery = $; // needed for bootstrap
 require( 'bootstrap' );
 require( './view_helpers' );
 require( './scrolling_effects' );
 require( './background' );
+require( './cookies' );
 
 var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
 fileForm.init();

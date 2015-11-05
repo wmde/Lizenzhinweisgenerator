@@ -22,10 +22,12 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.5",
+    "cookie": "^0.2.3",
     "gsap": "^1.18.0",
     "handlebars": "^4.0.3",
     "jquery": "^2.1.4",
     "node-polyglot": "^0.4.3",
+    "piwik": "^1.0.4",
     "scrollmagic": "^2.0.5",
     "justified-gallery": "git+https://github.com/miromannino/Justified-Gallery.git#71ea7a49124cdbbd8bf30f4a4b09303d3b3bcde5"
   }

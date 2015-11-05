@@ -1,3 +1,5 @@
 {
-  "supportedMediaTypes": ["bitmap", "drawing"]
+  "supportedMediaTypes": ["bitmap", "drawing"],
+  "piwikUrl" : "https://example.tld/piwik/",
+  "piwikToken" : "7vy8tye4ra"
 }
