@@ -51,10 +51,12 @@ $.extend( AttributionDialogueView.prototype, {
 		return new DoneView().render();
 	},
 
-	_toggleQuestionMark: function() {
+	_toggleQuestionMark: function( e ) {
 		$( this )
 			.toggleClass( 'active' )
 			.siblings( '.question-mark-content' ).toggle();
+
+		e.preventDefault();
 	},
 
 	/**
