@@ -333,18 +333,29 @@ a:hover {
   font-size: 12px;
   font-weight: bold;
   border-radius: 100%;
+  color: #97b314;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  padding: 0;
+  vertical-align: top;
 }
 .dialogue-bubble h2 .question-mark {
   background: #4b590a;
-  color: #97b314;
+}
+.dialogue-bubble h2 .question-mark-content {
+  margin-top: 10px;
+}
+.dialogue-bubble .bubble-text .question-mark {
+  background: #fff;
 }
 .dialogue-bubble .question-mark-content {
-  margin-top: 10px;
   display: none;
   font-size: 14px;
 }
 .dialogue-bubble label {
   font-weight: normal;
+  margin-bottom: 0;
 }
 .dialogue-bubble .form-group {
   margin: 5px 0;
