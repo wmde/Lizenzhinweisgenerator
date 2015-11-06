@@ -334,20 +334,25 @@ a:hover {
   font-weight: bold;
   border-radius: 100%;
   color: #97b314;
+  background: #108654;
   display: inline-block;
   height: 20px;
   width: 20px;
   padding: 0;
   vertical-align: top;
-}
-.dialogue-bubble h2 .question-mark {
-  background: #4b590a;
+  outline: 0;
 }
 .dialogue-bubble h2 .question-mark-content {
   margin-top: 10px;
 }
-.dialogue-bubble .bubble-text .question-mark {
+.dialogue-bubble .bubble-text .question-mark.active {
   background: #fff;
+}
+.dialogue-bubble h2 .question-mark.active {
+  background: #4b590a;
+}
+.dialogue-bubble .question-mark:hover {
+  background-color: #fff;
 }
 .dialogue-bubble .question-mark-content {
   display: none;
