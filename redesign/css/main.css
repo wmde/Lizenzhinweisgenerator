@@ -336,8 +336,8 @@ a:hover {
   color: #97b314;
   background: #108654;
   display: inline-block;
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
   padding: 0;
   vertical-align: top;
   outline: 0;
@@ -347,6 +347,16 @@ a:hover {
 }
 .dialogue-bubble .bubble-text .question-mark.active {
   background: #fff;
+}
+.dialogue-bubble .qm-wrapper {
+  padding-right: 20px;
+  position: relative;
+}
+.dialogue-bubble h2 .question-mark {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -13px;
 }
 .dialogue-bubble h2 .question-mark.active {
   background: #4b590a;

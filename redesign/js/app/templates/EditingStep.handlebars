@@ -1,10 +1,13 @@
 {{#>dialogueBubble}}
 	{{#*inline 'title'}}
-		{{translate 'dialogue.editing-headline'}}
+		<div class="qm-wrapper">
+			{{translate 'dialogue.editing-headline'}}
+			{{>questionMark target='qm-editing'}}
+		</div>
 
-		{{#>questionMark}}
+		<div id="qm-editing" class="question-mark-content">
 			{{translate 'dialogue.editing-question-mark'}}
-		{{/questionMark}}
+		</div>
 	{{/inline}}
 
 	{{#*inline 'content'}}
