@@ -19,6 +19,7 @@
       "editing-headline": "Haben Sie das Werk bearbeitet?",
       "change-headline": "Was genau haben Sie am Werk verändert?",
       "creator-headline": "Wie möchten Sie als Urheber oder Urheberin Ihrer Änderungen genannt werden?",
+      "licence-headline": "Unter welche Lizenz soll das veränderte Werk gestellt werden?",
       "done-headline": "Geschafft!",
       "answer-print": "In einem Druckerzeugnis.",
       "answer-online": "Online.",
@@ -33,6 +34,7 @@
       "change-question-mark": "Es reicht eine Kurzangabe wie “zugeschnitten”, “eingefärbt”",
       "compilation-question-mark": "Bitte wählen Sie diese Option, wenn Ihre Veröffentlichung des Bildes zusammen mit anderen Werken aufgrund von Auswahl und Anordnung der einzelnen Elemente eine eigene geistige Schöpfung darstellt (z.B. ein Bildband).",
       "editing-question-mark": "Sämtliche Änderungen, die Sie an dem Bild vorgenommen haben und die den Charakter des Werkes verändern, sind Bearbeitungen. Reine technische Änderungen sind keine Bearbeitungen. Dazu zählen Formatänderungen oder Digitalisierungen, da hier das Werk unverändert bleibt.",
+      "licence-question-mark": "Es werden nur Lizenzen angeboten, die mit der ursprünglichen CC-Lizenz kompatibel sind.",
       "creator-question-mark": "Bitte geben Sie möglichst Ihren vollständigen Namen an. Ein Pseudonym, Nickname oder “anonym” ist auch möglich."
     }
   }
