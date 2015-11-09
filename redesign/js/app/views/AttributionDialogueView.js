@@ -4,8 +4,8 @@ var $ = require( 'jquery' ),
 	AttributionDialogue = require( '../AttributionDialogue' ),
 	DoneView = require( './DoneView' );
 
-var AttributionDialogueView = function() {
-	this._dialogue = new AttributionDialogue();
+var AttributionDialogueView = function( asset ) {
+	this._dialogue = new AttributionDialogue( asset );
 	this._dialogue.init();
 };
 

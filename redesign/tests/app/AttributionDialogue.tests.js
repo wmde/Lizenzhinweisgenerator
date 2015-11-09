@@ -2,17 +2,25 @@
 
 QUnit.module( 'AttributionDialogue' );
 
-var AttributionDialogue = require( '../../js/app/AttributionDialogue' ),
-	Messages = require( '../../js/app/Messages' );
+var $ = require( 'jquery' ),
+	AttributionDialogue = require( '../../js/app/AttributionDialogue' ),
+	Messages = require( '../../js/app/Messages' ),
+	Author = require( '../../js/app/Author' ),
+	Asset = require( '../../js/app/Asset' );
+
+function newDefaultAttributionDialogue() {
+	return new AttributionDialogue( new Asset( '', '', null, null, [] ) );
+}
 
 QUnit.test( 'should have 4 steps by default', function( assert ) {
-	var dialogue = new AttributionDialogue();
+	var dialogue = newDefaultAttributionDialogue();
 	dialogue.init();
-	assert.equal( 4, dialogue._steps.length );
+	assert.equal( dialogue._steps.length, 4 );
 } );
 
 QUnit.test( 'should have only 3 steps if the author is known', function( assert ) {
-	var dialogue = new AttributionDialogue( 'Foo' );
+	var asset = new Asset( '', '', null, null, [ new Author( $( 'Meh' ) ) ] ),
+		dialogue = new AttributionDialogue( asset );
 	dialogue.init();
 	assert.equal( 3, dialogue._steps.length );
 } );
@@ -25,7 +33,7 @@ function completeEditingStep( dialogue, data ) {
 }
 
 QUnit.test( 'should add 3 more steps for editing', function( assert ) {
-	var dialogue = new AttributionDialogue();
+	var dialogue = newDefaultAttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
 	completeEditingStep( dialogue, { edited: 'true' } );
@@ -33,7 +41,7 @@ QUnit.test( 'should add 3 more steps for editing', function( assert ) {
 } );
 
 QUnit.test( 'should not add 3 more steps when not editing', function( assert ) {
-	var dialogue = new AttributionDialogue();
+	var dialogue = newDefaultAttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
 	completeEditingStep( dialogue, { edited: 'false' } );
@@ -49,7 +57,7 @@ function currentStepContains( dialogue, message ) {
 }
 
 QUnit.test( 'Steps content', function( assert ) {
-	var dialogue = new AttributionDialogue();
+	var dialogue = newDefaultAttributionDialogue();
 	dialogue.init();
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.type-of-use-headline' ) );

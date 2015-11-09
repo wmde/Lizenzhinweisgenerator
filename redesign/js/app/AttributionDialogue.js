@@ -8,20 +8,20 @@ var $ = require( 'jquery' ),
  * @param {string|null} author
  * @constructor
  */
-var AttributionDialogue = function( author ) {
+var AttributionDialogue = function( asset ) {
 	Dialogue.call( this );
-	this._author = author;
+	this._asset = asset;
 };
 
 $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	/**
-	 * @type {string}
+	 * @type {Asset}
 	 */
-	_author: null,
+	_asset: null,
 
 	init: function() {
 		this.addStep( new DialogueStep( 'typeOfUse', require( './templates/TypeOfUseStep.handlebars' ) ) );
-		if( !this._author ) {
+		if( this._asset.getAuthors().length === 0 ) {
 			this.addStep( new DialogueStep( 'author', require( './templates/AuthorStep.handlebars' ) ) );
 		}
 		this.addStep( new DialogueStep( 'compilation', require( './templates/CompilationStep.handlebars' ) ) );

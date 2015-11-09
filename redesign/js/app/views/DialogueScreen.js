@@ -45,7 +45,7 @@ $.extend( DialogueView.prototype, {
 			dialogue = new PublicDomainDialogueView;
 		} else {
 			title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
-			dialogue = new AttributionDialogueView;
+			dialogue = new AttributionDialogueView( this._asset );
 		}
 
 		$screen.html( template( {
