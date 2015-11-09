@@ -1,10 +1,30 @@
-{{#>dialogueBubble title='dialogue.editing-headline'}}
-	<form class="immediate-submit">
-		<label>
-			<input type="checkbox" name="edited" value="true"> {{translate 'dialogue.answer-edited'}}
-		</label>
-		<label>
-			<input type="checkbox" name="edited" value="false"> {{translate 'dialogue.answer-not-edited'}}
-		</label>
-	</form>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		<div class="qm-wrapper">
+			{{translate 'dialogue.editing-headline'}}
+			{{>questionMark target='qm-editing'}}
+		</div>
+
+		<div id="qm-editing" class="question-mark-content">
+			{{translate 'dialogue.editing-question-mark'}}
+		</div>
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form class="immediate-submit">
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="edited" value="true">
+					{{translate 'dialogue.answer-edited'}}
+				</label>
+			</div>
+
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="edited" value="false">
+					{{translate 'dialogue.answer-not-edited'}}
+				</label>
+			</div>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}

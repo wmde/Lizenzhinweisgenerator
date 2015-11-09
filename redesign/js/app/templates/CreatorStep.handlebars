@@ -1,5 +1,18 @@
-{{#>dialogueBubble title='dialogue.creator-headline'}}
-	<form>
-		<input type="text" name="name"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
-	</form>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		<div class="qm-wrapper">
+			{{translate 'dialogue.creator-headline'}}
+			{{>questionMark target='qm-creator'}}
+		</div>
+
+		<div id="qm-creator" class="question-mark-content">
+			{{translate 'dialogue.creator-question-mark'}}
+		</div>
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form>
+			<input type="text" name="name"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}

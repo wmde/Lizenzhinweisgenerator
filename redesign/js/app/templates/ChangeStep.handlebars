@@ -1,7 +1,20 @@
-{{#>dialogueBubble title='dialogue.change-headline'}}
-	<form>
-		<div class="form-group">
-			<input type="text" name="change"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		<div class="qm-wrapper">
+			{{translate 'dialogue.change-headline'}}
+			{{>questionMark target='qm-change'}}
 		</div>
-	</form>
+
+		<div id="qm-change" class="question-mark-content">
+			{{translate 'dialogue.change-question-mark'}}
+		</div>
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form>
+			<div class="form-group">
+				<input type="text" name="change"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+			</div>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}

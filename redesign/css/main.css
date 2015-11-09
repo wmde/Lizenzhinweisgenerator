@@ -328,10 +328,52 @@ a:hover {
   opacity: 1;
   background: inherit;
 }
-
+.dialogue-bubble .question-mark {
+  border: 0;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 100%;
+  color: #97b314;
+  background: #108654;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  padding: 0;
+  vertical-align: top;
+  outline: 0;
+}
+.dialogue-bubble h2 .question-mark-content {
+  margin-top: 10px;
+}
+.dialogue-bubble .bubble-text .question-mark.active {
+  background: #fff;
+}
+.dialogue-bubble .qm-wrapper {
+  padding-right: 20px;
+  position: relative;
+}
+.dialogue-bubble h2 .question-mark {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -13px;
+}
+.dialogue-bubble h2 .question-mark.active {
+  background: #4b590a;
+}
+.dialogue-bubble .question-mark:hover {
+  background-color: #fff;
+}
+.dialogue-bubble .question-mark-content {
+  display: none;
+  font-size: 14px;
+}
 .dialogue-bubble label {
-  display: block;
   font-weight: normal;
+  margin-bottom: 0;
+}
+.dialogue-bubble .form-group {
+  margin: 5px 0;
 }
 .dialogue-bubble .bubble-columns {
   -webkit-column-count: 2;
