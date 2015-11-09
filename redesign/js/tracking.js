@@ -31,8 +31,20 @@ $.extend( Tracking.prototype, {
 	 */
 	_cookieExpiryDays: null,
 
-	track: function () {
-		console.log( 'I tracked something for UID: ' + this._getUserId() );
+	/**
+	 * @param action
+	 */
+	track: function ( action ) {
+		piwik.track(
+			{
+				idsite: 1,
+				url: window.location.href,
+				action_name: action,
+				_cvar: { '1': [ 'group', 'customer' ] },
+				_id: this._getUserId
+			},
+			console.log
+		);
 	},
 
 	/**

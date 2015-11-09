@@ -5,7 +5,7 @@ var $ = require( 'jquery' ),
 	Tracking = require( './tracking' );
 
 var tracking = new Tracking();
-tracking.track();
+tracking.track( 'Site Load' );
 
 window.$ = window.jQuery = $; // needed for bootstrap
 require( 'bootstrap' );
