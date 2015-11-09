@@ -1,3 +1,15 @@
-<div class="">
-	{{translate 'dialogue.licence-headline'}}
-</div>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		<div class="qm-wrapper">
+			{{translate 'dialogue.licence-headline'}}
+			{{>questionMark target='qm-licence'}}
+		</div>
+
+		<div id="qm-licence" class="question-mark-content">
+			{{translate 'dialogue.licence-question-mark'}}
+		</div>
+	{{/inline}}
+
+	{{#*inline 'content'}}
+	{{/inline}}
+{{/dialogueBubble}}

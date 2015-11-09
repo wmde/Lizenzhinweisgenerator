@@ -1,14 +1,29 @@
-{{#>dialogueBubble title='dialogue.author-headline'}}
-	<form class="immediate-submit">
-		<p>{{translate 'dialogue.author-label'}}</p>
-
-		<div class="form-group">
-			<input type="text" name="author"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+{{#>dialogueBubble}}
+	{{#*inline 'title'}}
+		<div class="qm-wrapper">
+			{{translate 'dialogue.author-headline'}}
+			{{>questionMark target='author-qm'}}
 		</div>
 
-		<label>
-			<input type="checkbox" name="no-author" value="true">
-			{{translate 'dialogue.answer-no-author'}}
-		</label>
-	</form>
+		<div id="author-qm" class="question-mark-content">
+			{{translate 'dialogue.author-question-mark'}}
+		</div>
+	{{/inline}}
+
+	{{#*inline 'content'}}
+		<form class="immediate-submit">
+			<p>{{translate 'dialogue.author-label'}}</p>
+
+			<div class="form-group">
+				<input type="text" name="author"><button class="green-btn" type="submit">{{translate 'dialogue.next'}}</button>
+			</div>
+
+			<div class="form-group">
+				<label>
+					<input type="checkbox" name="no-author" value="true">
+					{{translate 'dialogue.answer-no-author'}}
+				</label>
+			</div>
+		</form>
+	{{/inline}}
 {{/dialogueBubble}}
