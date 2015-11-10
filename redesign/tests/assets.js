@@ -132,8 +132,7 @@ module.exports = {
 	'1950_Yankees.jpg': new WikiAsset(
 		'File:1950_Yankees.jpg',
 		'bitmap',
-		// Unsupported CC licence CC-BY-1.0:
-		licenceStore.getLicence( 'cc' ),
+		licenceStore.getLicence( 'cc-by-1.0' ),
 		'1950 Yankees',
 		[ new Author( $( document.createTextNode( 'jcasabona' ) ) ) ],
 		null,
