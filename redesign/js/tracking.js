@@ -7,16 +7,17 @@
 var $ = require( 'jquery' ),
 	cookie = require( 'cookie' ),
 	config = require( './config.json' ),
-	piwik = require( 'piwik' ).setup( config.piwikUrl, config.piwikToken );
+	piwik = require( 'piwik' ).setup( config.piwikUrl );
 
 /**
  * Tracking Handler.
  * @constructor
  */
-var Tracking = function () {
+var Tracking = function() {
 	this._cookieName = 'filereuseuser';
 	// 3 months
 	this._cookieExpiryDays = 60 * 24 * 90;
+	this._piwikSiteId = config.piwikSiteId;
 };
 
 $.extend( Tracking.prototype, {
@@ -32,18 +33,28 @@ $.extend( Tracking.prototype, {
 	_cookieExpiryDays: null,
 
 	/**
+	 * @type {int}
+	 */
+	_piwikSiteId: null,
+
+	/**
 	 * @param action
 	 */
-	track: function ( action ) {
+	track: function( action ) {
 		piwik.track(
 			{
-				idsite: 1,
+				idsite: this._piwikSiteId,
 				url: window.location.href,
 				action_name: action,
-				_cvar: { '1': [ 'group', 'customer' ] },
-				_id: this._getUserId
+				_id: this._getUserId()
 			},
-			console.log
+			function( err, data ) {
+				if( err ) {
+					console.log( err );
+				} else {
+					console.log( data );
+				}
+			}
 		);
 	},
 
@@ -51,7 +62,7 @@ $.extend( Tracking.prototype, {
 	 * @returns {Date}
 	 * @private
 	 */
-	_getCookieExpiryDate: function () {
+	_getCookieExpiryDate: function() {
 		var now = new Date();
 		var time = now.getTime();
 		// 3 months
@@ -64,7 +75,7 @@ $.extend( Tracking.prototype, {
 	 * @returns {*}
 	 * @private
 	 */
-	_getUserIdCookie: function () {
+	_getUserIdCookie: function() {
 		var value = '; ' + document.cookie;
 		var parts = value.split( '; ' + this._cookieName + '=' );
 		if( parts.length === 2 ) {
@@ -76,7 +87,7 @@ $.extend( Tracking.prototype, {
 	/**
 	 * @private
 	 */
-	_setUserIdCookie: function ( userId ) {
+	_setUserIdCookie: function( userId ) {
 		document.cookie = cookie.serialize(
 			this._cookieName,
 			userId,
@@ -88,7 +99,7 @@ $.extend( Tracking.prototype, {
 	 * @returns {string}
 	 * @private
 	 */
-	_getUserId: function () {
+	_getUserId: function() {
 		var userId = this._getUserIdCookie();
 		if( userId !== null ) {
 			return userId;
@@ -103,7 +114,7 @@ $.extend( Tracking.prototype, {
 	 * @returns {string}
 	 * @private
 	 */
-	_getFreshUserId: function () {
+	_getFreshUserId: function() {
 		return Math.round( Math.pow( 36, 16 + 1 ) - Math.random() * Math.pow( 36, 16 ) ).toString( 36 ).slice( 1 );
 	}
 
