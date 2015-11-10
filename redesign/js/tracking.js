@@ -38,23 +38,50 @@ $.extend( Tracking.prototype, {
 	_piwikSiteId: null,
 
 	/**
+	 * @param category
 	 * @param action
+	 * @param name
+	 * @param value
 	 */
-	track: function( action ) {
+	trackEvent: function( category, action, name, value ) {
 		piwik.track(
 			{
 				idsite: this._piwikSiteId,
+				rec: 1,
+				url: window.location.href,
+				_id: this._getUserId(),
+				// jscs:disable
+				e_c: category,
+				e_a: action,
+				e_n: name,
+				e_v: value
+				// jscs:enable
+			},
+			function( err, data ) {
+				if( err ) {
+					console.log( err );
+				}
+			}
+		);
+	},
+
+	/**
+	 * @param pageName
+	 */
+	trackPageLoad: function( pageName ) {
+		piwik.track(
+			{
+				idsite: this._piwikSiteId,
+				rec: 1,
 				url: window.location.href,
 				// jscs:disable
-				action_name: action,
+				action_name: pageName,
 				// jscs:enable
 				_id: this._getUserId()
 			},
 			function( err, data ) {
 				if( err ) {
 					console.log( err );
-				} else {
-					console.log( data );
 				}
 			}
 		);
