@@ -45,7 +45,9 @@ $.extend( Tracking.prototype, {
 			{
 				idsite: this._piwikSiteId,
 				url: window.location.href,
+				// jscs:disable
 				action_name: action,
+				// jscs:enable
 				_id: this._getUserId()
 			},
 			function( err, data ) {
