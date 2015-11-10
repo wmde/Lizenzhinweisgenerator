@@ -1,7 +1,11 @@
 'use strict';
 
 var $ = require( 'jquery' ),
-	FileForm = require( './app/FileForm' );
+	FileForm = require( './app/FileForm' ),
+	Tracking = require( './tracking' );
+
+var tracking = new Tracking();
+tracking.trackPageLoad( 'Main Page' );
 
 window.$ = window.jQuery = $; // needed for bootstrap
 require( 'bootstrap' );

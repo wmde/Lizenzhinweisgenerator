@@ -1,3 +1,5 @@
 {
-  "supportedMediaTypes": ["bitmap", "drawing"]
+  "supportedMediaTypes": ["bitmap", "drawing"],
+  "piwikUrl" : "http://tools.wmflabs.org/file-reuse-piwik/",
+  "piwikSiteId": 1
 }
