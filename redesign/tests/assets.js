@@ -87,8 +87,7 @@ module.exports = {
 	'Inisheer Gardens 2002 dry-stone walls.jpg': new WikiAsset(
 		'File:Inisheer Gardens 2002 dry-stone walls.jpg',
 		'bitmap',
-		// Features additional newer CC-BY-SA licence, preferring non-SA licence:
-		licenceStore.getLicence( 'cc-by-2.0-de' ),
+		licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Inisheer Gardens 2002 dry-stone walls',
 		[ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ) ) ],
 		null,
