@@ -19,4 +19,8 @@ QUnit.test( 'detects CC BY 2.0', function( assert ) {
 
 QUnit.test( 'detects CC BY 2.5', function( assert ) {
 	assert.equal( licences.detectLicence( 'Cc-by-2.5' ).getName(), 'CC BY 2.5' );
-} )
+} );
+
+QUnit.test( 'detects CC BY SA 2.5', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-2.5' ).getName(), 'CC BY-SA 2.5' );
+} );
