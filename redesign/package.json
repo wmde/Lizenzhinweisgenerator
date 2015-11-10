@@ -27,6 +27,6 @@
     "jquery": "^2.1.4",
     "node-polyglot": "^0.4.3",
     "scrollmagic": "^2.0.5",
-    "justified-gallery": "git+https://github.com/miromannino/Justified-Gallery.git#71ea7a49124cdbbd8bf30f4a4b09303d3b3bcde5"
+    "justifiedGallery": "git+https://github.com/miromannino/Justified-Gallery.git#60d253d6963750db2507571612ae0c2d7c2f970d"
   }
 }
