@@ -114,8 +114,16 @@ $.extend( LicenceStore.prototype, {
 		}
 
 		return null;
-	}
+	},
 
+	/**
+	 * Finds a list of compatible licences for a given licence ID
+	 * @param licence
+	 * @return {Licence[]}
+	 */
+	findCompatibilities: function( licence ) {
+		return [];
+	}
 } );
 
 module.exports = LicenceStore;
