@@ -16,7 +16,7 @@
 				<label>
 					<input type="checkbox" name="licence" value="{{original.id}}">
 					{{translate 'dialogue.same-licence'}}
-					<br>({{original.name}}
+					<br>(<b>{{original.name}}</b>
 					<small>&#8594;<a href="{{original.url}}" target="_blank">{{translate 'dialogue.licence-text'}}</a></small>)
 				</label>
 			</div>
@@ -24,7 +24,7 @@
 			{{#each compatibles}}
 				<div class="form-group">
 					<label>
-						<input type="checkbox" name="licence" value="{{this.getId}}"> {{this.getName}}
+						<input type="checkbox" name="licence" value="{{this.getId}}"> <b>{{this.getName}}</b>
 						<small>&#8594;<a href="{{this.getUrl}}" target="_blank">{{translate 'dialogue.licence-text'}}</a></small>
 					</label>
 				</div>
