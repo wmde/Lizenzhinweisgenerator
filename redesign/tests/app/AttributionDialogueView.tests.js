@@ -8,7 +8,6 @@ var $ = require( 'jquery' ),
 	Asset = require( '../../js/app/Asset' ),
 	LicenceStore = require( '../../js/app/LicenceStore' ),
 	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
-;
 
 $.fx.off = true;
 

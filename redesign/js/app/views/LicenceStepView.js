@@ -6,7 +6,7 @@ var $ = require( 'jquery' ),
 var LicenceStepView = function( original, compatibles ) {
 	this._original = original;
 	this._compatibles = compatibles;
-}
+};
 
 $.extend( LicenceStepView.prototype, {
 	render: function() {
