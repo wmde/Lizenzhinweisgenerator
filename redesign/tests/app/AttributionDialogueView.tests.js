@@ -164,6 +164,9 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	// Licence Substep
 	$dialogue.find( 'input:checkbox' )[ 4 ].click();
 
+	// Done!
+	assert.ok( dialogueContains( $dialogue, 'dialogue.done-headline' ) );
+
 	assert.equal( dialogue._dialogue.getData()[ 'typeOfUse' ][ 'type' ], 'online' );
 	assert.equal( dialogue._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
 	assert.equal( dialogue._dialogue.getData()[ 'compilation' ][ 'compilation' ], 'true' );
