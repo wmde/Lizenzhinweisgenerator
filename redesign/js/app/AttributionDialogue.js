@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	Dialogue = require( './Dialogue' ),
-	DialogueStep = require( './DialogueStep' );
+	DialogueStep = require( './DialogueStep' ),
+	LicenceStep = require( './LicenceStep' );
 
 /**
  * @param {string|null} author
@@ -40,7 +41,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	_addEditingSteps: function() {
 		this.addStep( new DialogueStep( 'change', require( './templates/ChangeStep.handlebars' ) ) );
 		this.addStep( new DialogueStep( 'creator', require( './templates/CreatorStep.handlebars' ) ) );
-		this.addStep( new DialogueStep( 'licence', require( './templates/LicenceStep.handlebars' ) ) );
+		this.addStep( new LicenceStep( this._asset.getLicence() ) );
 	}
 } );
 

@@ -306,6 +306,13 @@ a:hover {
 .dialogue-bubble .bubble-text {
   color: #fff;
 }
+.dialogue-bubble label small {
+  font-size: 70%;
+}
+.dialogue-bubble label small a {
+  color: #fff;
+  text-decoration: underline;
+}
 .dialogue-bubble input[type=text] {
   border-radius: 2px 0 0 2px;
   width: 75%;

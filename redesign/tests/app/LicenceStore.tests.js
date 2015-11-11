@@ -2,7 +2,8 @@
 
 QUnit.module( 'Licence Detection' );
 
-var LicenceStore = require( '../../js/app/LicenceStore' ),
+var $ = require( 'jquery' ),
+	LicenceStore = require( '../../js/app/LicenceStore' ),
 	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
 
 QUnit.test( 'detects Public Domain', function( assert ) {
@@ -55,4 +56,34 @@ QUnit.test( 'detects ported CC BY-SA 2.5', function( assert ) {
 
 QUnit.test( 'detects ported CC BY-SA 3.0', function( assert ) {
 	assert.equal( licences.detectLicence( 'Cc-by-sa-3.0-tw' ).getId(), 'cc-by-sa-3.0-ported' );
+} );
+
+QUnit.test( 'no compatible licences for cc by-sa 4.0', function( assert ) {
+	assert.equal( licences.findCompatibilities( 'cc-by-sa-4.0' ).length, 0 );
+} );
+
+QUnit.test( 'compatible licences', function( assert ) {
+	var compatibleLicences = {
+		'cc-by-sa-3.0': [ 'cc-by-sa-3.0-de', 'cc-by-sa-4.0' ],
+		'cc-by-sa-3.0-de': [ 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-2.5': [ 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-2.0': [ 'cc-by-sa-2.0-de', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-2.0-de': [ 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-4.0': [ 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-3.0': [ 'cc-by-3.0-de', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-3.0-de': [ 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-2.5': [ 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-2.0': [ 'cc-by-2.0-de', 'cc-by-2.5', 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-2.0-de': [ 'cc-by-2.0', 'cc-by-2.5', 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-1.0': [ 'cc-by-2.0-de', 'cc-by-2.0', 'cc-by-2.5', 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ]
+	};
+
+	$.each( compatibleLicences, function( input, compatibles ) {
+		var actual = licences.findCompatibilities( input );
+		assert.equal( actual.length, compatibles.length );
+
+		$.each( actual, function( _, licence ) {
+			assert.ok( compatibles.indexOf( licence.getId() ) !== -1 );
+		} );
+	} );
 } );
