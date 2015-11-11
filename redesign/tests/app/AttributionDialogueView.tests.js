@@ -137,7 +137,7 @@ QUnit.test( 'Licence Step', function( assert ) {
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = newDefaultAttributionDialogueView();
+		dialogue = new AttributionDialogueView( new Asset( '', '', licences.getLicence( 'cc-by-2.0' ) ) );
 	dialogue.render( $dialogue );
 
 	// Type of Use Step
@@ -158,10 +158,11 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	$dialogue.find( 'button' ).click();
 
 	// Creator Substep
-	assert.equal( $dialogue.find( 'input:text' ).length, 1 );
-
 	$dialogue.find( 'input:text' ).val( 'Meh' );
 	$dialogue.find( 'button' ).click();
+
+	// Licence Substep
+	$dialogue.find( 'input:checkbox' )[ 4 ].click();
 
 	assert.equal( dialogue._dialogue.getData()[ 'typeOfUse' ][ 'type' ], 'online' );
 	assert.equal( dialogue._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
@@ -169,6 +170,7 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	assert.equal( dialogue._dialogue.getData()[ 'editing' ][ 'edited' ], 'true' );
 	assert.equal( dialogue._dialogue.getData()[ 'change' ][ 'change' ], 'cropped' );
 	assert.equal( dialogue._dialogue.getData()[ 'creator' ][ 'name' ], 'Meh' );
+	assert.equal( dialogue._dialogue.getData()[ 'licence' ][ 'licence' ], 'cc-by-3.0-de' );
 } );
 
 QUnit.test( 'show done after completing last step', function( assert ) {
