@@ -141,8 +141,7 @@ module.exports = {
 	'NatMonumFengegKapell.jpg': new WikiAsset(
 		'File:NatMonumFengegKapell.jpg',
 		'bitmap',
-		// Unsupported licence derivative CC-BY-3.0-LU:
-		licenceStore.getLicence( 'cc' ),
+		licenceStore.getLicence( 'cc-by-3.0-ported' ),
 		'NatMonumFengegKapell',
 		[ new Author( $( '<div/>' ).html( '<a href="https://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() ) ],
 		null,

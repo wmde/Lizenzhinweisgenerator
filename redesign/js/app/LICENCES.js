@@ -23,6 +23,7 @@ module.exports = [
 	new Licence( 'cc-by-4.0', [ 'cc', 'cc4', 'ccby' ], 'CC BY 4.0', /^CC-BY-4.0(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by/4.0/legalcode/' ),
 	new Licence( 'cc-by-3.0-de', [ 'cc', 'cc3', 'ccby' ], 'CC BY 3.0 DE', /^CC-BY(-|\/)3.0(-|\/)DE/i, 'http://creativecommons.org/licenses/by/3.0/de/legalcode/' ),
 	new Licence( 'cc-by-3.0', [ 'cc', 'cc3', 'ccby' ], 'CC BY 3.0', /^CC-BY-3.0(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
+	new Licence( 'cc-by-3.0-ported', [ 'cc', 'cc3', 'ccby', 'ported' ], 'CC BY 3.0', /^CC-BY-3.0-\w+$/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
 	new Licence( 'cc-by-2.5', [ 'cc', 'cc2.5', 'ccby' ], 'CC BY 2.5', /^CC-BY-2.5(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by/2.5/legalcode/' ),
 	new Licence( 'cc-by-2.5-ported', [ 'cc', 'cc2.5', 'ccby', 'ported' ], 'CC BY 2.5', /^CC-BY-2.5-\w+$/i, 'http://creativecommons.org/licenses/by/2.5/legalcode/' ),
 	new Licence( 'cc-by-2.0-de', [ 'cc', 'cc2', 'cc2de', 'ccby' ], 'CC BY 2.0 DE', /^CC-BY(-|\/)2.0(-|\/)DE/i, 'http://creativecommons.org/licenses/by/2.0/de/legalcode/' ),
