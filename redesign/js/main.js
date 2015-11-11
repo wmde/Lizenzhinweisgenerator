@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	FileForm = require( './app/FileForm' ),
-	Tracking = require( './tracking' );
+	Tracking = require( './tracking' ),
+	Messages = require( './app/Messages' );
 
 var tracking = new Tracking();
 tracking.trackPageLoad( 'Main Page' );
@@ -15,15 +16,13 @@ require( './background' );
 
 var trackingSwitch = $( '#tracking-switch' );
 if( tracking.shouldTrack() ) {
-	// TODO germanify
-	trackingSwitch.text( 'Dont\'t track me!' );
+	trackingSwitch.text( Messages.t( 'do-not-track' ) );
 	trackingSwitch.click( function() {
 		tracking.setDoNotTrackCookie();
 		$( '#tracking-switch' ).remove();
 	} );
 } else {
-	// TODO germanify
-	trackingSwitch.text( 'Track me again!' );
+	trackingSwitch.text( Messages.t( 'do-track' ) );
 	trackingSwitch.click( function() {
 		tracking.removeDoNotTrackCookie();
 		$( '#tracking-switch' ).remove();
