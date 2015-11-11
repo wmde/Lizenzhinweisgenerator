@@ -146,14 +146,14 @@ $.extend( LicenceStore.prototype, {
 	},
 
 	/**
-	 * Removes the licence with an ID of `id`
+	 * Removes the licence with an ID of `id` and all ported licences
 	 * @param {Licence[]} licences
 	 * @param {string} id
 	 * @returns {Licence[]}
 	 */
-	_removeSame: function( licences, id ) {
+	_removeSameAndPorted: function( licences, id ) {
 		return licences.filter( function( licence ) {
-			return licence.getId() !== id;
+			return licence.getId() !== id && licence.getId().indexOf( '-ported' ) === -1;
 		} );
 	},
 
@@ -165,7 +165,7 @@ $.extend( LicenceStore.prototype, {
 	findCompatibilities: function( licence ) {
 		var index = this._getLicenceRestrictivenessIndex( licence );
 
-		return this._removeSame( this._getLicencesStartingAt( index ), licence );
+		return this._removeSameAndPorted( this._getLicencesStartingAt( index ), licence );
 	}
 } );
 
