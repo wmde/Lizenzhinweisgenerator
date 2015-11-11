@@ -87,8 +87,7 @@ module.exports = {
 	'Inisheer Gardens 2002 dry-stone walls.jpg': new WikiAsset(
 		'File:Inisheer Gardens 2002 dry-stone walls.jpg',
 		'bitmap',
-		// Features additional newer CC-BY-SA licence, preferring non-SA licence:
-		licenceStore.getLicence( 'cc-by-2.0-de' ),
+		licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Inisheer Gardens 2002 dry-stone walls',
 		[ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Arcimboldo">Eckhard Pecher</a>' ) ) ],
 		null,
@@ -132,8 +131,7 @@ module.exports = {
 	'1950_Yankees.jpg': new WikiAsset(
 		'File:1950_Yankees.jpg',
 		'bitmap',
-		// Unsupported CC licence CC-BY-1.0:
-		licenceStore.getLicence( 'cc' ),
+		licenceStore.getLicence( 'cc-by-1.0' ),
 		'1950 Yankees',
 		[ new Author( $( document.createTextNode( 'jcasabona' ) ) ) ],
 		null,
@@ -143,8 +141,7 @@ module.exports = {
 	'NatMonumFengegKapell.jpg': new WikiAsset(
 		'File:NatMonumFengegKapell.jpg',
 		'bitmap',
-		// Unsupported licence derivative CC-BY-3.0-LU:
-		licenceStore.getLicence( 'cc' ),
+		licenceStore.getLicence( 'cc-by-3.0-ported' ),
 		'NatMonumFengegKapell',
 		[ new Author( $( '<div/>' ).html( '<a href="https://lb.wikipedia.org/wiki/User:Pecalux">Pecalux</a> at <a href="http://lb.wikipedia.org">lb.wikipedia</a>' ).contents() ) ],
 		null,
