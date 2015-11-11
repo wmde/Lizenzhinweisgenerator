@@ -11,5 +11,14 @@
 	{{/inline}}
 
 	{{#*inline 'content'}}
+		<div class="form-group">
+			<label><input type="checkbox" name="licence" value="{{original.getId}}"> {{original.getName}}</label>
+		</div>
+
+		{{#each compatibles}}
+			<div class="form-group">
+				<label><input type="checkbox" name="licence" value="{{this.getId}}"> {{this.getName}}</label>
+			</div>
+		{{/each}}
 	{{/inline}}
 {{/dialogueBubble}}

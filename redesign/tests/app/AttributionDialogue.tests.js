@@ -6,10 +6,11 @@ var $ = require( 'jquery' ),
 	AttributionDialogue = require( '../../js/app/AttributionDialogue' ),
 	Messages = require( '../../js/app/Messages' ),
 	Author = require( '../../js/app/Author' ),
+	LICENCES = require( '../../js/app/LICENCES' ),
 	Asset = require( '../../js/app/Asset' );
 
 function newDefaultAttributionDialogue() {
-	return new AttributionDialogue( new Asset( '', '', null, null, [] ) );
+	return new AttributionDialogue( new Asset( '', '', LICENCES[ 0 ], null, [] ) );
 }
 
 QUnit.test( 'should have 4 steps by default', function( assert ) {

@@ -5,12 +5,15 @@ QUnit.module( 'AttributionDialogueView' );
 var $ = require( 'jquery' ),
 	AttributionDialogueView = require( '../../js/app/views/AttributionDialogueView' ),
 	Messages = require( '../../js/app/Messages' ),
-	Asset = require( '../../js/app/Asset' );
+	Asset = require( '../../js/app/Asset' ),
+	LicenceStore = require( '../../js/app/LicenceStore' ),
+	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
+;
 
 $.fx.off = true;
 
 function newDefaultAttributionDialogueView() {
-	return new AttributionDialogueView( new Asset( '', '', null, null, [] ) );
+	return new AttributionDialogueView( new Asset( '', '', licences.getLicence( 'cc' ), null, [] ) );
 }
 
 function dialogueContains( $dialogue, message ) {
@@ -31,9 +34,9 @@ QUnit.test( 'first step has two checkboxes', function( assert ) {
 	assert.equal( $dialogue.find( 'input[type="checkbox"]' ).length, 2 );
 } );
 
-function renderDialogueAtStep( n ) {
+function renderDialogueAtStep( n, dialogue ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = newDefaultAttributionDialogueView();
+		dialogue = dialogue || newDefaultAttributionDialogueView();
 	if( n > 3 ) {
 		dialogue._dialogue._addEditingSteps();
 	}
@@ -120,6 +123,15 @@ QUnit.test( 'Creator Step', function( assert ) {
 	dialogue.dom.find( 'input:text' ).val( 'Meh' );
 	dialogue.dom.find( 'button' ).click();
 	assert.equal( dialogue.view._dialogue.getData()[ 'creator' ][ 'name' ], 'Meh' );
+} );
+
+QUnit.test( 'Licence Step', function( assert ) {
+	var dialogue = renderDialogueAtStep(
+		6,
+		new AttributionDialogueView( new Asset( '', '', licences.getLicence( 'cc-by-3.0-de' ) ) )
+	);
+
+	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 9 ); // 8 compatible licences + the original licence
 } );
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {
