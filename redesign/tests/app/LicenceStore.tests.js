@@ -48,3 +48,7 @@ QUnit.test( 'detects ported CC BY 3.0', function( assert ) {
 QUnit.test( 'detects ported CC BY-SA 2.0', function( assert ) {
 	assert.equal( licences.detectLicence( 'Cc-by-sa-2.0-uk' ).getId(), 'cc-by-sa-2.0-ported' );
 } );
+
+QUnit.test( 'detects ported CC BY-SA 2.5', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-2.5-it' ).getId(), 'cc-by-sa-2.5-ported' );
+} );
