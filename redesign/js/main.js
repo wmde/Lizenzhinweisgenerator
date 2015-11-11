@@ -19,13 +19,13 @@ if( tracking.shouldTrack() ) {
 	trackingSwitch.text( Messages.t( 'do-not-track' ) );
 	trackingSwitch.click( function() {
 		tracking.setDoNotTrackCookie();
-		$( '#tracking-switch' ).remove();
+		trackingSwitch.remove();
 	} );
 } else {
 	trackingSwitch.text( Messages.t( 'do-track' ) );
 	trackingSwitch.click( function() {
 		tracking.removeDoNotTrackCookie();
-		$( '#tracking-switch' ).remove();
+		trackingSwitch.remove();
 	} );
 }
 
