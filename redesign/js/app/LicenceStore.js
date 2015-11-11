@@ -116,13 +116,50 @@ $.extend( LicenceStore.prototype, {
 		return null;
 	},
 
+	_getLicenceIndex: function( licence ) {
+		for( var i = 0; i < this._licences.length; i++ ) {
+			if( this._licences[ i ].getId() === licence ) {
+				return i;
+			}
+		}
+		return null;
+	},
+
+	/**
+	 * Returns licences with an index of `index` and lower
+	 * @param index
+	 * @returns {Licence[]}
+	 */
+	_getLicencesStartingAt: function( index ) {
+		var result = [];
+		for( var i = index; i >= 0; i-- ) {
+			result.push( this._licences[ i ] );
+		}
+
+		return result;
+	},
+
+	/**
+	 * Removes the licence with an ID of `id`
+	 * @param {Licence[]} licences
+	 * @param {string} id
+	 * @returns {Licence[]}
+	 */
+	_removeSame: function( licences, id ) {
+		return licences.filter( function( licence ) {
+			return licence.getId() !== id;
+		} );
+	},
+
 	/**
 	 * Finds a list of compatible licences for a given licence ID
 	 * @param licence
 	 * @return {Licence[]}
 	 */
 	findCompatibilities: function( licence ) {
-		return [];
+		var index = this._getLicenceIndex( licence );
+
+		return this._removeSame( this._getLicencesStartingAt( index ), licence );
 	}
 } );
 
