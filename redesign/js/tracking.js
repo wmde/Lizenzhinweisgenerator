@@ -45,7 +45,7 @@ $.extend( Tracking.prototype, {
 	 * @param value
 	 */
 	trackEvent: function( category, action, name, value ) {
-		if( !this._shouldTrack() ) {
+		if( !this.shouldTrack() ) {
 			return;
 		}
 		piwik.track(
@@ -74,7 +74,7 @@ $.extend( Tracking.prototype, {
 	 * @param pageName
 	 */
 	trackPageLoad: function( pageName ) {
-		if( !this._shouldTrack() ) {
+		if( !this.shouldTrack() ) {
 			return;
 		}
 		piwik.track(
@@ -180,9 +180,8 @@ $.extend( Tracking.prototype, {
 	/**
 	 * Check if we should track the current user
 	 * @returns {boolean}
-	 * @private
 	 */
-	_shouldTrack: function() {
+	shouldTrack: function() {
 		var noTrack = this._getCookie( this._cookieName + '_notrack' );
 		return ( noTrack === null );
 	}

@@ -13,6 +13,23 @@ require( './view_helpers' );
 require( './scrolling_effects' );
 require( './background' );
 
+var trackingSwitch = $( '#tracking-switch' );
+if( tracking.shouldTrack() ) {
+	// TODO germanify
+	trackingSwitch.text( 'Dont\'t track me!' );
+	trackingSwitch.click( function() {
+		tracking.setDoNotTrackCookie();
+		$( '#tracking-switch' ).remove();
+	} );
+} else {
+	// TODO germanify
+	trackingSwitch.text( 'Track me again!' );
+	trackingSwitch.click( function() {
+		tracking.removeDoNotTrackCookie();
+		$( '#tracking-switch' ).remove();
+	} );
+}
+
 var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
 fileForm.init();
 
