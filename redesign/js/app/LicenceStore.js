@@ -116,10 +116,16 @@ $.extend( LicenceStore.prototype, {
 		return null;
 	},
 
-	_getLicenceIndex: function( licence ) {
+	/**
+	 * Returns the licence's index or index+1 if it is a -de licence.
+	 * The +1 operation is necessary because -de licences are mutually compatible with their unported counterpart.
+	 * @param {string} licence - licence ID
+	 * @returns {int|null}
+	 */
+	_getLicenceRestrictivenessIndex: function( licence ) {
 		for( var i = 0; i < this._licences.length; i++ ) {
 			if( this._licences[ i ].getId() === licence ) {
-				return i;
+				return licence.slice( -3 ) === '-de' ? i + 1 : i;
 			}
 		}
 		return null;
@@ -157,7 +163,7 @@ $.extend( LicenceStore.prototype, {
 	 * @return {Licence[]}
 	 */
 	findCompatibilities: function( licence ) {
-		var index = this._getLicenceIndex( licence );
+		var index = this._getLicenceRestrictivenessIndex( licence );
 
 		return this._removeSame( this._getLicencesStartingAt( index ), licence );
 	}

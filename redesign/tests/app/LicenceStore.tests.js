@@ -64,7 +64,8 @@ QUnit.test( 'no compatible licences for cc by-sa 4.0', function( assert ) {
 
 QUnit.test( 'compatible licences', function( assert ) {
 	var compatibleLicences = {
-		'cc-by-sa-3.0': [ 'cc-by-sa-3.0-de', 'cc-by-sa-4.0' ]
+		'cc-by-sa-3.0': [ 'cc-by-sa-3.0-de', 'cc-by-sa-4.0' ],
+		'cc-by-sa-3.0-de': [ 'cc-by-sa-3.0', 'cc-by-sa-4.0' ]
 	};
 
 	$.each( compatibleLicences, function( input, compatibles ) {
