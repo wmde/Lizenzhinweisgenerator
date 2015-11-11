@@ -38,12 +38,16 @@ $.extend( Tracking.prototype, {
 	_piwikSiteId: null,
 
 	/**
+	 * Track an event to piwik is allowed by the user
 	 * @param category
 	 * @param action
 	 * @param name
 	 * @param value
 	 */
 	trackEvent: function( category, action, name, value ) {
+		if( !this._shouldTrack() ) {
+			return;
+		}
 		piwik.track(
 			{
 				idsite: this._piwikSiteId,
@@ -66,9 +70,13 @@ $.extend( Tracking.prototype, {
 	},
 
 	/**
+	 * Track a pageload to piwik is allowed by the user
 	 * @param pageName
 	 */
 	trackPageLoad: function( pageName ) {
+		if( !this._shouldTrack() ) {
+			return;
+		}
 		piwik.track(
 			{
 				idsite: this._piwikSiteId,
@@ -91,11 +99,11 @@ $.extend( Tracking.prototype, {
 	 * @returns {Date}
 	 * @private
 	 */
-	_getCookieExpiryDate: function() {
+	_getCookieExpiryDate: function( expiryDays ) {
 		var now = new Date();
 		var time = now.getTime();
 		// 3 months
-		var expireTime = time + ( this._cookieExpiryDays * 60000 );
+		var expireTime = time + ( expiryDays * 60000 );
 		now.setTime( expireTime );
 		return now;
 	},
@@ -104,9 +112,9 @@ $.extend( Tracking.prototype, {
 	 * @returns {*}
 	 * @private
 	 */
-	_getUserIdCookie: function() {
+	_getCookie: function( cookieName ) {
 		var value = '; ' + document.cookie;
-		var parts = value.split( '; ' + this._cookieName + '=' );
+		var parts = value.split( '; ' + cookieName + '=' );
 		if( parts.length === 2 ) {
 			return parts.pop().split( ';' ).shift();
 		}
@@ -120,7 +128,7 @@ $.extend( Tracking.prototype, {
 		document.cookie = cookie.serialize(
 			this._cookieName,
 			userId,
-			{ 'expires': this._getCookieExpiryDate() }
+			{ 'expires': this._getCookieExpiryDate( this._cookieExpiryDays ) }
 		);
 	},
 
@@ -129,7 +137,7 @@ $.extend( Tracking.prototype, {
 	 * @private
 	 */
 	_getUserId: function() {
-		var userId = this._getUserIdCookie();
+		var userId = this._getCookie( this._cookieName );
 		if( userId !== null ) {
 			return userId;
 		} else {
@@ -145,6 +153,38 @@ $.extend( Tracking.prototype, {
 	 */
 	_getFreshUserId: function() {
 		return Math.round( Math.pow( 36, 16 + 1 ) - Math.random() * Math.pow( 36, 16 ) ).toString( 36 ).slice( 1 );
+	},
+
+	/**
+	 * Set a cookie showing this user does not want to be tracked
+	 */
+	setDoNotTrackCookie: function() {
+		document.cookie = cookie.serialize(
+			this._cookieName + '_notrack',
+			'notrack',
+			{ 'expires': this._getCookieExpiryDate( 365 ) }
+		);
+	},
+
+	/**
+	 * Unset a cookie showing that this user now wants to be tracked again
+	 */
+	removeDoNotTrackCookie: function() {
+		document.cookie = cookie.serialize(
+			this._cookieName + '_notrack',
+			'notrack',
+			{ 'expires': this._getCookieExpiryDate( -365 ) }
+		);
+	},
+
+	/**
+	 * Check if we should track the current user
+	 * @returns {boolean}
+	 * @private
+	 */
+	_shouldTrack: function() {
+		var noTrack = this._getCookie( this._cookieName + '_notrack' );
+		return ( noTrack === null );
 	}
 
 } );
