@@ -10,7 +10,10 @@ var LicenceStepView = function( original, compatibles ) {
 
 $.extend( LicenceStepView.prototype, {
 	render: function() {
-		return $( template( { original: this._original, compatibles: this._compatibles } ) );
+		return $( template( {
+			original: { name: this._original.getName(), url: this._original.getUrl(), id: this._original.getId() },
+			compatibles: this._compatibles
+		} ) );
 	}
 } );
 

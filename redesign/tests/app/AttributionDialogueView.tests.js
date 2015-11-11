@@ -132,6 +132,7 @@ QUnit.test( 'Licence Step', function( assert ) {
 	);
 
 	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 9 ); // 8 compatible licences + the original licence
+	assert.equal( dialogue.dom.find( 'a[target="_blank"]' ).length, 9 );
 } );
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {
