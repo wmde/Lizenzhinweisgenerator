@@ -31,6 +31,16 @@ if( tracking.shouldTrack() ) {
 	} );
 }
 
+$( '#feedback-link' ).click( function() {
+	tracking.trackEvent( 'Navigation', 'Feedback' );
+} );
+$( '#about-link' ).click( function() {
+	tracking.trackEvent( 'Navigation', 'About' );
+} );
+$( '#legal-notice-link' ).click( function() {
+	tracking.trackEvent( 'Navigation', 'Legal notice' );
+} );
+
 var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
 fileForm.init();
 
@@ -38,6 +48,7 @@ var $howItWorks = $( '#how-it-works-screen' ),
 	$body = $( 'body' );
 
 $( '#how-it-works-button' ).click( function() {
+	tracking.trackEvent( 'Navigation', 'How it works' );
 	$howItWorks.show();
 	$body
 		.scrollTop( $howItWorks.height() )
@@ -86,10 +97,12 @@ $feedbackForm.submit( function( e ) {
 		}
 	)
 		.done( function( response ) {
+			tracking.trackEvent( 'Feedback', 'Success' );
 			bootstrapAlert( 'success', $.parseJSON( response ).message );
 			$( '#feedback-modal' ).modal( 'hide' );
 		} )
 		.fail( function( response ) {
+			tracking.trackEvent( 'Feedback', 'Fail' );
 			var jsonResponse = $.parseJSON( response.responseText );
 
 			if( jsonResponse && jsonResponse.errors ) {
