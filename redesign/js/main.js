@@ -18,6 +18,7 @@ var trackingSwitch = $( '#tracking-switch' );
 if( tracking.shouldTrack() ) {
 	trackingSwitch.text( Messages.t( 'do-not-track' ) );
 	trackingSwitch.click( function() {
+		tracking.trackEvent( 'Tracking', 'Disabled' );
 		tracking.setDoNotTrackCookie();
 		trackingSwitch.remove();
 	} );
@@ -25,6 +26,7 @@ if( tracking.shouldTrack() ) {
 	trackingSwitch.text( Messages.t( 'do-track' ) );
 	trackingSwitch.click( function() {
 		tracking.removeDoNotTrackCookie();
+		tracking.trackEvent( 'Tracking', 'Enabled' );
 		trackingSwitch.remove();
 	} );
 }

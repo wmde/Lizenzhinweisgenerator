@@ -48,19 +48,30 @@ $.extend( Tracking.prototype, {
 		if( !this.shouldTrack() ) {
 			return;
 		}
+
+		var vars = {
+			idsite: this._piwikSiteId,
+			rec: 1,
+			url: window.location.href,
+			_id: this._getUserId(),
+			// jscs:disable
+			e_c: category,
+			e_a: action
+			// jscs:enable
+		};
+		if( typeof name !== 'undefined' ) {
+			// jscs:disable
+			vars.e_n = name;
+			// jscs:enable
+		}
+		if( typeof value !== 'undefined' ) {
+			// jscs:disable
+			vars.e_v = value;
+			// jscs:enable
+		}
+
 		piwik.track(
-			{
-				idsite: this._piwikSiteId,
-				rec: 1,
-				url: window.location.href,
-				_id: this._getUserId(),
-				// jscs:disable
-				e_c: category,
-				e_a: action,
-				e_n: name,
-				e_v: value
-				// jscs:enable
-			},
+			vars,
 			function( err, data ) {
 				if( err ) {
 					console.log( err );
