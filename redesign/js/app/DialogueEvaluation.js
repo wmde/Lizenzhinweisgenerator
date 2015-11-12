@@ -2,13 +2,22 @@
 
 var $ = require( 'jquery' );
 
-var DialogueEvaluation = function() {
-
+/**
+ * @param {Asset} asset
+ * @constructor
+ */
+var DialogueEvaluation = function( asset ) {
+	this._asset = asset;
 };
 
 $.extend( DialogueEvaluation.prototype, {
+	/**
+	 * @type {Asset}
+	 */
+	_asset: null,
+
 	getAttribution: function() {
-		return '';
+		return this._asset.getTitle();
 	}
 } );
 
