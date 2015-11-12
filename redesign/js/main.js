@@ -18,6 +18,7 @@ var trackingSwitch = $( '#tracking-switch' );
 if( tracking.shouldTrack() ) {
 	trackingSwitch.text( Messages.t( 'do-not-track' ) );
 	trackingSwitch.click( function() {
+		tracking.trackEvent( 'Tracking', 'Disabled' );
 		tracking.setDoNotTrackCookie();
 		trackingSwitch.remove();
 	} );
@@ -25,9 +26,17 @@ if( tracking.shouldTrack() ) {
 	trackingSwitch.text( Messages.t( 'do-track' ) );
 	trackingSwitch.click( function() {
 		tracking.removeDoNotTrackCookie();
+		tracking.trackEvent( 'Tracking', 'Enabled' );
 		trackingSwitch.remove();
 	} );
 }
+
+$( '.track-click' ).click( function() {
+	tracking.trackEvent(
+		$( this ).data( 'track-category' ),
+		$( this ).data( 'track-event' )
+	);
+} );
 
 var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
 fileForm.init();
@@ -84,10 +93,12 @@ $feedbackForm.submit( function( e ) {
 		}
 	)
 		.done( function( response ) {
+			tracking.trackEvent( 'Feedback', 'Success' );
 			bootstrapAlert( 'success', $.parseJSON( response ).message );
 			$( '#feedback-modal' ).modal( 'hide' );
 		} )
 		.fail( function( response ) {
+			tracking.trackEvent( 'Feedback', 'Fail' );
 			var jsonResponse = $.parseJSON( response.responseText );
 
 			if( jsonResponse && jsonResponse.errors ) {
