@@ -31,14 +31,11 @@ if( tracking.shouldTrack() ) {
 	} );
 }
 
-$( '#feedback-link' ).click( function() {
-	tracking.trackEvent( 'Navigation', 'Feedback' );
-} );
-$( '#about-link' ).click( function() {
-	tracking.trackEvent( 'Navigation', 'About' );
-} );
-$( '#legal-notice-link' ).click( function() {
-	tracking.trackEvent( 'Navigation', 'Legal notice' );
+$( '.track-click' ).click( function() {
+	tracking.trackEvent(
+		$( this ).data( 'track-category' ),
+		$( this ).data( 'track-event' )
+	);
 } );
 
 var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
@@ -48,7 +45,6 @@ var $howItWorks = $( '#how-it-works-screen' ),
 	$body = $( 'body' );
 
 $( '#how-it-works-button' ).click( function() {
-	tracking.trackEvent( 'Navigation', 'How it works' );
 	$howItWorks.show();
 	$body
 		.scrollTop( $howItWorks.height() )
