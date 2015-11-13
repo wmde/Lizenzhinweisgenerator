@@ -23,14 +23,18 @@ $.extend( DialogueEvaluation.prototype, {
 	 */
 	_data: {},
 
-	getAttribution: function() {
-		var attribution = '';
+	_getPrintAttribution: function() {
+		return '(' + this._asset.getUrl() + '), '
+			+ this._asset.getTitle() + ', '
+			+ this._asset.getLicence().getUrl();
+	},
 
+	getAttribution: function() {
 		if( this._data[ 'type-of-use' ] && this._data[ 'type-of-use' ].type === 'print' ) {
-			attribution += '(' + this._asset.getUrl() + ') ';
+			return this._getPrintAttribution();
 		}
 
-		return attribution + this._asset.getTitle();
+		return this._asset.getTitle();
 	}
 } );
 

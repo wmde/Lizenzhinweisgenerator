@@ -4,14 +4,15 @@ QUnit.module( 'DialogueEvaluation' );
 
 var DialogueEvaluation = require( '../../js/app/DialogueEvaluation' ),
 	Asset = require( '../../js/app/Asset' ),
-	LICENCES = require( '../../js/app/LICENCES' );
+	LicenceStore = require( '../../js/app/LicenceStore' ),
+	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
 
 function newEvaluation( asset, dialogueData ) {
 	return new DialogueEvaluation(
 		new Asset(
 			'',
 			'',
-			asset.licence || LICENCES[ 0 ],
+			asset.licence || licences.getLicence( 'cc' ),
 			asset.title || '',
 			asset.authors || [ '' ],
 			asset.url || ''
@@ -32,4 +33,10 @@ QUnit.test( 'attribution contains asset url for use in print', function( assert 
 	var url = 'https://commons.wikimedia.org/wiki/File:Eichh%C3%B6rnchen_D%C3%BCsseldorf_Hofgarten_edit.jpg',
 		evaluation = newEvaluation( { url: url }, { 'type-of-use': { type: 'print' } } );
 	assert.ok( evaluation.getAttribution().indexOf( url ) !== -1 );
+} );
+
+QUnit.test( 'print attribution contains licence URL', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-3.0' ),
+		evaluation = newEvaluation( { licence: licence }, { 'type-of-use': { type: 'print' } } );
+	assert.ok( evaluation.getAttribution().indexOf( licence.getUrl() ) !== -1 );
 } );
