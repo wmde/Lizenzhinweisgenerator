@@ -4,10 +4,12 @@ var $ = require( 'jquery' );
 
 /**
  * @param {Asset} asset
+ * @param {{}} data - the dialogue result data
  * @constructor
  */
-var DialogueEvaluation = function( asset ) {
+var DialogueEvaluation = function( asset, data ) {
 	this._asset = asset;
+	this._data = data;
 };
 
 $.extend( DialogueEvaluation.prototype, {
@@ -16,8 +18,19 @@ $.extend( DialogueEvaluation.prototype, {
 	 */
 	_asset: null,
 
+	/**
+	 * @type {{}}
+	 */
+	_data: {},
+
 	getAttribution: function() {
-		return this._asset.getTitle();
+		var attribution = '';
+
+		if( this._data[ 'type-of-use' ] && this._data[ 'type-of-use' ].type === 'print' ) {
+			attribution += '(' + this._asset.getUrl() + ') ';
+		}
+
+		return attribution + this._asset.getTitle();
 	}
 } );
 
