@@ -90,6 +90,25 @@ textarea, input, .form-control:focus {
 .how-it-works-screen .close {
   margin: 15px 20px;
 }
+.how-it-works-image {
+  width: 200px;
+}
+.how-it-works-image-1 {
+  padding-left: 17px;
+  padding-right: 18px;
+}
+.how-it-works-image-2 {
+  padding-left: 17px;
+  padding-right: 18px;
+}
+.how-it-works-image-3 {
+  padding-left: 33px;
+  padding-right: 22px;
+}
+.how-it-works-image-4 {
+  padding-left: 23px;
+  padding-right: 23px;
+}
 
 a, a:focus, a:active {
   color: #dce4e8;
