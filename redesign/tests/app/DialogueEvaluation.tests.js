@@ -40,3 +40,16 @@ QUnit.test( 'print attribution contains licence URL', function( assert ) {
 		evaluation = newEvaluation( { licence: licence }, { 'type-of-use': { type: 'print' } } );
 	assert.ok( evaluation.getAttribution().indexOf( licence.getUrl() ) !== -1 );
 } );
+
+QUnit.test( 'use different licence URL if the user edited the asset and uses a compatible licence', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-3.0' ),
+		compatibleLicence = licences.getLicence( 'cc-by-3.0-de' ),
+		evaluation = newEvaluation(
+			{ licence: licence },
+			{
+				'type-of-use': { type: 'print' },
+				'editing': { edited: 'true' },
+				'licence': { licence: compatibleLicence.getId() }
+			} );
+	assert.ok( evaluation.getAttribution().indexOf( compatibleLicence.getUrl() ) !== -1 );
+} );

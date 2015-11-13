@@ -1,6 +1,8 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	LicenceStore = require( './LicenceStore' ),
+	licences = new LicenceStore( require( './LICENCES' ) );
 
 /**
  * @param {Asset} asset
@@ -23,14 +25,24 @@ $.extend( DialogueEvaluation.prototype, {
 	 */
 	_data: {},
 
+	_getResult: function( step, field ) {
+		return this._data[ step ] && this._data[ step ][ field ];
+	},
+
+	_getAttributionLicenceUrl: function() {
+		return this._getResult( 'editing', 'edited' ) === 'true' ?
+			licences.getLicence( this._getResult( 'licence', 'licence' ) ).getUrl()
+			: this._asset.getLicence().getUrl();
+	},
+
 	_getPrintAttribution: function() {
 		return '(' + this._asset.getUrl() + '), '
 			+ this._asset.getTitle() + ', '
-			+ this._asset.getLicence().getUrl();
+			+ this._getAttributionLicenceUrl();
 	},
 
 	getAttribution: function() {
-		if( this._data[ 'type-of-use' ] && this._data[ 'type-of-use' ].type === 'print' ) {
+		if( this._getResult( 'type-of-use', 'type' ) === 'print' ) {
 			return this._getPrintAttribution();
 		}
 
