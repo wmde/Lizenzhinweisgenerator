@@ -86,26 +86,47 @@ textarea, input, .form-control:focus {
 }
 .how-it-works-screen .col-sm-3 {
   text-align: center;
+  padding-top: 50px;
+  height: 80vh;
 }
 .how-it-works-screen .close {
   margin: 15px 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
 }
+
 .how-it-works-image {
   width: 200px;
 }
-.how-it-works-image-1 {
+
+#how-it-works-col-1 {
+  background-color: #c4cbcf;
+}
+#how-it-works-col-2 {
+  background-color: #d0d8db;
+}
+#how-it-works-col-3 {
+  background-color: #dce4e8;
+}
+#how-it-works-col-4 {
+  background-color: #e8f1f5;
+}
+
+#how-it-works-col-1 img {
   padding-left: 17px;
   padding-right: 18px;
 }
-.how-it-works-image-2 {
+#how-it-works-col-2 img {
   padding-left: 17px;
   padding-right: 18px;
 }
-.how-it-works-image-3 {
+#how-it-works-col-3 img {
   padding-left: 33px;
   padding-right: 22px;
 }
-.how-it-works-image-4 {
+#how-it-works-col-4 img {
   padding-left: 23px;
   padding-right: 23px;
 }
