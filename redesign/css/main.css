@@ -83,15 +83,17 @@ textarea, input, .form-control:focus {
 .how-it-works-screen {
   background-color: #dce4e8;
   height: 80vh;
+  padding-right: 10vw;
+  padding-left: 10vw;
+}
+
+.how-it-works-screen .col-sm-3 {
+  text-align: center;
+  height: 40vh;
+  width: 20vw;
 }
 .how-it-works-screen .row-1 .col-sm-3 {
-  text-align: center;
   padding-top: 40px;
-  height: 40vh;
-}
-.how-it-works-screen .row-2 .col-sm-3 {
-  text-align: center;
-  height: 40vh;
 }
 
 .how-it-works-screen .close {
@@ -134,6 +136,10 @@ textarea, input, .form-control:focus {
 .how-it-works-col-4 img {
   padding-left: 23px;
   padding-right: 23px;
+}
+
+.how-it-works-screen p {
+  padding: 18px;
 }
 
 a, a:focus, a:active {
