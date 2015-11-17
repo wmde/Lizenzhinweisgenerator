@@ -84,3 +84,9 @@ QUnit.test( 'attribution contains editing information if it was edited', functio
 
 	assert.ok( attributionContains( evaluation, 'zugeschnitten von Meh, ' + licence.getUrl() ) );
 } );
+
+QUnit.test( 'online attribution contains author\'s html', function( assert ) {
+	var authorHtml = '<a href="#meh">Meh</a>',
+		evaluation = newEvaluation( { authors: [ new Author( $( authorHtml ) ) ] } );
+	assert.ok( attributionContains( evaluation, authorHtml ) );
+} );

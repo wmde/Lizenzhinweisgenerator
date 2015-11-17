@@ -36,6 +36,12 @@ $.extend( DialogueEvaluation.prototype, {
 		} ).join( ', ' );
 	},
 
+	_getHtmlAuthor: function() {
+		return this._asset.getAuthors().map( function( author ) {
+			return typeof author === 'string' ? author : $( '<div/>' ).append( author.getHtml() ).html();
+		} ).join( ', ' );
+	},
+
 	_getAttributionLicenceUrl: function() {
 		return this._getResult( 'editing', 'edited' ) === 'true' ?
 			licences.getLicence( this._getResult( 'licence', 'licence' ) ).getUrl()
@@ -61,12 +67,16 @@ $.extend( DialogueEvaluation.prototype, {
 			+ this._getAttributionLicenceUrl();
 	},
 
+	_getHtmlAttribution: function() {
+		return this._getHtmlAuthor() + this._asset.getTitle();
+	},
+
 	getAttribution: function() {
 		if( this._getResult( 'type-of-use', 'type' ) === 'print' ) {
 			return this._getPrintAttribution();
 		}
 
-		return this._getAuthor() + ' ' + this._asset.getTitle();
+		return this._getHtmlAttribution();
 	}
 } );
 
