@@ -42,14 +42,22 @@ $.extend( DialogueEvaluation.prototype, {
 		} ).join( ', ' );
 	},
 
-	_getHtmlTitle: function() {
-		return '<a href="' + this._asset.getUrl() + '">' + this._asset.getTitle() + '</a>';
+	_makeLink: function( target, text ) {
+		return '<a href="' + target + '">' + text + '</a>';
 	},
 
-	_getAttributionLicenceUrl: function() {
+	_getHtmlTitle: function() {
+		return this._makeLink( this._asset.getUrl(), this._asset.getTitle() );
+	},
+
+	_getHtmlLicence: function() {
+		return this._makeLink( this._getAttributionLicence().getUrl(), this._getAttributionLicence().getName() );
+	},
+
+	_getAttributionLicence: function() {
 		return this._getResult( 'editing', 'edited' ) === 'true' ?
-			licences.getLicence( this._getResult( 'licence', 'licence' ) ).getUrl()
-			: this._asset.getLicence().getUrl();
+			licences.getLicence( this._getResult( 'licence', 'licence' ) )
+			: this._asset.getLicence();
 	},
 
 	_getEditingAttribution: function() {
@@ -68,11 +76,13 @@ $.extend( DialogueEvaluation.prototype, {
 			+ '(' + this._asset.getUrl() + '), '
 			+ this._asset.getTitle() + ', '
 			+ this._getEditingAttribution()
-			+ this._getAttributionLicenceUrl();
+			+ this._getAttributionLicence().getUrl();
 	},
 
 	_getHtmlAttribution: function() {
-		return this._getHtmlAuthor() + ', ' + this._getHtmlTitle();
+		return this._getHtmlAuthor()
+			+ ', ' + this._getHtmlTitle()
+			+ ', ' + this._getHtmlLicence();
 	},
 
 	getAttribution: function() {
