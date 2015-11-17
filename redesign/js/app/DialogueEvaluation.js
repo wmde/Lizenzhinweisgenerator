@@ -96,14 +96,18 @@ $.extend( DialogueEvaluation.prototype, {
 
 	/**
 	 * Returns a list of the DOs and DONTs
-	 * @returns {{do: Array, dont: Array}}
+	 * @returns {{dos: Array, donts: Array}}
 	 */
 	getDosAndDonts: function() {
-		var dosAndDonts = { do: [], dont: [] };
+		var dos = [],
+			donts = [];
 
-		dosAndDonts.do.push( this._getResult( 'type-of-use', 'type' ) );
+		dos.push( this._getResult( 'type-of-use', 'type' ) );
+		if( this._getResult( 'compilation', 'compilation' ) === 'true' ) {
+			dos.push( 'compilation' );
+		}
 
-		return dosAndDonts;
+		return { dos: dos, donts: donts };
 	}
 } );
 

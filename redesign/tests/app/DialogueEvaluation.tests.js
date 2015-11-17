@@ -123,10 +123,15 @@ QUnit.test( 'online attribution contains editing information', function( assert 
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
 	var printEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'print' } } ),
 		onlineEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'online' } } );
-	
-	assert.ok( printEvaluation.getDosAndDonts().do.indexOf( 'print' ) !== -1 );
-	assert.ok( printEvaluation.getDosAndDonts().do.indexOf( 'online' ) === -1 );
 
-	assert.ok( onlineEvaluation.getDosAndDonts().do.indexOf( 'online' ) !== -1 );
-	assert.ok( onlineEvaluation.getDosAndDonts().do.indexOf( 'print' ) === -1 );
+	assert.ok( printEvaluation.getDosAndDonts().dos.indexOf( 'print' ) !== -1 );
+	assert.ok( printEvaluation.getDosAndDonts().dos.indexOf( 'online' ) === -1 );
+
+	assert.ok( onlineEvaluation.getDosAndDonts().dos.indexOf( 'online' ) !== -1 );
+	assert.ok( onlineEvaluation.getDosAndDonts().dos.indexOf( 'print' ) === -1 );
+} );
+
+QUnit.test( 'has compilation hint in the DOs section', function( assert ) {
+	var evaluation = newEvaluation( {}, { compilation: { compilation: 'true' } } );
+	assert.ok( evaluation.getDosAndDonts().dos.indexOf( 'compilation' ) !== -1 );
 } );
