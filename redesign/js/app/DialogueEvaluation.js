@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	LicenceStore = require( './LicenceStore' ),
-	licences = new LicenceStore( require( './LICENCES' ) );
+	licences = new LicenceStore( require( './LICENCES' ) ),
+	Messages = require( './Messages' );
 
 /**
  * @param {Asset} asset
@@ -41,10 +42,22 @@ $.extend( DialogueEvaluation.prototype, {
 			: this._asset.getLicence().getUrl();
 	},
 
+	_getEditingAttribution: function() {
+		if( !this._getResult( 'editing', 'edited' ) ) {
+			return '';
+		}
+
+		return this._getResult( 'change', 'change' )
+			+ ' ' + Messages.t( 'evaluation.by' )
+			+ ' ' + this._getResult( 'creator', 'name' )
+			+ ', ';
+	},
+
 	_getPrintAttribution: function() {
 		return this._getAuthor() + '\n'
 			+ '(' + this._asset.getUrl() + '), '
 			+ this._asset.getTitle() + ', '
+			+ this._getEditingAttribution()
 			+ this._getAttributionLicenceUrl();
 	},
 

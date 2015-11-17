@@ -68,3 +68,19 @@ QUnit.test( 'attribution contains the author', function( assert ) {
 	assert.ok( attributionContains( evaluation, authorName ) );
 	assert.ok( attributionContains( printEvaluation, authorName ) );
 } );
+
+QUnit.test( 'attribution contains editing information if it was edited', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-3.0' ),
+		evaluation = newEvaluation(
+			{},
+			{
+				'type-of-use': { type: 'print' },
+				editing: { edited: 'true' },
+				licence: { licence: licence.getId() },
+				change: { change: 'zugeschnitten' },
+				creator: { name: 'Meh' }
+			}
+		);
+
+	assert.ok( attributionContains( evaluation, 'zugeschnitten von Meh, ' + licence.getUrl() ) );
+} );

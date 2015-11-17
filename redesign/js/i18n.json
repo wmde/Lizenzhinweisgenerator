@@ -40,6 +40,9 @@
       "creator-question-mark": "Bitte geben Sie möglichst Ihren vollständigen Namen an. Ein Pseudonym, Nickname oder “anonym” ist auch möglich.",
       "same-licence": "unter dieselbe Lizenz wie das ursprüngliche Werk",
       "licence-text": "Lizenztext"
+    },
+    "evaluation": {
+      "by": "von"
     }
   }
 }
