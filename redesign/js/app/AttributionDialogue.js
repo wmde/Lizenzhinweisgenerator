@@ -20,6 +20,10 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	 */
 	_asset: null,
 
+	getAsset: function() {
+		return this._asset;
+	},
+
 	init: function() {
 		this.addStep( new DialogueStep( 'typeOfUse', require( './templates/TypeOfUseStep.handlebars' ) ) );
 		if( this._asset.getAuthors().length === 0 ) {

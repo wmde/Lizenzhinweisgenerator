@@ -6,6 +6,7 @@ var $ = require( 'jquery' ),
 	AttributionDialogueView = require( '../../js/app/views/AttributionDialogueView' ),
 	Messages = require( '../../js/app/Messages' ),
 	Asset = require( '../../js/app/Asset' ),
+	DialogueEvaluation = require( '../../js/app/DialogueEvaluation' ),
 	LicenceStore = require( '../../js/app/LicenceStore' ),
 	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
 
@@ -165,6 +166,14 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 
 	// Done!
 	assert.ok( dialogueContains( $dialogue, 'dialogue.done-headline' ) );
+	assert.ok(
+		$dialogue.html().indexOf(
+			new DialogueEvaluation(
+				dialogue._dialogue._asset,
+				dialogue._dialogue.getData()
+			).getAttribution()
+		) !== -1
+	);
 
 	assert.equal( dialogue._dialogue.getData()[ 'typeOfUse' ][ 'type' ], 'online' );
 	assert.equal( dialogue._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
