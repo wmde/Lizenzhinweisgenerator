@@ -80,9 +80,10 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlAttribution: function() {
-		return this._getHtmlAuthor()
-			+ ', ' + this._getHtmlTitle()
-			+ ', ' + this._getHtmlLicence();
+		return this._getHtmlAuthor() + ', '
+			+ this._getHtmlTitle() + ', '
+			+ this._getEditingAttribution()
+			+ this._getHtmlLicence();
 	},
 
 	getAttribution: function() {
