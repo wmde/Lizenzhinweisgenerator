@@ -29,6 +29,12 @@ $.extend( DialogueEvaluation.prototype, {
 		return this._data[ step ] && this._data[ step ][ field ];
 	},
 
+	_getAuthor: function() {
+		return this._asset.getAuthors().map( function( author ) {
+			return typeof author === 'string' ? author : author.getText();
+		} ).join( ', ' );
+	},
+
 	_getAttributionLicenceUrl: function() {
 		return this._getResult( 'editing', 'edited' ) === 'true' ?
 			licences.getLicence( this._getResult( 'licence', 'licence' ) ).getUrl()
@@ -36,7 +42,8 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getPrintAttribution: function() {
-		return '(' + this._asset.getUrl() + '), '
+		return this._getAuthor() + '\n'
+			+ '(' + this._asset.getUrl() + '), '
 			+ this._asset.getTitle() + ', '
 			+ this._getAttributionLicenceUrl();
 	},
@@ -46,7 +53,7 @@ $.extend( DialogueEvaluation.prototype, {
 			return this._getPrintAttribution();
 		}
 
-		return this._asset.getTitle();
+		return this._getAuthor() + '\n' + this._asset.getTitle();
 	}
 } );
 

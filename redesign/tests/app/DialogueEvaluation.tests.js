@@ -2,10 +2,12 @@
 
 QUnit.module( 'DialogueEvaluation' );
 
-var DialogueEvaluation = require( '../../js/app/DialogueEvaluation' ),
+var $ = require( 'jquery' ),
+	DialogueEvaluation = require( '../../js/app/DialogueEvaluation' ),
 	Asset = require( '../../js/app/Asset' ),
 	LicenceStore = require( '../../js/app/LicenceStore' ),
-	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
+	licences = new LicenceStore( require( '../../js/app/LICENCES' ) ),
+	Author = require( '../../js/app/Author' );
 
 function newEvaluation( asset, dialogueData ) {
 	return new DialogueEvaluation(
@@ -21,24 +23,28 @@ function newEvaluation( asset, dialogueData ) {
 	);
 }
 
+function attributionContains( evaluation, text ) {
+	return evaluation.getAttribution().indexOf( text ) !== -1;
+}
+
 QUnit.test( 'responds to getAttribution', function( assert ) {
 	assert.ok( typeof newEvaluation( {} ).getAttribution() === 'string' );
 } );
 
 QUnit.test( 'attribution contains asset title', function( assert ) {
-	assert.ok( newEvaluation( { title: 'Test' } ).getAttribution().indexOf( 'Test' ) !== -1 );
+	assert.ok( attributionContains( newEvaluation( { title: 'Test' } ), 'Test' ) );
 } );
 
 QUnit.test( 'attribution contains asset url for use in print', function( assert ) {
 	var url = 'https://commons.wikimedia.org/wiki/File:Eichh%C3%B6rnchen_D%C3%BCsseldorf_Hofgarten_edit.jpg',
 		evaluation = newEvaluation( { url: url }, { 'type-of-use': { type: 'print' } } );
-	assert.ok( evaluation.getAttribution().indexOf( url ) !== -1 );
+	assert.ok( attributionContains( evaluation, url ) );
 } );
 
 QUnit.test( 'print attribution contains licence URL', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
 		evaluation = newEvaluation( { licence: licence }, { 'type-of-use': { type: 'print' } } );
-	assert.ok( evaluation.getAttribution().indexOf( licence.getUrl() ) !== -1 );
+	assert.ok( attributionContains( evaluation, licence.getUrl() ) );
 } );
 
 QUnit.test( 'use different licence URL if the user edited the asset and uses a compatible licence', function( assert ) {
@@ -51,5 +57,14 @@ QUnit.test( 'use different licence URL if the user edited the asset and uses a c
 				'editing': { edited: 'true' },
 				'licence': { licence: compatibleLicence.getId() }
 			} );
-	assert.ok( evaluation.getAttribution().indexOf( compatibleLicence.getUrl() ) !== -1 );
+	assert.ok( attributionContains( evaluation, compatibleLicence.getUrl() ) );
+} );
+
+QUnit.test( 'attribution contains the author', function( assert ) {
+	var authorName = 'Meh',
+		author = new Author( $( '<div>' + authorName + '</div>' ) ),
+		evaluation = newEvaluation( { authors: [ author ] } ),
+		printEvaluation = newEvaluation( { authors: [ author ] }, { 'type-of-use': { type: 'print' } } );
+	assert.ok( attributionContains( evaluation, authorName ) );
+	assert.ok( attributionContains( printEvaluation, authorName ) );
 } );
