@@ -54,7 +54,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getPrintAttribution: function() {
-		return this._getAuthor() + '\n'
+		return this._getAuthor() + ' '
 			+ '(' + this._asset.getUrl() + '), '
 			+ this._asset.getTitle() + ', '
 			+ this._getEditingAttribution()
@@ -66,7 +66,7 @@ $.extend( DialogueEvaluation.prototype, {
 			return this._getPrintAttribution();
 		}
 
-		return this._getAuthor() + '\n' + this._asset.getTitle();
+		return this._getAuthor() + ' ' + this._asset.getTitle();
 	}
 } );
 
