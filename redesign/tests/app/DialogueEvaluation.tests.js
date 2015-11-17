@@ -106,16 +106,16 @@ QUnit.test( 'online attribution contains link to licence', function( assert ) {
 
 QUnit.test( 'online attribution contains editing information', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
-			evaluation = newEvaluation(
-					{},
-					{
-						'type-of-use': { type: 'online' },
-						editing: { edited: 'true' },
-						licence: { licence: licence.getId() },
-						change: { change: 'zugeschnitten' },
-						creator: { name: 'Meh' }
-					}
-			);
+		evaluation = newEvaluation(
+			{},
+			{
+				'type-of-use': { type: 'online' },
+				editing: { edited: 'true' },
+				licence: { licence: licence.getId() },
+				change: { change: 'zugeschnitten' },
+				creator: { name: 'Meh' }
+			}
+		);
 
 	assert.ok( attributionContains( evaluation, 'zugeschnitten von Meh, ' ) );
 } );
