@@ -42,6 +42,10 @@ $.extend( DialogueEvaluation.prototype, {
 		} ).join( ', ' );
 	},
 
+	_getHtmlTitle: function() {
+		return '<a href="' + this._asset.getUrl() + '">' + this._asset.getTitle() + '</a>';
+	},
+
 	_getAttributionLicenceUrl: function() {
 		return this._getResult( 'editing', 'edited' ) === 'true' ?
 			licences.getLicence( this._getResult( 'licence', 'licence' ) ).getUrl()
@@ -68,7 +72,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlAttribution: function() {
-		return this._getHtmlAuthor() + this._asset.getTitle();
+		return this._getHtmlAuthor() + ', ' + this._getHtmlTitle();
 	},
 
 	getAttribution: function() {

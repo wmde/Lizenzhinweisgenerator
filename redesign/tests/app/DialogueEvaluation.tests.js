@@ -90,3 +90,10 @@ QUnit.test( 'online attribution contains author\'s html', function( assert ) {
 		evaluation = newEvaluation( { authors: [ new Author( $( authorHtml ) ) ] } );
 	assert.ok( attributionContains( evaluation, authorHtml ) );
 } );
+
+QUnit.test( 'online attribution contains link to asset from title', function( assert ) {
+	var url = 'http://example.com/foo.jpg',
+		title = 'bar',
+		evaluation = newEvaluation( { url: url, title: title } );
+	assert.ok( attributionContains( evaluation, '<a href="' + url + '">' + title + '</a>' ) );
+} );
