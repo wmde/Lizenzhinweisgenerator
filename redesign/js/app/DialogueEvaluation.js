@@ -100,7 +100,7 @@ $.extend( DialogueEvaluation.prototype, {
 	 */
 	getDosAndDonts: function() {
 		var dos = [],
-			donts = [];
+			donts = [ 'terms-of-use', 'sublicences', 'cc-licence', 'technical-protection', 'rightholder-connection' ];
 
 		dos.push( this._getResult( 'type-of-use', 'type' ) );
 		if( this._getResult( 'compilation', 'compilation' ) === 'true' ) {

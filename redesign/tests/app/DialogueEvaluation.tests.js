@@ -135,3 +135,11 @@ QUnit.test( 'has compilation hint in the DOs section', function( assert ) {
 	var evaluation = newEvaluation( {}, { compilation: { compilation: 'true' } } );
 	assert.ok( evaluation.getDosAndDonts().dos.indexOf( 'compilation' ) !== -1 );
 } );
+
+QUnit.test( 'has all DONTs by default', function( assert ) {
+	var evaluation = newEvaluation( {} );
+	assert.deepEqual(
+		evaluation.getDosAndDonts().donts,
+		[ 'terms-of-use', 'sublicences', 'cc-licence', 'technical-protection', 'rightholder-connection' ]
+	);
+} );
