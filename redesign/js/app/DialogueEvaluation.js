@@ -92,6 +92,18 @@ $.extend( DialogueEvaluation.prototype, {
 		}
 
 		return this._getHtmlAttribution();
+	},
+
+	/**
+	 * Returns a list of the DOs and DONTs
+	 * @returns {{do: Array, dont: Array}}
+	 */
+	getDosAndDonts: function() {
+		var dosAndDonts = { do: [], dont: [] };
+
+		dosAndDonts.do.push( this._getResult( 'type-of-use', 'type' ) );
+
+		return dosAndDonts;
 	}
 } );
 

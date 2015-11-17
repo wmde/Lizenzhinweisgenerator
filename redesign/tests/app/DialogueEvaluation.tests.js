@@ -119,3 +119,14 @@ QUnit.test( 'online attribution contains editing information', function( assert 
 
 	assert.ok( attributionContains( evaluation, 'zugeschnitten von Meh, ' ) );
 } );
+
+QUnit.test( 'has type of use information in the DOs section', function( assert ) {
+	var printEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'print' } } ),
+		onlineEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'online' } } );
+	
+	assert.ok( printEvaluation.getDosAndDonts().do.indexOf( 'print' ) !== -1 );
+	assert.ok( printEvaluation.getDosAndDonts().do.indexOf( 'online' ) === -1 );
+
+	assert.ok( onlineEvaluation.getDosAndDonts().do.indexOf( 'online' ) !== -1 );
+	assert.ok( onlineEvaluation.getDosAndDonts().do.indexOf( 'print' ) === -1 );
+} );
