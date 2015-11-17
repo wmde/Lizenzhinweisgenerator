@@ -106,6 +106,9 @@ $.extend( DialogueEvaluation.prototype, {
 		if( this._getResult( 'compilation', 'compilation' ) === 'true' ) {
 			dos.push( 'compilation' );
 		}
+		if( this._asset.getLicence().isInGroup( 'cc1' ) || this._asset.getLicence().isInGroup( 'cc2' ) ) {
+			donts.pop();
+		}
 
 		return { dos: dos, donts: donts };
 	}

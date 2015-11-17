@@ -137,9 +137,14 @@ QUnit.test( 'has compilation hint in the DOs section', function( assert ) {
 } );
 
 QUnit.test( 'has all DONTs by default', function( assert ) {
-	var evaluation = newEvaluation( {} );
+	var evaluation = newEvaluation( { licence: licences.getLicence( 'cc-by-3.0' ) } );
 	assert.deepEqual(
 		evaluation.getDosAndDonts().donts,
 		[ 'terms-of-use', 'sublicences', 'cc-licence', 'technical-protection', 'rightholder-connection' ]
 	);
+} );
+
+QUnit.test( 'does not have rightholder connection in DONTs for licence version <=2.0', function( assert ) {
+	var evaluation = newEvaluation( { licence: licences.getLicence( 'cc-by-2.0' ) } );
+	assert.ok( evaluation.getDosAndDonts().donts.indexOf( 'rightholder-connection' ) === -1 );
 } );
