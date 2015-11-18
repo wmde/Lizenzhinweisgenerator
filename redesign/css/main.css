@@ -526,7 +526,7 @@ a:hover {
 .dos-and-donts p .glyphicon {
   font-size: 11px;
 }
-.dos-and-donts a, a:hover {
+.dos-and-donts a, .dos-and-donts a:hover, .final-attribution a, .final-attribution a:hover {
   text-decoration: underline;
   color: #000
 }
