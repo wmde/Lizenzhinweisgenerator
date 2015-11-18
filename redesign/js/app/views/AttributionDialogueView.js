@@ -49,10 +49,10 @@ $.extend( AttributionDialogueView.prototype, {
 			return this._dialogue.currentStep().render();
 		}
 
-		return new DialogueEvaluationView(new DialogueEvaluation(
-				this._dialogue.getAsset(),
-				this._dialogue.getData()
-		)).render();
+		return new DialogueEvaluationView( new DialogueEvaluation(
+			this._dialogue.getAsset(),
+			this._dialogue.getData()
+		) ).render();
 	},
 
 	_toggleQuestionMark: function( e ) {

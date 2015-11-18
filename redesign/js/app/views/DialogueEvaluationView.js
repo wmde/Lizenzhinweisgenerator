@@ -25,6 +25,14 @@ $.extend( DialogueEvaluationView.prototype, {
 		e.preventDefault();
 	},
 
+	_showAttribution: function( e ) {
+		$( '.final-attribution .attribution-box div' ).hide();
+		$( $( this ).data( 'target' ) ).show();
+		$( '.final-attribution .show-attribution' ).toggleClass( 'active' );
+
+		e.preventDefault();
+	},
+
 	render: function() {
 		var $html = $( doneTemplate() ),
 			dosAndDonts = this._evaluation.getDosAndDonts();
@@ -41,10 +49,11 @@ $.extend( DialogueEvaluationView.prototype, {
 				return {
 					headline: 'evaluation.dont-' + dont + '-headline',
 					text: 'evaluation.dont-' + dont + '-text'
-				}
+				};
 			} )
 		} ) );
 
+		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
 
 		return $html;
