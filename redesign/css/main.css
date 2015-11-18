@@ -459,3 +459,41 @@ a:hover {
   height: 15px;
   width: 15px;
 }
+.final-attribution {
+  margin: 40px 0 0 20px;
+  padding-bottom: 0;
+}
+.final-attribution h2 {
+  border: 0;
+  color: #97b314;
+  margin: 0 0 0 8px;
+}
+.final-attribution .attribution-box {
+  border: 1px solid #97b314;
+  word-wrap: break-word;
+  border-left-width: 4px;
+  border-radius: 2px;
+  padding: 9px 4px;
+}
+.final-attribution .buttons {
+  margin: -2px 0 0 12px;
+}
+.final-attribution button.green-btn {
+  border: 1px solid #97b314;
+  color: #aaa;
+  background: #fff;
+  padding: 7px;
+  border-radius: 0 0 2px 2px;
+  opacity: 1;
+  outline: none;
+}
+.final-attribution .active.green-btn {
+  border-top-color: #fff;
+  color: #97b314;
+}
+.final-attribution #copy-attribution {
+  margin-top: 1px;
+  background: #97b314;
+  color: #fff;
+  float: right;
+}
