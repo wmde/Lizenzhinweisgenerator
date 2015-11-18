@@ -37,13 +37,13 @@ QUnit.test( 'attribution contains asset title', function( assert ) {
 
 QUnit.test( 'attribution contains asset url for use in print', function( assert ) {
 	var url = 'https://commons.wikimedia.org/wiki/File:Eichh%C3%B6rnchen_D%C3%BCsseldorf_Hofgarten_edit.jpg',
-		evaluation = newEvaluation( { url: url }, { 'type-of-use': { type: 'print' } } );
+		evaluation = newEvaluation( { url: url }, { 'typeOfUse': { type: 'print' } } );
 	assert.ok( attributionContains( evaluation, url ) );
 } );
 
 QUnit.test( 'print attribution contains licence URL', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
-		evaluation = newEvaluation( { licence: licence }, { 'type-of-use': { type: 'print' } } );
+		evaluation = newEvaluation( { licence: licence }, { 'typeOfUse': { type: 'print' } } );
 	assert.ok( attributionContains( evaluation, licence.getUrl() ) );
 } );
 
@@ -53,7 +53,7 @@ QUnit.test( 'use different licence URL if the user edited the asset and uses a c
 		evaluation = newEvaluation(
 			{ licence: licence },
 			{
-				'type-of-use': { type: 'print' },
+				'typeOfUse': { type: 'print' },
 				'editing': { edited: 'true' },
 				'licence': { licence: compatibleLicence.getId() }
 			} );
@@ -64,7 +64,7 @@ QUnit.test( 'attribution contains the author', function( assert ) {
 	var authorName = 'Meh',
 		author = new Author( $( '<div>' + authorName + '</div>' ) ),
 		evaluation = newEvaluation( { authors: [ author ] } ),
-		printEvaluation = newEvaluation( { authors: [ author ] }, { 'type-of-use': { type: 'print' } } );
+		printEvaluation = newEvaluation( { authors: [ author ] }, { 'typeOfUse': { type: 'print' } } );
 	assert.ok( attributionContains( evaluation, authorName ) );
 	assert.ok( attributionContains( printEvaluation, authorName ) );
 } );
@@ -74,7 +74,7 @@ QUnit.test( 'attribution contains editing information if it was edited', functio
 		evaluation = newEvaluation(
 			{},
 			{
-				'type-of-use': { type: 'print' },
+				'typeOfUse': { type: 'print' },
 				editing: { edited: 'true' },
 				licence: { licence: licence.getId() },
 				change: { change: 'zugeschnitten' },
@@ -109,7 +109,7 @@ QUnit.test( 'online attribution contains editing information', function( assert 
 		evaluation = newEvaluation(
 			{},
 			{
-				'type-of-use': { type: 'online' },
+				'typeOfUse': { type: 'online' },
 				editing: { edited: 'true' },
 				licence: { licence: licence.getId() },
 				change: { change: 'zugeschnitten' },
@@ -126,8 +126,8 @@ QUnit.test( 'attribution does not contain editing information if it was not edit
 } );
 
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
-	var printEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'print' } } ),
-		onlineEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'online' } } );
+	var printEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'print' } } ),
+		onlineEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'online' } } );
 
 	assert.ok( printEvaluation.getDosAndDonts().dos.indexOf( 'print' ) !== -1 );
 	assert.ok( printEvaluation.getDosAndDonts().dos.indexOf( 'online' ) === -1 );

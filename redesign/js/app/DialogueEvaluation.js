@@ -87,7 +87,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	getAttribution: function() {
-		if( this._getResult( 'type-of-use', 'type' ) === 'print' ) {
+		if( this._getResult( 'typeOfUse', 'type' ) === 'print' ) {
 			return this._getPrintAttribution();
 		}
 
@@ -102,7 +102,7 @@ $.extend( DialogueEvaluation.prototype, {
 		var dos = [],
 			donts = [ 'terms-of-use', 'sublicences', 'cc-licence', 'technical-protection', 'rightholder-connection' ];
 
-		dos.push( this._getResult( 'type-of-use', 'type' ) );
+		dos.push( this._getResult( 'typeOfUse', 'type' ) );
 		if( this._getResult( 'compilation', 'compilation' ) === 'true' ) {
 			dos.push( 'compilation' );
 		}
