@@ -120,6 +120,11 @@ QUnit.test( 'online attribution contains editing information', function( assert 
 	assert.ok( attributionContains( evaluation, 'zugeschnitten von Meh, ' ) );
 } );
 
+QUnit.test( 'attribution does not contain editing information if it was not edited', function( assert ) {
+	var evaluation = newEvaluation( {}, { editing: { edited: 'false' }, change: { change: 'blah' } } );
+	assert.notOk( attributionContains( evaluation, 'blah' ) );
+} );
+
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
 	var printEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'print' } } ),
 		onlineEvaluation = newEvaluation( {}, { 'type-of-use': { type: 'online' } } );

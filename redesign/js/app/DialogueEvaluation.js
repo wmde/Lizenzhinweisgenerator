@@ -61,7 +61,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getEditingAttribution: function() {
-		if( !this._getResult( 'editing', 'edited' ) ) {
+		if( this._getResult( 'editing', 'edited' ) !== 'true' ) {
 			return '';
 		}
 
