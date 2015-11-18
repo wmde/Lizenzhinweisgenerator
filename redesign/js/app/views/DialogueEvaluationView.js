@@ -31,7 +31,10 @@ $.extend( DialogueEvaluationView.prototype, {
 				return 'evaluation.do-' + d + '-text';
 			} ),
 			donts: dosAndDonts.donts.map( function( dont ) {
-				return 'evaluation.dont-' + dont + '-text'
+				return {
+					headline: 'evaluation.dont-' + dont + '-headline',
+					text: 'evaluation.dont-' + dont + '-text'
+				}
 			} )
 		} ) );
 

@@ -1,13 +1,26 @@
 <div class="dos-and-donts">
 	<div class="dos">
-		{{#each dos}}
-			{{translate this}}
-		{{/each}}
+		<div class="dd-icon">
+			<i class="glyphicon glyphicon-ok"></i>
+		</div>
+		<div class="dd-list">
+			{{#each dos}}
+				<p>{{translate this}}</p>
+			{{/each}}
+		</div>
 	</div>
 
 	<div class="donts">
-		{{#each donts}}
-			{{translate this}}
-		{{/each}}
+		<div class="dd-icon">
+			<i class="glyphicon glyphicon-remove"></i>
+		</div>
+		<div class="dd-list">
+			{{#each donts}}
+				<p>
+					<h3>{{translate this.headline}}</h3>
+					{{translate this.text}}
+				</p>
+			{{/each}}
+		</div>
 	</div>
 </div>

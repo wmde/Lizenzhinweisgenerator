@@ -183,6 +183,7 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 		assert.ok( $dialogue.text().indexOf( Messages.t( 'evaluation.do-' + d + '-text' ) ) !== -1 );
 	} );
 	$.each( expectedDosAndDonts.donts, function( _, dont ) {
+		assert.ok( $dialogue.text().indexOf( Messages.t( 'evaluation.dont-' + dont + '-headline' ) ) !== -1 );
 		assert.ok( $dialogue.text().indexOf( Messages.t( 'evaluation.dont-' + dont + '-text' ) ) !== -1 );
 	} );
 
