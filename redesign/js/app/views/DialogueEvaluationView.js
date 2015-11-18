@@ -19,6 +19,12 @@ $.extend( DialogueEvaluationView.prototype, {
 	 */
 	_evaluation: null,
 
+	_showDont: function( e ) {
+		$( this ).parent().siblings( '.dont-text' ).slideToggle();
+
+		e.preventDefault();
+	},
+
 	render: function() {
 		var $html = $( doneTemplate() ),
 			dosAndDonts = this._evaluation.getDosAndDonts();
@@ -37,6 +43,8 @@ $.extend( DialogueEvaluationView.prototype, {
 				}
 			} )
 		} ) );
+
+		$html.find( '.show-dont' ).click( this._showDont );
 
 		return $html;
 	}

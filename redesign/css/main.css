@@ -497,3 +497,36 @@ a:hover {
   color: #fff;
   float: right;
 }
+.dos-and-donts {
+  margin-top: 40px;
+  font-size: 14px;
+}
+.dos-and-donts .dos, .dos-and-donts .donts {
+  width: 50%;
+  float: left;
+}
+.dos-and-donts .dd-list {
+  padding-left: 45px;
+  position: relative;
+}
+.dos-and-donts .dd-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #97b314;
+  font-size: 35px;
+  padding: 3px;
+  text-align: center;
+  border-radius: 100%;
+}
+.dos-and-donts h3, .dos-and-donts p {
+  margin: 0;
+  padding: 0;
+}
+.dos-and-donts p .glyphicon {
+  font-size: 11px;
+}
+.dos-and-donts a, a:hover {
+  text-decoration: underline;
+  color: #000
+}
