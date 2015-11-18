@@ -2,6 +2,7 @@
 
 var $ = require( 'jquery' ),
 	doneTemplate = require( '../templates/Done.handlebars' ),
+	dosAndDontsTemplate = require( '../templates/DosAndDonts.handlebars' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' );
 
 /**
@@ -19,10 +20,19 @@ $.extend( DialogueEvaluationView.prototype, {
 	_evaluation: null,
 
 	render: function() {
-		var $html = $( doneTemplate() );
+		var $html = $( doneTemplate() ),
+			dosAndDonts = this._evaluation.getDosAndDonts();
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution()
+		} ) );
+		$html.append( dosAndDontsTemplate( {
+			dos: dosAndDonts.dos.map( function( d ) {
+				return 'evaluation.do-' + d + '-text';
+			} ),
+			donts: dosAndDonts.donts.map( function( dont ) {
+				return 'evaluation.dont-' + dont + '-text'
+			} )
 		} ) );
 
 		return $html;

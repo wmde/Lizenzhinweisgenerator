@@ -175,6 +175,17 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 		) !== -1
 	);
 
+	var expectedDosAndDonts = {
+		dos: [ 'online', 'compilation' ],
+		donts: [ 'terms-of-use', 'sublicences', 'cc-licence', 'technical-protection' ]
+	};
+	$.each( expectedDosAndDonts.dos, function( _, d ) {
+		assert.ok( $dialogue.text().indexOf( Messages.t( 'evaluation.do-' + d + '-text' ) ) !== -1 );
+	} );
+	$.each( expectedDosAndDonts.donts, function( _, dont ) {
+		assert.ok( $dialogue.text().indexOf( Messages.t( 'evaluation.dont-' + dont + '-text' ) ) !== -1 );
+	} );
+
 	assert.equal( dialogue._dialogue.getData()[ 'typeOfUse' ][ 'type' ], 'online' );
 	assert.equal( dialogue._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
 	assert.equal( dialogue._dialogue.getData()[ 'compilation' ][ 'compilation' ], 'true' );

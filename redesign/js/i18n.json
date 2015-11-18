@@ -45,7 +45,20 @@
       "by": "von",
       "done-text": "Sie haben alle Fragen beantwortet und können den unten angegebenen Lizenzhinweis nutzen.",
       "your-attribution": "Ihr Lizenzhinweis",
-      "copy": "Kopieren"
+      "copy": "Kopieren",
+      "do-print-text": "Die angezeigten Informationen müssen Sie in unmittelbarer Nähe zum Werk angeben, so dass für Nutzer der Zusammenhang deutlich wird (z.B. unmittelbar unter einem Foto oder am Ende eines Textes). Bei Büchern und Zeitschriften kann dies auch in einem Impressum oder anderer üblicher Stelle erfolgen, wenn dabei eindeutig die Zuordnung zu dem jeweiligen Werk möglich ist (z.B. durch Angabe der Seitenzahl).",
+      "do-online-text": "Die angezeigten Informationen müssen Sie in unmittelbarer Nähe zum Werk angeben, so dass für Nutzer der Zusammenhang deutlich wird (z.B. unmittelbar unter einem Foto oder am Ende eines Textes). Für eine einfache Übernahme wird der Lizenzhinweis auch als HTML-Text zur Verfügung gestellt, der unmittelbar in den Quelltext Ihrer Website übernommen werden kann.",
+      "do-compilation-text": "Sollte Ihnen der Lizenzgeber mitgeteilt haben, dass Sie seinen Namen, Werktitel oder Hinweise auf seine Webseite nicht veröffentlichen sollen, geben Sie bitte lediglich den Link zur Lizenz an. Diesen können Sie über das Lizenz-Icon erreichen. Der Rechteinhaber soll die Möglichkeit haben zu entscheiden, ob er mit Name und Titel genannt werden möchte, wenn sein Werk in einem Sammelwerk verwendet wird, mit dem er vielleicht nicht in Verbindung gebracht werden möchte.",
+      "dont-terms-of-use-headline": "Vertrags- oder Nutzungsbedingungen",
+      "dont-terms-of-use-text": "Sie dürfen keine Vertrags- oder Nutzungsbedingungen verwenden, die im Hinblick auf das CC-lizenzierte Werk die Rechte aus der CC-Lizenz beschränken (z.B. allgemeine Weitergabeverbote für die Inhalte auf einer Webseite, die die CC-lizenzierten Werke nicht explizit ausnehmen).",
+      "dont-sublicences-headline": "Unterlizenzen",
+      "dont-sublicences-text": "Sie dürfen keine Unterlizenzen an dem Werk einräumen. Dies bedeutet, dass Sie nicht selbst als Lizenzgeber auftreten dürfen - potenzielle Lizenznehmer können nur unmittelbar vom Rechteinhaber eine CC-Lizenz erwerben.",
+      "dont-cc-licence-headline": "Hinweise auf eine CC-Lizenz",
+      "dont-cc-licence-text": "Sofern das Werk Hinweise auf eine CC-Lizenz und/oder auf einen Haftungsausschluss enthält, dürfen diese Hinweise nicht geändert oder gelöscht werden.",
+      "dont-technical-protection-headline": "Technische Schutzmaßnahmen",
+      "dont-technical-protection-text": "Sie dürfen keine technischen Schutzmaßnahmen verwenden, die den Nutzer bei der Ausübung von Rechten aus der CC-Lizenz behindern können (z.B. Kopierschutztechnik, die den Ausdruck eines PDF verhindert).",
+      "dont-rightholder-connection-headline": "Verbindung zum Rechteinhaber",
+      "dont-rightholder-connection-text": "Sie dürfen nicht den Eindruck erwecken, dass Sie zu dem Rechteinhaber oder zu einer von dem Rechteinhaber als Zuschreibungsempfänger benannten Person eine Verbindung haben, die über die CC-Lizenzierung hinausgeht."
     }
   }
 }
