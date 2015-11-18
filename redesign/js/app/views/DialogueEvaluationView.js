@@ -30,7 +30,8 @@ $.extend( DialogueEvaluationView.prototype, {
 			dosAndDonts = this._evaluation.getDosAndDonts();
 
 		$html.append( attributionTemplate( {
-			attribution: this._evaluation.getAttribution()
+			attribution: this._evaluation.getAttribution(),
+			isPrint: this._evaluation.isPrint()
 		} ) );
 		$html.append( dosAndDontsTemplate( {
 			dos: dosAndDonts.dos.map( function( d ) {

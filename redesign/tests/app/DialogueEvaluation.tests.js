@@ -153,3 +153,11 @@ QUnit.test( 'does not have rightholder connection in DONTs for licence version <
 	var evaluation = newEvaluation( { licence: licences.getLicence( 'cc-by-2.0' ) } );
 	assert.ok( evaluation.getDosAndDonts().donts.indexOf( 'rightholder-connection' ) === -1 );
 } );
+
+QUnit.test( 'isPrint tells whether the asset is going to be used in a print medium', function( assert ) {
+	var printEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'print' } } ),
+		onlineEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'online' } } );
+
+	assert.ok( printEvaluation.isPrint() );
+	assert.notOk( onlineEvaluation.isPrint() );
+} );

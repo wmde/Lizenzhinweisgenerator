@@ -4,8 +4,10 @@
 		{{{attribution}}}
 	</div>
 	<div class="buttons">
-		<button class="active green-btn">Text</button>
-		<button class="green-btn">HTML</button>
+		{{#unless isPrint}}
+			<button class="active green-btn">Text</button>
+			<button class="green-btn">HTML</button>
+		{{/unless}}
 		<button class="copy green-btn" id="copy-attribution">
 			<i class="glyphicon glyphicon-copy"></i>
 			{{translate 'evaluation.copy'}}

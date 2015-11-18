@@ -111,6 +111,10 @@ $.extend( DialogueEvaluation.prototype, {
 		}
 
 		return { dos: dos, donts: donts };
+	},
+
+	isPrint: function() {
+		return this._getResult( 'typeOfUse', 'type' ) === 'print';
 	}
 } );
 
