@@ -1,3 +1,5 @@
+'use strict';
+
 require( 'qunitjs' );
 require( '../js/view_helpers' );
 require( './app/Api.local.tests' );
