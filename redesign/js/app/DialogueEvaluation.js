@@ -43,7 +43,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_makeLink: function( target, text ) {
-		return '<a href="' + target + '">' + text + '</a>';
+		return '<a href="' + target + '" target="_blank">' + text + '</a>';
 	},
 
 	_getHtmlTitle: function() {
