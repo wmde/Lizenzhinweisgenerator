@@ -289,15 +289,18 @@ a:hover {
 }
 
 .dialogue-screen {
-  overflow: hidden;
+  position: relative;
+  min-height: 100vh;
 }
 .dialogue-screen .image-preview {
   width: 40vw;
+  height: calc(100% - 40px);
+  position: absolute;
+  overflow: hidden;
   float: left;
 }
 .dialogue-screen .image-wrapper {
   width: 40vw;
-  float: left;
   background-color: rgb(238, 242, 244);
   text-align: right;
 }
@@ -329,7 +332,7 @@ a:hover {
   top: -0.5em;
 }
 .dialogue-screen .dialogue {
-  float: left;
+  margin-left: 40vw;
   width: 50vw;
 }
 .dialogue-bubble h2 {

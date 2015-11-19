@@ -160,7 +160,7 @@ $.extend( FileForm.prototype, {
 		asset.getImageInfo( 400 )
 			.done( function( imageInfo ) {
 				$( '.dialogue-screen' ).remove();
-				var $dialogueScreen = $( '<div class="screen dialogue-screen"/>' );
+				var $dialogueScreen = $( '<div class="dialogue-screen"/>' );
 				self._$resultsPage.after( $dialogueScreen );
 
 				new DialogueScreen( imageInfo, asset ).render( $dialogueScreen );
