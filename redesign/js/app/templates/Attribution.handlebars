@@ -1,0 +1,22 @@
+<div class="final-attribution">
+	<h2>{{translate 'evaluation.your-attribution'}}</h2>
+	<div class="attribution-box">
+		<div id="html-attribution">
+			{{{attribution}}}
+		</div>
+		<div id="escaped-attribution" class="display-none">
+			{{attribution}}
+		</div>
+	</div>
+	<div class="buttons">
+		{{#unless isPrint}}
+			<button class="active green-btn show-attribution" data-target="#html-attribution">Text</button>
+			<button class="green-btn show-attribution" data-target="#escaped-attribution">HTML</button>
+		{{/unless}}
+
+		<button class="copy green-btn" id="copy-attribution">
+			<i class="glyphicon glyphicon-copy"></i>
+			{{translate 'evaluation.copy'}}
+		</button>
+	</div>
+</div>

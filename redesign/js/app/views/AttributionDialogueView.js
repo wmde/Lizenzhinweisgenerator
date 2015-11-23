@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	AttributionDialogue = require( '../AttributionDialogue' ),
-	DoneView = require( './DoneView' );
+	DialogueEvaluation = require( '../DialogueEvaluation' ),
+	DialogueEvaluationView = require( './DialogueEvaluationView' );
 
 var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
@@ -48,7 +49,10 @@ $.extend( AttributionDialogueView.prototype, {
 			return this._dialogue.currentStep().render();
 		}
 
-		return new DoneView().render();
+		return new DialogueEvaluationView( new DialogueEvaluation(
+			this._dialogue.getAsset(),
+			this._dialogue.getData()
+		) ).render();
 	},
 
 	_toggleQuestionMark: function( e ) {

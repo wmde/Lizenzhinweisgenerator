@@ -1,3 +1,5 @@
+'use strict';
+
 require( 'qunitjs' );
 require( '../js/view_helpers' );
 require( './app/Api.local.tests' );
@@ -7,3 +9,4 @@ require( './app/Dialogue.tests' );
 require( './app/AttributionDialogue.tests' );
 require( './app/AttributionDialogueView.tests' );
 require( './app/LicenceStore.tests' );
+require( './app/DialogueEvaluation.tests' );
