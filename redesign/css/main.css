@@ -552,3 +552,7 @@ a:hover {
   color: #00c;
   text-decoration: underline;
 }
+.dialogue .licence-link {
+  margin-top: 35px;
+  text-align: center;
+}
