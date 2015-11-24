@@ -64,7 +64,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
-		new Clipboard( '#copy-attribution', { text: this._copyAttribution } );
+		new Clipboard( '#copy-attribution', { text: this._copyAttribution } ); // jshint ignore:line
 
 		return $html;
 	}
