@@ -69,12 +69,19 @@ $.extend( AttributionDialogueView.prototype, {
 	 */
 	render: function( $dialogue ) {
 		var $content = this._nextStepOrDone(),
-			self = this;
+			self = this,
+			$infoBox = $( '#info-box' );
 
-		$( '#info-box' ).html( new InfoBoxView(
+		$infoBox.html( new InfoBoxView(
 			Messages.t( 'info-box.private-use' ),
 			'<button class="green-btn small-btn close-info">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
 		).render() );
+		if( this._dialogue.getAsset().getLicence().isInGroup( 'ported' ) ) {
+			$infoBox.append( new InfoBoxView(
+				Messages.t( 'info-box.ported-licence' ),
+				'<button class="green-btn small-btn close-info">' + Messages.t( 'info-box.understood-and-close' ) + '</button>'
+			).render() );
+		}
 
 		$content.find( '.immediate-submit input:checkbox' ).click( function() {
 			$( this ).closest( 'form' ).submit();
