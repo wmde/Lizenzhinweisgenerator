@@ -4,7 +4,9 @@ var $ = require( 'jquery' ),
 	doneTemplate = require( '../templates/Done.handlebars' ),
 	dosAndDontsTemplate = require( '../templates/DosAndDonts.handlebars' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
-	Clipboard = require( 'clipboard' );
+	Clipboard = require( 'clipboard' ),
+	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
+	Messages = require( '../Messages' );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -61,6 +63,14 @@ $.extend( DialogueEvaluationView.prototype, {
 				};
 			} )
 		} ) );
+		$html.append( '<div class="clearfix"/>' );
+		$( '<div class="licence-link"/>' )
+			.append( buttonTemplate( {
+				content: '<img class="cc-logo" src="http://mirrors.creativecommons.org/presskit/icons/cc.svg">'
+				+ Messages.t( 'evaluation.show-licence-text' ),
+				target: this._evaluation.getAttributionLicence().getUrl()
+			} ) )
+			.appendTo( $html );
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
