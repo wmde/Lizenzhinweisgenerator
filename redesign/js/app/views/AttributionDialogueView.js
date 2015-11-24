@@ -56,8 +56,7 @@ $.extend( AttributionDialogueView.prototype, {
 	},
 
 	_toggleQuestionMark: function( e ) {
-		$( this )
-			.toggleClass( 'active' );
+		$( this ).toggleClass( 'active' );
 		$( '#' + $( this ).data( 'target' ) ).slideToggle();
 
 		e.preventDefault();
