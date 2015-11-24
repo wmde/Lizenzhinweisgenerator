@@ -14,22 +14,24 @@ require( './view_helpers' );
 require( './scrolling_effects' );
 require( './background' );
 
-var trackingSwitch = $( '#tracking-switch' );
+var $trackingSwitch = $( '#tracking-switch' ),
+	$trackingSwitchLabel = $( '#tracking-switch-text' );
 if( tracking.shouldTrack() ) {
-	trackingSwitch.text( Messages.t( 'do-not-track' ) );
-	trackingSwitch.click( function() {
+	$trackingSwitchLabel.text( Messages.t( 'do-not-track' ) );
+	$trackingSwitch.attr( 'checked', 'checked' );
+} else {
+	$trackingSwitchLabel.text( Messages.t( 'do-track' ) );
+	$trackingSwitch.attr( 'checked', false );
+}
+$trackingSwitch.change( function() {
+	if( $( this ).is( ':checked' ) ) {
+		tracking.trackEvent( 'Tracking', 'Enabled' );
+		tracking.removeDoNotTrackCookie();
+	} else {
 		tracking.trackEvent( 'Tracking', 'Disabled' );
 		tracking.setDoNotTrackCookie();
-		trackingSwitch.remove();
-	} );
-} else {
-	trackingSwitch.text( Messages.t( 'do-track' ) );
-	trackingSwitch.click( function() {
-		tracking.removeDoNotTrackCookie();
-		tracking.trackEvent( 'Tracking', 'Enabled' );
-		trackingSwitch.remove();
-	} );
-}
+	}
+} );
 
 $( '.track-click' ).click( function() {
 	tracking.trackEvent(
