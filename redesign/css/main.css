@@ -494,11 +494,26 @@ a:hover {
   border-top-color: #fff;
   color: #97b314;
 }
-.final-attribution #copy-attribution {
+#copy-attribution {
   margin-top: 1px;
   background: #97b314;
   color: #fff;
   float: right;
+}
+#copy-attribution:hover {
+  background: #008752;
+}
+@keyframes flash {
+  0% { background-color: #008752; }
+  20% { background-color: #97b314; }
+  40% { background-color: #008752; }
+  60% { background-color: #97b314; }
+  80% { background-color: #008752; }
+  100% { background-color: #97b314; }
+}
+#copy-attribution.flash {
+  animation-name: flash;
+  animation-duration: 0.8s;
 }
 .dos-and-donts {
   margin-top: 40px;

@@ -3,7 +3,8 @@
 var $ = require( 'jquery' ),
 	doneTemplate = require( '../templates/Done.handlebars' ),
 	dosAndDontsTemplate = require( '../templates/DosAndDonts.handlebars' ),
-	attributionTemplate = require( '../templates/Attribution.handlebars' );
+	attributionTemplate = require( '../templates/Attribution.handlebars' ),
+	Clipboard = require( 'clipboard' );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -33,6 +34,14 @@ $.extend( DialogueEvaluationView.prototype, {
 		e.preventDefault();
 	},
 
+	_copyAttribution: function( trigger ) {
+		$( trigger ).addClass( 'flash' );
+		window.setTimeout( function() {
+			$( trigger ).removeClass( 'flash' );
+		}, 800 );
+		return $( '.attribution-box > div:visible' ).text();
+	},
+
 	render: function() {
 		var $html = $( doneTemplate() ),
 			dosAndDonts = this._evaluation.getDosAndDonts();
@@ -55,6 +64,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
+		new Clipboard( '#copy-attribution', { text: this._copyAttribution } ); // jshint ignore:line
 
 		return $html;
 	}
