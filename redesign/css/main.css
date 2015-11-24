@@ -556,3 +556,31 @@ a:hover {
   margin-top: 35px;
   text-align: center;
 }
+.info-box {
+  background: #97b314;
+  color: #fff;
+  position: relative;
+  border-bottom: 1px solid #4b590a;
+}
+.info-box:last-child {
+  border-bottom: 2px solid #4b590a;
+}
+.info-box .close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.info-box .info-box-text {
+  padding: 17px;
+  float: left;
+  margin-right: 215px;
+}
+.info-box .info-box-button {
+  text-align: right;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+.info-box .small-btn {
+  border: 1px solid #fff;
+}

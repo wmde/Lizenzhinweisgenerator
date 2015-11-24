@@ -3,7 +3,9 @@
 var $ = require( 'jquery' ),
 	AttributionDialogue = require( '../AttributionDialogue' ),
 	DialogueEvaluation = require( '../DialogueEvaluation' ),
-	DialogueEvaluationView = require( './DialogueEvaluationView' );
+	DialogueEvaluationView = require( './DialogueEvaluationView' ),
+	infoBoxTemplate = require( '../templates/InfoBox.handlebars' ),
+	Messages = require( '../Messages' );
 
 var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
@@ -68,6 +70,11 @@ $.extend( AttributionDialogueView.prototype, {
 	render: function( $dialogue ) {
 		var $content = this._nextStepOrDone(),
 			self = this;
+
+		$( '#info-box' ).html( infoBoxTemplate( {
+			content: Messages.t( 'info-box.private-use' ),
+			buttons: '<button class="green-btn small-btn">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
+		} ) );
 
 		$content.find( '.immediate-submit input:checkbox' ).click( function() {
 			$( this ).closest( 'form' ).submit();
