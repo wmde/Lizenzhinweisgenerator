@@ -34,7 +34,11 @@ $.extend( DialogueEvaluationView.prototype, {
 		e.preventDefault();
 	},
 
-	_copyAttribution: function() {
+	_copyAttribution: function( trigger ) {
+		$( trigger ).addClass( 'flash' );
+		window.setTimeout( function() {
+			$( trigger ).removeClass( 'flash' );
+		}, 800 );
 		return $( '.attribution-box > div:visible' ).text();
 	},
 
