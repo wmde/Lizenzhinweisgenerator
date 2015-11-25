@@ -1,6 +1,5 @@
 body {
   font-size: 14.5pt;
-  padding-bottom: 42px;
 }
 textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:active, input:active, textarea:focus, input:focus, button:focus, button:active, button:hover {
   outline: 0;
@@ -73,9 +72,7 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
 
 .landing-screen {
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
-  background-color: #000;
   color: #fff;
   text-align: center;
 }
@@ -329,7 +326,7 @@ a:hover {
   padding: 5px;
   background: #fff;
   position: relative;
-  top: -0.5em;
+  top: -0.75em;
 }
 .dialogue-screen .dialogue {
   margin-left: 40vw;
@@ -553,7 +550,7 @@ a:hover {
   text-decoration: underline;
 }
 .dialogue .licence-link {
-  margin-top: 35px;
+  margin: 35px 0 50px;
   text-align: center;
 }
 .info-box {
