@@ -10,9 +10,31 @@ var $ = require( 'jquery' ),
 var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
 	this._dialogue.init();
+
+	this._privateUseBox = new InfoBoxView(
+		'private-use',
+		Messages.t( 'info-box.private-use' ),
+		'<button class="green-btn small-btn close-info hide-forever">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
+	);
+
+	this._portedLicenceBox = new InfoBoxView(
+		'ported-licence',
+		Messages.t( 'info-box.ported-licence' ),
+		'<button class="green-btn small-btn close-info">' + Messages.t( 'info-box.understood-and-close' ) + '</button>'
+	);
 };
 
 $.extend( AttributionDialogueView.prototype, {
+	/**
+	 * @type {InfoBox}
+	 */
+	_privateUseBox: null,
+
+	/**
+	 * @type {InfoBox}
+	 */
+	_portedLicenceBox: null,
+
 	/**
 	 * @type {AttributionDialogue}
 	 */
@@ -72,15 +94,9 @@ $.extend( AttributionDialogueView.prototype, {
 			self = this,
 			$infoBox = $( '#info-box' );
 
-		$infoBox.html( new InfoBoxView(
-			Messages.t( 'info-box.private-use' ),
-			'<button class="green-btn small-btn close-info">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
-		).render() );
+		$infoBox.html( this._privateUseBox.render() );
 		if( this._dialogue.getAsset().getLicence().isInGroup( 'ported' ) ) {
-			$infoBox.append( new InfoBoxView(
-				Messages.t( 'info-box.ported-licence' ),
-				'<button class="green-btn small-btn close-info">' + Messages.t( 'info-box.understood-and-close' ) + '</button>'
-			).render() );
+			$infoBox.append( this._portedLicenceBox.render() );
 		}
 
 		$content.find( '.immediate-submit input:checkbox' ).click( function() {
