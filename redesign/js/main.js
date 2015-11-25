@@ -25,8 +25,8 @@ if( tracking.shouldTrack() ) {
 }
 $trackingSwitch.change( function() {
 	if( $( this ).is( ':checked' ) ) {
-		tracking.trackEvent( 'Tracking', 'Enabled' );
 		tracking.removeDoNotTrackCookie();
+		tracking.trackEvent( 'Tracking', 'Enabled' );
 	} else {
 		tracking.trackEvent( 'Tracking', 'Disabled' );
 		tracking.setDoNotTrackCookie();
