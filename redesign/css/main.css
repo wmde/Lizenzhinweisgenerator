@@ -72,9 +72,7 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
 
 .landing-screen {
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
-  background-color: #000;
   color: #fff;
   text-align: center;
 }
