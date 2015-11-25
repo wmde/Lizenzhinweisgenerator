@@ -96,13 +96,13 @@ QUnit.test( 'online attribution contains link to asset from title', function( as
 	var url = 'http://example.com/foo.jpg',
 		title = 'bar',
 		evaluation = newEvaluation( { url: url, title: title } );
-	assert.ok( attributionContains( evaluation, '<a href="' + url + '">' + title + '</a>' ) );
+	assert.ok( attributionContains( evaluation, '<a href="' + url + '" target="_blank">' + title + '</a>' ) );
 } );
 
 QUnit.test( 'online attribution contains link to licence', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
 		evaluation = newEvaluation( { licence: licence } );
-	assert.ok( attributionContains( evaluation, '<a href="' + licence.getUrl() + '">' + licence.getName() + '</a>' ) );
+	assert.ok( attributionContains( evaluation, '<a href="' + licence.getUrl() + '" target="_blank">' + licence.getName() + '</a>' ) );
 } );
 
 QUnit.test( 'online attribution contains editing information', function( assert ) {
