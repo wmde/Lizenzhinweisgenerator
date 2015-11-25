@@ -558,6 +558,7 @@ a:hover {
   color: #fff;
   position: relative;
   border-bottom: 1px solid #4b590a;
+  min-height: 80px;
 }
 .info-box:last-child {
   border-bottom: 2px solid #4b590a;
@@ -566,6 +567,7 @@ a:hover {
   position: absolute;
   top: 5px;
   right: 10px;
+  z-index: 1;
 }
 .info-box .info-box-text {
   padding: 17px;
@@ -577,6 +579,7 @@ a:hover {
   position: absolute;
   bottom: 8px;
   right: 8px;
+  z-index: 0;
 }
 .info-box .small-btn {
   border: 1px solid #fff;
