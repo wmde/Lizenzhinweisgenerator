@@ -9,6 +9,12 @@
       "url-invalid": "Die angegebene Internetadresse konnte nicht verarbeitet werden.",
       "licence-not-recognized": "Es tut uns leid, aber dieses Bild wird aufgrund des Lizenzformats derzeit noch nicht unterstützt."
     },
+    "info-box": {
+      "private-use": "Wenn Sie das Bild für private Zwecke nutzen möchten, ist die Angabe eines Lizenzhinweises nicht nötig. <a href=\"#\">&#8594; MEHR ERFAHREN</a>",
+      "dont-show-again": "Hinweis nicht mehr anzeigen",
+      "understood-and-close": "Verstanden und schließen",
+      "ported-licence": "Bestimmte Creative-Commons-Lizenzen wurden in speziellen Länderversionen veröffentlicht, so genannte portierte Lizenzen. Das von Ihnen angefragte Werk wurde unter einer solchen portierten Lizenz veröffentlicht. Es wurde nicht geprüft, ob die Lizenzpflichten dieser Länderversion der deutschen Sprachversion entsprechen. Sie können den Lizenzhinweis gern mit diesem Tool erstellen. Um ganz sicherzugehen, empfehlen wir Ihnen, die Lizenzpflichten anhand des Lizenztextes zu überprüfen. Der Lizenzhinweis ist zusätzlich an die Sprache des Nutzungskontextes anzupassen."
+    },
     "dialogue": {
       "public-domain-picture": "Dieses Bild ist gemeinfrei. Es ist keine Lizenzangabe nötig.",
       "no-attribution-needed": "Keine Lizenzangabe nötig",

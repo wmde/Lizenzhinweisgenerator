@@ -3,14 +3,38 @@
 var $ = require( 'jquery' ),
 	AttributionDialogue = require( '../AttributionDialogue' ),
 	DialogueEvaluation = require( '../DialogueEvaluation' ),
-	DialogueEvaluationView = require( './DialogueEvaluationView' );
+	DialogueEvaluationView = require( './DialogueEvaluationView' ),
+	InfoBoxView = require( './InfoBoxView' ),
+	Messages = require( '../Messages' );
 
 var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
 	this._dialogue.init();
+
+	this._privateUseBox = new InfoBoxView(
+		'private-use',
+		Messages.t( 'info-box.private-use' ),
+		'<button class="green-btn small-btn close-info hide-forever">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
+	);
+
+	this._portedLicenceBox = new InfoBoxView(
+		'ported-licence',
+		Messages.t( 'info-box.ported-licence' ),
+		'<button class="green-btn small-btn close-info">' + Messages.t( 'info-box.understood-and-close' ) + '</button>'
+	);
 };
 
 $.extend( AttributionDialogueView.prototype, {
+	/**
+	 * @type {InfoBox}
+	 */
+	_privateUseBox: null,
+
+	/**
+	 * @type {InfoBox}
+	 */
+	_portedLicenceBox: null,
+
 	/**
 	 * @type {AttributionDialogue}
 	 */
@@ -56,8 +80,7 @@ $.extend( AttributionDialogueView.prototype, {
 	},
 
 	_toggleQuestionMark: function( e ) {
-		$( this )
-			.toggleClass( 'active' );
+		$( this ).toggleClass( 'active' );
 		$( '#' + $( this ).data( 'target' ) ).slideToggle();
 
 		e.preventDefault();
@@ -68,7 +91,13 @@ $.extend( AttributionDialogueView.prototype, {
 	 */
 	render: function( $dialogue ) {
 		var $content = this._nextStepOrDone(),
-			self = this;
+			self = this,
+			$infoBox = $( '#info-box' );
+
+		$infoBox.html( this._privateUseBox.render() );
+		if( this._dialogue.getAsset().getLicence().isInGroup( 'ported' ) ) {
+			$infoBox.append( this._portedLicenceBox.render() );
+		}
 
 		$content.find( '.immediate-submit input:checkbox' ).click( function() {
 			$( this ).closest( 'form' ).submit();

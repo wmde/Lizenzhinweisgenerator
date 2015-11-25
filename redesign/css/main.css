@@ -2,7 +2,7 @@ body {
   font-size: 14.5pt;
   padding-bottom: 42px;
 }
-textarea, input, .form-control:focus {
+textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:active, input:active, textarea:focus, input:focus, button:focus, button:active, button:hover {
   outline: 0;
   box-shadow: 0;
   -webkit-box-shadow: none;
@@ -555,4 +555,32 @@ a:hover {
 .dialogue .licence-link {
   margin-top: 35px;
   text-align: center;
+}
+.info-box {
+  background: #97b314;
+  color: #fff;
+  position: relative;
+  border-bottom: 1px solid #4b590a;
+}
+.info-box:last-child {
+  border-bottom: 2px solid #4b590a;
+}
+.info-box .close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.info-box .info-box-text {
+  padding: 17px;
+  float: left;
+  margin-right: 215px;
+}
+.info-box .info-box-button {
+  text-align: right;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+.info-box .small-btn {
+  border: 1px solid #fff;
 }
