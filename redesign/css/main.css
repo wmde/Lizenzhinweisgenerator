@@ -47,6 +47,7 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
   margin-right: 10px;
 }
 .ag-modal .modal-body {
+  font-size: 12pt;
   padding: 10% 15%;
 }
 .ag-modal .modal-body, .ag-modal .modal-footer {
