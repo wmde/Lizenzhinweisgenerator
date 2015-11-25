@@ -5,6 +5,7 @@ QUnit.module( 'DialogueEvaluation' );
 var $ = require( 'jquery' ),
 	DialogueEvaluation = require( '../../js/app/DialogueEvaluation' ),
 	Asset = require( '../../js/app/Asset' ),
+	Messages = require( '../../js/app/Messages' ),
 	LicenceStore = require( '../../js/app/LicenceStore' ),
 	licences = new LicenceStore( require( '../../js/app/LICENCES' ) ),
 	Author = require( '../../js/app/Author' );
@@ -123,6 +124,11 @@ QUnit.test( 'online attribution contains editing information', function( assert 
 QUnit.test( 'attribution does not contain editing information if it was not edited', function( assert ) {
 	var evaluation = newEvaluation( {}, { editing: { edited: 'false' }, change: { change: 'blah' } } );
 	assert.notOk( attributionContains( evaluation, 'blah' ) );
+} );
+
+QUnit.test( 'attribution shows "anonymous" for unknown author', function( assert ) {
+	var evaluation = newEvaluation( {}, { author: { 'no-author': 'true' } } );
+	assert.ok( attributionContains( evaluation, Messages.t( 'evaluation.anonymous' ) ) );
 } );
 
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {

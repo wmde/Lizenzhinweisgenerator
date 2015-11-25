@@ -30,13 +30,25 @@ $.extend( DialogueEvaluation.prototype, {
 		return this._data[ step ] && this._data[ step ][ field ];
 	},
 
+	_unknownAuthor: function() {
+		return this._getResult( 'author', 'no-author' ) === 'true';
+	},
+
 	_getAuthor: function() {
+		if( this._unknownAuthor() ) {
+			return Messages.t( 'evaluation.anonymous' );
+		}
+
 		return this._asset.getAuthors().map( function( author ) {
 			return typeof author === 'string' ? author : author.getText();
 		} ).join( ', ' );
 	},
 
 	_getHtmlAuthor: function() {
+		if( this._unknownAuthor() ) {
+			return Messages.t( 'evaluation.anonymous' );
+		}
+
 		return this._asset.getAuthors().map( function( author ) {
 			return typeof author === 'string' ? author : $( '<div/>' ).append( author.getHtml() ).html();
 		} ).join( ', ' );
