@@ -131,6 +131,11 @@ QUnit.test( 'attribution shows "anonymous" for unknown author', function( assert
 	assert.ok( attributionContains( evaluation, Messages.t( 'evaluation.anonymous' ) ) );
 } );
 
+QUnit.test( 'online attribution shows the author the user entered', function( assert ) {
+	var evaluation = newEvaluation( {}, { author: { author: 'Meh' } } );
+	assert.ok( attributionContains( evaluation, 'Meh' ) );
+} );
+
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
 	var printEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'print' } } ),
 		onlineEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'online' } } );
