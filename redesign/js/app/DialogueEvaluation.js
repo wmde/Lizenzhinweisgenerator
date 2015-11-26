@@ -31,12 +31,16 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_unknownAuthor: function() {
-		return this._getResult( 'author', 'no-author' ) === 'true';
+		return this._getResult( 'author', 'no-author' ) === 'true' || this._getResult( 'author', 'author' );
+	},
+
+	_unknownAuthorName: function() {
+		return this._getResult( 'author', 'author' ) || Messages.t( 'evaluation.anonymous' );
 	},
 
 	_getAuthor: function() {
 		if( this._unknownAuthor() ) {
-			return Messages.t( 'evaluation.anonymous' );
+			return this._unknownAuthorName();
 		}
 
 		return this._asset.getAuthors().map( function( author ) {
@@ -46,7 +50,7 @@ $.extend( DialogueEvaluation.prototype, {
 
 	_getHtmlAuthor: function() {
 		if( this._unknownAuthor() ) {
-			return Messages.t( 'evaluation.anonymous' );
+			return this._unknownAuthorName();
 		}
 
 		return this._asset.getAuthors().map( function( author ) {
