@@ -54,6 +54,10 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
   background: #fff;
 }
 
+.ag-modal a, .ag-modal a:hover, .ag-modal a:focus, .ag-modal a:active {
+  color: #00f;
+}
+
 .green-btn {
   background-color: #97b314;
   color: #fff;
