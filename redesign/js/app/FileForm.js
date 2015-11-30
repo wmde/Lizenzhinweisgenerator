@@ -52,7 +52,7 @@ $.extend( FileForm.prototype, {
 	},
 
 	_scrollTo: function( position ) {
-		$( 'body' ).animate( {
+		$( 'html, body' ).animate( {
 			scrollTop: position
 		}, 700 );
 	},
