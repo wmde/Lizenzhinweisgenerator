@@ -13,7 +13,8 @@ var AttributionDialogueView = function( asset ) {
 
 	this._privateUseBox = new InfoBoxView(
 		'private-use',
-		Messages.t( 'info-box.private-use' ),
+		Messages.t( 'info-box.private-use' ) +
+			'<a class="track-click" data-track-category="Navigation" data-track-event="Private Use" href="#" data-toggle="modal" data-target="#private-use-modal">' + Messages.t( 'info-box.private-use-more-link' ) + '</a>',
 		'<button class="green-btn small-btn close-info hide-forever">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
 	);
 
