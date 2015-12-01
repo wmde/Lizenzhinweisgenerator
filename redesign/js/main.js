@@ -44,11 +44,11 @@ var fileForm = new FileForm( $( '#file-form' ), $( '#results-screen' ) );
 fileForm.init();
 
 var $howItWorks = $( '#how-it-works-screen' ),
-	$body = $( 'body' );
+	$scrollingElements = $( 'html, body' );
 
 $( '#how-it-works-button' ).click( function() {
 	$howItWorks.show();
-	$body
+	$scrollingElements
 		.scrollTop( $howItWorks.height() )
 		.animate( {
 			scrollTop: 0
@@ -57,16 +57,15 @@ $( '#how-it-works-button' ).click( function() {
 } );
 
 $( '#how-it-works-screen .close' ).click( function() {
-	$body.animate(
+	$scrollingElements.animate(
 		{
 			scrollTop: $howItWorks.height()
 		},
-		700,
-		function() {
-			$howItWorks.hide();
-			$body.scrollTop( 0 );
-		}
-	);
+		700
+	).promise().done( function() {
+		$howItWorks.hide();
+		$scrollingElements.scrollTop( 0 );
+	} );
 } );
 
 $( '#file-form-input' ).on( 'input', function() {
