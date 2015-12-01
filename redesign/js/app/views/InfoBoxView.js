@@ -36,7 +36,7 @@ $.extend( InfoBoxView.prototype, {
 			return '';
 		}
 
-		var $box = $( infoBox( { content: this._text, buttons: this._buttons } ) ),
+		var $box = $( infoBox( { content: this._text, buttons: this._buttons, noCloseButton: this._name === 'ported-licence' } ) ),
 			self = this;
 
 		$box.find( '.close-info' ).click( function( e ) {
