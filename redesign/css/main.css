@@ -107,7 +107,13 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
 }
 
 .how-it-works-image {
-  width: 200px;
+  width: 90%;
+}
+
+@media (max-width : 992px) {
+  .how-it-works-screen .row-2 p {
+    font-size: 12pt;
+  }
 }
 
 .how-it-works-col-1 {
