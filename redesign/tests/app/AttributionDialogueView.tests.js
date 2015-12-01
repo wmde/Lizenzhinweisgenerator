@@ -131,8 +131,8 @@ QUnit.test( 'Licence Step', function( assert ) {
 		new AttributionDialogueView( new Asset( '', '', licences.getLicence( 'cc-by-3.0-de' ) ) )
 	);
 
-	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 9 ); // 8 compatible licences + the original licence
-	assert.equal( dialogue.dom.find( 'a[target="_blank"]' ).length, 9 );
+	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 5 ); // 4 compatible licences + the original licence
+	assert.equal( dialogue.dom.find( 'a[target="_blank"]' ).length, 5 );
 } );
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {
@@ -193,7 +193,7 @@ QUnit.test( 'Dialogue walkthrough', function( assert ) {
 	assert.equal( dialogue._dialogue.getData()[ 'editing' ][ 'edited' ], 'true' );
 	assert.equal( dialogue._dialogue.getData()[ 'change' ][ 'change' ], 'cropped' );
 	assert.equal( dialogue._dialogue.getData()[ 'creator' ][ 'name' ], 'Meh' );
-	assert.equal( dialogue._dialogue.getData()[ 'licence' ][ 'licence' ], 'cc-by-3.0-de' );
+	assert.equal( dialogue._dialogue.getData()[ 'licence' ][ 'licence' ], 'cc-by-3.0' );
 } );
 
 QUnit.test( 'show done after completing last step', function( assert ) {
