@@ -30,6 +30,10 @@ QUnit.test( 'detects CC BY SA 2.0', function( assert ) {
 	assert.equal( licences.detectLicence( 'Cc-by-sa-2.0' ).getName(), 'CC BY-SA 2.0' );
 } );
 
+QUnit.test( 'detects CC BY SA 1.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-1.0' ).getName(), 'CC BY-SA 1.0' );
+} );
+
 QUnit.test( 'detects ported CC BY 1.0', function( assert ) {
 	assert.equal( licences.detectLicence( 'Cc-by-1.0-nl' ).getId(), 'cc-by-1.0-ported' );
 } );
@@ -69,6 +73,7 @@ QUnit.test( 'compatible licences', function( assert ) {
 		'cc-by-sa-2.5': [ 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
 		'cc-by-sa-2.0': [ 'cc-by-sa-2.0-de', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
 		'cc-by-sa-2.0-de': [ 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-1.0': [ 'cc-by-sa-2.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
 		'cc-by-4.0': [ 'cc-by-sa-4.0' ],
 		'cc-by-3.0': [ 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ],
 		'cc-by-3.0-de': [ 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ],
