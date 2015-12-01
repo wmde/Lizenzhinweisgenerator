@@ -1,5 +1,7 @@
 <div class="info-box">
-	<button type="button" class="close close-info">&times;</button>
+	{{#unless noCloseButton}}
+		<button type="button" class="close close-info">&times;</button>
+	{{/unless}}
 
 	<div class="info-box-text">
 		{{{content}}}
