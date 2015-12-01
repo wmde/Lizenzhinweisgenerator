@@ -185,6 +185,15 @@ $.extend( Licence.prototype, {
 	},
 
 	/**
+	 * Returns the id of the licence's unported equivalent e.g. 'cc-by-3.0' for 'cc-by-3.0-ported'
+	 *
+	 * @returns {string}
+	 */
+	getUnportedVersionId: function() {
+		return this.getId().slice( 0, -7 );
+	},
+
+	/**
 	 * Retrieves the licence text of a specific licence.
 	 *
 	 * @return {Object} jQuery Promise
