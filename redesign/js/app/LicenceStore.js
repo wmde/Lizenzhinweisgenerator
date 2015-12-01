@@ -9,10 +9,10 @@ var $ = require( 'jquery' ),
 	Licence = require( './Licence' );
 
 /**
- * Licence store storing an ordered list of licences.
+ * Licence store storing a list of licences.
  * @constructor
  *
- * @param {Licence} licences
+ * @param {Licence[]} licences
  */
 var LicenceStore = function( licences ) {
 	this._licences = [];
