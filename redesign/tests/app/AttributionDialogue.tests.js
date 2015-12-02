@@ -6,17 +6,12 @@ var $ = require( 'jquery' ),
 	AttributionDialogue = require( '../../js/app/AttributionDialogue' ),
 	Messages = require( '../../js/app/Messages' ),
 	Author = require( '../../js/app/Author' ),
-	LICENCES = require( '../../js/app/LICENCES' ),
-	Asset = require( '../../js/app/Asset' );
+	Asset = require( '../../js/app/Asset' ),
+	Helpers = require( '../TestHelpers' );
 require( '../array-find' );
 
-function newDefaultAttributionDialogue() {
-	return new AttributionDialogue( new Asset( '', '', LICENCES[ 0 ], null, [] ) );
-}
-
 QUnit.test( 'should have 4 steps by default', function( assert ) {
-	var dialogue = newDefaultAttributionDialogue();
-	dialogue.init();
+	var dialogue = Helpers.newDefaultAttributionDialogue();
 	assert.equal( dialogue._steps.length, 4 );
 } );
 
@@ -35,7 +30,7 @@ function completeEditingStep( dialogue, data ) {
 }
 
 QUnit.test( 'should add 3 more steps for editing', function( assert ) {
-	var dialogue = newDefaultAttributionDialogue();
+	var dialogue = Helpers.newDefaultAttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
 	completeEditingStep( dialogue, { edited: 'true' } );
@@ -43,7 +38,7 @@ QUnit.test( 'should add 3 more steps for editing', function( assert ) {
 } );
 
 QUnit.test( 'should not add 3 more steps when not editing', function( assert ) {
-	var dialogue = newDefaultAttributionDialogue();
+	var dialogue = Helpers.newDefaultAttributionDialogue();
 	dialogue.init();
 	var initialNumber = dialogue._steps.length;
 	completeEditingStep( dialogue, { edited: 'false' } );
@@ -59,8 +54,7 @@ function currentStepContains( dialogue, message ) {
 }
 
 QUnit.test( 'Steps content', function( assert ) {
-	var dialogue = newDefaultAttributionDialogue();
-	dialogue.init();
+	var dialogue = Helpers.newDefaultAttributionDialogue();
 
 	assert.ok( currentStepContains( dialogue, 'dialogue.type-of-use-headline' ) );
 	dialogue.currentStep().complete();
