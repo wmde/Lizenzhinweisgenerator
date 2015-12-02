@@ -39,12 +39,18 @@ QUnit.test( 'should mark first step as active at the start', function( assert ) 
 	assert.equal( new ProgressBarView( Helpers.newDefaultAttributionDialogue() ).render().find( 'li.active' ).length, 1 );
 } );
 
-QUnit.test( 'should mark step <= current step as completed/active', function( assert ) {
+QUnit.test( 'should mark step < current step as completed and current step as active', function( assert ) {
 	var dialogue = Helpers.newDefaultAttributionDialogue(),
 		pb = new ProgressBarView( dialogue );
 
 	assert.equal( pb.render().find( 'li.active' ).length, 1 );
+	assert.equal( pb.render().find( 'li.completed' ).length, 0 );
 
 	dialogue.currentStep().complete( {} );
-	assert.equal( pb.render().find( 'li.active' ).length, 2 );
+	assert.equal( pb.render().find( 'li.active' ).length, 1 );
+	assert.equal( pb.render().find( 'li.completed' ).length, 1 );
+
+	dialogue.currentStep().complete( {} );
+	assert.equal( pb.render().find( 'li.active' ).length, 1 );
+	assert.equal( pb.render().find( 'li.completed' ).length, 2 );
 } );

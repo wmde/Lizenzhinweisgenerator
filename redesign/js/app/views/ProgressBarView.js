@@ -21,7 +21,8 @@ $.extend( ProgressBarView.prototype, {
 					return {
 						name: step.getName(),
 						isSubstep: i >= 4 || allSteps.length < 7 && i >= 3,
-						isActive: i <= currentStep
+						isActive: i === currentStep,
+						isCompleted: i < currentStep
 					};
 				} )
 			} ) );

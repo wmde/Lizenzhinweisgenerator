@@ -1,6 +1,6 @@
 <nav id="progress-bar">
 	{{#each steps}}
-		<li class="{{#if this.isSubstep}}sub{{/if}} {{#if this.isActive}}active{{/if}}">
+		<li class="{{#if this.isSubstep}}sub{{/if}} {{#if this.isActive}}active{{/if}} {{#if this.isCompleted}}completed{{/if}}">
 			<div class="bullet"></div>
 			<a href="#">{{translate this.name}}</a>
 		</li>
