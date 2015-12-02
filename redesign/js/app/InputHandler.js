@@ -32,10 +32,8 @@ $.extend( InputHandler.prototype, {
 	 * Tries to retrieve a filename evaluating the input parameter. If the referred Wikipedia page
 	 * does not refer to an asset itself, the promise will contain ImageInfo objects for all images
 	 * on that Wikipedia page instead of an asset filename.
-	 * If no Wikimedia URL is detected, the resolved promise's parameter is the original input
-	 * string.
 	 *
-	 * @param {string|jQuery.Event} input May be a Commons URL or a drop event.
+	 * @param {string} input
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {string|ImageInfo[]}
@@ -44,61 +42,12 @@ $.extend( InputHandler.prototype, {
 	 *         - {ApplicationError}
 	 */
 	getFilename: function( input ) {
-		var self = this,
-			deferred = $.Deferred();
+		var deferred = $.Deferred();
 
-		if( input instanceof $.Event ) {
-			this._getUrlFromEvent( input )
-				.done( function( url ) {
-					self._evaluate( url )
-						.done( function( prefixedFilenameOrImageInfos, wikiUrl ) {
-							deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
-						} )
-						.fail( function( error ) {
-							deferred.reject( error );
-						} );
-				} )
-				.fail( function( error ) {
-					deferred.reject( error );
-				} );
-		} else if( typeof input === 'string' ) {
+		if( typeof input === 'string' ) {
 			return this._evaluate( input );
 		} else {
 			deferred.reject( new ApplicationError( 'input-invalid' ) );
-		}
-
-		return deferred.promise();
-	},
-
-	/**
-	 * Extracts the URL from a drop event.
-	 *
-	 * @param {jQuery.Event} event
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {string} File URL
-	 *         Rejected parameters:
-	 *         - {ApplicationError}
-	 */
-	_getUrlFromEvent: function( event ) {
-		var deferred = $.Deferred();
-
-		if( event.type !== 'drop' || !event.dataTransfer ) {
-			deferred.reject( new ApplicationError( 'event-unsupported' ) );
-			return deferred.promise();
-		}
-
-		if(
-			event.dataTransfer.items !== undefined
-			&& event.dataTransfer.items[ 0 ] !== undefined
-			&& event.dataTransfer.items[ 0 ].getAsString !== undefined
-		) {
-			event.dataTransfer.items[ 0 ].getAsString( function( url ) {
-				deferred.resolve( url );
-			} );
-		} else {
-			var img = event.dataTransfer.getData( 'text/html' );
-			deferred.resolve( $( '<div/>' ).html( img ).find( 'img' ).attr( 'src' ) );
 		}
 
 		return deferred.promise();
