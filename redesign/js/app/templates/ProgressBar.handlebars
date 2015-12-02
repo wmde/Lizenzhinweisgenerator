@@ -1,6 +1,6 @@
 <nav id="progress-bar">
 	{{#each steps}}
-		<li><a href="#">{{translate this.getName}}</a></li>
+		<li class="{{#if this.isSubstep}}sub{{/if}}"><a href="#">{{translate this.name}}</a></li>
 	{{/each}}
 
 	<li><a href="#">{{translate 'done'}}</a></li>

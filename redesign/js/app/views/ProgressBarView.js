@@ -14,9 +14,15 @@ $.extend( ProgressBarView.prototype, {
 	_dialogue: null,
 
 	render: function() {
-		var $html = $( template( {
-			steps: this._dialogue.getSteps()
-		} ) );
+		var steps = this._dialogue.getSteps().map( function( step, i, allSteps ) {
+				return {
+					name: step.getName(),
+					isSubstep: i >= 4 || allSteps.length < 7 && i >= 3
+				};
+			} ),
+			$html = $( template( {
+				steps: steps
+			} ) );
 
 		return $html;
 	}
