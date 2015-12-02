@@ -1,9 +1,13 @@
 <nav id="progress-bar">
 	{{#each steps}}
 		<li class="{{#if this.isSubstep}}sub{{/if}} {{#if this.isActive}}active{{/if}}">
+			<div class="bullet"></div>
 			<a href="#">{{translate this.name}}</a>
 		</li>
 	{{/each}}
 
-	<li><a href="#">{{translate 'done'}}</a></li>
+	<li>
+		<div class="bullet"></div>
+		<a href="#">{{translate 'done'}}</a>
+	</li>
 </nav>
