@@ -34,3 +34,17 @@ QUnit.test( 'should add 3 substeps for editing', function( assert ) {
 	assert.equal( pb.render().find( 'li' ).length, 8 );
 	assert.equal( pb.render().find( 'li.sub' ).length, 3 );
 } );
+
+QUnit.test( 'should mark first step as active at the start', function( assert ) {
+	assert.equal( new ProgressBarView( Helpers.newDefaultAttributionDialogue() ).render().find( 'li.active' ).length, 1 );
+} );
+
+QUnit.test( 'should mark step <= current step as completed/active', function( assert ) {
+	var dialogue = Helpers.newDefaultAttributionDialogue(),
+		pb = new ProgressBarView( dialogue );
+
+	assert.equal( pb.render().find( 'li.active' ).length, 1 );
+
+	dialogue.currentStep().complete( {} );
+	assert.equal( pb.render().find( 'li.active' ).length, 2 );
+} );
