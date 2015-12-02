@@ -68,6 +68,10 @@ $.extend( Dialogue.prototype, {
 	 */
 	currentStep: function() {
 		return this._steps[ this._currentStep ];
+	},
+
+	getSteps: function() {
+		return this._steps;
 	}
 } );
 
