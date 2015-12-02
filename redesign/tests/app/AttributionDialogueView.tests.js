@@ -131,8 +131,8 @@ QUnit.test( 'Licence Step', function( assert ) {
 		new AttributionDialogueView( new Asset( '', '', licences.getLicence( 'cc-by-3.0-de' ) ) )
 	);
 
-	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 5 ); // 4 compatible licences + the original licence
-	assert.equal( dialogue.dom.find( 'a[target="_blank"]' ).length, 5 );
+	assert.equal( dialogue.dom.find( 'input:checkbox' ).length, 4 ); // 4 compatible licences + the original licence
+	assert.equal( dialogue.dom.find( 'a[target="_blank"]' ).length, 4 );
 } );
 
 QUnit.test( 'Dialogue walkthrough', function( assert ) {

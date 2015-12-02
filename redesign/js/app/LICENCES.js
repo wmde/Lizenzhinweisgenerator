@@ -26,7 +26,7 @@ module.exports = [
 	new Licence( 'cc-by-sa-1.0-ported', [ 'cc', 'cc1', 'ported' ], [], 'CC BY-SA 1.0', /^(Bild-)?CC-BY-SA(-|\/)1.0-\w+$/i, 'http://creativecommons.org/licenses/by-sa/1.0/legalcode/' ),
 
 	new Licence( 'cc-by-4.0', [ 'cc', 'cc4', 'ccby' ], [ 'cc-by-sa-4.0' ], 'CC BY 4.0', /^CC-BY-4.0(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by/4.0/legalcode/' ),
-	new Licence( 'cc-by-3.0-de', [ 'cc', 'cc3', 'ccby' ], [ 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ], 'CC BY 3.0 DE', /^CC-BY(-|\/)3.0(-|\/)DE/i, 'http://creativecommons.org/licenses/by/3.0/de/legalcode/' ),
+	new Licence( 'cc-by-3.0-de', [ 'cc', 'cc3', 'ccby' ], [ 'cc-by-3.0', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ], 'CC BY 3.0 DE', /^CC-BY(-|\/)3.0(-|\/)DE/i, 'http://creativecommons.org/licenses/by/3.0/de/legalcode/' ),
 	new Licence( 'cc-by-3.0', [ 'cc', 'cc3', 'ccby' ], [ 'cc-by-3.0-de', 'cc-by-4.0', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ], 'CC BY 3.0', /^CC-BY-3.0(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
 	new Licence( 'cc-by-3.0-ported', [ 'cc', 'cc3', 'ccby', 'ported' ], [], 'CC BY 3.0', /^CC-BY-3.0-\w+$/i, 'http://creativecommons.org/licenses/by/3.0/legalcode/' ),
 	new Licence( 'cc-by-2.5', [ 'cc', 'cc2.5', 'ccby' ], [ 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ], 'CC BY 2.5', /^CC-BY-2.5(([^\-]+.+|-migrated)*)?$/i, 'http://creativecommons.org/licenses/by/2.5/legalcode/' ),
