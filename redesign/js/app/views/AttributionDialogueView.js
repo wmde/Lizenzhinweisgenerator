@@ -5,11 +5,14 @@ var $ = require( 'jquery' ),
 	DialogueEvaluation = require( '../DialogueEvaluation' ),
 	DialogueEvaluationView = require( './DialogueEvaluationView' ),
 	InfoBoxView = require( './InfoBoxView' ),
-	Messages = require( '../Messages' );
+	Messages = require( '../Messages' ),
+	ProgressBarView = require( './ProgressBarView' );
 
 var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
 	this._dialogue.init();
+
+	this._progressBar = new ProgressBarView( this._dialogue );
 
 	this._privateUseBox = new InfoBoxView(
 		'private-use',
@@ -40,6 +43,11 @@ $.extend( AttributionDialogueView.prototype, {
 	 * @type {AttributionDialogue}
 	 */
 	_dialogue: null,
+
+	/**
+	 * @type {ProgressBarView}
+	 */
+	_progressBar: null,
 
 	/**
 	 * Turns a $form.serializeArray return value into an object
@@ -107,6 +115,8 @@ $.extend( AttributionDialogueView.prototype, {
 			self._submit( e, $dialogue );
 		} );
 		$content.find( '.question-mark' ).click( this._toggleQuestionMark );
+
+		$content.find( '.ag-progress-bar' ).html( this._progressBar.render() );
 
 		$dialogue.html( $content );
 	}
