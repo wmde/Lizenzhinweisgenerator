@@ -9,10 +9,10 @@ var $ = require( 'jquery' ),
 	Licence = require( './Licence' );
 
 /**
- * Licence store storing an ordered list of licences.
+ * Licence store storing a list of licences.
  * @constructor
  *
- * @param {Licence} licences
+ * @param {Licence[]} licences
  */
 var LicenceStore = function( licences ) {
 	this._licences = [];
@@ -117,55 +117,16 @@ $.extend( LicenceStore.prototype, {
 	},
 
 	/**
-	 * Returns the licence's index or index+1 if it is a -de licence.
-	 * The +1 operation is necessary because -de licences are mutually compatible with their unported counterpart.
-	 * @param {string} licence - licence ID
-	 * @returns {int|null}
-	 */
-	_getLicenceRestrictivenessIndex: function( licence ) {
-		for( var i = 0; i < this._licences.length; i++ ) {
-			if( this._licences[ i ].getId() === licence ) {
-				return licence.slice( -3 ) === '-de' ? i + 1 : i;
-			}
-		}
-		return null;
-	},
-
-	/**
-	 * Returns licences with an index of `index` and lower
-	 * @param index
-	 * @returns {Licence[]}
-	 */
-	_getLicencesStartingAt: function( index ) {
-		var result = [];
-		for( var i = index; i >= 0; i-- ) {
-			result.push( this._licences[ i ] );
-		}
-
-		return result;
-	},
-
-	/**
-	 * Removes the licence with an ID of `id` and all ported licences
-	 * @param {Licence[]} licences
-	 * @param {string} id
-	 * @returns {Licence[]}
-	 */
-	_removeSameAndPorted: function( licences, id ) {
-		return licences.filter( function( licence ) {
-			return licence.getId() !== id && licence.getId().indexOf( '-ported' ) === -1;
-		} );
-	},
-
-	/**
 	 * Finds a list of compatible licences for a given licence ID
 	 * @param licence
 	 * @return {Licence[]}
 	 */
 	findCompatibilities: function( licence ) {
-		var index = this._getLicenceRestrictivenessIndex( licence );
+		var self = this;
 
-		return this._removeSameAndPorted( this._getLicencesStartingAt( index ), licence );
+		return this.getLicence( licence ).getCompatibleLicenceIds().map( function( id ) {
+			return self.getLicence( id );
+		} );
 	}
 } );
 

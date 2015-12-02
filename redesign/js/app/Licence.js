@@ -38,13 +38,14 @@ var $ = require( 'jquery' ),
  * @throws {Error} if no proper parameters are specified.
  * @throws {Error} when trying to instantiate an "abstract" licence with an additional regExp.
  */
-var Licence = function( id, groups, name, regExp, url, options ) {
-	if( !id || !groups || !name ) {
+var Licence = function( id, groups, compatibleLicences, name, regExp, url, options ) {
+	if( !id || !groups || !name || typeof compatibleLicences !== 'object' ) {
 		throw new Error( 'Improper specification of required parameters' );
 	}
 
 	this._id = id;
 	this._groups = groups;
+	this._compatibleLicences = compatibleLicences;
 
 	if( $.isPlainObject( regExp ) ) {
 		options = regExp;
@@ -90,6 +91,12 @@ $.extend( Licence.prototype, {
 	 * @type {string[]}
 	 */
 	_groups: null,
+
+	/**
+	 * Identifiers of compatible licences.
+	 * @type {string[]}
+	 */
+	_compatibleLicences: null,
 
 	/**
 	 * @type {Object}
@@ -152,6 +159,10 @@ $.extend( Licence.prototype, {
 		return false;
 	},
 
+	getCompatibleLicenceIds: function() {
+		return this._compatibleLicences;
+	},
+
 	/**
 	 * @return {string|null}
 	 */
@@ -171,6 +182,15 @@ $.extend( Licence.prototype, {
 	 */
 	getUrl: function() {
 		return this._url;
+	},
+
+	/**
+	 * Returns the id of the licence's unported equivalent e.g. 'cc-by-3.0' for 'cc-by-3.0-ported'
+	 *
+	 * @returns {string}
+	 */
+	getUnportedVersionId: function() {
+		return this.getId().slice( 0, -7 );
 	},
 
 	/**
