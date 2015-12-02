@@ -19,7 +19,7 @@ $.extend( ProgressBarView.prototype, {
 			$html = $( template( {
 				steps: steps.map( function( step, i, allSteps ) {
 					return {
-						name: step.getName(),
+						name: 'dialogue.' + step.getName(),
 						isSubstep: i >= 4 || allSteps.length < 7 && i >= 3,
 						isActive: i === currentStep,
 						isCompleted: i < currentStep

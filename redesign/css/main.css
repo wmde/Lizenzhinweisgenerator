@@ -373,7 +373,7 @@ a:hover {
   background: #97b314;
   border-radius: 2px;
   padding: 10px;
-  margin: 0 25px 0 200px;
+  margin: 0 25px 0 210px;
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
@@ -608,7 +608,7 @@ a:hover {
 
 .ag-progress-bar {
   float: left;
-  width: 180px;
+  width: 200px;
   padding: 10px;
 }
 .ag-progress-bar li {
