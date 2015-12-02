@@ -1,7 +1,5 @@
 {
   "de": {
-    "do-not-track": "Ihr Besuch dieser Website wird aktuell von der Piwik Webanalyse erfasst. Klicken Sie hier, damit Ihr Besuch nicht mehr erfasst wird.",
-    "do-track": "Ihr Besuch dieser Website wird aktuell nicht von der Piwik Webanalyse erfasst. Klicken Sie hier, damit Ihr Besuch erfasst wird.",
     "error": {
       "generic": "Ein unvorhergesehener Fehler ist aufgetreten.",
       "mediatype-unsupported": "Der Medientyp der angegebenen Datei wird von dieser Applikation momentan leider nicht unterstützt.",

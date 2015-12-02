@@ -2,8 +2,7 @@
 
 var $ = require( 'jquery' ),
 	FileForm = require( './app/FileForm' ),
-	Tracking = require( './tracking' ),
-	Messages = require( './app/Messages' );
+	Tracking = require( './tracking' );
 
 var tracking = new Tracking();
 tracking.trackPageLoad( 'Main Page' );
@@ -14,13 +13,10 @@ require( './view_helpers' );
 require( './scrolling_effects' );
 require( './background' );
 
-var $trackingSwitch = $( '#tracking-switch' ),
-	$trackingSwitchLabel = $( '#tracking-switch-text' );
+var $trackingSwitch = $( '#tracking-switch' );
 if( tracking.shouldTrack() ) {
-	$trackingSwitchLabel.text( Messages.t( 'do-not-track' ) );
 	$trackingSwitch.attr( 'checked', 'checked' );
 } else {
-	$trackingSwitchLabel.text( Messages.t( 'do-track' ) );
 	$trackingSwitch.attr( 'checked', false );
 }
 $trackingSwitch.change( function() {
