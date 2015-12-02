@@ -8,7 +8,8 @@
 var $ = require( 'jquery' ),
 	ImageInfo = require( '../../js/app/ImageInfo' ),
 	InputHandler = require( '../../js/app/InputHandler' ),
-	LocalApi = require( '../LocalApi' );
+	LocalApi = require( '../LocalApi' ),
+	Messages = require( '../../js/app/Messages' );
 
 QUnit.module( 'InputHandler' );
 
@@ -89,13 +90,6 @@ var testCases = [
 		expected: {
 			file: 'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
 			wikiUrl: 'https://de.wikipedia.org/'
-		}
-	}, {
-		input: [
-			'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG'
-		],
-		expected: {
-			file: 'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG'
 		}
 	}, {
 		input: [
@@ -225,5 +219,37 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 			assertReturnedImageObjects( testCase, testCase.input[ j ] );
 		}
 
+	}
+} );
+
+QUnit.test( 'getFilename returns an error when given non-wikimedia/wikipedia URL', function( assert ) {
+	var inputHandler = new InputHandler( api );
+
+	var testCases = [
+		'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG',
+		'https://www.wikimedia.de/w/images.homepage/d/d6/',
+		'http://foo.bar'
+	];
+
+	/**
+	 * @param {string} input
+	 */
+	function testGetFilenameRejectsInput( input ) {
+		QUnit.stop();
+
+		inputHandler.getFilename( input )
+			.done( function() {
+				assert.ok( false, 'Parsing "' + input + '" succeeded while error has been expected' );
+			} )
+			.fail( function( error ) {
+				assert.equal( error.getMessage(), Messages.t( 'error.url-invalid' ) );
+			} )
+			.always( function() {
+				QUnit.start();
+			} );
+	}
+
+	for( var i = 0; i < testCases.length; i++ ) {
+		testGetFilenameRejectsInput( testCases[ i ] );
 	}
 } );

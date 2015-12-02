@@ -132,7 +132,7 @@ $.extend( InputHandler.prototype, {
 			var urlInfo = this._splitUrl( url );
 			deferred.resolve( urlInfo.title, urlInfo.wikiUrl );
 		} else {
-			deferred.resolve( url );
+			deferred.reject( new ApplicationError( 'url-invalid' ) );
 		}
 
 		return deferred.promise();
