@@ -1,4 +1,5 @@
 lib/
-node_modules
+**/node_modules
 **/*.min.js
 **/*.bundle.js
+redesign/tests/array-find.js

@@ -8,6 +8,7 @@ var $ = require( 'jquery' ),
 	Author = require( '../../js/app/Author' ),
 	LICENCES = require( '../../js/app/LICENCES' ),
 	Asset = require( '../../js/app/Asset' );
+require( '../array-find' );
 
 function newDefaultAttributionDialogue() {
 	return new AttributionDialogue( new Asset( '', '', LICENCES[ 0 ], null, [] ) );
