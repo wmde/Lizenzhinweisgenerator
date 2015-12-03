@@ -17,7 +17,7 @@ var AttributionDialogueView = function( asset ) {
 	this._privateUseBox = new InfoBoxView(
 		'private-use',
 		Messages.t( 'info-box.private-use' ) +
-			'<a class="track-click" data-track-category="Navigation" data-track-event="Private Use" href="#" data-toggle="modal" data-target="#private-use-modal">' + Messages.t( 'info-box.private-use-more-link' ) + '</a>',
+		'<a class="track-click" data-track-category="Navigation" data-track-event="Private Use" href="#" data-toggle="modal" data-target="#private-use-modal">' + Messages.t( 'info-box.private-use-more-link' ) + '</a>',
 		'<button class="green-btn small-btn close-info hide-forever">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
 	);
 
@@ -96,6 +96,21 @@ $.extend( AttributionDialogueView.prototype, {
 	},
 
 	/**
+	 * Adjusts the height of the dialogue and the position of the green triangle according to the progress
+	 *
+	 * @param {jQuery} $content
+	 * @private
+	 */
+	_alignDialogueBubbleAndProgressBar: function( $content ) {
+		var progressIndex = $content.find( '.ag-progress-bar li' ).index( $content.find( '.ag-progress-bar .active' ) ),
+			$triangle = $content.find( '.triangle' ),
+			$bubble = $content.find( '.bubble-content' );
+
+		$triangle.css( 'margin-top', (10 + progressIndex * 23) + 'px' );
+		$bubble.css( 'min-height', (25 + 18 + progressIndex * 23) + 'px' );
+	},
+
+	/**
 	 * @param {jQuery} $dialogue
 	 */
 	render: function( $dialogue ) {
@@ -117,6 +132,7 @@ $.extend( AttributionDialogueView.prototype, {
 		$content.find( '.question-mark' ).click( this._toggleQuestionMark );
 
 		$content.find( '.ag-progress-bar' ).html( this._progressBar.render() );
+		this._alignDialogueBubbleAndProgressBar( $content );
 
 		$dialogue.html( $content );
 	}
