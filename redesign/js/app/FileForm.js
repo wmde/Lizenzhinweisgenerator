@@ -2,7 +2,6 @@
 
 var $ = require( 'jquery' ),
 	Api = require( './Api' ),
-	NoApi = require( './NoApi' ),
 	InputHandler = require( './InputHandler' ),
 	ApplicationError = require( './ApplicationError' ),
 	WikiAsset = require( './WikiAsset' ),
@@ -16,6 +15,8 @@ require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
 var FileForm = function( $node, $resultsPage ) {
 	this._$node = $node;
 	this._$resultsPage = $resultsPage;
+	this._api = new Api( 'https://commons.wikimedia.org/' );
+	this._inputHandler = new InputHandler( this._api );
 };
 
 $.extend( FileForm.prototype, {
@@ -73,13 +74,6 @@ $.extend( FileForm.prototype, {
 	_evaluateInput: function( input ) {
 		var self = this,
 			deferred = $.Deferred();
-
-		if( !input.match( /wiki(m|p)edia\.org/ ) ) {
-			this._api = new NoApi();
-		} else {
-			this._api = new Api( 'https://commons.wikimedia.org/' );
-		}
-		this._inputHandler = new InputHandler( this._api );
 
 		this._inputHandler.getFilename( input )
 			.done( function( filenameOrImageInfos, wikiUrl ) {

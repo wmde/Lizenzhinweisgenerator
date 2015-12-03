@@ -9,27 +9,14 @@ var $ = require( 'jquery' ),
 	LicenceStore = require( '../js/app/LicenceStore' ),
 	LICENCES = require( '../js/app/LICENCES' ),
 	Api = require( '../js/app/Api' ),
-	NoApi = require( '../js/app/NoApi' ),
-	Asset = require( '../js/app/Asset' ),
 	WikiAsset = require( '../js/app/WikiAsset' ),
 	Author = require( '../js/app/Author' );
 
 var licenceStore = new LicenceStore( LICENCES );
 
-var api = new Api( 'https://commons.wikimedia.org/' ),
-	noApi = new NoApi();
+var api = new Api( 'https://commons.wikimedia.org/' );
 
 module.exports = {
-	'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG': new Asset(
-		'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG',
-		'mediatype',
-		null,
-		null,
-		null,
-		null,
-		null,
-		noApi
-	),
 	'LRO_Tycho_Central_Peak.jpg': new WikiAsset(
 		'File:LRO_Tycho_Central_Peak.jpg',
 		'bitmap',
