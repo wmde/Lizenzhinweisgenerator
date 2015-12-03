@@ -5,9 +5,12 @@ node_js:
 
 sudo: false
 
-install: travis_retry npm install qunit-phantomjs-runner jshint jscs
+install:
+  - travis_retry npm install qunit-phantomjs-runner jshint jscs
+  - cd redesign && npm install && npm run build-test && cd -
 
 script:
   - phantomjs ./node_modules/qunit-phantomjs-runner/runner.js ./tests/index.html
+  - phantomjs ./node_modules/qunit-phantomjs-runner/runner.js ./redesign/tests/index.html
   - ./node_modules/jshint/bin/jshint --exclude '**/node_modules/**' .
   - ./node_modules/jscs/bin/jscs .
