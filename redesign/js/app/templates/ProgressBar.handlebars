@@ -1,13 +1,13 @@
 <nav id="progress-bar">
 	{{#each steps}}
 		<li class="{{#if this.isSubstep}}sub{{/if}} {{#if this.isActive}}active{{/if}} {{#if this.isCompleted}}completed{{/if}}">
-			<div class="bullet"></div>
+			<div class="bullet-border"><div class="bullet"></div></div>
 			<a href="#">{{translate this.name}}</a>
 		</li>
 	{{/each}}
 
 	<li>
-		<div class="bullet"></div>
+		<div class="bullet-border"><div class="bullet"></div></div>
 		<a href="#">{{translate 'dialogue.done'}}</a>
 	</li>
 </nav>
