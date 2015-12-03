@@ -92,6 +92,7 @@ $feedbackForm.submit( function( e ) {
 		.done( function( response ) {
 			tracking.trackEvent( 'Feedback', 'Success' );
 			bootstrapAlert( 'success', $.parseJSON( response ).message );
+			$( '#feedback-form' ).trigger( 'reset' );
 			$( '#feedback-modal' ).modal( 'hide' );
 		} )
 		.fail( function( response ) {
