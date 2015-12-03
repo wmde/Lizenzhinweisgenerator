@@ -16,7 +16,7 @@ $.extend( PublicDomainDialogueView.prototype, {
 	_showPublicDomainInformation: function() {
 		return $( '<div class="more-information"/>' )
 			.html( buttonTemplate( {
-				content: '<img class="cc-logo" src="http://mirrors.creativecommons.org/presskit/icons/cc.svg">'
+				content: '<img class="cc-logo" src="images/cc.svg">'
 				+ Messages.t( 'dialogue.more-information' ),
 				target: 'https://wiki.creativecommons.org/wiki/Public_domain'
 			} ) );
