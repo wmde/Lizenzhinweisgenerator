@@ -66,7 +66,7 @@ $.extend( DialogueEvaluationView.prototype, {
 		$html.append( '<div class="clearfix"/>' );
 		$( '<div class="licence-link"/>' )
 			.append( buttonTemplate( {
-				content: '<img class="cc-logo" src="http://mirrors.creativecommons.org/presskit/icons/cc.svg">'
+				content: '<img class="cc-logo" src="images/cc.svg">'
 				+ Messages.t( 'evaluation.show-licence-text' ),
 				target: this._evaluation.getAttributionLicence().getUrl()
 			} ) )
