@@ -5,7 +5,7 @@
   "main": "js/main.js",
   "scripts": {
     "build": "browserify -t hbsfy js/main.js | uglifyjs -c > js/bundle.min.js",
-    "build-test": "browserify tests/tests.js > tests/tests.bundle.js",
+    "build-test": "browserify -t hbsfy tests/tests.js > tests/tests.bundle.js",
     "watch": "watchify -t hbsfy js/main.js -o js/bundle.min.js",
     "watch-test": "node_modules/.bin/watchify -t hbsfy tests/tests.js -o tests/tests.bundle.js"
   },
