@@ -4,10 +4,12 @@ var $ = require( 'jquery' ),
 	doneTemplate = require( '../templates/Done.handlebars' ),
 	dosAndDontsTemplate = require( '../templates/DosAndDonts.handlebars' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
-	Clipboard = require( 'clipboard' ),
+	Clipboard = require( 'zeroclipboard' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
 	Messages = require( '../Messages' ),
 	Tracking = require( '../../tracking.js' );
+
+Clipboard.config( { swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf' } );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -39,12 +41,12 @@ $.extend( DialogueEvaluationView.prototype, {
 		e.preventDefault();
 	},
 
-	_copyAttribution: function( trigger ) {
-		$( trigger ).addClass( 'flash' );
+	_copyAttribution: function( event, $button ) {
+		event.clipboardData.setData( 'text/plain', $( '.attribution-box > div:visible' ).text().trim() );
+		$button.addClass( 'flash' );
 		window.setTimeout( function() {
-			$( trigger ).removeClass( 'flash' );
+			$button.removeClass( 'flash' );
 		}, 800 );
-		return $( '.attribution-box > div:visible' ).text();
 	},
 
 	render: function() {
@@ -80,11 +82,13 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
-		new Clipboard( '#copy-attribution', { // jshint ignore:line
-			text: function( trigger ) {
-				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-				return self._copyAttribution( trigger );
-			}
+
+		var $copyButton = $html.find( '#copy-attribution' ),
+			clipboard = new Clipboard( $copyButton ),
+			self = this;
+		clipboard.on( 'copy', function( e ) {
+			self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+			self._copyAttribution( e, $copyButton );
 		} );
 
 		return $html;
