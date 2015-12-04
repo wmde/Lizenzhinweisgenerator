@@ -1,0 +1,407 @@
+{
+	"pageid": 51033,
+	"ns": 6,
+	"title": "File:Mona Lisa.jpg",
+	"templates": [
+		{
+			"ns": 10,
+			"title": "Template:,"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Artwork"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/category"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/commons"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/images"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/images/left"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/images/right"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/translate/Wikipedia"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/translate/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/translate/lang"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/wikipedia"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Assessments/wmf"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/BNF"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/GND"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/ISNI"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/LCCN"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/Museofile"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/SELIBR"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/SUDOC"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/TSURL"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/ULAN"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/VIAF"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control/WorldCat"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control tag"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Authority control tag: bare"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Autotranslate"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Cc-pd-mark-footer"
+		},
+		{
+			"ns": 10,
+			"title": "Template:City"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Collapse"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Conj"
+		},
+		{
+			"ns": 10,
+			"title": "Template:CountryAdjective"
+		},
+		{
+			"ns": 10,
+			"title": "Template:CountryAdjective/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Creator"
+		},
+		{
+			"ns": 10,
+			"title": "Template:De"
+		},
+		{
+			"ns": 10,
+			"title": "Template:DerivativeVersions"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Derivative versions"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Derivative versions/i18n/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Description"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Dir"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Edit"
+		},
+		{
+			"ns": 10,
+			"title": "Template:En"
+		},
+		{
+			"ns": 10,
+			"title": "Template:F"
+		},
+		{
+			"ns": 10,
+			"title": "Template:F/name"
+		},
+		{
+			"ns": 10,
+			"title": "Template:FNO"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Fallback"
+		},
+		{
+			"ns": 10,
+			"title": "Template:File namespace only"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Florence"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Formatnum"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Fr"
+		},
+		{
+			"ns": 10,
+			"title": "Template:France"
+		},
+		{
+			"ns": 10,
+			"title": "Template:GND"
+		},
+		{
+			"ns": 10,
+			"title": "Template:GeoPolygon/link"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Hu"
+		},
+		{
+			"ns": 10,
+			"title": "Template:ISOdate"
+		},
+		{
+			"ns": 10,
+			"title": "Template:ISOyear"
+		},
+		{
+			"ns": 10,
+			"title": "Template:IfNum"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Iffile"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Ifimage"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Infobox template tag"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Institution"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Institution/coordinates"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Institution/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Institution/layout"
+		},
+		{
+			"ns": 10,
+			"title": "Template:IsNum"
+		},
+		{
+			"ns": 10,
+			"title": "Template:It"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Joconde"
+		},
+		{
+			"ns": 10,
+			"title": "Template:LCCN"
+		},
+		{
+			"ns": 10,
+			"title": "Template:LangSwitch"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Language"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Layout"
+		},
+		{
+			"ns": 10,
+			"title": "Template:License template tag"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Louvre"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Mantua"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Milan"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Mk"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Ml"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Mona Lisa versions"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Ms"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Namespace only"
+		},
+		{
+			"ns": 10,
+			"title": "Template:NationAndOccupation"
+		},
+		{
+			"ns": 10,
+			"title": "Template:NationAndOccupation/default"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Nationality"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Nl"
+		},
+		{
+			"ns": 10,
+			"title": "Template:NoImageNotes"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Numbersort"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Occupation"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Occupation/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Online database reference"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Online database reference/i18n"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Ordinal"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Other date"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-Art"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-Art/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-Art/layout"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-Layout"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-old-100"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-old-text"
+		},
+		{
+			"ns": 10,
+			"title": "Template:PD-old-warning-text"
+		}
+	]
+}

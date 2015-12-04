@@ -55,7 +55,7 @@ module.exports = {
 		licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
 		// Complex author:
-		[ new Author( $( '<div/>' ).html( '©&nbsp;<a href="https://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a>' ).contents() ) ],
+		[ new Author( $( '<div/>' ).html( '©&nbsp;<a href="https://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a> <a href=\"https://commons.wikimedia.org/wiki/User:Ralf_Roletschek\">Ralf Roletschek</a>' ).contents() ) ],
 		null,
 		null,
 		api
@@ -196,7 +196,7 @@ module.exports = {
 		'bitmap',
 		licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'Seilsäge',
-		[ new Author( $( '<p>Reiner Flassig\n</p>' ) ) ],
+		[ new Author( $( document.createTextNode( 'Reiner Flassig' ) ) ) ],
 		null,
 		null,
 		api,
@@ -210,7 +210,7 @@ module.exports = {
 		// Local Wikipedia with more specific licence:
 		licenceStore.getLicence( 'cc-by-sa-3.0-de' ),
 		'Hektor Philippi',
-		[ new Author( $( '<p>Reinhard Philippi <a href="/wiki/Benutzer:Reinhardphilippi">Reinhardphilippi</a> 15:37, 21. Aug. 2008 (CEST)\n</p>' ) ) ],
+		[ new Author( $( '<div/>' ).html( 'Reinhard Philippi <a href="/wiki/Benutzer:Reinhardphilippi">Reinhardphilippi</a> 15:37, 21. Aug. 2008 (CEST)' ).contents() ) ],
 		null,
 		null,
 		api,
@@ -222,7 +222,7 @@ module.exports = {
 		// Public domain on local Wikipedia:
 		licenceStore.getLicence( 'PD' ),
 		'1 FC Bamberg - 1 FC Nürnberg 1901',
-		[ new Author( $( '<p>unbekannt\n</p>' ) ) ],
+		[ new Author( $( document.createTextNode( 'unbekannt' ) ) ) ],
 		null,
 		null,
 		api,
@@ -234,11 +234,41 @@ module.exports = {
 		// CC-0 licence on local Wikipedia:
 		licenceStore.getLicence( 'cc-zero' ),
 		'Fiesta-Zuschauer Z1',
-		[ new Author( $( '<p>Ziegler175\n</p>' ) ) ],
+		[ new Author( $( document.createTextNode( 'Ziegler175' ) ) ) ],
 		null,
 		null,
 		api,
 		'https://de.wikipedia.org/'
+	),
+	'CardinalMarkE.jpg': new WikiAsset(
+		'File:CardinalMarkE.jpg',
+		'bitmap',
+		licenceStore.getLicence( 'cc-by-4.0' ),
+		'CardinalMarkE',
+		[ new Author( $( '<a href=\"https://commons.wikimedia.org/wiki/User:Reinhard_Kraasch\">Reinhard Kraasch</a>' ) ) ],
+		null,
+		$( '<a href=\"https://commons.wikimedia.org/wiki/User:Reinhard_Kraasch\">Reinhard Kraasch</a>' ),
+		api
+	),
+	'Mona_Lisa.jpg': new WikiAsset(
+		'File:Mona_Lisa.jpg',
+		'bitmap',
+		licenceStore.getLicence( 'PD' ),
+		'Mona Lisa',
+		[ new Author( $( '<a href=\"https://en.wikipedia.org/wiki/Leonardo_da_Vinci\">Leonardo da Vinci</a>' ) ) ],
+		null,
+		null,
+		api
+	),
+	'John_Flamsteed.jpg': new WikiAsset(
+		'File:John_Flamsteed.jpg',
+		'bitmap',
+		licenceStore.getLicence( 'cc-by-4.0' ),
+		'John Flamsteed',
+		[ new Author( $( '<div/>' ).html( 'Line engraving by <a href=\"https://en.wikipedia.org/wiki/George_Vertue\">George Vertue</a>, 1721, after <a href=\"https://en.wikipedia.org/wiki/Thomas_Gibson_(artist)\">Thomas Gibson</a>, 1712.' ).contents() ) ],
+		null,
+		null,
+		api
 	)
 	// TODO: Edge cases
 	/*

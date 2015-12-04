@@ -1,0 +1,155 @@
+{
+	"pageid": 30058,
+	"ns": 6,
+	"title": "File:CardinalMarkE.jpg",
+	"templates": [
+		{
+			"ns": 10,
+			"title": "Template:CC-Layout"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Cc-by-4.0"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Cc-by-layout"
+		},
+		{
+			"ns": 10,
+			"title": "Template:City"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Conj"
+		},
+		{
+			"ns": 10,
+			"title": "Template:CountryAdjective"
+		},
+		{
+			"ns": 10,
+			"title": "Template:CountryAdjective/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Creator"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Creator template no image"
+		},
+		{
+			"ns": 10,
+			"title": "Template:De"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Description"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Dir"
+		},
+		{
+			"ns": 10,
+			"title": "Template:En"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Fallback"
+		},
+		{
+			"ns": 10,
+			"title": "Template:ISOdate"
+		},
+		{
+			"ns": 10,
+			"title": "Template:ISOyear"
+		},
+		{
+			"ns": 10,
+			"title": "Template:IfNum"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Iffile"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Ifimage"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Infobox template tag"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Information"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Information/author processing"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Lang"
+		},
+		{
+			"ns": 10,
+			"title": "Template:LangSwitch"
+		},
+		{
+			"ns": 10,
+			"title": "Template:License template tag"
+		},
+		{
+			"ns": 10,
+			"title": "Template:NationAndOccupation"
+		},
+		{
+			"ns": 10,
+			"title": "Template:NationAndOccupation/default"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Nationality"
+		},
+		{
+			"ns": 10,
+			"title": "Template:NoImageNotes"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Occupation"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Occupation/en"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Own"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Parse source"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Self"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Str left"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Str \u2264 len"
+		},
+		{
+			"ns": 10,
+			"title": "Template:Years since"
+		}
+	]
+}
