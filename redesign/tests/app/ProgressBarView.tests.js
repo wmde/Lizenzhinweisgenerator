@@ -76,3 +76,12 @@ QUnit.test( 'go back using by clicking on a progress bar item', function( assert
 	pb.render().find( 'li a' )[ 0 ].click();
 	assert.equal( dialogue.currentStep(), initialStep );
 } );
+
+QUnit.test( 'going to steps that were not previously completed should not be possible', function( assert ) {
+	var dialogue = Helpers.newDefaultAttributionDialogue(),
+			pb = new ProgressBarView( dialogue ),
+			initialStep = dialogue.currentStep();
+
+	pb.render().find( 'li a' )[ 2 ].click();
+	assert.equal( dialogue.currentStep(), initialStep );
+} );
