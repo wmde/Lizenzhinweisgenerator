@@ -190,7 +190,8 @@ $.extend( WikiAssetPage.prototype, {
 
 		$container.find( 'a' ).each( function() {
 			var $node = $( this ),
-				href = $node.attr( 'href' );
+				href = $node.attr( 'href' ),
+				attrsToRemove = [];
 
 			if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
 				href = href.replace(
@@ -204,8 +205,15 @@ $.extend( WikiAssetPage.prototype, {
 			}
 
 			$node.attr( 'href', href );
-			$node.removeAttr( 'class' );
-			$node.removeAttr( 'title' );
+			$.each( $node.get( 0 ).attributes, function( i, attr ) {
+				if( attr.name === 'href' ) {
+					return;
+				}
+				attrsToRemove.push( attr.name );
+			} );
+			$.each( attrsToRemove, function( i, attr ) {
+				$node.removeAttr( attr );
+			} );
 		} );
 
 		return $container.contents();

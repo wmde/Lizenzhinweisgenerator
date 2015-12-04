@@ -55,7 +55,7 @@ module.exports = {
 		licenceStore.getLicence( 'cc-by-sa-3.0' ),
 		'13-09-29-nordfriesisches-wattenmeer-RalfR-15',
 		// Complex author:
-		[ new Author( $( '<div/>' ).html( '©&nbsp;<a href="https://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a rel="nofollow" href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a> <a href=\"https://commons.wikimedia.org/wiki/User:Ralf_Roletschek\">Ralf Roletschek</a>' ).contents() ) ],
+		[ new Author( $( '<div/>' ).html( '©&nbsp;<a href="https://commons.wikimedia.org/wiki/User:Ralf_Roletschek">Ralf Roletschek</a> - <a href="http://www.fahrradmonteur.de">Fahrradtechnik und Fotografie</a> <a href=\"https://commons.wikimedia.org/wiki/User:Ralf_Roletschek\">Ralf Roletschek</a>' ).contents() ) ],
 		null,
 		null,
 		api
