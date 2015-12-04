@@ -87,3 +87,18 @@ QUnit.test( 'going to steps that were not previously completed should not be pos
 	pb.render().find( 'li a' )[ 2 ].click();
 	assert.equal( dialogue.currentStep(), initialStep );
 } );
+
+QUnit.test( 'should remove 3 editing substeps when going back further than editing', function( assert ) {
+	var dialogueView = Helpers.newDefaultAttributionDialogueView(),
+		dialogue = dialogueView._dialogue,
+		pb = new ProgressBarView( dialogue, dialogueView );
+
+	dialogue.currentStep().complete( {} );
+	dialogue.currentStep().complete( {} );
+	dialogue.currentStep().complete( {} );
+	dialogue.currentStep().complete( { edited: 'true' } );
+
+	assert.equal( dialogue.getSteps().length, 7 );
+	pb.render().find( 'li a' )[ 2 ].click();
+	assert.equal( dialogue.getSteps().length, 4 );
+} );
