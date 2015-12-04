@@ -8,13 +8,10 @@ var $ = require( 'jquery' ),
 	Asset = require( '../../js/app/Asset' ),
 	DialogueEvaluation = require( '../../js/app/DialogueEvaluation' ),
 	LicenceStore = require( '../../js/app/LicenceStore' ),
-	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
+	licences = new LicenceStore( require( '../../js/app/LICENCES' ) ),
+	Helpers = require( '../TestHelpers' );
 
 $.fx.off = true;
-
-function newDefaultAttributionDialogueView() {
-	return new AttributionDialogueView( new Asset( '', '', licences.getLicence( 'cc' ), null, [] ) );
-}
 
 function dialogueContains( $dialogue, message ) {
 	return $dialogue.text().indexOf( Messages.t( message ) ) > -1;
@@ -22,21 +19,21 @@ function dialogueContains( $dialogue, message ) {
 
 QUnit.test( 'render should show the first step', function( assert ) {
 	var $dialogue = $( '<div/>' );
-	newDefaultAttributionDialogueView().render( $dialogue );
+	Helpers.newDefaultAttributionDialogueView().render( $dialogue );
 
 	assert.ok( dialogueContains( $dialogue, 'dialogue.type-of-use-headline' ) );
 } );
 
 QUnit.test( 'first step has two checkboxes', function( assert ) {
 	var $dialogue = $( '<div/>' );
-	newDefaultAttributionDialogueView().render( $dialogue );
+	Helpers.newDefaultAttributionDialogueView().render( $dialogue );
 
 	assert.equal( $dialogue.find( 'input[type="checkbox"]' ).length, 2 );
 } );
 
 function renderDialogueAtStep( n, dialogue ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = dialogue || newDefaultAttributionDialogueView();
+		dialogue = dialogue || Helpers.newDefaultAttributionDialogueView();
 	if( n > 3 ) {
 		dialogue._dialogue._addEditingSteps();
 	}
@@ -48,7 +45,7 @@ function renderDialogueAtStep( n, dialogue ) {
 
 QUnit.test( 'clicking a checkbox on first step submits and saves data', function( assert ) {
 	var $dialogue = $( '<div/>' ),
-		dialogue = newDefaultAttributionDialogueView();
+		dialogue = Helpers.newDefaultAttributionDialogueView();
 	dialogue.render( $dialogue );
 
 	$dialogue.find( 'input:checkbox' )[ 0 ].click();
@@ -57,7 +54,7 @@ QUnit.test( 'clicking a checkbox on first step submits and saves data', function
 
 QUnit.test( 'submitting the form should renders second step', function( assert ) {
 	var $dialogue = $( '<div/>' );
-	newDefaultAttributionDialogueView().render( $dialogue );
+	Helpers.newDefaultAttributionDialogueView().render( $dialogue );
 
 	$dialogue.find( 'input[type="checkbox"]' )[ 0 ].click();
 	assert.ok( dialogueContains( $dialogue, 'dialogue.author-headline' ) );
