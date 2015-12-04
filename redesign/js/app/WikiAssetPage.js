@@ -174,7 +174,7 @@ $.extend( WikiAssetPage.prototype, {
 	_removeUnwantedWhiteSpace: function( $nodes ) {
 		var $container = $( '<div/>' ).append( $nodes.clone() );
 		return $( '<div/>' ).html(
-			$.trim( $container.html().replace( /\s+/g, ' ' ) )
+			$.trim( $container.html().replace( '&nbsp;', ' ' ).replace( /\s+/g, ' ' ) )
 		).contents();
 	},
 
