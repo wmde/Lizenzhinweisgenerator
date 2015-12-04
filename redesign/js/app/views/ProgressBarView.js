@@ -3,8 +3,9 @@
 var $ = require( 'jquery' ),
 	template = require( '../templates/ProgressBar.handlebars' );
 
-var ProgressBarView = function( dialogue ) {
+var ProgressBarView = function( dialogue, dialogueView ) {
 	this._dialogue = dialogue;
+	this._dialogueView = dialogueView;
 };
 
 $.extend( ProgressBarView.prototype, {
@@ -14,13 +15,21 @@ $.extend( ProgressBarView.prototype, {
 	_dialogue: null,
 
 	/**
+	 * @type {AttributionDialogueView}
+	 */
+	_dialogueView: null,
+
+	/**
 	 * @param {int} n
 	 * @private
 	 */
 	_backToStep: function( n ) {
-		if( n < this._dialogue.currentStepIndex() ) {
-			this._dialogue.setStep( n );
+		if( n >= this._dialogue.currentStepIndex() ) {
+			return;
 		}
+
+		this._dialogue.setStep( n );
+		this._dialogueView.updateContent();
 	},
 
 	render: function() {

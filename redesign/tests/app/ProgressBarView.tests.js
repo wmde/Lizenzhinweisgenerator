@@ -68,8 +68,9 @@ QUnit.test( 'should mark all steps completed when the attribution is shown', fun
 } );
 
 QUnit.test( 'go back using by clicking on a progress bar item', function( assert ) {
-	var dialogue = Helpers.newDefaultAttributionDialogue(),
-		pb = new ProgressBarView( dialogue ),
+	var dialogueView = Helpers.newDefaultAttributionDialogueView(),
+		dialogue = dialogueView._dialogue,
+		pb = new ProgressBarView( dialogue, dialogueView ),
 		initialStep = dialogue.currentStep();
 
 	dialogue.currentStep().complete( {} );
@@ -78,9 +79,10 @@ QUnit.test( 'go back using by clicking on a progress bar item', function( assert
 } );
 
 QUnit.test( 'going to steps that were not previously completed should not be possible', function( assert ) {
-	var dialogue = Helpers.newDefaultAttributionDialogue(),
-			pb = new ProgressBarView( dialogue ),
-			initialStep = dialogue.currentStep();
+	var dialogueView = Helpers.newDefaultAttributionDialogueView(),
+		dialogue = dialogueView._dialogue,
+		pb = new ProgressBarView( dialogue, dialogueView ),
+		initialStep = dialogue.currentStep();
 
 	pb.render().find( 'li a' )[ 2 ].click();
 	assert.equal( dialogue.currentStep(), initialStep );

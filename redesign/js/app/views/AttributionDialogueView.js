@@ -12,7 +12,7 @@ var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
 	this._dialogue.init();
 
-	this._progressBar = new ProgressBarView( this._dialogue );
+	this._progressBar = new ProgressBarView( this._dialogue, this );
 
 	this._privateUseBox = new InfoBoxView(
 		'private-use',
@@ -48,6 +48,11 @@ $.extend( AttributionDialogueView.prototype, {
 	 * @type {ProgressBarView}
 	 */
 	_progressBar: null,
+
+	/**
+	 * @type {jQuery}
+	 */
+	_$html: $( '<div/>' ),
 
 	/**
 	 * Turns a $form.serializeArray return value into an object
@@ -110,6 +115,10 @@ $.extend( AttributionDialogueView.prototype, {
 		$bubble.css( 'min-height', ( 25 + 18 + progressIndex * 23 ) + 'px' );
 	},
 
+	updateContent: function() {
+		this.render( this._$html );
+	},
+
 	/**
 	 * @param {jQuery} $dialogue
 	 */
@@ -117,6 +126,8 @@ $.extend( AttributionDialogueView.prototype, {
 		var $content = this._nextStepOrDone(),
 			self = this,
 			$infoBox = $( '#info-box' );
+
+		this._$html = $dialogue;
 
 		$infoBox.html( this._privateUseBox.render() );
 		if( this._dialogue.getAsset().getLicence().isInGroup( 'ported' ) ) {
