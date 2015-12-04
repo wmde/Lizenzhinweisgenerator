@@ -57,7 +57,7 @@ QUnit.test( 'should mark step < current step as completed and current step as ac
 
 QUnit.test( 'should mark all steps completed when the attribution is shown', function( assert ) {
 	var dialogue = Helpers.newDefaultAttributionDialogue(),
-			pb = new ProgressBarView( dialogue );
+		pb = new ProgressBarView( dialogue );
 	dialogue.currentStep().complete( {} );
 	dialogue.currentStep().complete( {} );
 	dialogue.currentStep().complete( {} );
@@ -65,4 +65,14 @@ QUnit.test( 'should mark all steps completed when the attribution is shown', fun
 
 	assert.equal( pb.render().find( 'li.active' ).length, 1 );
 	assert.equal( pb.render().find( 'li.completed' ).length, 4 );
+} );
+
+QUnit.test( 'go back using by clicking on a progress bar item', function( assert ) {
+	var dialogue = Helpers.newDefaultAttributionDialogue(),
+		pb = new ProgressBarView( dialogue ),
+		initialStep = dialogue.currentStep();
+
+	dialogue.currentStep().complete( {} );
+	pb.render().find( 'li a' )[ 0 ].click();
+	assert.equal( dialogue.currentStep(), initialStep );
 } );

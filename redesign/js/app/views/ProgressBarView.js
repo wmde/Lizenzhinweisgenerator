@@ -13,6 +13,14 @@ $.extend( ProgressBarView.prototype, {
 	 */
 	_dialogue: null,
 
+	/**
+	 * @param {int} n
+	 * @private
+	 */
+	_backToStep: function( n ) {
+		this._dialogue.setStep( n );
+	},
+
 	render: function() {
 		var steps = this._dialogue.getSteps()
 			.concat( [ {
@@ -33,7 +41,13 @@ $.extend( ProgressBarView.prototype, {
 						isCompleted: i < activeStep
 					};
 				} )
-			} ) );
+			} ) ),
+			self = this;
+
+		$html.find( 'li a' ).click( function( e ) {
+			self._backToStep( $html.find( 'li a' ).index( $( this ) ) );
+			e.preventDefault();
+		} );
 
 		return $html;
 	}
