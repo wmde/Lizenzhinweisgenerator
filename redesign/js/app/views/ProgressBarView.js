@@ -6,6 +6,7 @@ var $ = require( 'jquery' ),
 var ProgressBarView = function( dialogue, dialogueView ) {
 	this._dialogue = dialogue;
 	this._dialogueView = dialogueView;
+	this._initialized = false;
 };
 
 $.extend( ProgressBarView.prototype, {
@@ -18,6 +19,11 @@ $.extend( ProgressBarView.prototype, {
 	 * @type {AttributionDialogueView}
 	 */
 	_dialogueView: null,
+
+	/**
+	 * @type {boolean}
+	 */
+	_initialized: false,
 
 	/**
 	 * @param {int} n
@@ -59,6 +65,17 @@ $.extend( ProgressBarView.prototype, {
 			self._backToStep( $html.find( 'li a' ).index( $( this ) ) );
 			e.preventDefault();
 		} );
+
+		if( window.history && this._dialogue.currentStepIndex() > 0 ) {
+			window.history.pushState( 'step-back', '', '' );
+
+			if( !this._initialized ) {
+				this._initialized = true;
+				$( window ).on( 'popstate', function() {
+					self._backToStep( self._dialogue.currentStepIndex() - 1 );
+				} );
+			}
+		}
 
 		return $html;
 	}
