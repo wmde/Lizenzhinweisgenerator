@@ -1,11 +1,13 @@
 'use strict';
 
-var $ = require( 'jquery' );
+var $ = require( 'jquery' ),
+	Tracking = require( '../tracking.js' );
 
 var Dialogue = function() {
 	this._steps = [];
 	this._data = {};
 	this._currentStep = 0;
+	this._tracking = new Tracking();
 };
 
 $.extend( Dialogue.prototype, {
@@ -43,8 +45,15 @@ $.extend( Dialogue.prototype, {
 	 * @param {DialogueStep} step
 	 */
 	completeStep: function( step ) {
+		var self = this;
+
 		this._data[ step.getName() ] = step.getData();
 		this._currentStep++;
+
+		self._tracking.trackEvent( 'Progress', 'Step', step.getName() );
+		if( !self.currentStep() ) {
+			self._tracking.trackEvent( 'Progress', 'Done' );
+		}
 	},
 
 	/**
