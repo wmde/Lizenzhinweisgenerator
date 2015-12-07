@@ -175,6 +175,8 @@ $.extend( FileForm.prototype, {
 	 * @param {ApplicationError} error
 	 */
 	_displayError: function( error ) {
+		var self = this;
+
 		console.log( error.getMessage() );
 		self._tracking.trackEvent( 'Progress', 'Error', error.getCode() );
 

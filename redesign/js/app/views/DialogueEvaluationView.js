@@ -7,7 +7,7 @@ var $ = require( 'jquery' ),
 	Clipboard = require( 'clipboard' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
 	Messages = require( '../Messages' ),
-	Tracking = require( '../tracking.js' );
+	Tracking = require( '../../tracking.js' );
 
 /**
  * @param {DialogueEvaluation} evaluation
