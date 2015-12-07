@@ -49,13 +49,24 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlAuthor: function() {
+		var self = this;
 		if( this._unknownAuthor() ) {
 			return this._unknownAuthorName();
 		}
 
 		return this._asset.getAuthors().map( function( author ) {
-			return typeof author === 'string' ? author : $( '<div/>' ).append( author.getHtml() ).html();
+			return typeof author === 'string' ? author : self._getAuthorWithLink( author );
 		} ).join( ', ' );
+	},
+
+	_getAuthorWithLink: function( $author ) {
+		var self = this,
+			$container = $( '<div/>' ).append( $author.getHtml() );
+		$container.find( 'a' ).each( function() {
+			var $link = $( this );
+			$( this ).replaceWith( self._makeLink( $link.attr( 'href' ), $link.text() ) );
+		} );
+		return $container.html();
 	},
 
 	_makeLink: function( target, text ) {

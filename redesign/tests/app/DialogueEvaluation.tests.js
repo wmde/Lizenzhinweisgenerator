@@ -87,9 +87,10 @@ QUnit.test( 'attribution contains editing information if it was edited', functio
 } );
 
 QUnit.test( 'online attribution contains author\'s html', function( assert ) {
-	var authorHtml = '<a href="#meh">Meh</a>',
-		evaluation = newEvaluation( { authors: [ new Author( $( authorHtml ) ) ] } );
-	assert.ok( attributionContains( evaluation, authorHtml ) );
+	var authorUrl = 'https://commons.wikimedia.org/wiki/User:Foo',
+		author = 'Foo',
+		evaluation = newEvaluation( { authors: [ new Author( $( '<a href="' + authorUrl + '">' + author + '</a>' ) ) ] } );
+	assert.ok( attributionContains( evaluation, '<a href="' + authorUrl + '" target="_blank">' + author + '</a>' ) );
 } );
 
 QUnit.test( 'online attribution contains link to asset from title', function( assert ) {
