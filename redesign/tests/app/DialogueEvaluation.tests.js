@@ -42,6 +42,18 @@ QUnit.test( 'attribution contains asset url for use in print', function( assert 
 	assert.ok( attributionContains( evaluation, url ) );
 } );
 
+QUnit.test( 'print attribution does not contain title if licence is CC 4 ', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-4.0' ),
+		evaluation = newEvaluation( { licence: licence, title: 'Foo' }, { 'typeOfUse': { type: 'print' } } );
+	assert.notOk( attributionContains( evaluation, 'Foo' ) );
+} );
+
+QUnit.test( 'online attribution contains title even if licence is CC 4 ', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-4.0' ),
+		evaluation = newEvaluation( { licence: licence, title: 'Foo' }, { 'typeOfUse': { type: 'online' } } );
+	assert.ok( attributionContains( evaluation, 'Foo' ) );
+} );
+
 QUnit.test( 'print attribution contains licence URL', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
 		evaluation = newEvaluation( { licence: licence }, { 'typeOfUse': { type: 'print' } } );
