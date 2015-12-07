@@ -6,7 +6,8 @@ var $ = require( 'jquery' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
 	Clipboard = require( 'clipboard' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
-	Messages = require( '../Messages' );
+	Messages = require( '../Messages' ),
+	Tracking = require( '../tracking.js' );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -14,6 +15,7 @@ var $ = require( 'jquery' ),
  */
 var DialogueEvaluationView = function( evaluation ) {
 	this._evaluation = evaluation;
+	this._tracking = new Tracking();
 };
 
 $.extend( DialogueEvaluationView.prototype, {
@@ -37,6 +39,10 @@ $.extend( DialogueEvaluationView.prototype, {
 	},
 
 	_copyAttribution: function( trigger ) {
+		var self = this;
+
+		self._tracking.trackEvent( 'Button', 'CopyAttributation' );
+
 		$( trigger ).addClass( 'flash' );
 		window.setTimeout( function() {
 			$( trigger ).removeClass( 'flash' );
