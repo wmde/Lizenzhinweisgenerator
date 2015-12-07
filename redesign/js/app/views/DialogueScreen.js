@@ -28,7 +28,8 @@ $.extend( DialogueView.prototype, {
 			url: this._imageInfo.getUrl(),
 			size: this._imageInfo.getPrettySize(),
 			thumbUrl: this._imageInfo.getThumbnail().url,
-			imageWidth: this._imageInfo.getThumbnail().width
+			imageWidth: this._imageInfo.getThumbnail().width,
+			filePageUrl: this._asset.getUrl()
 		} );
 	},
 
