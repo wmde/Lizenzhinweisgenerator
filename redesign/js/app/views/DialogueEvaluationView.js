@@ -41,7 +41,7 @@ $.extend( DialogueEvaluationView.prototype, {
 	_copyAttribution: function( trigger ) {
 		var self = this;
 
-		self._tracking.trackEvent( 'Button', 'CopyAttributation' );
+		self._tracking.trackEvent( 'Button', 'CopyAttribution' );
 
 		$( trigger ).addClass( 'flash' );
 		window.setTimeout( function() {
