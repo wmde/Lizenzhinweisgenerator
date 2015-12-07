@@ -99,11 +99,14 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getPrintAttribution: function() {
-		return this._getAuthor() + ' '
-			+ '(' + this._asset.getUrl() + '), '
-			+ this._asset.getTitle() + ', '
-			+ this._getEditingAttribution()
+		var attribution = this._getAuthor() + ' '
+			+ '(' + this._asset.getUrl() + '), ';
+		if( !this._asset.getLicence().isInGroup( 'cc4' ) ) {
+			attribution += this._asset.getTitle() + ', ';
+		}
+		attribution += this._getEditingAttribution()
 			+ this.getAttributionLicence().getUrl();
+		return attribution;
 	},
 
 	_getHtmlAttribution: function() {
