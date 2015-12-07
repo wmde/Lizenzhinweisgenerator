@@ -126,6 +126,8 @@ $.extend( WikiAssetPage.prototype, {
 
 		var $author = this._sanitizeUrls( $td.contents() );
 
+		$author = this._flattenVcardDivs( $author );
+
 		// Remove useless wrapping nodes:
 		if( $author.length === 1 ) {
 			var nodeName = $author.get( 0 ).nodeName;
@@ -146,22 +148,34 @@ $.extend( WikiAssetPage.prototype, {
 			}
 		} );
 
-		$author = this._removeVcardDivs( $author );
+		$author = this._removeUnwantedHtmlTags( $author );
+		$author = this._removeUnwantedWhiteSpace( $author );
 
 		$author = this._trimNodeList( $author );
 
 		return [ new Author( $author ) ];
 	},
 
-	/**
-	 * Remove div nodes belonging to class 'vcard'.
-	 * @param {jQuery} $nodes
-	 * @return {jQuery}
-	 */
-	_removeVcardDivs: function( $nodes ) {
-		return $nodes.filter( function( i, node ) {
-			return node.nodeName !== 'DIV' || $( node ).attr( 'class' ) !== 'vcard';
+	_flattenVcardDivs: function( $nodes ) {
+		var $container = $( '<div/>' ).append( $nodes.clone() );
+		$container.find( 'div.vcard' ).each( function() {
+			var $creator = $( this ).find( 'span#creator' );
+			$( this ).html( $creator.html() );
 		} );
+		return $container.contents();
+	},
+
+	_removeUnwantedHtmlTags: function( $nodes ) {
+		var $container = $( '<div/>' ).append( $nodes.clone() );
+		$container.find( '*:not(a)' ).contents().unwrap();
+		return $container.contents();
+	},
+
+	_removeUnwantedWhiteSpace: function( $nodes ) {
+		var $container = $( '<div/>' ).append( $nodes.clone() );
+		return $( '<div/>' ).html(
+			$.trim( $container.html().replace( '&nbsp;', ' ' ).replace( /\s+/g, ' ' ) )
+		).contents();
 	},
 
 	/**
@@ -176,7 +190,8 @@ $.extend( WikiAssetPage.prototype, {
 
 		$container.find( 'a' ).each( function() {
 			var $node = $( this ),
-				href = $node.attr( 'href' );
+				href = $node.attr( 'href' ),
+				attrsToRemove = [];
 
 			if( href.indexOf( '/w/index.php?title=User:' ) === 0 ) {
 				href = href.replace(
@@ -190,8 +205,15 @@ $.extend( WikiAssetPage.prototype, {
 			}
 
 			$node.attr( 'href', href );
-			$node.removeAttr( 'class' );
-			$node.removeAttr( 'title' );
+			$.each( $node.get( 0 ).attributes, function( i, attr ) {
+				if( attr.name === 'href' ) {
+					return;
+				}
+				attrsToRemove.push( attr.name );
+			} );
+			$.each( attrsToRemove, function( i, attr ) {
+				$node.removeAttr( attr );
+			} );
 		} );
 
 		return $container.contents();
