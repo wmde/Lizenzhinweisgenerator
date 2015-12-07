@@ -3,7 +3,8 @@
 var $ = require( 'jquery' ),
 	Dialogue = require( './Dialogue' ),
 	DialogueStep = require( './DialogueStep' ),
-	LicenceStep = require( './LicenceStep' );
+	LicenceStep = require( './LicenceStep' ),
+	Tracking = require( '../tracking.js' );
 
 /**
  * @param {string|null} author
@@ -12,6 +13,7 @@ var $ = require( 'jquery' ),
 var AttributionDialogue = function( asset ) {
 	Dialogue.call( this );
 	this._asset = asset;
+	this._tracking = new Tracking();
 };
 
 $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
@@ -34,6 +36,9 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	},
 
 	completeStep: function( step ) {
+		var self = this;
+
+		self._tracking.trackEvent( 'Progress', 'Step', step.getName() );
 		Dialogue.prototype.completeStep.call( this, step );
 
 		var data = step.getData();
