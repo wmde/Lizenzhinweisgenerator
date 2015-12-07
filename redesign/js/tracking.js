@@ -15,8 +15,8 @@ var $ = require( 'jquery' ),
  */
 var Tracking = function() {
 	this._cookieName = 'filereuseuser';
-	// 3 months
-	this._cookieExpiryDays = 60 * 24 * 90;
+	// 1 day
+	this._cookieExpiryDays = 60 * 24;
 	this._piwikSiteId = config.piwikSiteId;
 };
 
