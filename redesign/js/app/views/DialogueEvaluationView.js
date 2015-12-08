@@ -41,18 +41,73 @@ $.extend( DialogueEvaluationView.prototype, {
 		e.preventDefault();
 	},
 
+	_attributionText: function() {
+		return $( '.attribution-box > div:visible' ).text().trim();
+	},
+
 	_copyAttribution: function( event, $button ) {
-		event.clipboardData.setData( 'text/plain', $( '.attribution-box > div:visible' ).text().trim() );
+		event.clipboardData.setData( 'text/plain', this._attributionText() );
+		this._blinkCopyButton( $button );
+	},
+
+	_blinkCopyButton: function( $button ) {
 		$button.addClass( 'flash' );
 		window.setTimeout( function() {
 			$button.removeClass( 'flash' );
 		}, 800 );
 	},
 
+	_hasFlash: function() {
+		var hasFlash = false;
+		try {
+			var fo = new ActiveXObject( 'ShockwaveFlash.ShockwaveFlash' ); // jshint ignore:line
+			if( fo ) {
+				hasFlash = true;
+			}
+		} catch( e ) {
+			if( navigator.mimeTypes
+				&& navigator.mimeTypes[ 'application/x-shockwave-flash' ] !== undefined
+				&& navigator.mimeTypes[ 'application/x-shockwave-flash' ].enabledPlugin ) {
+				hasFlash = true;
+			}
+		}
+
+		return hasFlash;
+	},
+
+	_initCopyButton: function( $button ) {
+		var self = this;
+
+		if( window.clipboardData ) { // IE
+			window.clipboardData.setData( 'Text', this._attributionText() );
+			this._blinkCopyButton( $button );
+		} else if( document.queryCommandSupported( 'copy' ) ) { // execCommand js
+			$button.click( function( e ) {
+				var $textarea = $( '#js-copy' );
+				$textarea.val( self._attributionText() );
+				$textarea.show();
+				$textarea.select();
+				document.execCommand( 'copy' );
+				$textarea.hide();
+				self._blinkCopyButton( $( this ) );
+				e.preventDefault();
+
+				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+			} );
+		} else if( this._hasFlash() ) { // flash
+			var clipboard = new Clipboard( $button );
+			clipboard.on( 'copy', function( e ) {
+				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+				self._copyAttribution( e, $button );
+			} );
+		} else { // nothing
+			$button.hide();
+		}
+	},
+
 	render: function() {
 		var $html = $( doneTemplate() ),
-			dosAndDonts = this._evaluation.getDosAndDonts(),
-			self = this;
+			dosAndDonts = this._evaluation.getDosAndDonts();
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
@@ -83,13 +138,7 @@ $.extend( DialogueEvaluationView.prototype, {
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
 
-		var $copyButton = $html.find( '#copy-attribution' ),
-			clipboard = new Clipboard( $copyButton ),
-			self = this;
-		clipboard.on( 'copy', function( e ) {
-			self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-			self._copyAttribution( e, $copyButton );
-		} );
+		this._initCopyButton( $html.find( '#copy-attribution' ) );
 
 		return $html;
 	}
