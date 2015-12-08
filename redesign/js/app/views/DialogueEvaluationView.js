@@ -67,7 +67,8 @@ $.extend( DialogueEvaluationView.prototype, {
 		$( '<div class="licence-link"/>' )
 			.append( buttonTemplate( {
 				content: '<img class="cc-logo" src="images/cc.svg">'
-				+ Messages.t( 'evaluation.show-licence-text' ),
+				+ Messages.t( 'evaluation.show-licence-text' )
+				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')',
 				target: this._evaluation.getAttributionLicence().getUrl()
 			} ) )
 			.appendTo( $html );
