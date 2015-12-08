@@ -50,6 +50,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
+			unformattedAttribution: this._evaluation.getUnformattedAttribution(),
 			isPrint: this._evaluation.isPrint()
 		} ) );
 		$html.append( dosAndDontsTemplate( {

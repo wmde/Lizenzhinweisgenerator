@@ -4,6 +4,9 @@
 		<div id="html-attribution">
 			{{{attribution}}}
 		</div>
+		<div id="plain-text-attribution" class="display-none">
+			{{{unformattedAttribution}}}
+		</div>
 		<div id="escaped-attribution" class="display-none">
 			{{attribution}}
 		</div>
@@ -11,6 +14,7 @@
 	<div class="buttons">
 		{{#unless isPrint}}
 			<button class="active green-btn show-attribution" data-target="#html-attribution">Text</button>
+			<button class="green-btn show-attribution" data-target="#plain-text-attribution">Plain Text</button>
 			<button class="green-btn show-attribution" data-target="#escaped-attribution">HTML</button>
 		{{/unless}}
 

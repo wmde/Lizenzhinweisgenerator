@@ -116,12 +116,27 @@ $.extend( DialogueEvaluation.prototype, {
 			+ this._getHtmlLicence();
 	},
 
+	_getAttributionAsTextWithLinks: function() {
+		return this._getAuthor() + ' '
+			+ '(' + this._makeLink( this._asset.getUrl(), this._asset.getUrl() ) + '), '
+			+ '„' + this._asset.getTitle() + '“' + ', '
+			+ this._getEditingAttribution()
+			+ this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getUrl() );
+	},
+
 	getAttribution: function() {
 		if( this._getResult( 'typeOfUse', 'type' ) === 'print' ) {
 			return this._getPrintAttribution();
 		}
 
 		return this._getHtmlAttribution();
+	},
+
+	getUnformattedAttribution: function() {
+		if( this._getResult( 'typeOfUse', 'type' ) === 'print' ) {
+			return this._getPrintAttribution();
+		}
+		return this._getAttributionAsTextWithLinks();
 	},
 
 	/**
