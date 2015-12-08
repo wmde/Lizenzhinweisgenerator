@@ -31,7 +31,8 @@ $.extend( DialogueEvaluationView.prototype, {
 	_showAttribution: function( e ) {
 		$( '.final-attribution .attribution-box div' ).hide();
 		$( $( this ).data( 'target' ) ).show();
-		$( '.final-attribution .show-attribution' ).toggleClass( 'active' );
+		$( '.final-attribution .show-attribution' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
 
 		e.preventDefault();
 	},
