@@ -29,7 +29,7 @@ $trackingSwitch.change( function() {
 	}
 } );
 
-$( '.track-click' ).click( function() {
+$( document ).on( 'click', '.track-click', function() {
 	tracking.trackEvent(
 		$( this ).data( 'track-category' ),
 		$( this ).data( 'track-event' )
