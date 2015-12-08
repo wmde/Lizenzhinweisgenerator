@@ -39,10 +39,6 @@ $.extend( DialogueEvaluationView.prototype, {
 	},
 
 	_copyAttribution: function( trigger ) {
-		var self = this;
-
-		self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-
 		$( trigger ).addClass( 'flash' );
 		window.setTimeout( function() {
 			$( trigger ).removeClass( 'flash' );
@@ -52,7 +48,8 @@ $.extend( DialogueEvaluationView.prototype, {
 
 	render: function() {
 		var $html = $( doneTemplate() ),
-			dosAndDonts = this._evaluation.getDosAndDonts();
+			dosAndDonts = this._evaluation.getDosAndDonts(),
+			self = this;
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
@@ -80,7 +77,12 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
-		new Clipboard( '#copy-attribution', { text: this._copyAttribution } ); // jshint ignore:line
+		new Clipboard( '#copy-attribution', { // jshint ignore:line
+			text: function( trigger ) {
+				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+				return self._copyAttribution( trigger );
+			}
+		} );
 
 		return $html;
 	}
