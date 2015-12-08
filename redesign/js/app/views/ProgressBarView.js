@@ -25,6 +25,13 @@ $.extend( ProgressBarView.prototype, {
 	 */
 	_initialized: false,
 
+	_backBuffer: false,
+
+	_setBackBuffer: function() {
+		this._backBuffer = true;
+		window.history.pushState( 'step-back', '', '' );
+	},
+
 	/**
 	 * @param {int} n
 	 * @private
@@ -67,11 +74,15 @@ $.extend( ProgressBarView.prototype, {
 		} );
 
 		if( window.history && this._dialogue.currentStepIndex() > 0 ) {
-			window.history.pushState( 'step-back', '', '' );
+			if( !this._backBuffer ) {
+				this._setBackBuffer();
+			}
 
 			if( !this._initialized ) {
 				this._initialized = true;
+
 				$( window ).on( 'popstate', function() {
+					self._backBuffer = false;
 					self._backToStep( self._dialogue.currentStepIndex() - 1 );
 				} );
 			}
