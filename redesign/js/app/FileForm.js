@@ -7,7 +7,8 @@ var $ = require( 'jquery' ),
 	WikiAsset = require( './WikiAsset' ),
 	config = require( '../config.json' ),
 	ImageSuggestionView = require( './views/ImageSuggestionView' ),
-	DialogueScreen = require( './views/DialogueScreen' );
+	DialogueScreen = require( './views/DialogueScreen' ),
+	Tracking = require( '../tracking.js' );
 
 window.jQuery = $; // needed for justifiedGallery
 require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
@@ -17,6 +18,7 @@ var FileForm = function( $node, $resultsPage ) {
 	this._$resultsPage = $resultsPage;
 	this._api = new Api( 'https://commons.wikimedia.org/' );
 	this._inputHandler = new InputHandler( this._api );
+	this._tracking = new Tracking();
 };
 
 $.extend( FileForm.prototype, {
@@ -78,9 +80,11 @@ $.extend( FileForm.prototype, {
 		this._inputHandler.getFilename( input )
 			.done( function( filenameOrImageInfos, wikiUrl ) {
 				if( typeof filenameOrImageInfos === 'string' ) {
+					self._tracking.trackEvent( 'Progress', 'Start-Single', input );
 					self._processFilename( filenameOrImageInfos, wikiUrl );
 					deferred.resolve( filenameOrImageInfos );
 				} else {
+					self._tracking.trackEvent( 'Progress', 'Start-Multiple', input );
 					self._showResults( filenameOrImageInfos );
 				}
 			} )
@@ -171,7 +175,10 @@ $.extend( FileForm.prototype, {
 	 * @param {ApplicationError} error
 	 */
 	_displayError: function( error ) {
+		var self = this;
+
 		console.log( error.getMessage() );
+		self._tracking.trackEvent( 'Progress', 'Error', error.getCode() );
 
 		$( '#file-form-alert-placeholder' ).text( error.getMessage() );
 		$( '#file-form-input' ).css( 'color', '#bf311a' );

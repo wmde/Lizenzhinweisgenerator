@@ -36,6 +36,15 @@ $.extend( ApplicationError.prototype, {
 	 */
 	getMessage: function() {
 		return Messages.t( 'error.' + this._code );
+	},
+
+	/**
+	 * Returns the error's code.
+	 *
+	 * @return {string}
+	 */
+	getCode: function() {
+		return this._code;
 	}
 
 } );

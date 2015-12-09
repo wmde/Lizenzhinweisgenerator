@@ -6,7 +6,8 @@ var $ = require( 'jquery' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
 	Clipboard = require( 'clipboard' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
-	Messages = require( '../Messages' );
+	Messages = require( '../Messages' ),
+	Tracking = require( '../../tracking.js' );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -14,6 +15,7 @@ var $ = require( 'jquery' ),
  */
 var DialogueEvaluationView = function( evaluation ) {
 	this._evaluation = evaluation;
+	this._tracking = new Tracking();
 };
 
 $.extend( DialogueEvaluationView.prototype, {
@@ -46,7 +48,8 @@ $.extend( DialogueEvaluationView.prototype, {
 
 	render: function() {
 		var $html = $( doneTemplate() ),
-			dosAndDonts = this._evaluation.getDosAndDonts();
+			dosAndDonts = this._evaluation.getDosAndDonts(),
+			self = this;
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
@@ -75,7 +78,12 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
-		new Clipboard( '#copy-attribution', { text: this._copyAttribution } ); // jshint ignore:line
+		new Clipboard( '#copy-attribution', { // jshint ignore:line
+			text: function( trigger ) {
+				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+				return self._copyAttribution( trigger );
+			}
+		} );
 
 		return $html;
 	}
