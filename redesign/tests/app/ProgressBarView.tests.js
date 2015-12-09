@@ -57,7 +57,7 @@ QUnit.test( 'should mark step < current step as completed and current step as ac
 
 QUnit.test( 'should mark all steps completed when the attribution is shown', function( assert ) {
 	var dialogue = Helpers.newDefaultAttributionDialogue(),
-			pb = new ProgressBarView( dialogue );
+		pb = new ProgressBarView( dialogue );
 	dialogue.currentStep().complete( {} );
 	dialogue.currentStep().complete( {} );
 	dialogue.currentStep().complete( {} );
@@ -65,4 +65,40 @@ QUnit.test( 'should mark all steps completed when the attribution is shown', fun
 
 	assert.equal( pb.render().find( 'li.active' ).length, 1 );
 	assert.equal( pb.render().find( 'li.completed' ).length, 4 );
+} );
+
+QUnit.test( 'go back using by clicking on a progress bar item', function( assert ) {
+	var dialogueView = Helpers.newDefaultAttributionDialogueView(),
+		dialogue = dialogueView._dialogue,
+		pb = new ProgressBarView( dialogue, dialogueView ),
+		initialStep = dialogue.currentStep();
+
+	dialogue.currentStep().complete( {} );
+	pb.render().find( 'li a' )[ 0 ].click();
+	assert.equal( dialogue.currentStep(), initialStep );
+} );
+
+QUnit.test( 'going to steps that were not previously completed should not be possible', function( assert ) {
+	var dialogueView = Helpers.newDefaultAttributionDialogueView(),
+		dialogue = dialogueView._dialogue,
+		pb = new ProgressBarView( dialogue, dialogueView ),
+		initialStep = dialogue.currentStep();
+
+	pb.render().find( 'li a' )[ 2 ].click();
+	assert.equal( dialogue.currentStep(), initialStep );
+} );
+
+QUnit.test( 'should remove 3 editing substeps when going back further than editing', function( assert ) {
+	var dialogueView = Helpers.newDefaultAttributionDialogueView(),
+		dialogue = dialogueView._dialogue,
+		pb = new ProgressBarView( dialogue, dialogueView );
+
+	dialogue.currentStep().complete( {} );
+	dialogue.currentStep().complete( {} );
+	dialogue.currentStep().complete( {} );
+	dialogue.currentStep().complete( { edited: 'true' } );
+
+	assert.equal( dialogue.getSteps().length, 7 );
+	pb.render().find( 'li a' )[ 2 ].click();
+	assert.equal( dialogue.getSteps().length, 4 );
 } );

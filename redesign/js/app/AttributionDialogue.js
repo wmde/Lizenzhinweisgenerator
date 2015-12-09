@@ -24,9 +24,20 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 		return this._asset;
 	},
 
+	setStep: function( n ) {
+		Dialogue.prototype.setStep.call( this, n );
+		if( this._hasAuthor() && n < 4 || n < 3 ) {
+			this._removeEditingSteps();
+		}
+	},
+
+	_hasAuthor: function() {
+		return this._asset.getAuthors().length === 0;
+	},
+
 	init: function() {
 		this.addStep( new DialogueStep( 'typeOfUse', require( './templates/TypeOfUseStep.handlebars' ) ) );
-		if( this._asset.getAuthors().length === 0 ) {
+		if( this._hasAuthor() ) {
 			this.addStep( new DialogueStep( 'author', require( './templates/AuthorStep.handlebars' ) ) );
 		}
 		this.addStep( new DialogueStep( 'compilation', require( './templates/CompilationStep.handlebars' ) ) );
@@ -39,6 +50,14 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 		var data = step.getData();
 		if( step.getName() === 'editing' && data[ 'edited' ] === 'true' ) {
 			this._addEditingSteps();
+		}
+	},
+
+	_removeEditingSteps: function() {
+		if( this._steps.length > 4 ) {
+			this._steps.pop();
+			this._steps.pop();
+			this._steps.pop();
 		}
 	},
 
