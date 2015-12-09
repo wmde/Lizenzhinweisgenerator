@@ -54,7 +54,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
-			unformattedAttribution: this._evaluation.getUnformattedAttribution(),
+			plainTextAttribution: this._evaluation.getPlainTextAttribution(),
 			isPrint: this._evaluation.isPrint()
 		} ) );
 		$html.append( dosAndDontsTemplate( {

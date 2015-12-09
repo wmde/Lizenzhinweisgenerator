@@ -102,7 +102,7 @@ $.extend( DialogueEvaluation.prototype, {
 		var attribution = this._getAuthor() + ' '
 			+ '(' + this._asset.getUrl() + '), ';
 		if( !this._asset.getLicence().isInGroup( 'cc4' ) ) {
-			attribution += this._asset.getTitle() + ', ';
+			attribution += '„' + this._asset.getTitle() + '“' + ', ';
 		}
 		attribution += this._getEditingAttribution()
 			+ this.getAttributionLicence().getUrl();
@@ -118,10 +118,10 @@ $.extend( DialogueEvaluation.prototype, {
 
 	_getAttributionAsTextWithLinks: function() {
 		return this._getAuthor() + ' '
-			+ '(' + this._makeLink( this._asset.getUrl(), this._asset.getUrl() ) + '), '
+			+ '(' + this._asset.getUrl() + '), '
 			+ '„' + this._asset.getTitle() + '“' + ', '
 			+ this._getEditingAttribution()
-			+ this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getUrl() );
+			+ this.getAttributionLicence().getUrl();
 	},
 
 	getAttribution: function() {
@@ -132,8 +132,8 @@ $.extend( DialogueEvaluation.prototype, {
 		return this._getHtmlAttribution();
 	},
 
-	getUnformattedAttribution: function() {
-		if( this._getResult( 'typeOfUse', 'type' ) === 'print' ) {
+	getPlainTextAttribution: function() {
+		if( this._getResult( 'typeOfUse', 'type' ) === 'print' || !this._asset.getLicence().isInGroup( 'cc4' ) ) {
 			return this._getPrintAttribution();
 		}
 		return this._getAttributionAsTextWithLinks();
