@@ -74,7 +74,7 @@ QUnit.test( 'go back using by clicking on a progress bar item', function( assert
 		initialStep = dialogue.currentStep();
 
 	dialogue.currentStep().complete( {} );
-	pb.render().find( 'li a' )[ 0 ].click();
+	$( pb.render().find( 'li a' ) [ 0 ] ).click();
 	assert.equal( dialogue.currentStep(), initialStep );
 } );
 
@@ -84,7 +84,7 @@ QUnit.test( 'going to steps that were not previously completed should not be pos
 		pb = new ProgressBarView( dialogue, dialogueView ),
 		initialStep = dialogue.currentStep();
 
-	pb.render().find( 'li a' )[ 2 ].click();
+	$( pb.render().find( 'li a' )[ 2 ] ).click();
 	assert.equal( dialogue.currentStep(), initialStep );
 } );
 
@@ -99,6 +99,6 @@ QUnit.test( 'should remove 3 editing substeps when going back further than editi
 	dialogue.currentStep().complete( { edited: 'true' } );
 
 	assert.equal( dialogue.getSteps().length, 7 );
-	pb.render().find( 'li a' )[ 2 ].click();
+	$( pb.render().find( 'li a' )[ 2 ] ).click();
 	assert.equal( dialogue.getSteps().length, 4 );
 } );
