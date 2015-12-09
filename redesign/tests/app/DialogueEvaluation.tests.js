@@ -149,7 +149,7 @@ QUnit.test( 'online attribution shows the author the user entered', function( as
 	assert.ok( attributionContains( evaluation, 'Meh' ) );
 } );
 
-QUnit.test( 'unformatted attribution for online usage is generated correctly', function( assert ) {
+QUnit.test( 'plain text attribution for online usage is generated correctly', function( assert ) {
 	var evaluation = newEvaluation(
 		{
 			authors: [ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Foo">Foo</a>' ) ) ],
@@ -159,11 +159,11 @@ QUnit.test( 'unformatted attribution for online usage is generated correctly', f
 		},
 		{ 'typeOfUse': { type: 'online' } }
 	),
-		expectedAttribution = 'Foo (<a href="https://commons.wikimedia.org/wiki/File:Baz.jpg" target="_blank">https://commons.wikimedia.org/wiki/File:Baz.jpg</a>), „Bar“, <a href="https://creativecommons.org/licenses/by/3.0/legalcode" target="_blank">https://creativecommons.org/licenses/by/3.0/legalcode</a>';
-	assert.equal( evaluation.getUnformattedAttribution(), expectedAttribution );
+		expectedAttribution = 'Foo (https://commons.wikimedia.org/wiki/File:Baz.jpg), „Bar“, https://creativecommons.org/licenses/by/3.0/legalcode';
+	assert.equal( evaluation.getPlainTextAttribution(), expectedAttribution );
 } );
 
-QUnit.test( 'unformatted attribution for print usage is same as the normal attribution', function( assert ) {
+QUnit.test( 'plain text attribution for print usage is the same as the normal attribution', function( assert ) {
 	var evaluation = newEvaluation(
 		{
 			authors: [ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Foo">Foo</a>' ) ) ],
@@ -173,7 +173,7 @@ QUnit.test( 'unformatted attribution for print usage is same as the normal attri
 		},
 		{ 'typeOfUse': { type: 'print' } }
 	);
-	assert.equal( evaluation.getUnformattedAttribution(), evaluation.getAttribution() );
+	assert.equal( evaluation.getPlainTextAttribution(), evaluation.getAttribution() );
 } );
 
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
