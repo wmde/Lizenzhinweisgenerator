@@ -79,8 +79,13 @@ $.extend( DialogueEvaluationView.prototype, {
 		var self = this;
 
 		if( window.clipboardData ) { // IE
-			window.clipboardData.setData( 'Text', this._attributionText() );
-			this._blinkCopyButton( $button );
+			$button.click( function( e ) {
+				window.clipboardData.setData( 'Text', self._attributionText() );
+				self._blinkCopyButton( $button );
+
+				e.preventDefault();
+				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+			} );
 		} else if( document.queryCommandSupported( 'copy' ) ) { // execCommand js
 			$button.click( function( e ) {
 				var $textarea = $( '#js-copy' );
@@ -90,8 +95,8 @@ $.extend( DialogueEvaluationView.prototype, {
 				document.execCommand( 'copy' );
 				$textarea.hide();
 				self._blinkCopyButton( $( this ) );
-				e.preventDefault();
 
+				e.preventDefault();
 				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
 			} );
 		} else if( this._hasFlash() ) { // flash
