@@ -10,3 +10,4 @@ require( './app/AttributionDialogue.tests' );
 require( './app/AttributionDialogueView.tests' );
 require( './app/LicenceStore.tests' );
 require( './app/DialogueEvaluation.tests' );
+require( './app/ProgressBarView.tests' );

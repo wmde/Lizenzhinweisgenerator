@@ -5,16 +5,19 @@ var $ = require( 'jquery' ),
 	DialogueEvaluation = require( '../DialogueEvaluation' ),
 	DialogueEvaluationView = require( './DialogueEvaluationView' ),
 	InfoBoxView = require( './InfoBoxView' ),
-	Messages = require( '../Messages' );
+	Messages = require( '../Messages' ),
+	ProgressBarView = require( './ProgressBarView' );
 
 var AttributionDialogueView = function( asset ) {
 	this._dialogue = new AttributionDialogue( asset );
 	this._dialogue.init();
 
+	this._progressBar = new ProgressBarView( this._dialogue, this );
+
 	this._privateUseBox = new InfoBoxView(
 		'private-use',
 		Messages.t( 'info-box.private-use' ) +
-			'<a class="track-click" data-track-category="Navigation" data-track-event="Private Use" href="#" data-toggle="modal" data-target="#private-use-modal">' + Messages.t( 'info-box.private-use-more-link' ) + '</a>',
+		'<a class="track-click" data-track-category="Navigation" data-track-event="Private Use" href="#" data-toggle="modal" data-target="#private-use-modal">' + Messages.t( 'info-box.private-use-more-link' ) + '</a>',
 		'<button class="green-btn small-btn close-info hide-forever">' + Messages.t( 'info-box.dont-show-again' ) + '</button>'
 	);
 
@@ -40,6 +43,16 @@ $.extend( AttributionDialogueView.prototype, {
 	 * @type {AttributionDialogue}
 	 */
 	_dialogue: null,
+
+	/**
+	 * @type {ProgressBarView}
+	 */
+	_progressBar: null,
+
+	/**
+	 * @type {jQuery}
+	 */
+	_$html: $( '<div/>' ),
 
 	/**
 	 * Turns a $form.serializeArray return value into an object
@@ -88,12 +101,33 @@ $.extend( AttributionDialogueView.prototype, {
 	},
 
 	/**
+	 * Adjusts the height of the dialogue and the position of the green triangle according to the progress
+	 *
+	 * @param {jQuery} $content
+	 * @private
+	 */
+	_alignDialogueBubbleAndProgressBar: function( $content ) {
+		var progressIndex = $content.find( '.ag-progress-bar li' ).index( $content.find( '.ag-progress-bar .active' ) ),
+			$triangle = $content.find( '.triangle' ),
+			$bubble = $content.find( '.bubble-content' );
+
+		$triangle.css( 'margin-top', ( 10 + progressIndex * 23 ) + 'px' );
+		$bubble.css( 'min-height', ( 25 + 18 + progressIndex * 23 ) + 'px' );
+	},
+
+	updateContent: function() {
+		this.render( this._$html );
+	},
+
+	/**
 	 * @param {jQuery} $dialogue
 	 */
 	render: function( $dialogue ) {
 		var $content = this._nextStepOrDone(),
 			self = this,
 			$infoBox = $( '#info-box' );
+
+		this._$html = $dialogue;
 
 		$infoBox.html( this._privateUseBox.render() );
 		if( this._dialogue.getAsset().getLicence().isInGroup( 'ported' ) ) {
@@ -107,6 +141,9 @@ $.extend( AttributionDialogueView.prototype, {
 			self._submit( e, $dialogue );
 		} );
 		$content.find( '.question-mark' ).click( this._toggleQuestionMark );
+
+		$content.find( '.ag-progress-bar' ).html( this._progressBar.render() );
+		this._alignDialogueBubbleAndProgressBar( $content );
 
 		$dialogue.html( $content );
 	}

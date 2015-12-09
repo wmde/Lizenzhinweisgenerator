@@ -46,7 +46,15 @@
       "same-licence": "Unter derselben Lizenz wie das ursprüngliche Werk.",
       "licence-text": "Lizenztext",
       "download-image-link": "Bild herunterladen",
-      "file-page-link": "Bild auf Wikimedia Commons"
+      "file-page-link": "Bild auf Wikimedia Commons",
+      "done": "Fertig",
+      "typeOfUse": "Nutzungsart",
+      "author": "Autor",
+      "compilation": "Sammelwerk",
+      "editing": "Bearbeitung",
+      "change": "Veränderungen",
+      "creator": "Urheber",
+      "licence": "Lizenz"
     },
     "evaluation": {
       "by": "von",
