@@ -149,6 +149,33 @@ QUnit.test( 'online attribution shows the author the user entered', function( as
 	assert.ok( attributionContains( evaluation, 'Meh' ) );
 } );
 
+QUnit.test( 'unformatted attribution for online usage is generated correctly', function( assert ) {
+	var evaluation = newEvaluation(
+		{
+			authors: [ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Foo">Foo</a>' ) ) ],
+			licence: licences.getLicence( 'cc-by-3.0' ),
+			title: 'Bar',
+			url: 'https://commons.wikimedia.org/wiki/File:Baz.jpg'
+		},
+		{ 'typeOfUse': { type: 'online' } }
+	),
+		expectedAttribution = 'Foo (<a href="https://commons.wikimedia.org/wiki/File:Baz.jpg" target="_blank">https://commons.wikimedia.org/wiki/File:Baz.jpg</a>), „Bar“, <a href="https://creativecommons.org/licenses/by/3.0/legalcode" target="_blank">https://creativecommons.org/licenses/by/3.0/legalcode</a>';
+	assert.equal( evaluation.getUnformattedAttribution(), expectedAttribution );
+} );
+
+QUnit.test( 'unformatted attribution for print usage is same as the normal attribution', function( assert ) {
+	var evaluation = newEvaluation(
+		{
+			authors: [ new Author( $( '<a href="https://commons.wikimedia.org/wiki/User:Foo">Foo</a>' ) ) ],
+			licence: licences.getLicence( 'cc-by-3.0' ),
+			title: 'Bar',
+			url: 'https://commons.wikimedia.org/wiki/File:Baz.jpg'
+		},
+		{ 'typeOfUse': { type: 'print' } }
+	);
+	assert.equal( evaluation.getUnformattedAttribution(), evaluation.getAttribution() );
+} );
+
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
 	var printEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'print' } } ),
 		onlineEvaluation = newEvaluation( {}, { 'typeOfUse': { type: 'online' } } );

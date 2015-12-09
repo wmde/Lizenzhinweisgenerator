@@ -33,7 +33,8 @@ $.extend( DialogueEvaluationView.prototype, {
 	_showAttribution: function( e ) {
 		$( '.final-attribution .attribution-box div' ).hide();
 		$( $( this ).data( 'target' ) ).show();
-		$( '.final-attribution .show-attribution' ).toggleClass( 'active' );
+		$( '.final-attribution .show-attribution' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
 
 		e.preventDefault();
 	},
@@ -53,6 +54,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
+			unformattedAttribution: this._evaluation.getUnformattedAttribution(),
 			isPrint: this._evaluation.isPrint()
 		} ) );
 		$html.append( dosAndDontsTemplate( {
