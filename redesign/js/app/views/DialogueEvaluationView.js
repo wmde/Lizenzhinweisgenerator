@@ -60,8 +60,8 @@ $.extend( DialogueEvaluationView.prototype, {
 	_hasFlash: function() {
 		var hasFlash = false;
 		try {
-			var fo = new ActiveXObject( 'ShockwaveFlash.ShockwaveFlash' ); // jshint ignore:line
-			if( fo ) {
+			var swf = new ActiveXObject( 'ShockwaveFlash.ShockwaveFlash' ); // jshint ignore:line
+			if( swf ) {
 				hasFlash = true;
 			}
 		} catch( e ) {
