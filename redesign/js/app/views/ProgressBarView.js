@@ -37,7 +37,7 @@ $.extend( ProgressBarView.prototype, {
 	 * @private
 	 */
 	_backToStep: function( n ) {
-		if( n >= this._dialogue.currentStepIndex() ) {
+		if( n < 0 || n >= this._dialogue.currentStepIndex() ) {
 			return;
 		}
 
