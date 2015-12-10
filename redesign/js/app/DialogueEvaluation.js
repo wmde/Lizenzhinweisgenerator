@@ -88,14 +88,19 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getEditingAttribution: function() {
+		var change, creator, attribution;
 		if( this._getResult( 'editing', 'edited' ) !== 'true' ) {
 			return '';
 		}
 
-		return this._getResult( 'change', 'change' )
-			+ ' ' + Messages.t( 'evaluation.by' )
-			+ ' ' + this._getResult( 'creator', 'name' )
-			+ ', ';
+		change = this._getResult( 'change', 'change' );
+		creator = this._getResult( 'creator', 'name' );
+		attribution = change || Messages.t( 'evaluation.edited' );
+		if( creator ) {
+			attribution += ' ' + Messages.t( 'evaluation.by' ) + ' ' + creator;
+		}
+		attribution += ', ';
+		return attribution;
 	},
 
 	_getPrintAttribution: function() {
