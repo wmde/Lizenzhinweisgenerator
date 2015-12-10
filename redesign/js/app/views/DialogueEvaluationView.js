@@ -4,12 +4,13 @@ var $ = require( 'jquery' ),
 	doneTemplate = require( '../templates/Done.handlebars' ),
 	dosAndDontsTemplate = require( '../templates/DosAndDonts.handlebars' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
-	Clipboard = require( 'zeroclipboard' ),
+	ZeroClipboard = require( 'zeroclipboard' ),
+	Clipboard = require( 'clipboard' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
 	Messages = require( '../Messages' ),
 	Tracking = require( '../../tracking.js' );
 
-Clipboard.config( { swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf' } );
+ZeroClipboard.config( { swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf' } );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -75,38 +76,47 @@ $.extend( DialogueEvaluationView.prototype, {
 		return hasFlash;
 	},
 
-	_initCopyButton: function( $button ) {
+	_initIECopy: function( $button ) {
 		var self = this;
 
-		if( window.clipboardData ) { // IE
-			$button.click( function( e ) {
-				window.clipboardData.setData( 'Text', self._attributionText() );
+		$button.click( function( e ) {
+			window.clipboardData.setData( 'Text', self._attributionText() );
+			self._blinkCopyButton( $button );
+
+			e.preventDefault();
+			self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+		} );
+	},
+
+	_initFlashCopy: function( $button ) {
+		var self = this,
+			clipboard = new ZeroClipboard( $button );
+
+		clipboard.on( 'copy', function( e ) {
+			self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+			self._copyAttribution( e, $button );
+		} );
+	},
+
+	_initJSCopy: function( $button ) {
+		var self = this;
+
+		new Clipboard( '#' + $button.attr( 'id' ), { // jshint ignore:line
+			text: function() {
+				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
 				self._blinkCopyButton( $button );
+				return self._attributionText();
+			} // TODO: show a hint in case this fails
+		} );
+	},
 
-				e.preventDefault();
-				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-			} );
-		} else if( document.queryCommandSupported( 'copy' ) ) { // execCommand js
-			$button.click( function( e ) {
-				var $textarea = $( '#js-copy' );
-				$textarea.val( self._attributionText() );
-				$textarea.show();
-				$textarea.select();
-				document.execCommand( 'copy' );
-				$textarea.hide();
-				self._blinkCopyButton( $( this ) );
-
-				e.preventDefault();
-				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-			} );
+	_initCopyButton: function( $button ) {
+		if( window.clipboardData ) { // IE
+			this._initIECopy( $button );
 		} else if( this._hasFlash() ) { // flash
-			var clipboard = new Clipboard( $button );
-			clipboard.on( 'copy', function( e ) {
-				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-				self._copyAttribution( e, $button );
-			} );
-		} else { // nothing
-			$button.hide();
+			this._initFlashCopy( $button );
+		} else { // JS with hint when copying fails
+			this._initJSCopy( $button );
 		}
 	},
 
