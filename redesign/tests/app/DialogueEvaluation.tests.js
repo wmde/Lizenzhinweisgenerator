@@ -98,6 +98,52 @@ QUnit.test( 'attribution contains editing information if it was edited', functio
 	assert.ok( attributionContains( evaluation, 'zugeschnitten von Meh, ' + licence.getUrl() ) );
 } );
 
+QUnit.test( 'attribution contains default change name if asset was edited but no change description has been provided', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-3.0' ),
+		evaluation = newEvaluation(
+			{},
+			{
+				'typeOfUse': { type: 'print' },
+				editing: { edited: 'true' },
+				licence: { licence: licence.getId() },
+				creator: { name: 'Meh' }
+			}
+		);
+
+	assert.ok( attributionContains( evaluation, Messages.t( 'evaluation.edited' ) + ' ' + Messages.t( 'evaluation.by' ) + ' Meh, ' + licence.getUrl() ) );
+} );
+
+QUnit.test( 'attribution contains only change name if asset was edited but maker of changes has not been provided', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-3.0' ),
+		evaluation = newEvaluation(
+			{},
+			{
+				'typeOfUse': { type: 'print' },
+				editing: { edited: 'true' },
+				licence: { licence: licence.getId() },
+				change: { change: 'zugeschnitten' }
+			}
+		);
+
+	assert.ok( attributionContains( evaluation, 'zugeschnitten, ' + licence.getUrl() ) );
+	assert.notOk( attributionContains( evaluation, ' ' + Messages.t( 'evaluation.by' ) + ' ' ) );
+} );
+
+QUnit.test( 'attribution contains only change name if asset was edited but no change description nor author of changes have been provided', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-3.0' ),
+		evaluation = newEvaluation(
+			{},
+			{
+				'typeOfUse': { type: 'print' },
+				editing: { edited: 'true' },
+				licence: { licence: licence.getId() }
+			}
+		);
+
+	assert.ok( attributionContains( evaluation, Messages.t( 'evaluation.edited' ) + ', ' + licence.getUrl() ) );
+	assert.notOk( attributionContains( evaluation, ' ' + Messages.t( 'evaluation.by' ) + ' ' ) );
+} );
+
 QUnit.test( 'online attribution contains author\'s html', function( assert ) {
 	var authorUrl = 'https://commons.wikimedia.org/wiki/User:Foo',
 		author = 'Foo',
