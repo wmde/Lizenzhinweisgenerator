@@ -99,14 +99,29 @@ $.extend( DialogueEvaluationView.prototype, {
 	},
 
 	_initJSCopy: function( $button ) {
-		var self = this;
+		var self = this,
+			clipboard = new Clipboard( '#' + $button.attr( 'id' ), {
+				target: function() {
+					self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+					return $( '.attribution-box > div:visible' )[ 0 ];
+				}
+			} );
 
-		new Clipboard( '#' + $button.attr( 'id' ), { // jshint ignore:line
-			text: function() {
-				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-				self._blinkCopyButton( $button );
-				return self._attributionText();
-			} // TODO: show a hint in case this fails
+		clipboard.on( 'error', function() {
+			$button
+				.tooltip( {
+					title: Messages.t( 'evaluation.copy-hint' ),
+					trigger: 'manual'
+				} )
+				.tooltip( 'show' );
+
+			setTimeout( function() {
+				$button.tooltip( 'hide' );
+			}, 3000 );
+		} );
+		clipboard.on( 'success', function( e ) {
+			self._blinkCopyButton( $button );
+			e.clearSelection();
 		} );
 	},
 
