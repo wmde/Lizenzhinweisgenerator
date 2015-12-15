@@ -155,7 +155,7 @@ $.extend( FileForm.prototype, {
 	_showAsset: function( asset ) {
 		var self = this;
 
-		asset.getImageInfo( 400 )
+		asset.getImageInfo( 300 )
 			.done( function( imageInfo ) {
 				$( '.dialogue-screen' ).remove();
 				var $dialogueScreen = $( '<div class="dialogue-screen"/>' );

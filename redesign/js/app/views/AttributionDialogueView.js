@@ -111,8 +111,8 @@ $.extend( AttributionDialogueView.prototype, {
 			$triangle = $content.find( '.triangle' ),
 			$bubble = $content.find( '.bubble-content' );
 
-		$triangle.css( 'margin-top', ( 10 + progressIndex * 23 ) + 'px' );
-		$bubble.css( 'min-height', ( 25 + 18 + progressIndex * 23 ) + 'px' );
+		$triangle.css( 'margin-top', ( 12 + progressIndex * 21 ) + 'px' );
+		$bubble.css( 'min-height', ( 27 + 18 + progressIndex * 21 ) + 'px' );
 	},
 
 	updateContent: function() {
