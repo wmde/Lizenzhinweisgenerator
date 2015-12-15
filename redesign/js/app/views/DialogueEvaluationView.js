@@ -4,10 +4,13 @@ var $ = require( 'jquery' ),
 	doneTemplate = require( '../templates/Done.handlebars' ),
 	dosAndDontsTemplate = require( '../templates/DosAndDonts.handlebars' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
+	ZeroClipboard = require( 'zeroclipboard' ),
 	Clipboard = require( 'clipboard' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
 	Messages = require( '../Messages' ),
 	Tracking = require( '../../tracking.js' );
+
+ZeroClipboard.config( { swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf' } );
 
 /**
  * @param {DialogueEvaluation} evaluation
@@ -39,18 +42,102 @@ $.extend( DialogueEvaluationView.prototype, {
 		e.preventDefault();
 	},
 
-	_copyAttribution: function( trigger ) {
-		$( trigger ).addClass( 'flash' );
+	_attributionText: function() {
+		return $( '.attribution-box > div:visible' ).text().trim();
+	},
+
+	_copyAttribution: function( event, $button ) {
+		event.clipboardData.setData( 'text/plain', this._attributionText() );
+		this._blinkCopyButton( $button );
+	},
+
+	_blinkCopyButton: function( $button ) {
+		$button.addClass( 'flash' );
 		window.setTimeout( function() {
-			$( trigger ).removeClass( 'flash' );
+			$button.removeClass( 'flash' );
 		}, 800 );
-		return $( '.attribution-box > div:visible' ).text();
+	},
+
+	_hasFlash: function() {
+		var hasFlash = false;
+		try {
+			var swf = new ActiveXObject( 'ShockwaveFlash.ShockwaveFlash' ); // jshint ignore:line
+			if( swf ) {
+				hasFlash = true;
+			}
+		} catch( e ) {
+			if( navigator.mimeTypes
+				&& navigator.mimeTypes[ 'application/x-shockwave-flash' ] !== undefined
+				&& navigator.mimeTypes[ 'application/x-shockwave-flash' ].enabledPlugin ) {
+				hasFlash = true;
+			}
+		}
+
+		return hasFlash;
+	},
+
+	_initIECopy: function( $button ) {
+		var self = this;
+
+		$button.click( function( e ) {
+			window.clipboardData.setData( 'Text', self._attributionText() );
+			self._blinkCopyButton( $button );
+
+			e.preventDefault();
+			self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+		} );
+	},
+
+	_initFlashCopy: function( $button ) {
+		var self = this,
+			clipboard = new ZeroClipboard( $button );
+
+		clipboard.on( 'copy', function( e ) {
+			self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+			self._copyAttribution( e, $button );
+		} );
+	},
+
+	_initJSCopy: function( $button ) {
+		var self = this,
+			clipboard = new Clipboard( '#' + $button.attr( 'id' ), {
+				target: function() {
+					self._tracking.trackEvent( 'Button', 'CopyAttribution' );
+					return $( '.attribution-box > div:visible' )[ 0 ];
+				}
+			} );
+
+		clipboard.on( 'error', function() {
+			$button
+				.tooltip( {
+					title: Messages.t( 'evaluation.copy-hint' ),
+					trigger: 'manual'
+				} )
+				.tooltip( 'show' );
+
+			setTimeout( function() {
+				$button.tooltip( 'hide' );
+			}, 3000 );
+		} );
+		clipboard.on( 'success', function( e ) {
+			self._blinkCopyButton( $button );
+			e.clearSelection();
+		} );
+	},
+
+	_initCopyButton: function( $button ) {
+		if( window.clipboardData ) { // IE
+			this._initIECopy( $button );
+		} else if( this._hasFlash() ) { // flash
+			this._initFlashCopy( $button );
+		} else { // JS with hint when copying fails
+			this._initJSCopy( $button );
+		}
 	},
 
 	render: function() {
 		var $html = $( doneTemplate() ),
-			dosAndDonts = this._evaluation.getDosAndDonts(),
-			self = this;
+			dosAndDonts = this._evaluation.getDosAndDonts();
 
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
@@ -80,12 +167,8 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
-		new Clipboard( '#copy-attribution', { // jshint ignore:line
-			text: function( trigger ) {
-				self._tracking.trackEvent( 'Button', 'CopyAttribution' );
-				return self._copyAttribution( trigger );
-			}
-		} );
+
+		this._initCopyButton( $html.find( '#copy-attribution' ) );
 
 		return $html;
 	}

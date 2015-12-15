@@ -31,6 +31,7 @@
     "justifiedGallery": "git+https://github.com/miromannino/Justified-Gallery.git#60d253d6963750db2507571612ae0c2d7c2f970d",
     "node-polyglot": "^0.4.3",
     "piwik": "^1.0.4",
-    "scrollmagic": "^2.0.5"
+    "scrollmagic": "^2.0.5",
+    "zeroclipboard": "^2.2.0"
   }
 }
