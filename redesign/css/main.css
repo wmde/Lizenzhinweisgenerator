@@ -279,7 +279,8 @@ a:hover {
 }
 .bottom-menu li a {
   display: block;
-  padding: 10px 15px;
+  color: #fff;
+  padding: 12px 15px;
 }
 #wikimedia-logo {
   width: 118px;
