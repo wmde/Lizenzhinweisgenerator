@@ -75,9 +75,9 @@ $.extend( AttributionDialogueView.prototype, {
 		this._dialogue.currentStep().complete( this._formValuesToObj(
 			$dialogue.find( 'form' ).serializeArray()
 		) );
-		$dialogue.animate( { opacity: 0 }, 500, function() {
+		$dialogue.find( '.animated-content' ).animate( { opacity: 0 }, 500, function() {
 			self.render( $dialogue );
-			$dialogue.animate( { opacity: 1 }, 500 );
+			$dialogue.find( '.animated-content' ).animate( { opacity: 1 }, 500 );
 		} );
 		e.preventDefault();
 	},
