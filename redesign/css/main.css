@@ -665,3 +665,15 @@ a:hover {
 .ag-progress-bar .completed a, .ag-progress-bar .completed a:hover {
   color: #97b314;
 }
+.ag-progress-bar li:first-child .bullet-border, .ag-progress-bar li:last-child .bullet-border {
+  position: relative;
+  height: 10px;
+}
+.ag-progress-bar li:first-child .bullet-border {
+  vertical-align: bottom;
+}
+.ag-progress-bar li:first-child .bullet {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+}
