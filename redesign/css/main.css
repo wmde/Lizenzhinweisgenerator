@@ -632,7 +632,6 @@ a:hover {
   margin-left: -5px;
   background: #fff;
   border-radius: 100%;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
 .ag-progress-bar li:not(.sub) + .sub .bullet-border {
@@ -656,12 +655,14 @@ a:hover {
 }
 .ag-progress-bar .active .bullet {
   background-color: rgba(0, 0, 0, 0.75);
+  border: 0;
 }
 .ag-progress-bar .active a, .ag-progress-bar .active a:hover {
   color: rgba(0, 0, 0, 0.75);
 }
 .ag-progress-bar .completed .bullet {
   background-color: #97b314;
+  border: 0;
 }
 .ag-progress-bar .completed a, .ag-progress-bar .completed a:hover {
   color: #97b314;
