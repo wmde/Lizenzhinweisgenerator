@@ -146,6 +146,7 @@ $.extend( AttributionDialogueView.prototype, {
 		this._alignDialogueBubbleAndProgressBar( $content );
 
 		$dialogue.html( $content );
+		$content.find( 'input:text' ).focus();
 	}
 } );
 
