@@ -103,8 +103,18 @@ $.extend( DialogueEvaluation.prototype, {
 		return attribution;
 	},
 
+	_getAuthorAttribution: function() {
+		var attributionText = this._asset.getAttribution() && this._asset.getAttribution().text().trim(),
+			notEmpty = attributionText && attributionText.length > 0;
+
+		if( this.isPrint() ) {
+			return notEmpty && attributionText;
+		}
+		return notEmpty && ( this._asset.getAttribution().html() || attributionText );
+	},
+
 	_getPrintAttribution: function() {
-		var attribution = this._getAuthor() + ' '
+		var attribution = ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
 			+ '(' + this._asset.getUrl() + '), ';
 		if( !this._asset.getLicence().isInGroup( 'cc4' ) ) {
 			attribution += '„' + this._asset.getTitle() + '“' + ', ';
@@ -115,14 +125,14 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlAttribution: function() {
-		return this._getHtmlAuthor() + ', '
+		return ( this._getAuthorAttribution() || this._getHtmlAuthor() ) + ', '
 			+ this._getHtmlTitle() + ', '
 			+ this._getEditingAttribution()
 			+ this._getHtmlLicence();
 	},
 
 	_getAttributionAsTextWithLinks: function() {
-		return this._getAuthor() + ' '
+		return ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
 			+ '(' + this._asset.getUrl() + '), '
 			+ '„' + this._asset.getTitle() + '“' + ', '
 			+ this._getEditingAttribution()
@@ -130,7 +140,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	getAttribution: function() {
-		if( this._getResult( 'typeOfUse', 'type' ) === 'print' ) {
+		if( this.isPrint() ) {
 			return this._getPrintAttribution();
 		}
 
@@ -138,7 +148,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	getPlainTextAttribution: function() {
-		if( this._getResult( 'typeOfUse', 'type' ) === 'print' || !this._asset.getLicence().isInGroup( 'cc4' ) ) {
+		if( this.isPrint() || !this._asset.getLicence().isInGroup( 'cc4' ) ) {
 			return this._getPrintAttribution();
 		}
 		return this._getAttributionAsTextWithLinks();

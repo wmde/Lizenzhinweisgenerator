@@ -18,7 +18,8 @@ function newEvaluation( asset, dialogueData ) {
 			asset.licence || licences.getLicence( 'cc' ),
 			asset.title || '',
 			asset.authors || [ '' ],
-			asset.url || ''
+			asset.url || '',
+			asset.attribution || $( '<div/>' )
 		),
 		dialogueData || {}
 	);
@@ -220,6 +221,12 @@ QUnit.test( 'plain text attribution for print usage is the same as the normal at
 		{ 'typeOfUse': { type: 'print' } }
 	);
 	assert.equal( evaluation.getPlainTextAttribution(), evaluation.getAttribution() );
+} );
+
+QUnit.test( 'attribution should contain an alternative attribution if the author provided one', function( assert ) {
+	var evaluation = newEvaluation( { authors: [ 'Meh' ], attribution: $( '<div>Meehh</div>' ) }, {} );
+	assert.notOk( attributionContains( evaluation, 'Meh' ) );
+	assert.ok( attributionContains( evaluation, 'Meehh' ) );
 } );
 
 QUnit.test( 'has type of use information in the DOs section', function( assert ) {
