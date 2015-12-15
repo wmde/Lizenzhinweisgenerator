@@ -20,6 +20,9 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
 .modal-backdrop {
   background-color: #fff;
 }
+.ag-modal .modal-dialog {
+  box-shadow: 2px 2px #4b590a;
+}
 .ag-modal .modal-content {
   border: 0;
   border-radius: 0;
