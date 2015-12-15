@@ -352,10 +352,12 @@ a:hover {
 .dialogue-screen .dialogue {
   margin-left: 40vw;
   width: 50vw;
+  font-size: 12pt;
 }
 .dialogue-bubble h2 {
   color: #4b590a;
-  font-size: 14.5pt;
+  font-size: 12pt;
+  font-weight: bold;
   margin-top: 0;
   border-bottom: 1px solid #4b590a;
 }
@@ -373,7 +375,7 @@ a:hover {
   background: #97b314;
   border-radius: 2px;
   padding: 10px;
-  margin: 0 25px 0 210px;
+  margin: 0 0 0 175px;
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
@@ -538,6 +540,7 @@ a:hover {
 }
 .dos-and-donts {
   margin-top: 40px;
+  margin-left: 15px;
   font-size: 14px;
 }
 .dos-and-donts .dos, .dos-and-donts .donts {
@@ -611,12 +614,13 @@ a:hover {
 
 .ag-progress-bar {
   float: left;
-  width: 200px;
-  padding: 10px;
+  width: 155px;
+  padding: 10px 0 0 25px;
 }
 .ag-progress-bar li {
   list-style-type: none;
-  font-size: 12pt;
+  font-size: 11pt;
+  height: 21px;
   color: rgba(0, 0, 0, 0.5);
 }
 .ag-progress-bar a, .ag-progress-bar a:hover {
