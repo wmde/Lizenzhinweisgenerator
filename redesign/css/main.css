@@ -502,7 +502,10 @@ a:hover {
   padding: 9px 4px;
 }
 .final-attribution .buttons {
-  margin: -2px 0 0 12px;
+  margin: -1px 0 0 12px;
+}
+.final-attribution .buttons button {
+  vertical-align: top;
 }
 .final-attribution button.green-btn {
   border: 1px solid #97b314;
