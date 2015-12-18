@@ -1,146 +1,99 @@
-/**
- * @licence GNU GPL v3
- * @author snater.com < wikimedia@snater.com >
- */
-( function( QUnit ) {
 'use strict';
 
-define( ['app/LicenceStore', 'app/Licence'], function( LicenceStore, Licence ) {
+QUnit.module( 'Licence Detection' );
 
-	QUnit.module( 'LicenceStore' );
+var $ = require( 'jquery' ),
+	LicenceStore = require( '../../js/app/LicenceStore' ),
+	licences = new LicenceStore( require( '../../js/app/LICENCES' ) );
 
-	var testSet = [
-		{
-			licence: new Licence( 'PD', ['pd'], 'PD-text', /^(PD|Public domain)\b/i ),
-			detectable: [
-				['PD NASA']
-			]
-		}, {
-			licence: new Licence( 'cc-by-3.0', ['cc', 'cc3'], 'CC BY 3.0', /^CC-BY-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-3.0 link' ),
-			detectable: [
-				['CC-BY-SA-3.0', 'CC-BY-3.0']
-			]
-		}, {
-			licence: new Licence( 'cc-by-sa-3.0-de', ['cc', 'cc3'], 'CC BY-SA 3.0 DE', 'cc-by-3.0-de link' ),
-			detectable: [
-				['CC-BY-SA-3.0-DE']
-			]
-		}, {
-			licence: new Licence( 'cc-by-sa-3.0', ['cc', 'cc3'], 'CC BY-SA 3.0', /^CC-BY-SA-3.0(([^\-]+.+|-migrated)*)?$/i, 'cc-by-sa-3.0 link' ),
-			detectable: [
-				['CC-BY-SA-3.0', 'some other string'],
-				['some other string', 'CC-BY-SA-3.0'],
-				['CC-BY-SA-2.0', 'CC-BY-SA-3.0,2.5,2.0,1.0']
-			]
-		}
-	];
-
-	/**
-	 * @param {Object} testSet
-	 * @return {Licence[]}
-	 */
-	function extractLicences( testSet ) {
-		var licences = [];
-		for( var i = 0; i < testSet.length; i++ ) {
-			licences.push( testSet[i].licence );
-		}
-		return licences;
-	}
-
-	QUnit.test( 'Instantiation & getLicences()', function( assert ) {
-		var licenceStore = new LicenceStore(),
-			licences = extractLicences( testSet );
-
-		assert.ok(
-			licenceStore.getLicences(),
-			'Instantiated empty licence store.'
-		);
-
-		licenceStore = new LicenceStore( licences );
-
-		assert.equal(
-			licenceStore.getLicences().length,
-			licences.length,
-			'Instantiated licence store with ' + licences.length + ' licences.'
-		);
-	} );
-
-	QUnit.test( 'appendLicence()', function( assert ) {
-		var licenceStore = new LicenceStore(),
-			licences = extractLicences( testSet );
-
-		assert.ok(
-			licenceStore.getLicences(),
-			'Instantiated empty licence store.'
-		);
-
-		licenceStore.appendLicence( licences[0] );
-
-		assert.equal(
-			licenceStore.getLicences().length,
-			1,
-			'Appended a licence.'
-		);
-
-		assert.equal(
-			licenceStore.getLicence( licences[0].getId() ),
-			licences[0],
-			'Validated appended licence.'
-		);
-
-		assert.throws(
-			function() {
-				licenceStore.append( 'invalid' );
-			},
-			'Throwing an error when trying to append an invalid licence.'
-		);
-	} );
-
-	QUnit.test( 'getLicence()', function( assert ) {
-		var licences = extractLicences( testSet ),
-			licenceStore = new LicenceStore( licences ),
-			maxIndex = licences.length - 1;
-
-		assert.equal(
-			licenceStore.getLicence( licences[maxIndex].getId() ),
-			licences[maxIndex],
-			'Retrieved expected licence from the store.'
-		);
-
-		assert.strictEqual(
-			licenceStore.getLicence( 'non-existent id' ),
-			null,
-			'Trying to get a licence with an id not registered returns "null".'
-		);
-	} );
-
-	QUnit.test( 'detectLicence()', function( assert ) {
-		var licenceStore = new LicenceStore(),
-			detectables = [];
-
-		for( var i = 0; i < testSet.length; i++ ) {
-			licenceStore.appendLicence( testSet[i].licence );
-			detectables.push( testSet[i].detectable );
-		}
-
-		for( i = 0; i < detectables.length; i++ ) {
-			for( var j = 0; j < detectables[i].length; j++ ) {
-				assert.equal(
-					licenceStore.detectLicence( detectables[i][j] ),
-					testSet[i].licence,
-					'Detected licence "' + testSet[i].licence.getId() + '" on "' + detectables[i][j]
-						+ '"'
-				);
-			}
-		}
-
-		assert.equal(
-			licenceStore.detectLicence( 'nothing to detect' ),
-			null,
-			'Returning "null" when no licence can be detected.'
-		);
-	} );
-
+QUnit.test( 'detects Public Domain', function( assert ) {
+	assert.equal( licences.detectLicence( 'PD-self' ).getName(), 'Public Domain' );
 } );
 
-}( QUnit ) );
+QUnit.test( 'detects CC BY 1.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-1.0' ).getName(), 'CC BY 1.0' );
+} );
+
+QUnit.test( 'detects CC BY 2.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-2.0' ).getName(), 'CC BY 2.0' );
+} );
+
+QUnit.test( 'detects CC BY 2.5', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-2.5' ).getName(), 'CC BY 2.5' );
+} );
+
+QUnit.test( 'detects CC BY SA 2.5', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-2.5' ).getName(), 'CC BY-SA 2.5' );
+} );
+
+QUnit.test( 'detects CC BY SA 2.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-2.0' ).getName(), 'CC BY-SA 2.0' );
+} );
+
+QUnit.test( 'detects CC BY SA 1.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-1.0' ).getName(), 'CC BY-SA 1.0' );
+	assert.equal( licences.detectLicence( 'cc-by-sa' ).getName(), 'CC BY-SA 1.0' );
+} );
+
+QUnit.test( 'detects ported CC BY-SA 1.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-1.0-nl' ).getId(), 'cc-by-sa-1.0-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY 1.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-1.0-nl' ).getId(), 'cc-by-1.0-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY 2.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-2.0-at' ).getId(), 'cc-by-2.0-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY 2.5', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-2.5-au' ).getId(), 'cc-by-2.5-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY 3.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-3.0-hk' ).getId(), 'cc-by-3.0-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY-SA 2.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-2.0-uk' ).getId(), 'cc-by-sa-2.0-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY-SA 2.5', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-2.5-it' ).getId(), 'cc-by-sa-2.5-ported' );
+} );
+
+QUnit.test( 'detects ported CC BY-SA 3.0', function( assert ) {
+	assert.equal( licences.detectLicence( 'Cc-by-sa-3.0-tw' ).getId(), 'cc-by-sa-3.0-ported' );
+} );
+
+QUnit.test( 'no compatible licences for cc by-sa 4.0', function( assert ) {
+	assert.equal( licences.findCompatibilities( 'cc-by-sa-4.0' ).length, 0 );
+} );
+
+QUnit.test( 'compatible licences', function( assert ) {
+	var compatibleLicences = {
+		'cc-by-sa-3.0': [ 'cc-by-sa-3.0-de', 'cc-by-sa-4.0' ],
+		'cc-by-sa-3.0-de': [ 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-2.5': [ 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-2.0': [ 'cc-by-sa-2.0-de', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-2.0-de': [ 'cc-by-sa-2.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-sa-1.0': [ 'cc-by-sa-2.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0', 'cc-by-sa-4.0' ],
+		'cc-by-4.0': [ 'cc-by-sa-4.0' ],
+		'cc-by-3.0': [ 'cc-by-3.0-de', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ],
+		'cc-by-3.0-de': [ 'cc-by-3.0', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ],
+		'cc-by-2.5': [ 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.5', 'cc-by-sa-3.0-de', 'cc-by-sa-3.0' ],
+		'cc-by-2.0': [ 'cc-by-2.0-de', 'cc-by-2.5', 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-4.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0' ],
+		'cc-by-2.0-de': [ 'cc-by-2.0', 'cc-by-2.5', 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-sa-2.0-de', 'cc-by-sa-2.0' ],
+		'cc-by-1.0': [ 'cc-by-2.0-de', 'cc-by-2.0', 'cc-by-2.5', 'cc-by-3.0-de', 'cc-by-3.0', 'cc-by-sa-1.0' ]
+	};
+
+	$.each( compatibleLicences, function( input, compatibles ) {
+		var actual = licences.findCompatibilities( input );
+		assert.equal( actual.length, compatibles.length );
+
+		$.each( actual, function( _, licence ) {
+			assert.ok( compatibles.indexOf( licence.getId() ) !== -1 );
+		} );
+	} );
+} );

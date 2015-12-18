@@ -2,40 +2,38 @@
  * @licence GNU GPL v3
  * @author Leszek Manicki < leszek.manicki@wikimedia.de >
  */
-( function( QUnit ) {
+
 'use strict';
 
-define( [
-	'jquery', 'app/Author', 'tests/LocalApi', 'app/WikiAsset', 'tests/assets'
-],
-function(
-	$, Author, LocalApi, WikiAsset, testAssets
-) {
+var LocalApi = require( '../LocalApi' ),
+	$ = require( 'jquery' ),
+	testAssets = require( '../assets' ),
+	WikiAsset = require( '../../js/app/WikiAsset' );
 
-	QUnit.module( 'Api local' );
+QUnit.module( 'Api local' );
 
-	var api = new LocalApi( 'fixtures' );
+var api = new LocalApi( 'fixtures' );
 
-	/**
-	 * Returns a nodes HTML as plain text.
-	 *
-	 * @param {jQuery|null} $node
-	 * @return {string|null}
-	 */
-	function getHtmlText( $node ) {
-		return $node ? $( '<div/>' ).append( $node ).html() : null;
-	}
+/**
+ * Returns a nodes HTML as plain text.
+ *
+ * @param {jQuery|null} $node
+ * @return {string|null}
+ */
+function getHtmlText( $node ) {
+	return $node ? $( '<div/>' ).append( $node ).html() : null;
+}
 
-	QUnit.test( 'Check scraped asset', function( assert ) {
+QUnit.test( 'Check scraped asset', function( assert ) {
 
-		$.each( testAssets, function( filename, testAsset ) {
-			if( !( testAsset instanceof WikiAsset ) ) {
-				return true;
-			}
+	$.each( testAssets, function( filename, testAsset ) {
+		if( !( testAsset instanceof WikiAsset ) ) {
+			return true;
+		}
 
-			QUnit.stop();
+		QUnit.stop();
 
-			api.getAsset( 'File:' + filename, testAsset.getWikiUrl() )
+		api.getAsset( 'File:' + filename, testAsset.getWikiUrl() )
 			.done( function( asset ) {
 
 				assert.equal(
@@ -54,7 +52,7 @@ function(
 
 					assert.equal(
 						author.getText(),
-						testAsset.getAuthors()[i].getText(),
+						testAsset.getAuthors()[ i ].getText(),
 						'"' + testAsset.getFilename() + '": Author text "' + author.getText()
 						+ '" matches.'
 					);
@@ -63,7 +61,7 @@ function(
 
 					assert.equal(
 						authorHtml,
-						getHtmlText( testAsset.getAuthors()[i].getHtml() ),
+						getHtmlText( testAsset.getAuthors()[ i ].getHtml() ),
 						'"' + testAsset.getFilename() + '": Author html "' + authorHtml
 						+ '" matches.'
 					);
@@ -101,9 +99,5 @@ function(
 				QUnit.start();
 			} );
 
-		} );
 	} );
-
 } );
-
-}( QUnit ) );
