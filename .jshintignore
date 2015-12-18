@@ -2,4 +2,4 @@ lib/
 **/node_modules
 **/*.min.js
 **/*.bundle.js
-redesign/tests/array-find.js
+tests/array-find.js

@@ -7,10 +7,9 @@ sudo: false
 
 install:
   - travis_retry npm install qunit-phantomjs-runner jshint jscs
-  - cd redesign && npm install && npm run build-test && cd -
+  - npm install && npm run build-test
 
 script:
   - phantomjs ./node_modules/qunit-phantomjs-runner/runner.js ./tests/index.html
-  - phantomjs ./node_modules/qunit-phantomjs-runner/runner.js ./redesign/tests/index.html
   - ./node_modules/jshint/bin/jshint .
   - ./node_modules/jscs/bin/jscs .
