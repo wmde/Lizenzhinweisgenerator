@@ -3,39 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>QUnit tests</title>
-	<link rel="stylesheet" href="../lib/qunit/qunit-1.18.0.css">
+	<link rel="stylesheet" href="qunit-1.18.0.css">
 </head>
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
-<script src="../lib/qunit/qunit-1.18.0.js"></script>
-<script src="../dojoConfig.js"></script>
-<script>
-	( function( dojoConfig, QUnit ) {
-		QUnit.config.autoload = false;
-		QUnit.config.autostart = false;
-
-		dojoConfig.baseUrl = '../';
-		dojoConfig.locale = 'de';
-	}( dojoConfig, QUnit ) );
-</script>
-<script src="../lib/dojo/dojo.js"></script>
-<script>
-	( function( require ) {
-		require( [
-			'tests/app/Api.local.tests',
-			'tests/app/AttributionGenerator.tests',
-			'tests/app/InputHandler.local.tests',
-			'tests/app/Questionnaire.tests',
-			'tests/app/QuestionnairePage.tests',
-			'tests/app/LicenceStore.tests',
-			'tests/app/WikiAsset.tests'
-		], function() {
-			QUnit.load();
-			QUnit.start();
-		} );
-	}( require ) );
-</script>
-
+<script src="tests.bundle.js"></script>
 </body>
 </html>

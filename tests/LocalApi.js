@@ -2,9 +2,11 @@
  * @licence GNU GPL v3
  * @author Leszek Manicki < leszek.manicki@wikimedia.de >
  */
-define( ['jquery', 'app/Api', 'dojo/_base/declare', 'app/AjaxError'],
-	function( $, Api, declare, AjaxError ) {
 'use strict';
+
+var $ = require( 'jquery' ),
+	Api = require( '../js/app/Api' ),
+	ApplicationError = require( '../js/app/ApplicationError' );
 
 /**
  * A mock of Commons API handler (@see Api).
@@ -13,11 +15,11 @@ define( ['jquery', 'app/Api', 'dojo/_base/declare', 'app/AjaxError'],
  *
  * @param {string} dataDirectory Directory containing API response data
  */
-var LocalApi = declare( Api, {
-	constructor: function( dataDirectory ) {
-		this._dataDirectory = dataDirectory;
-	},
+var LocalApi = function( dataDirectory ) {
+	this._dataDirectory = dataDirectory;
+};
 
+$.extend( LocalApi.prototype, Api.prototype, {
 	/**
 	 * @type {string}
 	 */
@@ -34,7 +36,7 @@ var LocalApi = declare( Api, {
 	 *         Resolved parameters:
 	 *         - {Object[]}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_query: function( title, property, wikiUrl, params ) {
 		return this._readFile( this._getLocalFilename( title, property, params ) );
@@ -53,7 +55,7 @@ var LocalApi = declare( Api, {
 		var subdirectory;
 
 		if( $.isArray( title ) ) {
-			return this._getLocalFilename( title[0], property, params );
+			return this._getLocalFilename( title[ 0 ], property, params );
 		}
 
 		title = this._escapeUrlCharacters( title );
@@ -96,7 +98,7 @@ var LocalApi = declare( Api, {
 			if( params.iiprop === 'mediatype|url' ) {
 				return 'metadata';
 			}
-			if( params.iiurlwidth === 300 ) {
+			if( params.iiurlwidth === 300 || params.iiurlheight === 300 ) {
 				return 'imageinfo';
 			}
 		}
@@ -113,23 +115,21 @@ var LocalApi = declare( Api, {
 	 *         Resolved parameters:
 	 *         - {Object[]}
 	 *         Rejected parameters:
-	 *         - {AjaxError}
+	 *         - {ApplicationError}
 	 */
 	_readFile: function( filename ) {
 		var deferred = $.Deferred();
 
 		$.getJSON( filename )
-		.done( function( data ) {
-			deferred.resolve( data );
-		} )
-		.fail( function() {
-			deferred.reject( new AjaxError( 'file-not-exist', {} ) );
-		} );
+			.done( function( data ) {
+				deferred.resolve( data );
+			} )
+			.fail( function() {
+				deferred.reject( new ApplicationError( 'file-not-exist', {} ) );
+			} );
 
 		return deferred.promise();
 	}
 } );
 
-return LocalApi;
-
-} );
+module.exports = LocalApi;

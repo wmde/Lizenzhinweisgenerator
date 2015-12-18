@@ -2,41 +2,39 @@
  * @licence GNU GPL v3
  * @author snater.com < wikimedia@snater.com >
  */
-( function( QUnit ) {
+
 'use strict';
 
-define( [
-	'jquery', 'app/Api', 'app/Author', 'app/WikiAsset', 'tests/assets'
-],
-function(
-	$, Api, Author, WikiAsset, testAssets
-) {
+var $ = require( 'jquery' ),
+	Api = require( '../../js/app/Api' ),
+	testAssets = require( '../assets' ),
+	WikiAsset = require( '../../js/app/WikiAsset' );
 
-	QUnit.module( 'Api' );
+QUnit.module( 'Api' );
 
-	var api = new Api( 'https://commons.wikimedia.org/' );
+var api = new Api( 'https://commons.wikimedia.org/' );
 
-	/**
-	 * Returns a nodes HTML as plain text.
-	 *
-	 * @param {jQuery|null} $node
-	 * @return {string|null}
-	 */
-	function getHtmlText( $node ) {
-		return $node ? $( '<div/>' ).append( $node ).html() : null;
-	}
+/**
+ * Returns a nodes HTML as plain text.
+ *
+ * @param {jQuery|null} $node
+ * @return {string|null}
+ */
+function getHtmlText( $node ) {
+	return $node ? $( '<div/>' ).append( $node ).html() : null;
+}
 
-	QUnit.test( 'Check scraped asset', function( assert ) {
+QUnit.test( 'Check scraped asset', function( assert ) {
 
-		$.each( testAssets, function( filename, testAsset ) {
+	$.each( testAssets, function( filename, testAsset ) {
 
-			if( !( testAsset instanceof WikiAsset ) ) {
-				return true;
-			}
+		if( !( testAsset instanceof WikiAsset ) ) {
+			return true;
+		}
 
-			QUnit.stop();
+		QUnit.stop();
 
-			api.getAsset( 'File:' + filename, testAsset.getWikiUrl() )
+		api.getAsset( 'File:' + filename, testAsset.getWikiUrl() )
 			.done( function( asset ) {
 
 				assert.equal(
@@ -55,18 +53,18 @@ function(
 
 					assert.equal(
 						author.getText(),
-						testAsset.getAuthors()[i].getText(),
+						testAsset.getAuthors()[ i ].getText(),
 						'"' + testAsset.getFilename() + '": Author text "' + author.getText()
-							+ '" matches.'
+						+ '" matches.'
 					);
 
 					var authorHtml = getHtmlText( author.getHtml() );
 
 					assert.equal(
 						authorHtml,
-						getHtmlText( testAsset.getAuthors()[i].getHtml() ),
+						getHtmlText( testAsset.getAuthors()[ i ].getHtml() ),
 						'"' + testAsset.getFilename() + '": Author html "' + authorHtml
-							+ '" matches.'
+						+ '" matches.'
 					);
 
 				} );
@@ -102,25 +100,25 @@ function(
 				QUnit.start();
 			} );
 
-		} );
-
 	} );
 
-	QUnit.test( 'getAsset() error handling', function( assert ) {
-		var negativeTestCases = [
-			'string that is not supposed to be the name of an existing image',
-			'{invalid input}',
-			// Not in "File:" namespace:
-			'TimedText:Elephants_Dream.ogg.ca.srt'
-		];
+} );
 
-		/**
-		 * @param {string} input
-		 */
-		function testAssetErrorHandling( input ) {
-			QUnit.stop();
+QUnit.test( 'getAsset() error handling', function( assert ) {
+	var negativeTestCases = [
+		'string that is not supposed to be the name of an existing image',
+		'{invalid input}',
+		// Not in "File:" namespace:
+		'TimedText:Elephants_Dream.ogg.ca.srt'
+	];
 
-			api.getAsset( 'File:' + input )
+	/**
+	 * @param {string} input
+	 */
+	function testAssetErrorHandling( input ) {
+		QUnit.stop();
+
+		api.getAsset( 'File:' + input )
 			.done( function( parsedFilename ) {
 				assert.ok(
 					false,
@@ -135,13 +133,9 @@ function(
 			.always( function() {
 				QUnit.start();
 			} );
-		}
+	}
 
-		for( var i = 0; i < negativeTestCases.length; i++ ) {
-			testAssetErrorHandling(  negativeTestCases[i] );
-		}
-	} );
-
+	for( var i = 0; i < negativeTestCases.length; i++ ) {
+		testAssetErrorHandling( negativeTestCases[ i ] );
+	}
 } );
-
-}( QUnit ) );
