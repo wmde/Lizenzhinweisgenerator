@@ -13,7 +13,7 @@ var $ = require( 'jquery' ),
 
 QUnit.module( 'InputHandler' );
 
-var api = new LocalApi( '../../tests/fixtures' );
+var api = new LocalApi( 'fixtures' );
 
 var testCases = [
 	{
