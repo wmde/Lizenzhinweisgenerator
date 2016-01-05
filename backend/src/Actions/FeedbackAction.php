@@ -37,12 +37,12 @@ class FeedbackAction {
 		try {
 			$this->app['mailer']->send( $message );
 		} catch ( Exception $e ) {
-			$this->errors[] = 'Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuche es erneut.';
+			$this->errors[] = 'Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
 		}
 	}
 
 	private function success() {
-		return [ 'message' => 'Vielen Dank für Dein Feedback!' ];
+		return [ 'message' => 'Vielen Dank für Ihr Feedback!' ];
 	}
 
 	public function getResponse() {
