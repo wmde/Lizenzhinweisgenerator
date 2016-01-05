@@ -110,7 +110,7 @@ $.extend( DialogueEvaluation.prototype, {
 		if( this.isPrint() ) {
 			return notEmpty && attributionText;
 		}
-		return notEmpty && ( this._asset.getAttribution().html() || attributionText );
+		return notEmpty && ( $( '<div/>' ).append( this._asset.getAttribution() ).html() || attributionText );
 	},
 
 	_getPrintAttribution: function() {

@@ -112,48 +112,50 @@ $.extend( WikiAssetPage.prototype, {
 	},
 
 	/**
+	 * Extracts contents of a summary field
+	 *
+	 * @param {jQuery} $node
+	 * @return {jQuery}
+	 */
+	_scrapeSummaryField: function( $node ) {
+		var $field = this._sanitizeUrls( $node.contents() );
+
+		$field = this._flattenVcardDivs( $field );
+
+		// Remove useless wrapping nodes:
+		if( $field.length === 1 ) {
+			var nodeName = $field.get( 0 ).nodeName;
+
+			if( nodeName !== 'A' && nodeName !== '#text' ) {
+				$field = $field.contents();
+			}
+		}
+
+		// Remove "talk" link:
+		$field.each( function( i ) {
+			var $node = $( this );
+			if( this.nodeName === 'A' && $node.text() === 'talk' ) {
+				$field = $field
+					.not( $field.eq( i + 1 ) )
+					.not( $node )
+					.not( $field.eq( i - 1 ) );
+			}
+		} );
+
+		$field = this._removeUnwantedHtmlTags( $field );
+		$field = this._removeUnwantedWhiteSpace( $field );
+
+		return this._trimNodeList( $field );
+	},
+
+	/**
 	 * Extracts the author(s) from the DOM.
 	 *
 	 * @return {Author[]}
 	 */
 	_scrapeAuthors: function() {
-		var $td = this._$dom.find( '#fileinfotpl_aut' ).next(),
-			authors = [];
-
-		if( $td.length === 0 ) {
-			return authors;
-		}
-
-		var $author = this._sanitizeUrls( $td.contents() );
-
-		$author = this._flattenVcardDivs( $author );
-
-		// Remove useless wrapping nodes:
-		if( $author.length === 1 ) {
-			var nodeName = $author.get( 0 ).nodeName;
-
-			if( nodeName !== 'A' && nodeName !== '#text' ) {
-				$author = $author.contents();
-			}
-		}
-
-		// Remove "talk" link:
-		$author.each( function( i ) {
-			var $node = $( this );
-			if( this.nodeName === 'A' && $node.text() === 'talk' ) {
-				$author = $author
-					.not( $author.eq( i + 1 ) )
-					.not( $node )
-					.not( $author.eq( i - 1 ) );
-			}
-		} );
-
-		$author = this._removeUnwantedHtmlTags( $author );
-		$author = this._removeUnwantedWhiteSpace( $author );
-
-		$author = this._trimNodeList( $author );
-
-		return [ new Author( $author ) ];
+		var $td = this._$dom.find( '#fileinfotpl_aut' ).next();
+		return $td.length === 0 ? [] : [ new Author( this._scrapeSummaryField( $td ) ) ];
 	},
 
 	_flattenVcardDivs: function( $nodes ) {
@@ -241,11 +243,11 @@ $.extend( WikiAssetPage.prototype, {
 	},
 
 	/**
-	 * Extracts the attribution notice from the DOM.
+	 * Extracts the attribution notice from the licence template DOM.
 	 *
 	 * @return {jQuery|null}
 	 */
-	_scrapeAttribution: function() {
+	_scrapeAttributionFromLicenceTpl: function() {
 		var $attribution = this._$dom.find( '.licensetpl_attr' ).first();
 
 		if( $attribution.length === 0 ) {
@@ -255,6 +257,20 @@ $.extend( WikiAssetPage.prototype, {
 		var $clonedAttribution = $attribution.contents().clone();
 
 		return this._trimNodeList( this._sanitizeUrls( $clonedAttribution ) );
+	},
+
+	/**
+	 * Scrapes the attribution from its summary table field.
+	 *
+	 * @returns {jQuery}
+	 */
+	_scrapeAttributionSummaryField: function() {
+		var $td = this._$dom.find( '.commons-file-information-table td:first-child:contains(Attribution)' ).next();
+		return $td.length === 0 ? null : this._scrapeSummaryField( $td );
+	},
+
+	_scrapeAttribution: function() {
+		return this._scrapeAttributionFromLicenceTpl() || this._scrapeAttributionSummaryField();
 	}
 
 } );
