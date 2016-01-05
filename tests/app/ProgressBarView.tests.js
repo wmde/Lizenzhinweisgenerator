@@ -13,6 +13,10 @@ QUnit.test( 'should have 5 steps by default', function( assert ) {
 	assert.equal( new ProgressBarView( Helpers.newDefaultAttributionDialogue() ).render().find( 'li' ).length, 5 );
 } );
 
+QUnit.test( 'should initially not have any substeps', function( assert ) {
+	assert.equal( new ProgressBarView( Helpers.newDefaultAttributionDialogue() ).render().find( '.sub' ).length, 0 );
+} );
+
 QUnit.test( 'should have only 4 steps if the author is known', function( assert ) {
 	var asset = new Asset( '', '', null, null, [ new Author( $( 'Meh' ) ) ] ),
 		dialogue = new AttributionDialogue( asset ),
