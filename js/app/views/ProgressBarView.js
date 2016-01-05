@@ -60,7 +60,7 @@ $.extend( ProgressBarView.prototype, {
 
 					return {
 						name: 'dialogue.' + step.getName(),
-						isSubstep: i !== lastStepIndex && ( i >= 4 || allSteps.length < 8 && i >= 3 ),
+						isSubstep: i !== lastStepIndex && allSteps.length > 5 && i >= lastStepIndex - 3,
 						isActive: i === activeStep,
 						isCompleted: i < activeStep
 					};
