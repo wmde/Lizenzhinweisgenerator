@@ -24,7 +24,10 @@ var testCases = [
 			'http://upload.wikimedia.org/wikipedia/commons/8/84/Helene_Fischer_2010.jpg',
 			'http://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Helene_Fischer_2010.jpg/171px-Helene_Fischer_2010.jpg',
 			'upload.wikimedia.org/wikipedia/commons/thumb/8/84/Helene_Fischer_2010.jpg/171px-Helene_Fischer_2010.jpg',
-			'http://commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg#mediaviewer/File:Helene_Fischer_2010.jpg'
+			'http://commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg#mediaviewer/File:Helene_Fischer_2010.jpg',
+			'commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?uselang=de',
+			'https://commons.wikimedia.org/w/index.php?title=File:Helene_Fischer_2010.jpg&uselang=de',
+			'commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?foo=bar'
 		],
 		expected: {
 			file: 'File:Helene_Fischer_2010.jpg',
