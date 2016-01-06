@@ -125,6 +125,12 @@ $.extend( InputHandler.prototype, {
 			matches,
 			segments;
 
+		if( url.indexOf( 'title=' ) !== -1 ) {
+			matches = url.match( /title=([^&]+)/i );
+			return matches[ 1 ];
+		}
+		url = url.replace( /\?.+$/, '' );
+
 		key = '#mediaviewer/';
 		keyLoc = url.indexOf( key );
 
@@ -137,11 +143,6 @@ $.extend( InputHandler.prototype, {
 
 		if( keyLoc !== -1 ) {
 			return url.substr( keyLoc + key.length );
-		}
-
-		if( url.indexOf( 'title=' ) !== -1 ) {
-			matches = url.match( /title=([^&]+)/i );
-			return matches[ 1 ];
 		}
 
 		key = 'wiki/';
@@ -183,9 +184,7 @@ $.extend( InputHandler.prototype, {
 			matches = url.match( regExp1 );
 			wikiUrl = 'https://' + matches[ 1 ] + '/';
 
-			title = url.indexOf( 'title=' ) !== -1
-				? url.match( /title=([^&]+)/i )[ 1 ]
-				: this._extractPageTitle( url.replace( /\?.+$/, '' ), false );
+			title = this._extractPageTitle( url, false );
 
 		} else if( regExp2.test( url ) ) {
 			matches = url.match( regExp2 );
