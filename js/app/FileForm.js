@@ -77,7 +77,9 @@ $.extend( FileForm.prototype, {
 
 	_stopLoading: function() {
 		this._formLoadingSpinner.remove();
-		this._imageLoadingSpinner && this._imageLoadingSpinner.remove();
+		if( this._imageLoadingSpinner ) {
+			this._imageLoadingSpinner.remove();
+		}
 	},
 
 	/**
