@@ -123,16 +123,14 @@ $.extend( FileForm.prototype, {
 		self._api.getAsset( prefixedFilename, wikiUrl )
 			.done( function( asset ) {
 				if( asset instanceof WikiAsset ) {
-					if( asset.getLicence() !== null && asset.getLicence().isInGroup( 'unsupported' ) ) {
+					if( $.inArray( asset.getMediaType(), config.supportedMediaTypes ) === -1 ) {
+						self._displayError( new ApplicationError( 'mediatype-unsupported' ) );
+						return;
+					} else if( asset.getLicence() !== null && asset.getLicence().isInGroup( 'unsupported' ) ) {
 						self._displayError( new ApplicationError( 'licence-unsupported' ) );
 						return;
 					} else if( asset.getLicence() === null ) {
 						self._displayError( new ApplicationError( 'licence-not-recognized' ) );
-						return;
-					} else if(
-						$.inArray( asset.getMediaType(), config.supportedMediaTypes ) === -1
-					) {
-						self._displayError( new ApplicationError( 'mediatype-unsupported' ) );
 						return;
 					}
 				}
