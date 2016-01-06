@@ -12,7 +12,7 @@ Currently deployed version: https://lizenzhinweisgenerator.wmflabs.org/
 
 ### Licence support
 
-The licences supported by the application are defined in <code>app/LICENCES.js</code>.
+The licences supported by the application are defined in <code>js/app/LICENCES.js</code>.
 
 ### Coding conventions
 
