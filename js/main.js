@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	FileForm = require( './app/FileForm' ),
-	Tracking = require( './tracking' );
+	Tracking = require( './tracking' ),
+	Spinner = require( './app/Spinner' );
 
 var tracking = new Tracking();
 tracking.trackPageLoad( 'Main Page' );
@@ -80,15 +81,16 @@ var bootstrapAlert = function( type, message ) {
 };
 
 var $feedbackForm = $( '#feedback-form' ),
-	baseUrl = '//' + location.host + location.pathname;
+	baseUrl = '//' + location.host + location.pathname,
+	loadingSpinner = new Spinner( $feedbackForm.find( 'button[type="submit"]' ) );
+
 $feedbackForm.submit( function( e ) {
-	$.post(
-		baseUrl + '../backend/web/index.php/feedback',
+	loadingSpinner.add();
+	$.post( baseUrl + '../backend/web/index.php/feedback',
 		{
 			name: $feedbackForm.find( 'input[name="name"]' ).val(),
 			feedback: $feedbackForm.find( 'textarea' ).val()
-		}
-	)
+		} )
 		.done( function( response ) {
 			tracking.trackEvent( 'Feedback', 'Success' );
 			bootstrapAlert( 'success', $.parseJSON( response ).message );
@@ -104,6 +106,9 @@ $feedbackForm.submit( function( e ) {
 			} else {
 				bootstrapAlert( 'danger', 'Beim Senden ist etwas schiefgelaufen. Bitte versuche es erneut.' );
 			}
+		} )
+		.always( function() {
+			loadingSpinner.remove();
 		} );
 
 	e.preventDefault();

@@ -688,7 +688,7 @@ a:hover {
   top: 50%;
   margin-top: -10px;
 }
-#file-form .ag-spinner {
+button .ag-spinner {
   display: inline-block;
   font-size: 12pt;
   padding-right: 10px;
