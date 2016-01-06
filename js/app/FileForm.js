@@ -8,7 +8,8 @@ var $ = require( 'jquery' ),
 	config = require( '../config.json' ),
 	ImageSuggestionView = require( './views/ImageSuggestionView' ),
 	DialogueScreen = require( './views/DialogueScreen' ),
-	Tracking = require( '../tracking.js' );
+	Tracking = require( '../tracking.js' ),
+	Spinner = require( './Spinner' );
 
 window.jQuery = $; // needed for justifiedGallery
 require( 'justifiedGallery/dist/js/jquery.justifiedGallery.min' );
@@ -28,6 +29,16 @@ $.extend( FileForm.prototype, {
 	_$node: null,
 
 	/**
+	 * @type {Spinner}
+	 */
+	_formLoadingSpinner: null,
+
+	/**
+	 * @type {Spinner}
+	 */
+	_imageLoadingSpinner: null,
+
+	/**
 	 * @type {jQuery}
 	 */
 	_$resultsPage: null,
@@ -40,7 +51,6 @@ $.extend( FileForm.prototype, {
 	},
 
 	_submit: function( e ) {
-		this._$resultsPage.hide();
 		this._$resultsPage.hide();
 		this._evaluateInput( this._$node.find( 'input' ).val() );
 		e.preventDefault();
@@ -60,6 +70,16 @@ $.extend( FileForm.prototype, {
 		}, 700 );
 	},
 
+	_indicateLoading: function() {
+		this._formLoadingSpinner = new Spinner( this._$node.find( 'button' ) );
+		this._formLoadingSpinner.add( 15 );
+	},
+
+	_stopLoading: function() {
+		this._formLoadingSpinner.remove();
+		this._imageLoadingSpinner && this._imageLoadingSpinner.remove();
+	},
+
 	/**
 	 * Evaluates any given input using the input handler.
 	 *
@@ -77,6 +97,8 @@ $.extend( FileForm.prototype, {
 		var self = this,
 			deferred = $.Deferred();
 
+		self._indicateLoading();
+
 		this._inputHandler.getFilename( input )
 			.done( function( filenameOrImageInfos, wikiUrl ) {
 				if( typeof filenameOrImageInfos === 'string' ) {
@@ -90,9 +112,6 @@ $.extend( FileForm.prototype, {
 			} )
 			.fail( function( error ) {
 				self._displayError( error );
-			} )
-			.always( function() {
-				self._$node.find( 'input' ).removeClass( 'loading' );
 			} );
 
 		return deferred;
@@ -105,6 +124,7 @@ $.extend( FileForm.prototype, {
 	 */
 	_showResults: function( imageInfos ) {
 		this._$resultsPage.show();
+		this._stopLoading();
 		this._scrollToResults();
 		this._renderSuggestions( imageInfos );
 	},
@@ -143,7 +163,7 @@ $.extend( FileForm.prototype, {
 				self._displayError( error );
 			} )
 			.always( function() {
-				self._$node.find( 'input' ).removeClass( 'loading' );
+				self._stopLoading();
 			} );
 	},
 
@@ -175,10 +195,8 @@ $.extend( FileForm.prototype, {
 	 * @param {ApplicationError} error
 	 */
 	_displayError: function( error ) {
-		var self = this;
-
-		console.log( error.getMessage() );
-		self._tracking.trackEvent( 'Progress', 'Error', error.getCode() );
+		this._stopLoading();
+		this._tracking.trackEvent( 'Progress', 'Error', error.getCode() );
 
 		$( '#file-form-alert-placeholder' ).text( error.getMessage() );
 		$( '#file-form-input' ).css( 'color', '#bf311a' );
@@ -219,6 +237,8 @@ $.extend( FileForm.prototype, {
 
 		$suggestion.on( 'click', function( e ) {
 			self._evaluateInput( imageInfo.getDescriptionUrl() );
+			self._imageLoadingSpinner = new Spinner( $( this ) );
+			self._imageLoadingSpinner.add( 20 );
 			e.preventDefault();
 		} );
 		self._$resultsPage.append( $suggestion );
