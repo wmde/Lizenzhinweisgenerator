@@ -73,7 +73,7 @@ $.extend( FileForm.prototype, {
 
 	_indicateLoading: function() {
 		this._formLoadingSpinner = new Spinner( this._$node.find( 'button' ) );
-		this._formLoadingSpinner.add( 15 );
+		this._formLoadingSpinner.add();
 	},
 
 	_stopLoading: function() {
@@ -239,7 +239,7 @@ $.extend( FileForm.prototype, {
 		$suggestion.on( 'click', function( e ) {
 			self._evaluateInput( imageInfo.getDescriptionUrl() );
 			self._imageLoadingSpinner = new Spinner( $( this ) );
-			self._imageLoadingSpinner.add( 20 );
+			self._imageLoadingSpinner.add();
 			e.preventDefault();
 		} );
 		self._$resultsPage.append( $suggestion );

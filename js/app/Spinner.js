@@ -13,9 +13,7 @@ $.extend( Spinner.prototype, {
 	_$node: null,
 
 	/**
-	 * Adds a spinner with `size` px height to a node.
-	 *
-	 * @param {int} size
+	 * Adds a spinner to a node.
 	 */
 	add: function() {
 		if( this._$node.find( '.ag-spinner' ).length !== 0 ) {
