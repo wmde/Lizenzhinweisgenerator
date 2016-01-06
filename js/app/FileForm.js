@@ -53,6 +53,7 @@ $.extend( FileForm.prototype, {
 	_submit: function( e ) {
 		this._$resultsPage.hide();
 		this._evaluateInput( this._$node.find( 'input' ).val() );
+		this._indicateLoading();
 		e.preventDefault();
 	},
 
@@ -98,8 +99,6 @@ $.extend( FileForm.prototype, {
 	_evaluateInput: function( input ) {
 		var self = this,
 			deferred = $.Deferred();
-
-		self._indicateLoading();
 
 		this._inputHandler.getFilename( input )
 			.done( function( filenameOrImageInfos, wikiUrl ) {
