@@ -230,7 +230,6 @@ a:hover {
 }
 #file-form button {
   border-radius: 0 2px 2px 0;
-  width: 66px;
 }
 #file-form-input-wrapper {
   display: inline-block;
@@ -688,4 +687,31 @@ a:hover {
   position: absolute;
   top: 50%;
   margin-top: -10px;
+}
+button .ag-spinner {
+  display: inline-block;
+  font-size: 12pt;
+  padding-right: 10px;
+}
+#results-screen > a > .ag-spinner {
+  z-index: 100;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+}
+#results-screen > a > .ag-spinner i {
+  left: 50%;
+  margin-left: -25px;
+  margin-top: -25px;
+  font-size: 50px;
+  top: 50%;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+.spin-icon {
+  -webkit-animation: spin 2s linear infinite;
+  -moz-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
 }
