@@ -40,7 +40,7 @@ module.exports = [
 	new Licence( 'cc', [ 'unsupported' ], [], 'CC', /CC-BY/i ),
 
 	new Licence( 'cc-zero', [ 'cc', 'cc0' ], [], 'CC0 1.0', /^(cc-zero|Bild-CC-0)/i, 'https://creativecommons.org/publicdomain/zero/1.0/legalcode' ),
-	new Licence( 'PD', [ 'pd' ], [], 'Public Domain', /^(Bild-)?(PD|Public domain)\b/i ),
+	new Licence( 'PD', [ 'pd' ], [], 'Public Domain', /^(Bild-)?(PD|Public domain|Copyrighted free use)\b/i ),
 
 	new Licence( 'unknown', [ 'unknown' ], [], 'Unknown', '', '' )
 ];
