@@ -34,14 +34,15 @@ $.extend( DialogueView.prototype, {
 	},
 
 	/**
-	 * Renders information about Public Domain Licence if the picture was under PD or starts the dialogue
+	 * Renders information about the usage not requiring attributing the author,
+	 * if the asset has been licenced under appropriate licence, or starts the dialogue otherwise.
 	 *
 	 * @param {jQuery} $screen
 	 */
 	render: function( $screen ) {
 		var title, dialogue;
 
-		if( this._asset.getLicence().isInGroup( 'pd' ) ) {
+		if( this._noAttributionNeeded( this._asset.getLicence() ) ) {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
 			dialogue = new PublicDomainDialogueView;
 		} else {
@@ -54,7 +55,17 @@ $.extend( DialogueView.prototype, {
 			imagePreview: this._renderImagePreview()
 		} ) );
 		dialogue.render( $screen.find( '.dialogue' ) );
+	},
+
+	/**
+	 * Checks if the licence does not oblige to provide the attribution
+	 *
+	 * @param {Licence} licence
+	 */
+	_noAttributionNeeded: function( licence ) {
+		return licence.isInGroup( 'pd' ) || licence.isInGroup( 'cc0' );
 	}
+
 } );
 
 module.exports = DialogueView;
