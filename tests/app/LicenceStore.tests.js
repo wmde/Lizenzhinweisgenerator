@@ -10,6 +10,10 @@ QUnit.test( 'detects Public Domain', function( assert ) {
 	assert.equal( licences.detectLicence( 'PD-self' ).getName(), 'Public Domain' );
 } );
 
+QUnit.test( 'detects Copyrighted free use', function( assert ) {
+	assert.equal( licences.detectLicence( 'Copyrighted free use' ).getName(), 'Public Domain' );
+} );
+
 QUnit.test( 'detects CC BY 1.0', function( assert ) {
 	assert.equal( licences.detectLicence( 'Cc-by-1.0' ).getName(), 'CC BY 1.0' );
 } );
