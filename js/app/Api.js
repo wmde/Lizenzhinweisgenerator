@@ -99,7 +99,7 @@ $.extend( Api.prototype, {
 	_getPageContent: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
 
-		this._query( prefixedFilename, 'revisions', wikiUrl, {
+		this._getResultsFromApi( prefixedFilename, 'revisions', wikiUrl, {
 			rvprop: 'content',
 			rvparse: 1
 		} )
@@ -132,10 +132,10 @@ $.extend( Api.prototype, {
 	_getPageTemplates: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
 
-		this._query( prefixedFilename, 'templates', wikiUrl, {
+		this._getResultsFromApi( prefixedFilename, 'templates', wikiUrl, {
 			tlnamespace: 10,
 			tllimit: 100
-		} )
+		}, 'tlcontinue' )
 			.done( function( page ) {
 				if( !page.templates ) {
 					deferred.reject( new ApplicationError( 'templates-missing' ) );
@@ -171,7 +171,7 @@ $.extend( Api.prototype, {
 	getImageInfo: function( prefixedFilename, size, wikiUrl ) {
 		var deferred = $.Deferred();
 
-		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
+		this._getResultsFromApi( prefixedFilename, 'imageinfo', wikiUrl, {
 			iiprop: 'url|size',
 			iiurlwidth: size,
 			iiurlheight: size
@@ -204,7 +204,7 @@ $.extend( Api.prototype, {
 	_getMetaData: function( prefixedFilename, wikiUrl ) {
 		var deferred = $.Deferred();
 
-		this._query( prefixedFilename, 'imageinfo', wikiUrl, {
+		this._getResultsFromApi( prefixedFilename, 'imageinfo', wikiUrl, {
 			iiprop: 'mediatype|url',
 			iilimit: 1
 		} )
@@ -299,7 +299,7 @@ $.extend( Api.prototype, {
 			format: 'json'
 		};
 
-		this._query( title, 'images', wikiUrl, params )
+		this._getResultsFromApi( title, 'images', wikiUrl, params )
 			.done( function( page ) {
 				var imageTitles = [];
 
@@ -341,7 +341,7 @@ $.extend( Api.prototype, {
 			iiurlheight: 300
 		};
 
-		this._query( imageTitles, 'imageinfo', wikiUrl, params )
+		this._getResultsFromApi( imageTitles, 'imageinfo', wikiUrl, params )
 			.done( function( pages ) {
 				if( !$.isArray( pages ) ) {
 					pages = [ pages ];
@@ -363,36 +363,62 @@ $.extend( Api.prototype, {
 	},
 
 	/**
-	 * Issues a call to the Commons API of a Wikipedia API querying for a specific property of a
-	 * file.
+	 * Issues a call to the Commons API or a Wikipedia API querying for a specific property of a
+	 * file, and returns an array of Page data..
 	 *
 	 * @param {string|string[]} title Page title(s)
 	 * @param {string} property
 	 * @param {string} [wikiUrl]
 	 * @param {Object} [params] API request parameter overwrites or additional parameters.
+	 * @param {string|null} continuationParam name of the continuation parameter used in API requests and responses, or null if no continuation required
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {Object[]}
 	 *         Rejected parameters:
 	 *         - {ApplicationError}
 	 */
-	_query: function( title, property, wikiUrl, params ) {
-		var deferred = $.Deferred();
+	_getResultsFromApi: function( title, property, wikiUrl, params, continuationParam ) {
+		var deferred = $.Deferred(),
+			queryParams = $.extend( {
+				action: 'query',
+				prop: property,
+				titles: $.isArray( title ) ? title.join( '|' ) : title,
+				format: 'json'
+			}, params );
+		this._query( wikiUrl, queryParams, continuationParam, new $.Deferred(), [] )
+			.done( function( results ) {
+				deferred.resolve( results );
+			} )
+			.fail( function( error ) {
+				deferred.reject( error );
+			} );
+		return deferred.promise();
+	},
 
-		params = $.extend( {
-			action: 'query',
-			prop: property,
-			titles: $.isArray( title ) ? title.join( '|' ) : title,
-			format: 'json'
-		}, params );
-
+	/**
+	 * Send a query to Commons or Wikipedia API, and returns an array of page data.
+	 * Performs multiple queries if contination parameter is provided, and size of API response requires continuation.
+	 *
+	 * @param {string|string[]} wikiUrl
+	 * @param {string} params API request parameters
+	 * @param {string|null} continuationParam name of the continuation parameter used in API requests and responses, or null if no continuation required
+	 * @param {Object} deferred jQuery Deferred object instance shared by consecutive queries (in case of continuation)
+	 * @param {Array} results data collected by previous queries (in case of continuation)
+	 * @returns {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {Object[]}
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
+	 */
+	_query: function( wikiUrl, params, continuationParam, deferred, results ) {
 		var ajaxOptions = {
-			url: ( wikiUrl || this._defaultUrl ) + 'w/api.php',
-			crossDomain: true,
-			dataType: 'jsonp',
-			data: params,
-			timeout: 5000
-		};
+				url: ( wikiUrl || this._defaultUrl ) + 'w/api.php',
+				crossDomain: true,
+				dataType: 'jsonp',
+				data: params,
+				timeout: 5000
+			},
+			self = this;
 
 		$.ajax( ajaxOptions )
 			.done( function( response ) {
@@ -405,7 +431,7 @@ $.extend( Api.prototype, {
 					errorCode;
 
 				$.each( response.query.pages, function( id, page ) {
-					var isSharedImage = property === 'imageinfo' && page.imagerepository === 'shared';
+					var isSharedImage = params['prop'] === 'imageinfo' && page.imagerepository === 'shared';
 
 					if( page.missing !== undefined && !isSharedImage ) {
 						errorCode = 'page-missing';
@@ -416,6 +442,13 @@ $.extend( Api.prototype, {
 					}
 
 				} );
+
+				pages = self._mergeResultArrays( results, pages );
+
+				if( self._continuationNeeded( response, continuationParam ) ) {
+					params['tlcontinue'] = response.continue[continuationParam];
+					return self._query( wikiUrl, params, continuationParam, deferred, pages );
+				}
 
 				if( pages.length === 1 ) {
 					deferred.resolve( pages[ 0 ] );
@@ -434,6 +467,56 @@ $.extend( Api.prototype, {
 			} );
 
 		return deferred.promise();
+	},
+
+	/**
+	 * Checks if continuation queries are required
+	 *
+	 * @param {Array} response API response
+	 * @param {string|null} continuationParam name of the continuation parameter used in API requests and responses, or null if no continuation required
+	 * @returns {boolean}
+	 */
+	_continuationNeeded: function( response, continuationParam ) {
+		return continuationParam !== undefined && response.continue !== undefined && response.continue[continuationParam] !== undefined;
+	},
+
+	/**
+	 * Merges results collected by two API queries
+	 *
+	 * @param {Array} a
+	 * @param {Array} b
+	 * @returns {Array}
+	 */
+	_mergeResultArrays: function( a, b ) {
+		var pageIds = $.map( a, function( x ) { return x.pageid;  } ),
+			merged = $.extend( [], a ),
+			self = this;
+		$.each( b, function( i, page ) {
+			var index = pageIds.indexOf( page.pageid );
+			if( index > -1 ) {
+				merged[index] = self._mergePageData( merged[index], page );
+			} else {
+				merged.push( page );
+			}
+		} );
+		return merged;
+	},
+
+	/**
+	 * Merges page data collected by two API queries. Array values of the same property are concatenated, other properties
+	 * remain unchanged
+	 *
+	 * @param {Array} data current page data
+	 * @param {Array} moarData page data to be added
+	 * @returns {Array}
+	 */
+	_mergePageData: function( data, moarData ) {
+		$.each( moarData, function( i, prop ) {
+			if( Array.isArray( prop ) ) {
+				data[i] = data[i].concat( prop );
+			}
+		} );
+		return data;
 	}
 
 } );
