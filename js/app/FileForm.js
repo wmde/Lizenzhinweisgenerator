@@ -52,8 +52,8 @@ $.extend( FileForm.prototype, {
 
 	_submit: function( e ) {
 		this._$resultsPage.hide();
-		this._evaluateInput( this._$node.find( 'input' ).val() );
 		this._indicateLoading();
+		this._evaluateInput( this._$node.find( 'input' ).val() );
 		e.preventDefault();
 	},
 
