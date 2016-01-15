@@ -103,7 +103,7 @@ $.extend( Api.prototype, {
 			rvprop: 'content',
 			rvparse: 1
 		} )
-			.done( function( page, ajaxOptions ) {
+			.done( function( page ) {
 				if( !page.revisions || page.revisions.length === 0 || !page.revisions[ 0 ][ '*' ] ) {
 					deferred.reject( new ApplicationError( 'revision-invalid' ) );
 					return;
@@ -136,7 +136,7 @@ $.extend( Api.prototype, {
 			tlnamespace: 10,
 			tllimit: 100
 		} )
-			.done( function( page, ajaxOptions ) {
+			.done( function( page ) {
 				if( !page.templates ) {
 					deferred.reject( new ApplicationError( 'templates-missing' ) );
 					return;
@@ -176,7 +176,7 @@ $.extend( Api.prototype, {
 			iiurlwidth: size,
 			iiurlheight: size
 		} )
-			.done( function( page, ajaxOptions ) {
+			.done( function( page ) {
 				if( !page.imageinfo || page.imageinfo[ 0 ].length === 0 ) {
 					deferred.reject( new ApplicationError( 'imageinfo-missing' ) );
 					return;
@@ -208,7 +208,7 @@ $.extend( Api.prototype, {
 			iiprop: 'mediatype|url',
 			iilimit: 1
 		} )
-			.done( function( page, ajaxOptions ) {
+			.done( function( page ) {
 				if( !page.imageinfo ) {
 					deferred.resolve( 'unknown' );
 					return;
@@ -373,7 +373,6 @@ $.extend( Api.prototype, {
 	 * @return {Object} jQuery Promise
 	 *         Resolved parameters:
 	 *         - {Object[]}
-	 *         - {Object} Options $.ajax() has been initiated with
 	 *         Rejected parameters:
 	 *         - {ApplicationError}
 	 */
@@ -419,9 +418,9 @@ $.extend( Api.prototype, {
 				} );
 
 				if( pages.length === 1 ) {
-					deferred.resolve( pages[ 0 ], ajaxOptions );
+					deferred.resolve( pages[ 0 ] );
 				} else if( pages.length > 0 ) {
-					deferred.resolve( pages, ajaxOptions );
+					deferred.resolve( pages );
 				} else if( errorCode ) {
 					deferred.reject( new ApplicationError( errorCode ) );
 				} else {
