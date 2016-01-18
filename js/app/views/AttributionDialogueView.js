@@ -138,6 +138,10 @@ $.extend( AttributionDialogueView.prototype, {
 			$( this ).closest( 'form' ).submit();
 		} );
 		$content.find( 'form' ).submit( function( e ) {
+			if( !self._validateForm( $( e.target ) ) ) {
+				e.preventDefault();
+				return false;
+			}
 			self._submit( e, $dialogue );
 		} );
 		$content.find( '.question-mark' ).click( this._toggleQuestionMark );
@@ -147,7 +151,16 @@ $.extend( AttributionDialogueView.prototype, {
 
 		$dialogue.html( $content );
 		$content.find( 'input:text' ).focus();
+	},
+
+	_validateForm: function( $form ) {
+		return !$form.hasClass( 'author-step' ) || this._validateAuthorStepForm( $form );
+	},
+
+	_validateAuthorStepForm: function( $form ) {
+		return $form.find( 'input:checkbox[name="no-author"]' ).is( ':checked' ) || $form.find( 'input:text[name="author"]' ).val();
 	}
+
 } );
 
 module.exports = AttributionDialogueView;

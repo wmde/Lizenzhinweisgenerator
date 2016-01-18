@@ -52,7 +52,7 @@ QUnit.test( 'clicking a checkbox on first step submits and saves data', function
 	assert.equal( dialogue._dialogue.getData()[ 'typeOfUse' ][ 'type' ], 'print' );
 } );
 
-QUnit.test( 'submitting the form should renders second step', function( assert ) {
+QUnit.test( 'submitting the form should render second step', function( assert ) {
 	var $dialogue = $( '<div/>' );
 	Helpers.newDefaultAttributionDialogueView().render( $dialogue );
 
@@ -74,6 +74,21 @@ QUnit.test( 'Author Step', function( assert ) {
 	dialogue.dom.find( 'input:text' ).val( 'Blah' );
 	dialogue.dom.find( 'button' ).click();
 	assert.equal( dialogue.view._dialogue.getData()[ 'author' ][ 'author' ], 'Blah' );
+} );
+
+QUnit.test( 'Author Step does not accept empty author name', function( assert ) {
+	var dialogue = renderDialogueAtStep( 1 );
+
+	dialogue.dom.find( 'button' ).click();
+
+	assert.ok( dialogueContains( dialogue.dom, 'dialogue.author-headline' ) );
+	assert.notOk( dialogueContains( dialogue.dom, 'dialogue.compilation-headline' ) );
+
+	dialogue = renderDialogueAtStep( 1 );
+	dialogue.dom.find( 'input:text' ).trigger( $.Event( 'keydown', { which: 13 } ) );
+
+	assert.ok( dialogueContains( dialogue.dom, 'dialogue.author-headline' ) );
+	assert.notOk( dialogueContains( dialogue.dom, 'dialogue.compilation-headline' ) );
 } );
 
 QUnit.test( 'Compilation Step', function( assert ) {
