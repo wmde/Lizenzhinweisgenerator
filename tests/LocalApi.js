@@ -38,7 +38,7 @@ $.extend( LocalApi.prototype, Api.prototype, {
 	 *         Rejected parameters:
 	 *         - {ApplicationError}
 	 */
-	_query: function( title, property, wikiUrl, params ) {
+	_getResultsFromApi: function( title, property, wikiUrl, params ) {
 		return this._readFile( this._getLocalFilename( title, property, params ) );
 	},
 
