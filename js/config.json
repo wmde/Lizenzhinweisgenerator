@@ -1,4 +1,5 @@
 {
+  "apiContinuationLimit": 10,
   "supportedMediaTypes": ["bitmap", "drawing"],
   "piwikUrl": "https://lizenzhinweisgenerator.wmflabs.org/piwik/",
   "piwikSiteId": 1

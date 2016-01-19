@@ -385,7 +385,7 @@ $.extend( Api.prototype, {
 				titles: $.isArray( title ) ? title.join( '|' ) : title,
 				format: 'json'
 			}, params );
-		this._query( wikiUrl, queryParams, continuationParam, new $.Deferred(), [] )
+		this._query( wikiUrl, queryParams, continuationParam, 0, new $.Deferred(), [] )
 			.done( function( results ) {
 				deferred.resolve( results );
 			} )
@@ -402,6 +402,7 @@ $.extend( Api.prototype, {
 	 * @param {string|string[]} wikiUrl
 	 * @param {string} params API request parameters
 	 * @param {string|null} continuationParam name of the continuation parameter used in API requests and responses, or null if no continuation required
+	 * @param {int|null} continuationCount number of API calls already done for the query, or null if no continuation required
 	 * @param {Object} deferred jQuery Deferred object instance shared by consecutive queries (in case of continuation)
 	 * @param {Array} results data collected by previous queries (in case of continuation)
 	 * @returns {Object} jQuery Promise
@@ -410,7 +411,7 @@ $.extend( Api.prototype, {
 	 *         Rejected parameters:
 	 *         - {ApplicationError}
 	 */
-	_query: function( wikiUrl, params, continuationParam, deferred, results ) {
+	_query: function( wikiUrl, params, continuationParam, continuationCount, deferred, results ) {
 		var ajaxOptions = {
 				url: ( wikiUrl || this._defaultUrl ) + 'w/api.php',
 				crossDomain: true,
@@ -444,10 +445,11 @@ $.extend( Api.prototype, {
 				} );
 
 				pages = self._mergeResultArrays( results, pages );
+				continuationCount++;
 
-				if( self._continuationNeeded( response, continuationParam ) ) {
+				if( self._continuationNeeded( response, continuationParam, continuationCount ) ) {
 					params['tlcontinue'] = response.continue[continuationParam];
-					return self._query( wikiUrl, params, continuationParam, deferred, pages );
+					return self._query( wikiUrl, params, continuationParam, continuationCount, deferred, pages );
 				}
 
 				if( pages.length === 1 ) {
@@ -474,10 +476,12 @@ $.extend( Api.prototype, {
 	 *
 	 * @param {Array} response API response
 	 * @param {string|null} continuationParam name of the continuation parameter used in API requests and responses, or null if no continuation required
+	 * @param {int|null} continuationCount number of API calls already done for the query, or null if no continuation required
 	 * @returns {boolean}
 	 */
-	_continuationNeeded: function( response, continuationParam ) {
-		return continuationParam !== undefined && response.continue !== undefined && response.continue[continuationParam] !== undefined;
+	_continuationNeeded: function( response, continuationParam, continuationCount ) {
+		return continuationParam !== undefined && response.continue !== undefined && response.continue[continuationParam] !== undefined
+			&& continuationCount < config.apiContinuationLimit;
 	},
 
 	/**
