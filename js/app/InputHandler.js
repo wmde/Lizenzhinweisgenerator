@@ -71,20 +71,25 @@ $.extend( InputHandler.prototype, {
 	_evaluate: function( url ) {
 		var deferred = $.Deferred();
 
-		if(
-			url.indexOf( '.wikipedia.org/w' ) !== -1
-			|| url.indexOf( 'upload.wikimedia.org/wikipedia/' ) !== -1
-			&& url.indexOf( '/wikipedia/commons/' ) === -1
-		) {
+		if( this._isWikiUrl( url ) ) {
 			return this._getWikipediaPageImagesFileInfo( url );
-		} else if( url.indexOf( '.wikimedia.org/' ) !== -1 ) {
-			var urlInfo = this._splitUrl( url );
-			deferred.resolve( urlInfo.title, urlInfo.wikiUrl );
 		} else {
 			deferred.reject( new ApplicationError( 'url-invalid' ) );
 		}
 
 		return deferred.promise();
+	},
+
+	/**
+	 * @param {string} url
+	 * @return {boolean}
+	 */
+	_isWikiUrl: function( url ) {
+		return url.indexOf( '.wikipedia.org/w' ) !== -1
+			|| (
+				url.indexOf( 'upload.wikimedia.org/wikipedia/' ) !== -1 && url.indexOf( '/wikipedia/commons/' ) === -1
+			)
+			|| url.indexOf( 'wikimedia.org/' ) !== -1;
 	},
 
 	/**

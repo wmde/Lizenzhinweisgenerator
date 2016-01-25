@@ -178,6 +178,14 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 			expected: {
 				wikiUrl: 'https://de.wikipedia.org/'
 			}
+		}, {
+			input: [
+				'https://commons.wikimedia.org/wiki/User:Seeteufel',
+				'commons.wikimedia.org/wiki/User:Seeteufel'
+			],
+			expected: {
+				wikiUrl: 'https://commons.wikimedia.org/'
+			}
 		}
 	];
 
