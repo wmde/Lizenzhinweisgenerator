@@ -1,5 +1,7 @@
 <div class="dialogue-bubble">
-	<div class="ag-progress-bar"></div><!-- .progress-bar is used by bootstrap -->
+	{{#unless noProgressBar}}
+		<div class="ag-progress-bar"></div><!-- .progress-bar is used by bootstrap -->
+	{{/unless}}
 
 	<div class="animated-content">
 		<div class="triangle"></div>
