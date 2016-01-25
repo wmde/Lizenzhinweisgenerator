@@ -136,9 +136,10 @@ $.extend( DialogueEvaluationView.prototype, {
 	},
 
 	render: function() {
-		var $html = $( doneTemplate() ),
+		var $html = $( '<div/>' ),
 			dosAndDonts = this._evaluation.getDosAndDonts();
 
+		$html.append( doneTemplate() );
 		$html.append( attributionTemplate( {
 			attribution: this._evaluation.getAttribution(),
 			plainTextAttribution: this._evaluation.getPlainTextAttribution(),
@@ -170,7 +171,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		this._initCopyButton( $html.find( '#copy-attribution' ) );
 
-		return $html;
+		return $html.contents();
 	}
 } );
 
