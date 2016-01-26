@@ -435,7 +435,7 @@ $.extend( Api.prototype, {
 					var isSharedImage = params['prop'] === 'imageinfo' && page.imagerepository === 'shared';
 
 					if( page.missing !== undefined && !isSharedImage ) {
-						errorCode = 'page-missing';
+						errorCode = 'url-invalid';
 					} else if( page.invalid !== undefined ) {
 						errorCode = 'page-invalid';
 					} else {
