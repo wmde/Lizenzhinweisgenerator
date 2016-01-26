@@ -200,6 +200,8 @@ $.extend( FileForm.prototype, {
 		$( '#file-form-alert-placeholder' ).text( error.getMessage() );
 		$( '#file-form-input' ).css( 'color', '#bf311a' );
 		$( '#file-form-alert' ).slideDown();
+
+		this._scrollToResults();
 	},
 
 	/**
