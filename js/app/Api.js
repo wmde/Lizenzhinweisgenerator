@@ -253,7 +253,7 @@ $.extend( Api.prototype, {
 
 		this._getMetaData( title, wikiUrl )
 			.done( function( metaData ) {
-				if( $.inArray( metaData.mediatype, config.supportedMediaTypes ) !== -1 ) {
+				if( typeof metaData === 'object' && metaData.mediatype ) {
 					deferred.resolve( title, metaData.url );
 					return;
 				}

@@ -102,6 +102,14 @@ var testCases = [
 			file: 'File:Commodore_Plus_4_Knurri.png',
 			wikiUrl: 'https://commons.wikimedia.org/'
 		}
+	}, {
+		input: [
+			'https://commons.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm'
+		],
+		expected: {
+			file: 'File:A_Punjab_Village,_1925.webm',
+			wikiUrl: 'https://commons.wikimedia.org/'
+		}
 	}
 ];
 
