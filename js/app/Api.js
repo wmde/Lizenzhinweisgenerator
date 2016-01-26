@@ -301,6 +301,10 @@ $.extend( Api.prototype, {
 
 		this._getResultsFromApi( title, 'images', wikiUrl, params )
 			.done( function( page ) {
+				if( page.images === undefined || page.images.length === 0  ) {
+					deferred.reject( new ApplicationError( 'url-invalid' ) );
+					return;
+				}
 				var imageTitles = [];
 
 				for( var i = 0; i < page.images.length; i++ ) {
