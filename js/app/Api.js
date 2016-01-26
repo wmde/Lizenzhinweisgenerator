@@ -483,7 +483,7 @@ $.extend( Api.prototype, {
 				continuationCount++;
 
 				if( self._continuationNeeded( response, continuationParam, continuationCount ) ) {
-					params['tlcontinue'] = response.continue[continuationParam];
+					params[continuationParam] = response.continue[continuationParam];
 					return self._query( wikiUrl, params, continuationParam, continuationCount, deferred, pages );
 				}
 
