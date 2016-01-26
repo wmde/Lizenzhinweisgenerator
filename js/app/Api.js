@@ -299,7 +299,7 @@ $.extend( Api.prototype, {
 			format: 'json'
 		};
 
-		this._getResultsFromApi( title, 'images', wikiUrl, params )
+		this._getResultsFromApi( title, 'images', wikiUrl, params, 'imcontinue' )
 			.done( function( page ) {
 				if( page.images === undefined || page.images.length === 0  ) {
 					deferred.reject( new ApplicationError( 'url-invalid' ) );
