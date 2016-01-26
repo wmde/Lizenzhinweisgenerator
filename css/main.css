@@ -356,6 +356,13 @@ a:hover {
   width: 50vw;
   font-size: 12pt;
 }
+.dialogue-bubble {
+  display: table;
+  width: 100%;
+}
+.dialogue-bubble .animated-content {
+  display: table-cell;
+}
 .dialogue-bubble h2 {
   color: #4b590a;
   font-size: 12pt;
@@ -377,7 +384,7 @@ a:hover {
   background: #97b314;
   border-radius: 2px;
   padding: 10px;
-  margin: 0 0 0 175px;
+  margin: 0 0 0 20px;
 }
 .dialogue-bubble .bubble-text {
   color: #fff;
@@ -618,9 +625,9 @@ a:hover {
 }
 
 .ag-progress-bar {
-  float: left;
   width: 155px;
   padding: 10px 0 0 25px;
+  display: table-cell;
 }
 .ag-progress-bar li {
   list-style-type: none;
