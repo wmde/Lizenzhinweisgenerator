@@ -102,6 +102,14 @@ var testCases = [
 			file: 'File:Commodore_Plus_4_Knurri.png',
 			wikiUrl: 'https://commons.wikimedia.org/'
 		}
+	}, {
+		input: [
+			'https://commons.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm'
+		],
+		expected: {
+			file: 'File:A_Punjab_Village,_1925.webm',
+			wikiUrl: 'https://commons.wikimedia.org/'
+		}
 	}
 ];
 
@@ -177,6 +185,14 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 			],
 			expected: {
 				wikiUrl: 'https://de.wikipedia.org/'
+			}
+		}, {
+			input: [
+				'https://commons.wikimedia.org/wiki/User:Seeteufel',
+				'commons.wikimedia.org/wiki/User:Seeteufel'
+			],
+			expected: {
+				wikiUrl: 'https://commons.wikimedia.org/'
 			}
 		}
 	];
