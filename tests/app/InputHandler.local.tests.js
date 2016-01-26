@@ -225,13 +225,14 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 	}
 } );
 
-QUnit.test( 'getFilename returns an error when given non-wikimedia/wikipedia URL', function( assert ) {
+QUnit.test( 'getFilename returns an error when given an URL that cannot be processed', function( assert ) {
 	var inputHandler = new InputHandler( api );
 
 	var testCases = [
 		'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG',
 		'https://www.wikimedia.de/w/images.homepage/d/d6/',
-		'http://foo.bar'
+		'http://foo.bar',
+		'https://de.wikipedia.org/wiki/Lars_Kindgen'
 	];
 
 	/**
