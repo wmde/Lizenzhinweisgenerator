@@ -475,6 +475,7 @@ a:hover {
   -webkit-column-gap: 40px;
   -moz-column-gap: 40px;
   column-gap: 40px;
+  overflow: hidden;
 }
 .dialogue-bubble .bubble-columns p {
   break-after: column;
