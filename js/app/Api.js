@@ -299,7 +299,7 @@ $.extend( Api.prototype, {
 			format: 'json'
 		};
 
-		this._getResultsFromApi( title, 'images', wikiUrl, params )
+		this._getResultsFromApi( title, 'images', wikiUrl, params, 'imcontinue' )
 			.done( function( page ) {
 				if( page.images === undefined || page.images.length === 0  ) {
 					deferred.reject( new ApplicationError( 'url-invalid' ) );
@@ -339,23 +339,54 @@ $.extend( Api.prototype, {
 			return deferred.promise();
 		}
 
+		this._getImageInfoBatch( imageTitles, wikiUrl, new $.Deferred(), [] )
+			.done( function( imageInfos ) {
+				deferred.resolve( imageInfos );
+			} )
+			.fail( function( error ) {
+				deferred.reject( error );
+			} );
+
+		return deferred.promise();
+	},
+
+	/**
+	 * Retrieves image info for a batch of (max 50) images. Continues with another batch if more images has been
+	 * passed in.
+	 *
+	 * @param {string[]} titles
+	 * @param {string} wikiUrl
+	 * @param {Object} deferred jQuery Deferred object instance shared by consecutive queries
+	 * @param {ImageInfo[]} imageInfos image info data collected by previous queries
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {ImageInfo[]}
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
+	 */
+	_getImageInfoBatch: function( titles, wikiUrl, deferred, imageInfos ) {
 		var params = {
 			iiprop: 'url',
 			iilimit: 1,
 			iiurlheight: 300
-		};
+		},
+			self = this,
+			titleLimit = 50,
+			titleSubset = titles.slice( 0, Math.min( titleLimit, titles.length ) );
 
-		this._getResultsFromApi( imageTitles, 'imageinfo', wikiUrl, params )
+		this._getResultsFromApi( titleSubset, 'imageinfo', wikiUrl, params )
 			.done( function( pages ) {
 				if( !$.isArray( pages ) ) {
 					pages = [ pages ];
 				}
 
-				var imageInfos = [];
-
 				$.each( pages, function( index, page ) {
 					imageInfos.push( ImageInfo.newFromMediaWikiImageInfoJson( page.imageinfo[ 0 ] ) );
 				} );
+
+				if( titles.length > titleLimit ) {
+					return self._getImageInfoBatch( titles.slice( titleSubset.length ), wikiUrl, deferred, imageInfos );
+				}
 
 				deferred.resolve( imageInfos );
 			} )
@@ -452,7 +483,7 @@ $.extend( Api.prototype, {
 				continuationCount++;
 
 				if( self._continuationNeeded( response, continuationParam, continuationCount ) ) {
-					params['tlcontinue'] = response.continue[continuationParam];
+					params[continuationParam] = response.continue[continuationParam];
 					return self._query( wikiUrl, params, continuationParam, continuationCount, deferred, pages );
 				}
 
