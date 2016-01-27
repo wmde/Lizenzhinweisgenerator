@@ -205,9 +205,9 @@ $.extend( FileForm.prototype, {
 	},
 
 	/**
-	 * Displays an error on the front-page.
+	 * Dismisses an error on the front-page.
 	 */
-	_dismissError: function() {
+	dismissError: function() {
 		$( '#file-form-input' ).removeAttr( 'style' );
 		$( '#file-form-alert' ).slideUp();
 	},
@@ -237,6 +237,7 @@ $.extend( FileForm.prototype, {
 			self = this;
 
 		$suggestion.on( 'click', function( e ) {
+			self.dismissError();
 			self._evaluateInput( imageInfo.getDescriptionUrl() );
 			self._imageLoadingSpinner = new Spinner( $( this ) );
 			self._imageLoadingSpinner.add();
