@@ -214,8 +214,8 @@ $.extend( Api.prototype, {
 					return;
 				}
 
-				for( var i = 0; i < page.imageinfo.length; i++ ) {
-					var metaData = page.imageinfo[ i ];
+				if( page.imageinfo.length > 0 ) {
+					var metaData = page.imageinfo[ 0 ];
 					if( metaData.mediatype ) {
 						metaData.mediatype = metaData.mediatype.toLowerCase();
 					}
