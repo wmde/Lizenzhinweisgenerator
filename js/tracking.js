@@ -7,7 +7,7 @@
 var $ = require( 'jquery' ),
 	cookie = require( 'cookie' ),
 	config = require( './config.json' ),
-	piwik = require( 'piwik' ).setup( config.piwikUrl );
+	piwik = require( 'piwik' ).setup( window.location.host + config.piwikDir );
 
 /**
  * Tracking Handler.
@@ -38,7 +38,7 @@ $.extend( Tracking.prototype, {
 	_piwikSiteId: null,
 
 	/**
-	 * Track an event to piwik is allowed by the user
+	 * Track an event to piwik if allowed by the user
 	 * @param category
 	 * @param action
 	 * @param name
@@ -81,7 +81,7 @@ $.extend( Tracking.prototype, {
 	},
 
 	/**
-	 * Track a pageload to piwik is allowed by the user
+	 * Track a pageload to piwik if allowed by the user
 	 * @param pageName
 	 */
 	trackPageLoad: function( pageName ) {
