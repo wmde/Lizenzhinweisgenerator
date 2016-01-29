@@ -7,7 +7,8 @@
 var $ = require( 'jquery' ),
 	cookie = require( 'cookie' ),
 	config = require( './config.json' ),
-	piwik = require( 'piwik' ).setup( window.location.host + config.piwikDir );
+	piwikUrl = 'https://' + window.location.host + config.piwikDir,
+	piwik = require( 'piwik' ).setup( piwikUrl );
 
 /**
  * Tracking Handler.
