@@ -6,8 +6,6 @@ A questionnaire leads through the process of collecting information needed when 
 [![Build Status](https://travis-ci.org/wmde/Lizenzverweisgenerator.svg?branch=master)](https://travis-ci.org/wmde/Lizenzverweisgenerator
 )
 
-Currently deployed version: https://lizenzhinweisgenerator.wmflabs.org/
-
 ## Technical documentation
 
 ### Licence support
