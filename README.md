@@ -3,7 +3,7 @@
 Using and sharing works licenced under Creative Commons requires specifying an attribution as defined by the respective licence. This application helps generating a legally correct attribution with images from Wikipedia and Wikimedia Commons.
 A questionnaire leads through the process of collecting information needed when publishing images from Wikipedia and Commons to create a legally sufficient attribution line.
 
-[![Build Status](https://travis-ci.org/wmde/Lizenzverweisgenerator.svg?branch=master)](https://travis-ci.org/wmde/Lizenzverweisgenerator
+[![Build Status](https://travis-ci.org/wmde/Lizenzhinweisgenerator.svg?branch=master)](https://travis-ci.org/wmde/Lizenzhinweisgenerator
 )
 
 ## Technical documentation
