@@ -112,6 +112,7 @@ $.extend( FileForm.prototype, {
 				}
 			} )
 			.fail( function( error ) {
+				self._tracking.trackEvent( 'Progress', 'Start', input );
 				self._displayError( error );
 			} );
 
