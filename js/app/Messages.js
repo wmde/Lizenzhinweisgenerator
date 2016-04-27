@@ -24,9 +24,9 @@ if( lang === undefined ) {
 }
 
 try {
-	i18n = require( '../../i18n/' + lang + '.json' );
+	i18n = require( '../../i18n/' + lang + '/i18n.json' );
 } catch( e ) {
-	i18n = require( '../../i18n/de.json' );
+	i18n = require( '../../i18n/de/i18n.json' );
 }
 
 module.exports = new Polyglot( { phrases: i18n } );

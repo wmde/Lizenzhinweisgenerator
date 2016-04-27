@@ -4,10 +4,10 @@
 $lang = isset( $_GET['lang'] ) ? $_GET['lang'] : 'de';
 
 // Load the i18n file
-if( !file_exists( __DIR__ . '/i18n/' . $lang . '.json' ) ) {
+if( !file_exists( __DIR__ . '/i18n/' . $lang . '/i18n.json' ) ) {
     $lang = 'de';
 }
-$i18nData = file_get_contents( __DIR__ . '/i18n/' . $lang . '.json' );
+$i18nData = file_get_contents( __DIR__ . '/i18n/' . $lang . '/i18n.json' );
 $i18nData = json_decode($i18nData, true);
 
 // Get the base html to output
@@ -28,9 +28,9 @@ $htmlFiles = array(
     'private-use',
 );
 foreach( $htmlFiles as $file ) {
-    $path = __DIR__ . '/i18n/html/' . $lang . '/' . $file . '.html';
+    $path = __DIR__ . '/i18n/' . $lang . '/' . $file . '.html';
     if( !file_exists( $path ) ) {
-        $path = __DIR__ . '/i18n/html/de/' . $file . '.html';
+        $path = __DIR__ . '/i18n/de/' . $file . '.html';
     }
     $html = str_replace( 'i18n.html.' . $file, file_get_contents( $path ), $html );
 }
