@@ -12,6 +12,7 @@ $i18nData = json_decode($i18nData, true);
 
 // Get the base html to output
 $html = file_get_contents( __DIR__ . '/index.base.html' );
+$html = str_replace( 'i18n.lang', $lang, $html );
 
 // If we have any i18n data replace the i18n codes with new strings
 if ( $i18nData && isset( $i18nData['index'] ) ) {

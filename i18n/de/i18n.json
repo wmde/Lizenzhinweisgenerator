@@ -13,6 +13,7 @@
     "feedback-name": "Name",
     "feedback-body": "Feedback",
     "feedback-submit": "Abschicken",
+    "feedback-thanks": "Vielen Dank für Ihr Feedback!",
     "feedback": "Feedback",
     "about": "Über das Tool",
     "legal": "Impressum und Datenschutz",
@@ -24,7 +25,9 @@
     "licence-unsupported": "Leider wird die ermittelte Lizenz des Bildes von dieser Anwendung nicht unterstützt.",
     "url-invalid": "Die angegebene Internetadresse konnte nicht verarbeitet werden.",
     "licence-not-recognized": "Es tut uns leid, aber dieses Bild wird aufgrund des Lizenzformats derzeit noch nicht unterstützt.",
-    "send-feedback": "Beim Senden ist etwas schiefgelaufen. Bitte versuche es erneut."
+    "send-feedback": "Beim Senden ist etwas schiefgelaufen. Bitte versuche es erneut.",
+    "feedback-generic": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "feedback-blank-fields": "Alle Felder des Feedback-Formulars müssen ausgefüllt werden."
   },
   "info-box": {
     "private-use": "Die Angabe eines Lizenzhinweises ist bei manchen privaten Nutzungen nicht nötig.",
