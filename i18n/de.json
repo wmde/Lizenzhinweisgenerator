@@ -15,7 +15,8 @@
     "feedback-submit": "Abschicken",
     "feedback": "Feedback",
     "about": "Über das Tool",
-    "legal": "Impressum und Datenschutz"
+    "legal": "Impressum und Datenschutz",
+    "private-use": "Private Nutzung und andere Ausnahmen"
   },
   "error": {
     "generic": "Ein unvorhergesehener Fehler ist aufgetreten.",

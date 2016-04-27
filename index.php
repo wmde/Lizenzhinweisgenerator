@@ -20,5 +20,20 @@ if ( $i18nData && isset( $i18nData['index'] ) ) {
     }
 }
 
+// Also replace html snippets
+$htmlFiles = array(
+    'about',
+    'feedback',
+    'legal',
+    'private-use',
+);
+foreach( $htmlFiles as $file ) {
+    $path = __DIR__ . '/i18n/html/' . $lang . '/' . $file . '.html';
+    if( !file_exists( $path ) ) {
+        $path = __DIR__ . '/i18n/html/de/' . $file . '.html';
+    }
+    $html = str_replace( 'i18n.html.' . $file, file_get_contents( $path ), $html );
+}
+
 // Output the html
 echo $html;
