@@ -3,7 +3,8 @@
 var $ = require( 'jquery' ),
 	FileForm = require( './app/FileForm' ),
 	Tracking = require( './tracking' ),
-	Spinner = require( './app/Spinner' );
+	Spinner = require( './app/Spinner' ),
+	Messages = require( './app/Messages' );
 
 var tracking = new Tracking();
 tracking.trackPageLoad( 'Main Page' );
@@ -104,7 +105,7 @@ $feedbackForm.submit( function( e ) {
 			if( jsonResponse && jsonResponse.errors ) {
 				bootstrapAlert( 'danger', jsonResponse.errors.join( ' ' ) );
 			} else {
-				bootstrapAlert( 'danger', 'Beim Senden ist etwas schiefgelaufen. Bitte versuche es erneut.' );
+				bootstrapAlert( 'danger', Messages.t( 'error.send-feedback' ) );
 			}
 		} )
 		.always( function() {

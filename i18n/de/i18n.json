@@ -23,7 +23,8 @@
     "mediatype-unsupported": "Der Medientyp der angegebenen Datei wird von dieser Applikation momentan leider nicht unterstützt.",
     "licence-unsupported": "Leider wird die ermittelte Lizenz des Bildes von dieser Anwendung nicht unterstützt.",
     "url-invalid": "Die angegebene Internetadresse konnte nicht verarbeitet werden.",
-    "licence-not-recognized": "Es tut uns leid, aber dieses Bild wird aufgrund des Lizenzformats derzeit noch nicht unterstützt."
+    "licence-not-recognized": "Es tut uns leid, aber dieses Bild wird aufgrund des Lizenzformats derzeit noch nicht unterstützt.",
+    "send-feedback": "Beim Senden ist etwas schiefgelaufen. Bitte versuche es erneut."
   },
   "info-box": {
     "private-use": "Die Angabe eines Lizenzhinweises ist bei manchen privaten Nutzungen nicht nötig.",
