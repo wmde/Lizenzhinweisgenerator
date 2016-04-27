@@ -1,5 +1,8 @@
 {
   "de": {
+    "index": {
+      "gobutton": "Los!"
+    },
     "error": {
       "generic": "Ein unvorhergesehener Fehler ist aufgetreten.",
       "mediatype-unsupported": "Der Medientyp der angegebenen Datei wird von dieser Applikation momentan leider nicht unterstützt.",
