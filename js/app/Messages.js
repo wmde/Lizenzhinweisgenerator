@@ -1,7 +1,7 @@
 'use strict';
 
 var Polyglot = require( 'node-polyglot' ),
-	i18n = require( '../i18n.json' );
+	i18n;
 
 var getParam = function getUrlParameter( sParam ) {
 	var sPageURL = decodeURIComponent( window.location.search.substring( 1 ) ),
@@ -23,4 +23,10 @@ if( lang === undefined ) {
 	lang = 'de';
 }
 
-module.exports = new Polyglot( { phrases: i18n[ lang ] } );
+try {
+	i18n = require( '../../i18n/' + lang + '.json' );
+} catch( e ) {
+	i18n = require( '../../i18n/de.json' );
+}
+
+module.exports = new Polyglot( { phrases: i18n } );

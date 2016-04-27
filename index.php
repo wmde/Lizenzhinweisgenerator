@@ -4,9 +4,11 @@
 $lang = isset( $_GET['lang'] ) ? $_GET['lang'] : 'de';
 
 // Load the i18n file
-$i18nData = file_get_contents(__DIR__ . '/js/i18n.json');
+if( !file_exists( __DIR__ . '/i18n/' . $lang . '.json' ) ) {
+    $lang = 'de';
+}
+$i18nData = file_get_contents( __DIR__ . '/i18n/' . $lang . '.json' );
 $i18nData = json_decode($i18nData, true);
-$i18nData = isset( $i18nData[$lang] ) ? $i18nData[$lang] : null;
 
 // Get the base html to output
 $html = file_get_contents( __DIR__ . '/index.base.html' );
