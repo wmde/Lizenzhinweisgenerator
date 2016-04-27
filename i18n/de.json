@@ -1,6 +1,21 @@
 {
   "index": {
-    "gobutton": "Los!"
+    "title": "Lizenzhinweisgenerator",
+    "description": "Lizenzhinweise für Bilder aus Wikipedia und Wikimedia Commons",
+    "no-script": "You must have JavaScript enabled to use this website.",
+    "how-it-works-1": "Starten Sie mit einem Link auf ein Wikimedia-Commons-Bild oder einen Wikipedia-Artikel die Anwendung.",
+    "how-it-works-2": "Beantworten Sie die Fragen zur beabsichtigten Nutzung, um den Lizenzhinweis zu erstellen.",
+    "how-it-works-3": "Lesen Sie nach, wie der Lizenzhinweis zu benutzen ist.",
+    "how-it-works-4": "Kopieren Sie Ihren Lizenzhinweis und binden Sie ihn in Ihre Veröffentlichung ein, um das Bild entsprechend der Richtlinien zu nutzen.",
+    "how-it-works": "Wie funktioniert das?",
+    "input-placeholder": "Internetadresse eines Wikimedia-Commons-Bildes oder eines Wikipedia-Artikels",
+    "go-button": "Los!",
+    "feedback-name": "Name",
+    "feedback-body": "Feedback",
+    "feedback-submit": "Abschicken",
+    "feedback": "Feedback",
+    "about": "Über das Tool",
+    "legal": "Impressum und Datenschutz"
   },
   "error": {
     "generic": "Ein unvorhergesehener Fehler ist aufgetreten.",

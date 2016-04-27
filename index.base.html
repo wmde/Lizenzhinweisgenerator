@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Lizenzhinweisgenerator</title>
+    <title>i18n.index.title</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/justifiedGallery.min.css">
@@ -33,22 +33,22 @@
       <div class="row row-2">
         <div class="col-sm-3 how-it-works-col-1">
           <p>
-            Starten Sie mit einem Link auf ein Wikimedia-Commons-Bild oder einen Wikipedia-Artikel die Anwendung.
+            i18n.index.how-it-works-1
           </p>
         </div>
         <div class="col-sm-3 how-it-works-col-2">
           <p>
-            Beantworten Sie die Fragen zur beabsichtigten Nutzung, um den Lizenzhinweis zu erstellen.
+            i18n.index.how-it-works-2
           </p>
         </div>
         <div class="col-sm-3 how-it-works-col-3">
           <p>
-            Lesen Sie nach, wie der Lizenzhinweis zu benutzen ist.
+            i18n.index.how-it-works-3
           </p>
         </div>
         <div class="col-sm-3 how-it-works-col-4">
           <p>
-            Kopieren Sie Ihren Lizenzhinweis und binden Sie ihn in Ihre Veröffentlichung ein, um das Bild entsprechend der Richtlinien zu nutzen.
+            i18n.index.how-it-works-4
           </p>
         </div>
       </div>
@@ -59,17 +59,17 @@
 
       <div class="wrapper top-wrapper">
         <div class="heading">
-          <h1>Lizenzhinweisgenerator</h1>
-          <h2>Lizenzhinweise für Bilder aus Wikipedia und Wikimedia Commons</h2>
+          <h1>i18n.index.title</h1>
+          <h2>i18n.index.description</h2>
         </div>
 
         <div class="how-it-works yes-script">
-          <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">Wie funktioniert das?</button>
+          <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">i18n.index.how-it-works</button>
         </div>
       </div>
 
       <form id="file-form" class="yes-script" onsubmit="return false;">
-        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="Internetadresse eines Wikimedia-Commons-Bildes oder eines Wikipedia-Artikels" autofocus><button type="submit" class="green-btn">i18n.index.gobutton</button>
+        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="i18n.index.input-placeholder" autofocus><button type="submit" class="green-btn">i18n.index.go-button</button>
         <div class="container-fluid display-none" id="file-form-alert">
           <span class="glyphicon glyphicon-warning-sign"></span><span id="file-form-alert-placeholder">Alert</span>
         </div>
@@ -77,7 +77,7 @@
 
       <noscript>
         <div class="no-script" >
-          <h2>You must have JavaScript enabled to use this website.</h2>
+          <h2>i18n.index.no-script</h2>
         </div>
       </noscript>
 
@@ -90,9 +90,9 @@
 
     <nav class="bottom-menu">
       <ul class="yes-script" >
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">Feedback</a></li>
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">Über das Tool</a></li>
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">Impressum und Datenschutz</a></li>
+        <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">i18n.index.feedback</a></li>
+        <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">i18n.index.about</a></li>
+        <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">i18n.index.legal</a></li>
       </ul>
       <a href="https://wikimedia.de" target="_blank"><img id="wikimedia-logo" src="images/wmde_logo.svg" alt="Wikimedia Deutschland" /></a>
     </nav>
@@ -102,7 +102,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Über das Tool</h4>
+            <h4 class="modal-title">i18n.index.about</h4>
           </div>
           <div class="modal-body">
             <p>Diese Webseite soll Ihnen dabei helfen, Bilder aus Wikipedia und dem freien Medienarchiv Wikimedia Commons einfach und rechtssicher nachzunutzen.</p>
@@ -142,7 +142,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Impressum und Datenschutz</h4>
+            <h4 class="modal-title">i18n.index.legal</h4>
           </div>
           <div class="modal-body">
             <p>
@@ -192,7 +192,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Feedback</h4>
+            <h4 class="modal-title">i18n.index.feedback</h4>
           </div>
 
           <form class="feedback-form" id="feedback-form" action="#" method="post">
@@ -208,7 +208,7 @@
               </p>
               <div class="row">
                 <div class="col-sm-3">
-                  <label for="name">Name:</label>
+                  <label for="name">i18n.index.feedback-name:</label>
                 </div>
 
                 <div class="col-sm-9">
@@ -218,7 +218,7 @@
 
               <div class="row">
                 <div class="col-sm-3">
-                  <label for="feedback">Feedback:</label>
+                  <label for="feedback">i18n.index.feedback-body:</label>
                 </div>
 
                 <div class="col-sm-9">
@@ -228,7 +228,7 @@
             </div>
 
             <div class="modal-footer">
-              <button type="submit" class="green-btn">Abschicken</button>
+              <button type="submit" class="green-btn">i18n.index.feedback-submit</button>
             </div>
           </form>
         </div>
