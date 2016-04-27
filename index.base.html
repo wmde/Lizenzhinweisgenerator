@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/justifiedGallery.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <noscript>
+      <link rel="stylesheet" href="css/noscript.css">
+    </noscript>
   </head>
   <body>
     <div id="alert-placeholder"></div>
 
-    <div class="container-fluid how-it-works-screen display-none" id="how-it-works-screen">
+    <div class="container-fluid how-it-works-screen display-none yes-script" id="how-it-works-screen">
       <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <div class="row row-1">
         <div class="col-sm-3 how-it-works-col-1">
@@ -60,22 +63,32 @@
           <h2>Lizenzhinweise für Bilder aus Wikipedia und Wikimedia Commons</h2>
         </div>
 
-        <div class="how-it-works">
+        <div class="how-it-works yes-script">
           <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">Wie funktioniert das?</button>
         </div>
       </div>
 
-      <form id="file-form" onsubmit="return false;">
+      <form id="file-form" class="yes-script" onsubmit="return false;">
         <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="Internetadresse eines Wikimedia-Commons-Bildes oder eines Wikipedia-Artikels" autofocus><button type="submit" class="green-btn">i18n.index.gobutton</button>
         <div class="container-fluid display-none" id="file-form-alert">
           <span class="glyphicon glyphicon-warning-sign"></span><span id="file-form-alert-placeholder">Alert</span>
         </div>
       </form>
 
-      <div class="attribution" id="attribution"></div>
+      <noscript>
+        <div class="no-script" >
+          <h2>You must have JavaScript enabled to use this website.</h2>
+        </div>
+      </noscript>
+
+      <div class="attribution" id="attribution">
+        <noscript>
+          ""<a href="https://commons.wikimedia.org/wiki/User:The_Photographer">The Photographer</a>, <a href="https://commons.wikimedia.org/wiki/File:A_day_of_fishing_aground.jpg">„A day of fishing aground“</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode">CC0 1.0</a>"
+        </noscript>
+      </div>
     </div>
 
-    <nav class="bottom-menu">
+    <nav class="bottom-menu yes-script">
       <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">Feedback</a></li>
       <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">Über das Tool</a></li>
       <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">Impressum und Datenschutz</a></li>
