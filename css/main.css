@@ -1,6 +1,7 @@
 body {
   font-size: 14.5pt;
 }
+
 textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:active, input:active, textarea:focus, input:focus, button:focus, button:active, button:hover {
   outline: 0;
   box-shadow: 0;

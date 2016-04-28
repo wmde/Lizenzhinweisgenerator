@@ -1,0 +1,21 @@
+.yes-script {
+  display:none;
+}
+
+.landing-screen {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3a/A_day_of_fishing_aground.jpg');
+}
+
+.no-script {
+  background-color: rgba(0, 0, 0, 0.25);
+  display: block;
+  top: 60%;
+  position: absolute;
+  width: 100%;
+  padding: 20px 25px;
+}
+
+.no-script h2 {
+  padding: 0;
+  margin: 0;
+}
