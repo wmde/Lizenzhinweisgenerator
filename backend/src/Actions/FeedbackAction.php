@@ -19,7 +19,7 @@ class FeedbackAction {
 		}
 		$this->i18n = json_decode( file_get_contents( $langFile ), true );
 
-		if ( $this->requestValid( $app['request'] ) ) {
+		if ( $this->requestValid( $request ) ) {
 			$this->sendMail(
 				$request->get( 'name' ),
 				$request->get( 'feedback' )
