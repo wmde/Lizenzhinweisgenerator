@@ -22,12 +22,12 @@ if ( $i18nData && isset( $i18nData['index'] ) ) {
 }
 
 // Also replace html snippets
-$htmlFiles = array(
+$htmlFiles = [
     'about',
     'feedback',
     'legal',
     'private-use',
-);
+];
 foreach( $htmlFiles as $file ) {
     $path = __DIR__ . '/i18n/' . $lang . '/' . $file . '.html';
     if( !file_exists( $path ) ) {
