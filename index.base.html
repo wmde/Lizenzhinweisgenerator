@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>i18n.index.title</title>
+    <title>{{i18n.index.title}}</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/justifiedGallery.min.css">
@@ -33,22 +33,22 @@
       <div class="row row-2">
         <div class="col-sm-3 how-it-works-col-1">
           <p>
-            i18n.index.how-it-works-1
+            {{i18n.index.how-it-works-1}}
           </p>
         </div>
         <div class="col-sm-3 how-it-works-col-2">
           <p>
-            i18n.index.how-it-works-2
+            {{i18n.index.how-it-works-2}}
           </p>
         </div>
         <div class="col-sm-3 how-it-works-col-3">
           <p>
-            i18n.index.how-it-works-3
+            {{i18n.index.how-it-works-3}}
           </p>
         </div>
         <div class="col-sm-3 how-it-works-col-4">
           <p>
-            i18n.index.how-it-works-4
+            {{i18n.index.how-it-works-4}}
           </p>
         </div>
       </div>
@@ -59,17 +59,17 @@
 
       <div class="wrapper top-wrapper">
         <div class="heading">
-          <h1>i18n.index.title</h1>
-          <h2>i18n.index.description</h2>
+          <h1>{{i18n.index.title}}</h1>
+          <h2>{{i18n.index.description}}</h2>
         </div>
 
         <div class="how-it-works yes-script">
-          <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">i18n.index.how-it-works</button>
+          <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">{{i18n.index.how-it-works}}</button>
         </div>
       </div>
 
       <form id="file-form" class="yes-script" onsubmit="return false;">
-        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="i18n.index.input-placeholder" autofocus><button type="submit" class="green-btn">i18n.index.go-button</button>
+        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="{{i18n.index.input-placeholder}}" autofocus><button type="submit" class="green-btn">{{i18n.index.go-button}}</button>
         <div class="container-fluid display-none" id="file-form-alert">
           <span class="glyphicon glyphicon-warning-sign"></span><span id="file-form-alert-placeholder">Alert</span>
         </div>
@@ -77,7 +77,7 @@
 
       <noscript>
         <div class="no-script" >
-          <h2>i18n.index.no-script</h2>
+          <h2>{{i18n.index.no-script}}</h2>
         </div>
       </noscript>
 
@@ -90,9 +90,9 @@
 
     <nav class="bottom-menu">
       <ul class="yes-script" >
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">i18n.index.feedback</a></li>
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">i18n.index.about</a></li>
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">i18n.index.legal</a></li>
+        <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">{{i18n.index.feedback}}</a></li>
+        <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">{{i18n.index.about}}</a></li>
+        <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">{{i18n.index.legal}}</a></li>
       </ul>
       <a href="https://wikimedia.de" target="_blank"><img id="wikimedia-logo" src="images/wmde_logo.svg" alt="Wikimedia Deutschland" /></a>
     </nav>
@@ -102,10 +102,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">i18n.index.about</h4>
+            <h4 class="modal-title">{{i18n.index.about}}</h4>
           </div>
           <div class="modal-body">
-            i18n.html.about
+            {{i18n.html.about}}
           </div>
         </div>
       </div>
@@ -116,10 +116,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">i18n.index.legal</h4>
+            <h4 class="modal-title">{{i18n.index.legal}}</h4>
           </div>
           <div class="modal-body">
-            i18n.html.legal
+            {{i18n.html.legal}}
           </div>
         </div>
       </div>
@@ -130,15 +130,15 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">i18n.index.feedback</h4>
+            <h4 class="modal-title">{{i18n.index.feedback}}</h4>
           </div>
 
           <form class="feedback-form" id="feedback-form" action="#" method="post">
             <div class="modal-body container col-sm-12">
-              i18n.html.feedback
+              {{i18n.html.feedback}}
               <div class="row">
                 <div class="col-sm-3">
-                  <label for="name">i18n.index.feedback-name:</label>
+                  <label for="name">{{i18n.index.feedback-name}}:</label>
                 </div>
 
                 <div class="col-sm-9">
@@ -148,7 +148,7 @@
 
               <div class="row">
                 <div class="col-sm-3">
-                  <label for="feedback">i18n.index.feedback-body:</label>
+                  <label for="feedback">{{i18n.index.feedback-body}}:</label>
                 </div>
 
                 <div class="col-sm-9">
@@ -157,10 +157,10 @@
               </div>
             </div>
 
-            <input type="hidden" name="lang" value="i18n.lang">
+            <input type="hidden" name="lang" value="{{i18n.lang}}">
 
             <div class="modal-footer">
-              <button type="submit" class="green-btn">i18n.index.feedback-submit</button>
+              <button type="submit" class="green-btn">{{i18n.index.feedback-submit}}</button>
             </div>
           </form>
         </div>
@@ -172,11 +172,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">i18n.index.private-use</h4>
+                    <h4 class="modal-title">{{i18n.index.private-use}}</h4>
                 </div>
 
                 <div class="modal-body">
-                  i18n.html.private-use
+                  {{i18n.html.private-use}}
                 </div>
             </div>
         </div>

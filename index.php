@@ -12,12 +12,12 @@ $i18nData = json_decode($i18nData, true);
 
 // Get the base html to output
 $html = file_get_contents( __DIR__ . '/index.base.html' );
-$html = str_replace( 'i18n.lang', $lang, $html );
+$html = str_replace( '{{i18n.lang}}', $lang, $html );
 
 // If we have any i18n data replace the i18n codes with new strings
 if ( $i18nData && isset( $i18nData['index'] ) ) {
     foreach( $i18nData['index'] as $key => $string ) {
-        $html = str_replace( 'i18n.index.' . $key, $string, $html );
+        $html = str_replace( '{{i18n.index.' . $key . '}}', $string, $html );
     }
 }
 
@@ -33,7 +33,7 @@ foreach( $htmlFiles as $file ) {
     if( !file_exists( $path ) ) {
         $path = __DIR__ . '/i18n/de/' . $file . '.html';
     }
-    $html = str_replace( 'i18n.html.' . $file, file_get_contents( $path ), $html );
+    $html = str_replace( '{{i18n.html.' . $file . '}}', file_get_contents( $path ), $html );
 }
 
 // Output the html
