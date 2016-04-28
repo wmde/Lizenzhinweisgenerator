@@ -2,7 +2,7 @@
   "index": {
     "title": "Lizenzhinweisgenerator",
     "description": "Lizenzhinweise für Bilder aus Wikipedia und Wikimedia Commons",
-    "no-script": "You must have JavaScript enabled to use this website.",
+    "no-script": "Sie müssen JavaScript zur Nutzung dieser Website aktiviert.",
     "how-it-works-1": "Starten Sie mit einem Link auf ein Wikimedia-Commons-Bild oder einen Wikipedia-Artikel die Anwendung.",
     "how-it-works-2": "Beantworten Sie die Fragen zur beabsichtigten Nutzung, um den Lizenzhinweis zu erstellen.",
     "how-it-works-3": "Lesen Sie nach, wie der Lizenzhinweis zu benutzen ist.",
