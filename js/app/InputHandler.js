@@ -177,7 +177,7 @@ $.extend( InputHandler.prototype, {
 			wikiUrl,
 			title;
 
-		if( url.indexOf( 'commons.wikimedia.org/' ) !== -1 ) {
+		if( url.indexOf( 'commons.wikimedia.org/' ) !== -1 || url.indexOf( 'commons.m.wikimedia.org/' ) !== -1 ) {
 			wikiUrl = 'https://commons.wikimedia.org/';
 			title = this._extractPageTitle( url );
 		} else if( regExp0.test( url ) ) {

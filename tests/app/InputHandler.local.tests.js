@@ -27,7 +27,13 @@ var testCases = [
 			'http://commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg#mediaviewer/File:Helene_Fischer_2010.jpg',
 			'commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?uselang=de',
 			'https://commons.wikimedia.org/w/index.php?title=File:Helene_Fischer_2010.jpg&uselang=de',
-			'commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?foo=bar'
+			'commons.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?foo=bar',
+			'https://commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg',
+			'commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg',
+			'https://commons.m.wikimedia.org/w/index.php?title=File:Helene_Fischer_2010.jpg',
+			'commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?uselang=de',
+			'https://commons.m.wikimedia.org/w/index.php?title=File:Helene_Fischer_2010.jpg&uselang=de',
+			'commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?foo=bar'
 		],
 		expected: {
 			file: 'File:Helene_Fischer_2010.jpg',
@@ -48,7 +54,9 @@ var testCases = [
 			'http://upload.wikimedia.org/wikipedia/commons/e/e4/JapaneseToiletControlPanel.jpg',
 			'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/JapaneseToiletControlPanel.jpg/320px-JapaneseToiletControlPanel.jpg',
 			'http://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg#mediaviewer/File:JapaneseToiletControlPanel.jpg',
-			'http://commons.wikimedia.org/wiki/User:Chris_73/Gallery_001#mediaviewer/File:JapaneseToiletControlPanel.jpg'
+			'http://commons.wikimedia.org/wiki/User:Chris_73/Gallery_001#mediaviewer/File:JapaneseToiletControlPanel.jpg',
+			'https://commons.m.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg',
+			'https://commons.m.wikimedia.org/w/index.php?title=File:JapaneseToiletControlPanel.jpg'
 		],
 		expected: {
 			file: 'File:JapaneseToiletControlPanel.jpg',
@@ -61,7 +69,9 @@ var testCases = [
 			'http://upload.wikimedia.org/wikipedia/commons/f/f4/Gerardus_t%27_Hooft_at_Harvard.jpg',
 			'http://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Gerardus_t%27_Hooft_at_Harvard.jpg/180px-Gerardus_t%27_Hooft_at_Harvard.jpg',
 			'http://commons.wikimedia.org/wiki/File:Gerardus_t%27_Hooft_at_Harvard.jpg#mediaviewer/File:Gerardus_t%27_Hooft_at_Harvard.jpg',
-			'http://commons.wikimedia.org/wiki/Gerardus_%27t_Hooft#mediaviewer/File:Gerardus_t%27_Hooft_at_Harvard.jpg'
+			'http://commons.wikimedia.org/wiki/Gerardus_%27t_Hooft#mediaviewer/File:Gerardus_t%27_Hooft_at_Harvard.jpg',
+			'https://commons.m.wikimedia.org/wiki/File:Gerardus_t%27_Hooft_at_Harvard.jpg',
+			'https://commons.m.wikimedia.org/w/index.php?title=File:Gerardus_t%27_Hooft_at_Harvard.jpg'
 		],
 		expected: {
 			file: 'File:Gerardus_t\'_Hooft_at_Harvard.jpg',
@@ -104,7 +114,8 @@ var testCases = [
 		}
 	}, {
 		input: [
-			'https://commons.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm'
+			'https://commons.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm',
+			'https://commons.m.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm'
 		],
 		expected: {
 			file: 'File:A_Punjab_Village,_1925.webm',
