@@ -85,7 +85,10 @@ var testCases = [
 			'http://upload.wikimedia.org/wikipedia/de/f/fb/1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
 			'http://upload.wikimedia.org/wikipedia/de/thumb/f/fb/1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg/320px-1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
 			'upload.wikimedia.org/wikipedia/de/thumb/f/fb/1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg/320px-1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
-			'http://upload.wikimedia.org/wikipedia/de/thumb/f/fb/1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg/320px-1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg'
+			'http://upload.wikimedia.org/wikipedia/de/thumb/f/fb/1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg/320px-1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'https://de.m.wikipedia.org/wiki/File:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'de.m.wikipedia.org/wiki/File:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'https://de.m.wikipedia.org/w/index.php?title=File:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg'
 		],
 		expected: {
 			file: 'File:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
@@ -98,7 +101,11 @@ var testCases = [
 			'http://de.wikipedia.org/w/index.php?title=Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
 			'de.wikipedia.org/w/index.php?title=Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
 			'http://de.wikipedia.org/wiki/1._FC_Bamberg#mediaviewer/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
-			'http://de.wikipedia.org/wiki/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg#mediaviewer/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg'
+			'http://de.wikipedia.org/wiki/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg#mediaviewer/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'https://de.m.wikipedia.org/wiki/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'de.m.wikipedia.org/wiki/Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'https://de.m.wikipedia.org/w/index.php?title=Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg',
+			'de.m.wikipedia.org/w/index.php?title=Datei:1_FC_Bamberg_-_1_FC_N%C3%BCrnberg_1901.jpg'
 		],
 		expected: {
 			file: 'Datei:1_FC_Bamberg_-_1_FC_Nürnberg_1901.jpg',
@@ -178,7 +185,10 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 		{
 			input: [
 				'http://en.wikipedia.org/wiki/K%C3%B6nigsberg,_Bavaria',
-				'http://en.wikipedia.org/w/index.php?title=K%C3%B6nigsberg,_Bavaria'
+				'http://en.wikipedia.org/w/index.php?title=K%C3%B6nigsberg,_Bavaria',
+				'https://en.m.wikipedia.org/wiki/K%C3%B6nigsberg,_Bavaria',
+				'https://en.m.wikipedia.org/w/index.php?title=K%C3%B6nigsberg,_Bavaria'
+
 			],
 			expected: {
 				wikiUrl: 'https://en.wikipedia.org/'
@@ -192,7 +202,15 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 				'http://de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern',
 				'http://de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de',
 				'de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern',
-				'de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de'
+				'de.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de',
+				'https://de.m.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern',
+				'https://de.m.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern?uselang=en',
+				'de.m.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern',
+				'de.m.wikipedia.org/wiki/K%C3%B6nigsberg_in_Bayern?uselang=de',
+				'https://de.m.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern',
+				'https://de.m.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de',
+				'de.m.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern',
+				'de.m.wikipedia.org/w/index.php?title=K%C3%B6nigsberg_in_Bayern&uselang=de'
 			],
 			expected: {
 				wikiUrl: 'https://de.wikipedia.org/'
@@ -200,7 +218,9 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 		}, {
 			input: [
 				'https://commons.wikimedia.org/wiki/User:Seeteufel',
-				'commons.wikimedia.org/wiki/User:Seeteufel'
+				'commons.wikimedia.org/wiki/User:Seeteufel',
+				'https://commons.m.wikimedia.org/wiki/User:Seeteufel',
+				'commons.m.wikimedia.org/wiki/User:Seeteufel'
 			],
 			expected: {
 				wikiUrl: 'https://commons.wikimedia.org/'
@@ -259,7 +279,8 @@ QUnit.test( 'getFilename returns an error when given an URL that cannot be proce
 		'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG',
 		'https://www.wikimedia.de/w/images.homepage/d/d6/',
 		'http://foo.bar',
-		'https://de.wikipedia.org/wiki/Lars_Kindgen'
+		'https://de.wikipedia.org/wiki/Lars_Kindgen',
+		'https://de.m.wikipedia.org/wiki/Lars_Kindgen'
 	];
 
 	/**

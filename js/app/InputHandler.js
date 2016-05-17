@@ -171,7 +171,7 @@ $.extend( InputHandler.prototype, {
 	 */
 	_splitUrl: function( url ) {
 		var regExp0 = /upload.wikimedia\.org\/wikipedia\/([-a-z]{2,})\//i,
-			regExp1 = /([-a-z]{2,}(\.m)?\.wikipedia\.org)\//i,
+			regExp1 = /([-a-z]{2,})(\.m)?\.wikipedia\.org\//i,
 			regExp2 = /\/wikipedia\/([^/]+)\//,
 			matches,
 			wikiUrl,
@@ -187,7 +187,7 @@ $.extend( InputHandler.prototype, {
 			title = this._extractPageTitle( url );
 		} else if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
-			wikiUrl = 'https://' + matches[ 1 ] + '/';
+			wikiUrl = 'https://' + matches[ 1 ] + '.wikipedia.org/';
 
 			title = this._extractPageTitle( url, false );
 
