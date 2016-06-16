@@ -1,5 +1,8 @@
 'use strict';
 
+// Load all i18n.json files available
+require( '../../i18n/**/i18n.json', { mode: 'expand' } );
+
 var Polyglot = require( 'node-polyglot' ),
 	i18n;
 
