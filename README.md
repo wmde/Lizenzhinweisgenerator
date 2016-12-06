@@ -22,6 +22,8 @@ Coding style adheres to the [Wikibase coding conventions](http://www.mediawiki.o
 
 ### Building the code
 
+Run `npm install`to pull any new dependencies.
+
 Browserify is used to build and minify the JS code.
 
 * `npm run build` builds a production version
