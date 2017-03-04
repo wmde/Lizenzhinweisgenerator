@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>{{i18n.index.title}}</title>
 
@@ -10,171 +11,172 @@
     <noscript>
       <link rel="stylesheet" href="css/noscript.css">
     </noscript>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="alert-placeholder"></div>
 
     <div class="container-fluid how-it-works-screen display-none yes-script" id="how-it-works-screen">
-      <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <div class="row row-1">
-        <div class="col-sm-3 how-it-works-col-1">
-          <img class="how-it-works-image" src="images/how_it_works-1.svg">
+        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="row row-1">
+            <div class="col-sm-3 how-it-works-col-1">
+                <img class="how-it-works-image" src="images/how_it_works-1.svg">
+            </div>
+            <div class="col-sm-3 how-it-works-col-2">
+                <img class="how-it-works-image" src="images/how_it_works-2.svg">
+            </div>
+            <div class="col-sm-3 how-it-works-col-3">
+                <img class="how-it-works-image" src="images/how_it_works-3.svg">
+            </div>
+            <div class="col-sm-3 how-it-works-col-4">
+                <img class="how-it-works-image" src="images/how_it_works-4.svg">
+            </div>
         </div>
-        <div class="col-sm-3 how-it-works-col-2">
-          <img class="how-it-works-image" src="images/how_it_works-2.svg">
+        <div class="row row-2">
+            <div class="col-sm-3 how-it-works-col-1">
+                <p>
+                    {{i18n.index.how-it-works-1}}
+                </p>
+            </div>
+            <div class="col-sm-3 how-it-works-col-2">
+                <p>
+                    {{i18n.index.how-it-works-2}}
+                </p>
+            </div>
+            <div class="col-sm-3 how-it-works-col-3">
+                <p>
+                    {{i18n.index.how-it-works-3}}
+                </p>
+            </div>
+            <div class="col-sm-3 how-it-works-col-4">
+                <p>
+                    {{i18n.index.how-it-works-4}}
+                </p>
+            </div>
         </div>
-        <div class="col-sm-3 how-it-works-col-3">
-          <img class="how-it-works-image" src="images/how_it_works-3.svg">
-        </div>
-        <div class="col-sm-3 how-it-works-col-4">
-          <img class="how-it-works-image" src="images/how_it_works-4.svg">
-        </div>
-      </div>
-      <div class="row row-2">
-        <div class="col-sm-3 how-it-works-col-1">
-          <p>
-            {{i18n.index.how-it-works-1}}
-          </p>
-        </div>
-        <div class="col-sm-3 how-it-works-col-2">
-          <p>
-            {{i18n.index.how-it-works-2}}
-          </p>
-        </div>
-        <div class="col-sm-3 how-it-works-col-3">
-          <p>
-            {{i18n.index.how-it-works-3}}
-          </p>
-        </div>
-        <div class="col-sm-3 how-it-works-col-4">
-          <p>
-            {{i18n.index.how-it-works-4}}
-          </p>
-        </div>
-      </div>
     </div>
 
     <div class="screen landing-screen" id="landing-screen">
-      <div class="clearfix"></div>
+        <div class="clearfix"></div>
 
-      <div class="wrapper top-wrapper">
-        <div class="heading">
-          <h1>{{i18n.index.title}}</h1>
-          <h2>{{i18n.index.description}}</h2>
+        <div class="wrapper top-wrapper">
+            <div class="heading">
+                <h1>{{i18n.index.title}}</h1>
+                <h2>{{i18n.index.description}}</h2>
+            </div>
+
+            <div class="how-it-works yes-script">
+                <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">{{i18n.index.how-it-works}}</button>
+            </div>
         </div>
 
-        <div class="how-it-works yes-script">
-          <button class="green-btn track-click" data-track-category="Navigation" data-track-event="How it works" id="how-it-works-button">{{i18n.index.how-it-works}}</button>
-        </div>
-      </div>
+        <form id="file-form" class="yes-script" onsubmit="return false;">
+            <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="{{i18n.index.input-placeholder}}" autofocus {{i18n.input}}><button type="submit" class="green-btn">{{i18n.index.go-button}}</button>
+            <div class="container-fluid display-none" id="file-form-alert">
+                <span class="glyphicon glyphicon-warning-sign"></span><span id="file-form-alert-placeholder">Alert</span>
+            </div>
+        </form>
 
-      <form id="file-form" class="yes-script" onsubmit="return false;">
-        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="{{i18n.index.input-placeholder}}" autofocus><button type="submit" class="green-btn">{{i18n.index.go-button}}</button>
-        <div class="container-fluid display-none" id="file-form-alert">
-          <span class="glyphicon glyphicon-warning-sign"></span><span id="file-form-alert-placeholder">Alert</span>
-        </div>
-      </form>
-
-      <noscript>
+        <noscript>
         <div class="no-script" >
           <h2>{{i18n.index.no-script}}</h2>
         </div>
       </noscript>
 
-      <div class="attribution" id="attribution">
-        <noscript>
+        <div class="attribution" id="attribution">
+            <noscript>
           "<a href="https://commons.wikimedia.org/wiki/User:The_Photographer">The Photographer</a>, <a href="https://commons.wikimedia.org/wiki/File:A_day_of_fishing_aground.jpg">„A day of fishing aground“</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode">CC0 1.0</a>"
         </noscript>
-      </div>
+        </div>
     </div>
 
     <nav class="bottom-menu">
-      <ul class="yes-script" >
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">{{i18n.index.feedback}}</a></li>
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">{{i18n.index.about}}</a></li>
-        <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">{{i18n.index.legal}}</a></li>
-      </ul>
-      <a href="https://wikimedia.de" target="_blank"><img id="wikimedia-logo" src="images/wmde_logo.svg" alt="Wikimedia Deutschland" /></a>
+        <ul class="yes-script">
+            <li><a class='track-click' data-track-category="Navigation" data-track-event="Feedback" href="#" data-toggle="modal" data-target="#feedback-modal">{{i18n.index.feedback}}</a></li>
+            <li><a class='track-click' data-track-category="Navigation" data-track-event="About" href="#" data-toggle="modal" data-target="#about-modal">{{i18n.index.about}}</a></li>
+            <li><a class='track-click' data-track-category="Navigation" data-track-event="Legal notice" href="#" data-toggle="modal" data-target="#legal-notice-modal">{{i18n.index.legal}}</a></li>
+        </ul>
+        <a href="https://wikimedia.de" target="_blank"><img id="wikimedia-logo" src="images/wmde_logo.svg" alt="Wikimedia Deutschland" /></a>
     </nav>
 
     <div class="modal ag-modal fade" id="about-modal">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">{{i18n.index.about}}</h4>
-          </div>
-          <div class="modal-body">
-            {{i18n.html.about}}
-          </div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{i18n.index.about}}</h4>
+                </div>
+                <div class="modal-body">
+                    {{i18n.html.about}}
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <div class="modal ag-modal fade" id="legal-notice-modal">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">{{i18n.index.legal}}</h4>
-          </div>
-          <div class="modal-body">
-            {{i18n.html.legal}}
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{i18n.index.legal}}</h4>
+                </div>
+                <div class="modal-body">
+                    {{i18n.html.legal}}
 
 
-            <div class="checkbox">
-              <input type="checkbox" name="tracking" id="tracking-switch">
-              <label for="tracking-switch">{{i18n.index.legal-tracking-switch}}</label>
+                    <div class="checkbox">
+                        <input type="checkbox" name="tracking" id="tracking-switch">
+                        <label for="tracking-switch">{{i18n.index.legal-tracking-switch}}</label>
+                    </div>
+
+                    <p>
+                        {{i18n.index.legal-hosting}}
+                    </p>
+                </div>
             </div>
-
-            <p>
-              {{i18n.index.legal-hosting}}
-            </p>
-          </div>
         </div>
-      </div>
     </div>
 
     <div class="modal ag-modal fade" id="feedback-modal">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">{{i18n.index.feedback}}</h4>
-          </div>
-
-          <form class="feedback-form" id="feedback-form" action="#" method="post">
-            <div class="modal-body container col-sm-12">
-              {{i18n.html.feedback}}
-              <div class="row">
-                <div class="col-sm-3">
-                  <label for="name">{{i18n.index.feedback-name}}:</label>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{i18n.index.feedback}}</h4>
                 </div>
 
-                <div class="col-sm-9">
-                  <input type="text" id="name" name="name" class="form-control">
-                </div>
-              </div>
+                <form class="feedback-form" id="feedback-form" action="#" method="post">
+                    <div class="modal-body container col-sm-12">
+                        {{i18n.html.feedback}}
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label for="name">{{i18n.index.feedback-name}}:</label>
+                            </div>
 
-              <div class="row">
-                <div class="col-sm-3">
-                  <label for="feedback">{{i18n.index.feedback-body}}:</label>
-                </div>
+                            <div class="col-sm-9">
+                                <input type="text" id="name" name="name" class="form-control">
+                            </div>
+                        </div>
 
-                <div class="col-sm-9">
-                  <textarea id="feedback" name="feedback" class="form-control" rows="10"></textarea>
-                </div>
-              </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label for="feedback">{{i18n.index.feedback-body}}:</label>
+                            </div>
+
+                            <div class="col-sm-9">
+                                <textarea id="feedback" name="feedback" class="form-control" rows="10"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="lang" value="{{i18n.lang}}">
+
+                    <div class="modal-footer">
+                        <button type="submit" class="green-btn">{{i18n.index.feedback-submit}}</button>
+                    </div>
+                </form>
             </div>
-
-            <input type="hidden" name="lang" value="{{i18n.lang}}">
-
-            <div class="modal-footer">
-              <button type="submit" class="green-btn">{{i18n.index.feedback-submit}}</button>
-            </div>
-          </form>
         </div>
-      </div>
     </div>
 
     <div class="modal ag-modal fade" id="private-use-modal">
@@ -186,7 +188,7 @@
                 </div>
 
                 <div class="modal-body">
-                  {{i18n.html.private-use}}
+                    {{i18n.html.private-use}}
                 </div>
             </div>
         </div>
@@ -194,5 +196,6 @@
     <div class="screen display-none" id="results-screen"></div>
 
     <script src="js/bundle.min.js"></script>
-  </body>
+</body>
+
 </html>
