@@ -14,7 +14,7 @@ $i18nData = json_decode($i18nData, true);
 $html = file_get_contents( __DIR__ . '/index.base.html' );
 $html = str_replace( '{{i18n.lang}}', $lang, $html );
 $html = str_replace( '{{inputattr}}',
-    isset( $_GET['url'] ) ? ' value="'.$_GET['url'].'"' : '',
+    isset( $_GET['url'] ) ? ' value="'.htmlspecialchars($_GET['url']).'"' : '',
     $html
 );
 

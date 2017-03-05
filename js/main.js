@@ -115,13 +115,14 @@ $feedbackForm.submit( function( e ) {
 	e.preventDefault();
 } );
 
-$(function() {
+$( function() {
 	// Instant start if input field is filled
+
 	var $fileForm = $('#file-form'),
 		$fileFormInput = $fileForm.find('#file-form-input'),
 		fileFormVal = $fileFormInput.val();
 
 	if (fileFormVal && fileFormVal !== '') {
-		$fileForm.find('[type="submit"]').trigger('click');
+		$fileForm.submit();
 	}
-});
+} );
