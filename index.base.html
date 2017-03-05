@@ -69,7 +69,7 @@
       </div>
 
       <form id="file-form" class="yes-script" onsubmit="return false;">
-        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="{{i18n.index.input-placeholder}}" autofocus><button type="submit" class="green-btn">{{i18n.index.go-button}}</button>
+        <input id="file-form-input" type="text" inputmode="url" name="file" placeholder="{{i18n.index.input-placeholder}}" {{inputattr}} autofocus><button type="submit" class="green-btn">{{i18n.index.go-button}}</button>
         <div class="container-fluid display-none" id="file-form-alert">
           <span class="glyphicon glyphicon-warning-sign"></span><span id="file-form-alert-placeholder">Alert</span>
         </div>
