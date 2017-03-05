@@ -122,7 +122,7 @@ $( function() {
 		$fileFormInput = $fileForm.find( '#file-form-input' ),
 		fileFormVal = $fileFormInput.val();
 
-	if (fileFormVal && fileFormVal !== '') {
+	if( fileFormVal && fileFormVal !== '' ) {
 		$fileForm.submit();
 	}
 } );
