@@ -118,8 +118,8 @@ $feedbackForm.submit( function( e ) {
 $( function() {
 	// Instant start if input field is filled
 
-	var $fileForm = $('#file-form'),
-		$fileFormInput = $fileForm.find('#file-form-input'),
+	var $fileForm = $( '#file-form' ),
+		$fileFormInput = $fileForm.find( '#file-form-input' ),
 		fileFormVal = $fileFormInput.val();
 
 	if (fileFormVal && fileFormVal !== '') {
