@@ -10,10 +10,13 @@ if( !file_exists( __DIR__ . '/i18n/' . $lang . '/i18n.json' ) ) {
 $i18nData = file_get_contents( __DIR__ . '/i18n/' . $lang . '/i18n.json' );
 $i18nData = json_decode($i18nData, true);
 
+// Get the url if passed
+$url =  isset( $_GET['url'] ) ? $_GET['url'] : '';
+
 // Get the base html to output
 $html = file_get_contents( __DIR__ . '/index.base.html' );
 $html = str_replace( '{{i18n.lang}}', $lang, $html );
-$html = str_replace( '{{inputattr}}', isset( $_GET['url'] ) ? ' value="'.htmlspecialchars($_GET['url']).'"' : '', $html );
+$html = str_replace( '{{url}}', htmlspecialchars( $url ), $html );
 
 // If we have any i18n data replace the i18n codes with new strings
 if ( $i18nData && isset( $i18nData['index'] ) ) {
