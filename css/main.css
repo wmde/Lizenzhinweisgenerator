@@ -69,6 +69,7 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
   height: 42px;
   border-radius: 2px;
   border: 0;
+  transition: background 100ms;
 }
 .green-btn:hover {
   background-color: #008752;
@@ -157,6 +158,7 @@ textarea, input, .form-control:focus, textarea:hover, input:hover, textarea:acti
 a, a:focus, a:active {
   color: #dce4e8;
   outline: none;
+  transition: color 100ms;
 }
 a:hover {
   color: #fff;
@@ -299,6 +301,7 @@ a:hover {
 }
 #results-screen a {
   box-sizing: border-box;
+  transition: border 100ms;
 }
 #results-screen a:hover {
   border: 3px solid #97b314;
@@ -432,6 +435,7 @@ a:hover {
   padding: 0;
   vertical-align: top;
   outline: 0;
+  transition: background 100ms;
 }
 .dialogue-bubble h2 .question-mark-content {
   margin-top: 10px;
