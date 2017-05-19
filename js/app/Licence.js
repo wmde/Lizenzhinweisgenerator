@@ -185,6 +185,13 @@ $.extend( Licence.prototype, {
 	},
 
 	/**
+	 * @return {Array}
+	 */
+	getGroups: function() {
+		return this._groups;
+	},
+
+	/**
 	 * Returns the id of the licence's unported equivalent e.g. 'cc-by-3.0' for 'cc-by-3.0-ported'
 	 *
 	 * @returns {string}

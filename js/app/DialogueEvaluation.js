@@ -2,7 +2,8 @@
 
 var $ = require( 'jquery' ),
 	LicenceStore = require( './LicenceStore' ),
-	licences = new LicenceStore( require( './LICENCES' ) ),
+	config = require( '../config.json' ),
+	licences = new LicenceStore( require( './LICENCES' ), config.portedLicences ),
 	Messages = require( './Messages' );
 
 /**
@@ -82,7 +83,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	getAttributionLicence: function() {
-		return this._getResult( 'editing', 'edited' ) === 'true' ?
+		return this._getResult( 'editing', 'edited' ) === 'true' && this._getResult( 'licence', 'licence' ) !== 'original' ?
 			licences.getLicence( this._getResult( 'licence', 'licence' ) )
 			: this._asset.getLicence();
 	},
