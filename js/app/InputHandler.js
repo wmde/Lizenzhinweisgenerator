@@ -96,43 +96,74 @@ $.extend( InputHandler.prototype, {
 	 * Extracts a prefixed filename (MediaWiki page title) out of an URL string.
 	 *
 	 * @param {string} url
+	 * @param {string} [wikiUrl]
 	 * @param {boolean} [forcePrefix]
 	 *        Default: true
-	 * @return {string}
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {string}
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
 	 */
-	_extractPageTitle: function( url, forcePrefix ) {
-		var filename,
-			prefixedFilename;
+	_extractPageTitle: function( url, wikiUrl, forcePrefix ) {
+		var deferred = $.Deferred();
 
 		if( forcePrefix === undefined ) {
 			forcePrefix = true;
 		}
 
-		filename = this._extractFilename( url );
+		this._extractFilename( url, wikiUrl )
+			.done( function( filename ) {
+				var prefixedFilename = decodeURIComponent( filename );
+				if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
+					prefixedFilename = 'File:' + prefixedFilename;
+				}
 
-		prefixedFilename = decodeURIComponent( filename );
-		if( prefixedFilename.indexOf( ':' ) === -1 && forcePrefix ) {
-			prefixedFilename = 'File:' + prefixedFilename;
-		}
+				deferred.resolve(  prefixedFilename );
+			} )
+			.fail( function( error ) {
+				deferred.reject( error );
+			} );
 
-		return prefixedFilename;
+		return deferred.promise();
 	},
 
 	/**
 	 * Extracts filename or mediawiki page title
 	 *
 	 * @param {string} url
-	 * @return {string}
+	 * @param {string} [wikiUrl]
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {string}
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
 	 */
-	_extractFilename: function( url ) {
-		var key,
+	_extractFilename: function( url, wikiUrl ) {
+		var deferred = $.Deferred(),
+			key,
 			keyLoc,
 			matches,
-			segments;
+			segments,
+			pageId;
+
+		if( url.indexOf( 'curid=' ) !== -1 ) {
+			matches = url.match( /curid=([^&=]+)/i );
+			pageId = matches[ 1 ];
+			this._api.getTitleFromPageId( pageId, wikiUrl )
+				.done( function( title ) {
+					deferred.resolve( title );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
+			return deferred.promise();
+		}
 
 		if( url.indexOf( 'title=' ) !== -1 ) {
 			matches = url.match( /title=([^&]+)/i );
-			return matches[ 1 ];
+			deferred.resolve( matches[ 1 ] );
+			return deferred.promise();
 		}
 		url = url.replace( /\?.+$/, '' );
 
@@ -140,67 +171,122 @@ $.extend( InputHandler.prototype, {
 		keyLoc = url.indexOf( key );
 
 		if( keyLoc !== -1 ) {
-			return url.substr( keyLoc + key.length );
+			deferred.resolve( url.substr( keyLoc + key.length ) );
+			return deferred.promise();
 		}
 
 		key = '#/media/';
 		keyLoc = url.indexOf( key );
 
 		if( keyLoc !== -1 ) {
-			return url.substr( keyLoc + key.length );
+			deferred.resolve( url.substr( keyLoc + key.length ) );
+			return deferred.promise();
 		}
 
 		key = 'wiki/';
 		keyLoc = url.indexOf( key );
 
 		if( keyLoc !== -1 ) {
-			return url.substr( keyLoc + key.length );
+			deferred.resolve( url.substr( keyLoc + key.length ) );
+			return deferred.promise();
 		}
 
 		segments = url.split( '/' );
-		return ( $.inArray( 'thumb', segments ) !== -1 )
-			? segments[ segments.length - 2 ]
-			: segments[ segments.length - 1 ];
+		if( $.inArray( 'thumb', segments ) !== -1 ) {
+			deferred.resolve( segments[ segments.length - 2 ] );
+		} else {
+			deferred.resolve( segments[ segments.length - 1 ] );
+		}
+
+		return deferred.promise();
 	},
 
 	/**
 	 * Splits a URL into the base URL of a Wiki and the asset title.
 	 *
 	 * @param {string} url
-	 * @return {Object}
+	 * @return {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {Object} Contains keys wikiUrl and title
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
 	 */
 	_splitUrl: function( url ) {
-		var regExp0 = /upload.wikimedia\.org\/wikipedia\/([-a-z]{2,})\//i,
+		var deferred = $.Deferred(),
+			regExp0 = /upload.wikimedia\.org\/wikipedia\/([-a-z]{2,})\//i,
 			regExp1 = /([-a-z]{2,})(\.m)?\.wikipedia\.org\//i,
 			regExp2 = /\/wikipedia\/([^/]+)\//,
 			matches,
-			wikiUrl,
-			title;
+			wikiUrl;
 
 		if( url.indexOf( 'commons.wikimedia.org/' ) !== -1 || url.indexOf( 'commons.m.wikimedia.org/' ) !== -1 ) {
 			wikiUrl = 'https://commons.wikimedia.org/';
-			title = this._extractPageTitle( url );
-		} else if( regExp0.test( url ) ) {
+			this._extractPageTitle( url )
+				.done( function( title ) {
+					deferred.resolve( {
+						wikiUrl: wikiUrl,
+						title: title
+					} );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
+			return deferred.promise();
+		}
+
+		if( regExp0.test( url ) ) {
 			matches = url.match( regExp0 );
 			var domain = ( matches[ 1 ] === 'commons' ) ? 'wikimedia' : 'wikipedia';
 			wikiUrl = 'https://' + matches[ 1 ] + '.' + domain + '.org/';
-			title = this._extractPageTitle( url );
-		} else if( regExp1.test( url ) ) {
+			this._extractPageTitle( url )
+				.done( function( title ) {
+					deferred.resolve( {
+						wikiUrl: wikiUrl,
+						title: title
+					} );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
+			return deferred.promise();
+		}
+
+		if( regExp1.test( url ) ) {
 			matches = url.match( regExp1 );
 			wikiUrl = 'https://' + matches[ 1 ] + '.wikipedia.org/';
 
-			title = this._extractPageTitle( url, false );
-
-		} else if( regExp2.test( url ) ) {
-			matches = url.match( regExp2 );
-			wikiUrl = 'https://' + matches[ 1 ] + '.wikipedia.org/';
-			title = this._extractPageTitle( url );
+			this._extractPageTitle( url, wikiUrl, false )
+				.done( function( title ) {
+					deferred.resolve( {
+						wikiUrl: wikiUrl,
+						title: title
+					} );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
+			return deferred.promise();
 		}
 
-		return {
-			wikiUrl: wikiUrl,
-			title: title
-		};
+		if( regExp2.test( url ) ) {
+			matches = url.match( regExp2 );
+			wikiUrl = 'https://' + matches[ 1 ] + '.wikipedia.org/';
+			this._extractPageTitle( url )
+				.done( function( title ) {
+					deferred.resolve( {
+						wikiUrl: wikiUrl,
+						title: title
+					} );
+				} )
+				.fail( function( error ) {
+					deferred.reject( error );
+				} );
+			return deferred.promise();
+		}
+
+		deferred.reject( new ApplicationError( 'url-invalid' ) );
+
+		return deferred.promise();
 	},
 
 	/**
@@ -218,28 +304,32 @@ $.extend( InputHandler.prototype, {
 	 */
 	_getWikipediaPageImagesFileInfo: function( url ) {
 		var self = this,
-			deferred = $.Deferred(),
-			urlInfo = this._splitUrl( url ),
-			wikiUrl = urlInfo.wikiUrl;
+			deferred = $.Deferred();
 
-		if( !wikiUrl ) {
-			deferred.reject( new ApplicationError( 'url-invalid' ) );
-			return deferred.promise();
-		}
-
-		this._api.getWikipediaPageImageInfo( decodeURI( urlInfo.title ), wikiUrl )
-			.done( function( prefixedFilenameOrImageInfos, url ) {
-				// Overwrite initial information if the asset is not stored in the local Wiki:
-				var evaluatedUrlInfo = self._splitUrl( url );
-				if( evaluatedUrlInfo.wikiUrl !== wikiUrl ) {
-					urlInfo = self._splitUrl( url );
-					deferred.resolve( urlInfo.title, urlInfo.wikiUrl );
-				} else {
-					deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
-				}
+		this._splitUrl( url )
+			.done( function( urlInfo ) {
+				var wikiUrl = urlInfo.wikiUrl;
+				self._api.getWikipediaPageImageInfo( decodeURI( urlInfo.title ), wikiUrl )
+					.done( function( prefixedFilenameOrImageInfos, url ) {
+						// Overwrite initial information if the asset is not stored in the local Wiki:
+						self._splitUrl( url )
+							.done( function( evaluatedUrlInfo ) {
+								if( evaluatedUrlInfo.wikiUrl !== wikiUrl ) {
+									deferred.resolve( evaluatedUrlInfo.title, evaluatedUrlInfo.wikiUrl );
+								} else {
+									deferred.resolve( prefixedFilenameOrImageInfos, wikiUrl );
+								}
+							} )
+							.fail( function( error ) {
+								deferred.reject( error );
+							} );
+					} )
+					.fail( function( error ) {
+						deferred.reject( error );
+					} );
 			} )
-			.fail( function( error ) {
-				deferred.reject( error );
+			.fail( function() {
+				deferred.reject( new ApplicationError( 'url-invalid' ) );
 			} );
 
 		return deferred.promise();

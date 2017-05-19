@@ -33,7 +33,11 @@ var testCases = [
 			'https://commons.m.wikimedia.org/w/index.php?title=File:Helene_Fischer_2010.jpg',
 			'commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?uselang=de',
 			'https://commons.m.wikimedia.org/w/index.php?title=File:Helene_Fischer_2010.jpg&uselang=de',
-			'commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?foo=bar'
+			'commons.m.wikimedia.org/wiki/File:Helene_Fischer_2010.jpg?foo=bar',
+			'https://commons.wikimedia.org/?curid=15382769',
+			'commons.wikimedia.org/?curid=15382769',
+			'https://commons.m.wikimedia.org/?curid=15382769',
+			'commons.m.wikimedia.org/?curid=15382769'
 		],
 		expected: {
 			file: 'File:Helene_Fischer_2010.jpg',
@@ -56,7 +60,11 @@ var testCases = [
 			'https://commons.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg#mediaviewer/File:JapaneseToiletControlPanel.jpg',
 			'https://commons.wikimedia.org/wiki/User:Chris_73/Gallery_001#mediaviewer/File:JapaneseToiletControlPanel.jpg',
 			'https://commons.m.wikimedia.org/wiki/File:JapaneseToiletControlPanel.jpg',
-			'https://commons.m.wikimedia.org/w/index.php?title=File:JapaneseToiletControlPanel.jpg'
+			'https://commons.m.wikimedia.org/w/index.php?title=File:JapaneseToiletControlPanel.jpg',
+			'https://commons.wikimedia.org/?curid=10391',
+			'commons.wikimedia.org/?curid=10391',
+			'https://commons.m.wikimedia.org/?curid=10391',
+			'commons.m.wikimedia.org/?curid=10391'
 		],
 		expected: {
 			file: 'File:JapaneseToiletControlPanel.jpg',
@@ -71,7 +79,11 @@ var testCases = [
 			'https://commons.wikimedia.org/wiki/File:Gerardus_t%27_Hooft_at_Harvard.jpg#mediaviewer/File:Gerardus_t%27_Hooft_at_Harvard.jpg',
 			'https://commons.wikimedia.org/wiki/Gerardus_%27t_Hooft#mediaviewer/File:Gerardus_t%27_Hooft_at_Harvard.jpg',
 			'https://commons.m.wikimedia.org/wiki/File:Gerardus_t%27_Hooft_at_Harvard.jpg',
-			'https://commons.m.wikimedia.org/w/index.php?title=File:Gerardus_t%27_Hooft_at_Harvard.jpg'
+			'https://commons.m.wikimedia.org/w/index.php?title=File:Gerardus_t%27_Hooft_at_Harvard.jpg',
+			'https://commons.wikimedia.org/?curid=118613',
+			'commons.wikimedia.org/?curid=118613',
+			'https://commons.m.wikimedia.org/?curid=118613',
+			'commons.m.wikimedia.org/?curid=118613'
 		],
 		expected: {
 			file: 'File:Gerardus_t\'_Hooft_at_Harvard.jpg',
@@ -122,7 +134,9 @@ var testCases = [
 	}, {
 		input: [
 			'https://commons.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm',
-			'https://commons.m.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm'
+			'https://commons.m.wikimedia.org/wiki/File:A_Punjab_Village,_1925.webm',
+			'https://commons.wikimedia.org/?curid=45093094',
+			'https://commons.m.wikimedia.org/?curid=45093094'
 		],
 		expected: {
 			file: 'File:A_Punjab_Village,_1925.webm',
