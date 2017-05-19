@@ -43,8 +43,23 @@ $.extend( LocalApi.prototype, Api.prototype, {
 	},
 
 	/**
+	 * Simulates a call to the API by reading API response data from local file
+	 *
+	 * @param {string} pageId
+	 * @param {string} [wikiUrl]
+	 * @returns {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {string}
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
+	 */
+	getTitleFromPageId: function( pageId, wikiUrl ) {
+		return this._readFile( this._getLocalFilename( pageId, null ) );
+	},
+
+	/**
 	 * Returns filename of file containing API response data
-	 * for the given page and given API query property and params.
+	 * for the given page (title or ID) and given API query property and params.
 	 *
 	 * @param title
 	 * @param {string} property
@@ -94,6 +109,10 @@ $.extend( LocalApi.prototype, Api.prototype, {
 	 * @return {string}
 	 */
 	_getSubdirectory: function( property, params ) {
+		if( property === null ) {
+			return 'titles';
+		}
+
 		if( property === 'imageinfo' ) {
 			if( params.iiprop === 'mediatype|url' ) {
 				return 'metadata';
@@ -102,6 +121,7 @@ $.extend( LocalApi.prototype, Api.prototype, {
 				return 'imageinfo';
 			}
 		}
+
 		if( property === 'templates' || property === 'revisions' || property === 'images' ) {
 			return property;
 		}

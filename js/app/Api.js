@@ -431,6 +431,36 @@ $.extend( Api.prototype, {
 	},
 
 	/**
+	 * Returns a page title for a given page ID.
+	 *
+	 * @param {string} pageId
+	 * @param {string} [wikiUrl]
+	 * @returns {Object} jQuery Promise
+	 *         Resolved parameters:
+	 *         - {string}
+	 *         Rejected parameters:
+	 *         - {ApplicationError}
+	 */
+	getTitleFromPageId: function( pageId, wikiUrl ) {
+		var deferred = $.Deferred(),
+			queryParams = {
+				action: 'query',
+				pageids: pageId,
+				format: 'json'
+			};
+
+		this._query( wikiUrl, queryParams, null, 0, new $.Deferred(), [] )
+			.done( function( page ) {
+				deferred.resolve( page.title );
+			} )
+			.fail( function( error ) {
+				deferred.reject( error );
+			} );
+
+		return deferred.promise();
+	},
+
+	/**
 	 * Send a query to Commons or Wikipedia API, and returns an array of page data.
 	 * Performs multiple queries if contination parameter is provided, and size of API response requires continuation.
 	 *
