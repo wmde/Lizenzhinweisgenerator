@@ -9,8 +9,8 @@ var $ = require( 'jquery' ),
 	Author = require( './Author' ),
 	WikiAsset = require( './WikiAsset' ),
 	LicenceStore = require( './LicenceStore' ),
-	LICENCES = require( './LICENCES' ),
-	licenceStore = new LicenceStore( LICENCES );
+	config = require( '../config.json' ),
+	licenceStore = new LicenceStore( require( './LICENCES' ), config.portedLicences );
 
 /**
  * Represents a Commons asset page.

@@ -13,9 +13,11 @@ var $ = require( 'jquery' ),
  * @constructor
  *
  * @param {Licence[]} licences
+ * @param {Object} portedLicences - map of lowercase licence names to URLs
  */
-var LicenceStore = function( licences ) {
+var LicenceStore = function( licences, portedLicences ) {
 	this._licences = [];
+	this._portedLicences = portedLicences;
 
 	licences = licences || [];
 
@@ -29,6 +31,11 @@ $.extend( LicenceStore.prototype, {
 	 * @type {Licence[]}
 	 */
 	_licences: null,
+
+	/**
+	 * @type {Object}
+	 */
+	_portedLicences: null,
 
 	/**
 	 * Returns all stored licences.
@@ -92,6 +99,8 @@ $.extend( LicenceStore.prototype, {
 				if( licence.match( string ) ) {
 					if( licence.isAbstract() ) {
 						licence = Licence.newFromAbstract( licence, string );
+					} else if( this._isKnownPortedLicence( licence, string ) ) {
+						licence = this._buildKnownPortedLicence( licence, string );
 					}
 					detectedLicences.push( licence );
 				}
@@ -107,13 +116,49 @@ $.extend( LicenceStore.prototype, {
 		// Return the first licence according to the order the licences are stored:
 		for( i = 0; i < this._licences.length; i++ ) {
 			for( j = 0; j < detectedLicences.length; j++ ) {
-				if( this._licences[ i ] === detectedLicences[ j ] ) {
-					return this._licences[ i ];
+				if( this._licences[ i ].getId() === detectedLicences[ j ].getId() ) {
+					return detectedLicences[ j ];
 				}
 			}
 		}
 
 		return null;
+	},
+
+	/**
+	 * @param {Licence} licence
+	 * @param {string} licenceString
+	 */
+	_isKnownPortedLicence: function( licence, licenceString ) {
+		return licence.isInGroup( 'ported' ) && this._getUrlFromPortedLicenceName( licenceString );
+	},
+
+	/**
+	 * @param {Licence} licence
+	 * @param {string} licenceString
+	 */
+	_buildKnownPortedLicence: function( licence, licenceString ) {
+		var name = licenceString
+			.toUpperCase()
+			.split( '-' )
+			.join( ' ' )
+			.replace( 'BY SA', 'BY-SA' );
+
+		return new Licence(
+			licence.getId(), // keep the generic ID so that it is detected as a valid licence in LicenceStore
+			licence.getGroups().concat( [ 'knownPorted' ] ),
+			[],
+			name,
+			null,
+			this._getUrlFromPortedLicenceName( licenceString )
+		);
+	},
+
+	/**
+	 * @param {string} licenceString
+	 */
+	_getUrlFromPortedLicenceName: function( licenceString ) {
+		return this._portedLicences[ licenceString.toLowerCase() ];
 	},
 
 	/**
