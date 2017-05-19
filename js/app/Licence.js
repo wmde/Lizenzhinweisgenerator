@@ -4,9 +4,7 @@
  */
 'use strict';
 
-var $ = require( 'jquery' ),
-	config = require( '../config' ),
-	ApplicationError = require( './ApplicationError' );
+var $ = require( 'jquery' );
 
 /**
  * Represents a licence.
@@ -191,34 +189,6 @@ $.extend( Licence.prototype, {
 	 */
 	getUnportedVersionId: function() {
 		return this.getId().slice( 0, -7 );
-	},
-
-	/**
-	 * Retrieves the licence text of a specific licence.
-	 *
-	 * @return {Object} jQuery Promise
-	 *         Resolved parameters:
-	 *         - {jQuery} Licence text
-	 *         Rejected parameters:
-	 *         - {ApplicationError}
-	 */
-	getLegalCode: function() {
-		var self = this,
-			deferred = $.Deferred();
-
-		$.get( config.baseUrl + 'licences/' + this._id + '.html' )
-			.done( function( html ) {
-				var $licence = $( '<div/>' )
-					.addClass( 'licence-text' )
-					.addClass( 'licence-' + self.getName() )
-					.html( html );
-				deferred.resolve( $licence );
-			} )
-			.fail( function() {
-				deferred.reject( new ApplicationError( 'licencetext-missing' ) );
-			} );
-
-		return deferred.promise();
 	}
 
 } );
