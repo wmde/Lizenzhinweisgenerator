@@ -478,9 +478,9 @@ a:hover {
   column-gap: 40px;
   overflow: hidden;
 }
-.dialogue-bubble .bubble-columns p {
-  break-after: column;
-  -webkit-column-break-after: always;
+.dialogue-bubble .bubble-columns p:last-child {
+  break-before: column;
+  -webkit-column-break-before: always;
 }
 .dialogue-screen .more-information {
   text-align: center;
