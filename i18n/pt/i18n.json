@@ -1,0 +1,34 @@
+{
+  "index": {
+    "title": "Gerador de Atribuição",
+    "description": "Informação da licença para imagens da Wikipedia e Wikimedia Commons",
+    "no-script": "Precisa de ter Javascript ativado para usar esta página.",
+    "how-it-works-1": "Inserir direção web de una imagem da Wikimedia Commons o um artígo da Wikipedia para iniciar a ferrramenta.",
+    "how-it-works-2": "Responda as perguntas sobre o uso pretendido para criar um aviso de licença correto.",
+    "how-it-works-3": "Leia como usar o aviso de licença.",
+    "how-it-works-4": "Copie o aviso de licença gerado e insira-o em sua publicação para usar a imagem corretamente.",
+    "how-it-works": "Como funciona?",
+    "input-placeholder": "Direção web de uma imagem da Wikimedia Commons o de um artigo da Wikipedia.",
+    "go-button": "Vamos começar!",
+    "feedback-name": "Nome",
+    "feedback-body": "Feedback",
+    "feedback-submit": "Enviar",
+    "feedback-thanks": "Obrigado por seus comentários!",
+    "feedback": "Feedback",
+    "about": "Sobre",
+    "legal": "Política de privacidade",
+    "legal-tracking-switch": "Desative a marca de verificação para parar o rastreamento da sua visita.",
+    "legal-hosting": "Esta ferramenta é hospedada na Wikimedia Labs. Leia os termos de uso em <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use</a>.",
+    "private-use": "Uso basicamente privado (sem publicação) e outras exceções e limitações aos direitos autorais"
+  },
+  "erro": {
+    "generic": "Ocorreu um erro imprevisto. Sentimos muito.",
+    "mediatype-unsupported": "Infelizmente, este tipo de arquivo multimídia não é suportado pela ferramenta neste momento. Sentimos muito.",
+    "licence-unsupported": "Infelizmente, o tipo de licença detectada não é suportado pela ferramenta neste momento. Sentimos muito.",
+    "url-invalid": "O endereço da Web que você forneceu não pode ser processado. Sentimos muito.",
+    "licence-not-recognized": "Infelizmente, o formato da informação de licença armazenadas para esta imagem não é suportado pela ferramenta neste momento. Sentimos muito.",
+    "send-feedback": "Algo não funcionou corretamente. Tente novamente.",
+    "feedback-generic": "Algo não funcionou corretamente. Tente novamente",
+    "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback."
+  },
+  
