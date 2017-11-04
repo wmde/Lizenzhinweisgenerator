@@ -21,7 +21,7 @@
     "legal-hosting": "Esta ferramenta é hospedada na Wikimedia Labs. Leia os termos de uso em <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use</a>.",
     "private-use": "Uso basicamente privado (sem publicação) e outras exceções e limitações aos direitos autorais"
   },
-  "erro": {
+  "error": {
     "generic": "Ocorreu um erro imprevisto. Sentimos muito.",
     "mediatype-unsupported": "Infelizmente, este tipo de arquivo multimídia não é suportado pela ferramenta neste momento. Sentimos muito.",
     "licence-unsupported": "Infelizmente, o tipo de licença detectada não é suportado pela ferramenta neste momento. Sentimos muito.",
@@ -31,4 +31,29 @@
     "feedback-generic": "Algo não funcionou corretamente. Tente novamente",
     "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback."
   },
+	  "info-box": {
+    "private-use": "Para usos puramente privados, você não precisa do aviso de licença.",
+    "private-use-more-link": "&#8594; APRENDER MAIS",
+    "dont-show-again": "Não mostrar esta mensagem novamente.",
+    "understood-and-close": "Entendido e fechar.",
+    "ported-licence": "Algumas licenças Creative Commons foram publicadas com edições específicas por país, denominadas «ported license». A imagem que você solicitou foi publicada com uma licença «ported». A ferramenta não consegue verificar se os requisitos da licença Creative Commons deste país em particular são os mesmos da versão em inglês. No entanto, você ainda pode gerar o aviso de licença de atribuição com esta ferramenta. Para ser totalmente seguro, recomendamos verificar os requisitos da versão específica do país para a mesma. Além disso, o aviso de licença deve estar na linguagem do seu contexto para completar sua função na sua totalidade."
+  },
+  "dialogue": {
+    "public-domain-picture": "Esta imagem foi marcada como domínio público quando foi carregada, você não precisa de um aviso de licença.",
+    "no-attribution-needed": "Não é necessário aviso de licença",
+    "more-information": "mais informação",
+    "adjust-attribution-for-usage": "Adapte o aviso de licença para o seu caso de uso",
+    "public-domain-text": "<p>De acordo com os detalhes que foram detectados, esta imagem está livre de direitos autorais e pode ser usada sem qualquer requisito de licença e mesmo sem mencionar nenhum autor ou licença.</p><p>No entanto, de acordo com a lei de direitos autorais alemã, um autor sempre conserva alguns direitos inalienáveis em cada uma das suas obras. Por este motivo, recomendamos não reivindicar falsamente a autoria da imagem ou usá-la de qualquer forma que possa ser considerada prejudicial à reputação do autor. Além disso, é aconselhável informar outros usuários sobre o status do domínio público desta imagem.</p><p>Em alguns países (incluindo a Alemanha), há reivindicações regulares para proteção de reproduções fotográficas de obras de domínio público.Isso se aplica a ambos, imagens de esculturas e outras obras tridimensionais, bem como fotografias de pinturas. É responsabilidade dos reutilizadores esclarecer se isso os afeta quando eles usam a respectiva imagem.</p>",
+    "type-of-use-headline": "Como deseja usar você a imagem?",
+    "author-headline": "Qual é o nome (ou nomes) do autor ou o proprietário de seus direitos?",
+    "compilation-headline": "Como  deseja você publicar a imagem?",
+    "editing-headline": "Deseja usar uma versão modificada da imagem?",
+    "change-headline": "Que  modificou você?",
+    "creator-headline": "Como  deseja você que sejam atribuídas suas modificações?",
+    "licence-headline": "Baixo que licença  deseja você publicar a imagem modificada?",
+    "done-headline": "Parabéns!",
+    "answer-print": "Em um contexto onde você não pode usar hiperlinks (por exemplo, materiais impressos, conjunto de slides).",
+    "answer-online": "Online.",
+    "author-label": "Por favor, preencha as informações e declare qualquer atribuição a outras partes (como «patrocinado por X» ou «publicado por Y»), se aplicável:",
+
   
