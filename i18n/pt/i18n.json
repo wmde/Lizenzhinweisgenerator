@@ -31,7 +31,7 @@
     "feedback-generic": "Algo não funcionou corretamente. Tente novamente",
     "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback."
   },
-	  "info-box": {
+  "info-box": {
     "private-use": "Para usos puramente privados, você não precisa do aviso de licença.",
     "private-use-more-link": "&#8594; APRENDER MAIS",
     "dont-show-again": "Não mostrar esta mensagem novamente.",
@@ -63,10 +63,10 @@
     "answer-not-edited": "Não, eu quero usar a imagem em sua versão original sem modificação.",
     "author-question-mark": "sto é para os nomes ou pseudônimos atribuídos ao autor ou autores, ou o proprietário dos direitos autorais. A informação deve ser indicada da mesma forma que foi encontrada na fonte, incluindo © e o ano.",
     "change-question-mark": "Será suficiente fornecer informações breves, como um «Resumo» ou «Colorir».",
-      "compilation-question-mark": "Por favor, escolha esta opção se você acha que a publicação desta imagem junto com outras obras (devido à sua seleção e disposição) na forma de uma coleção de obras é uma criação intelectual em si, p. ex. O novo trabalho, devido à sua originalidade, é um trabalho digno de proteção de direitos autorais além dos trabalhos que contém. Por exemplo, poderia-se dar este caso se você criar um livro de fotos ou uma coleção de "melhores imagens". A situação é diferente se você criar um "remix", como uma colagem de várias imagens, o que na maioria dos casos não resultará em uma coleção, mas sim num trabalho composto ou uma adaptação das imagens usadas para ele. ",   "editing-question-mark": "Todas as mudanças na imagem que alteram seu impacto nos espectadores (como cortes, coloração, mudanças drásticas de tamanho, etc.) convertem o resultado em uma adaptação, no sentido jurídico. Por outro lado, modificar o formato da imagem ou digitalizá-la não cria uma adaptação porque a imagem e o impacto ou a impressão que ela dá ficam iguais. ",
+    "compilation-question-mark": "Por favor, escolha esta opção se você acha que a publicação desta imagem junto com outras obras (devido à sua seleção e disposição) na forma de uma coleção de obras é uma criação intelectual em si, p. ex. O novo trabalho, devido à sua originalidade, é um trabalho digno de proteção de direitos autorais além dos trabalhos que contém. Por exemplo, poderia-se dar este caso se você criar um livro de fotos ou uma coleção de «melhores imagens». A situação é diferente se você criar um «remix¢, como uma colagem de várias imagens, o que na maioria dos casos não resultará em uma coleção, mas sim num trabalho composto ou uma adaptação das imagens usadas para ele.",
+    "editing-question-mark": "Todas as mudanças na imagem que alteram seu impacto nos espectadores (como cortes, coloração, mudanças drásticas de tamanho, etc.) convertem o resultado em uma adaptação, no sentido jurídico. Por outro lado, modificar o formato da imagem ou digitalizá-la não cria uma adaptação porque a imagem e o impacto ou a impressão que ela dá ficam iguais. ",
     "licence-question-mark": "A ferramenta só oferece licenças compatíveis com a licença Creative Commons que corresponde ao trabalho original.",
-    "creator-question-mark": "Por favor, indique seu nome completo, se possível. Também é possível indicar um pseudônimo, apelido ou indicar «anônimo».",
-    "same-licence": "A mesma licença que o trabalho original ",
+    "same-licence": "A mesma licença que o trabalho original",
     "licence-text": "Texto da licença ",
     "download-image-link": "Baixe o arquivo da imagem",
     "file-page-link": "Endereço da imagem na Wikimedia Commons",
@@ -83,20 +83,20 @@
     "by": "por",
     "edited": "modificado",
     "done-text": "Você respondeu todas as perguntas. Você está pronto para usar o aviso de licença correto.",
-   "your-attribution": "Seu aviso de licença",
+    "your-attribution": "Seu aviso de licença",
     "copy": "Copiar",
-    "do-print-text": "Você deve mostrar essa informação tão perto quanto razoavelmente possível da imagem (por exemplo, abaixo da mesma). Em qualquer caso, aqueles que vêem a imagem devem poder encontrar a informação com facilidade. Se você tem um livro ou uma revista, as atribuições também podem ser colocadas na página de impressão ou em outra localização, desde que a informação de atribuição de cada imagem possa ser facilmente identificada (por exemplo, fornecendo o número da página) ". ,
+    "do-print-text": "Você deve mostrar essa informação tão perto quanto razoavelmente possível da imagem (por exemplo, abaixo da mesma). Em qualquer caso, aqueles que vêem a imagem devem poder encontrar a informação com facilidade. Se você tem um livro ou uma revista, as atribuições também podem ser colocadas na página de impressão ou em outra localização, desde que a informação de atribuição de cada imagem possa ser facilmente identificada (por exemplo, fornecendo o número da página).",
     "do-online-text": "Tenha em mente que o aviso de licença inclui hiperlinks que devem ser incluídos sempre que você usa o aviso de licença.Você deve mostrar essa informação tão perto quanto razoavelmente possível da imagem (por exemplo, abaixo da mesma). Em qualquer caso, aqueles que vêem a imagem devem poder encontrar a informação com facilidade. Se você tem um livro ou uma revista, as atribuições também podem ser colocadas na página de impressão ou em outra localização, desde que a informação de atribuição de cada imagem possa ser facilmente identificada (por exemplo, fornecendo o número da página). Para tornar este processo mais fácil para você, a ferramenta fornece-lhe a atribuição, incluindo todos os hiperlinks em formato de texto simples, bem como um fragmento HTML. Desta forma, você pode transferi-lo diretamente para o código-fonte da sua página web.",
-    "do-compilation-text": "Se o proprietário da licença solicitar que você não publique seu nome, o título do trabalho ou qualquer outra informação, mantenha apenas o hiperlink. A ferramenta fornece o hiperlink com o botão indicado abaixo. Os autores ou proprietários dos direitos podem decidir por si mesmos, se seus nomes ou o título das imagens forem publicados ou não, caso as imagens façam parte de uma coleção com a qual eles não querem ser associados. "
-    "dont-terms-of-use-headline" : "Não imponha mais condições",
-    "dont-terms-of-use-text": "Você não está autorizado a impor mais condições sobre o uso da imagem, o que pode restringir os direitos concedidos pela licença Creative Commons (por exemplo, não é permitido proibir a distribuição de conteúdo de uma determinada página web, desde que as imagens com A licença CC não está explicitamente isenta dessa proibição). "
-    "dont-sublicences-headline" : "Sublicenças não são permitidas.",
-    "dont-sublicences-text": "Você não está autorizado a sublicenciar o trabalho. Isso significa que você não está autorizado a estabelecer-se como o licenciante deste trabalho. Você só se tornou um licenciador se você modificou a imagem (e isso, apenas em relação às suas modificações, e não à imagem original). Aqueles que receberem a foto, através de você, receberão a licença Creative Commons oferecida diretamente do licenciante da imagem original e não você, como transmissor. ",
-    "dont-cc-licence-headline" : "Avisos jurídicos atuais",
+    "do-compilation-text": "Se o proprietário da licença solicitar que você não publique seu nome, o título do trabalho ou qualquer outra informação, mantenha apenas o hiperlink. A ferramenta fornece o hiperlink com o botão indicado abaixo. Os autores ou proprietários dos direitos podem decidir por si mesmos, se seus nomes ou o título das imagens forem publicados ou não, caso as imagens façam parte de uma coleção com a qual eles não querem ser associados."
+    "dont-terms-of-use-headline": "Não imponha mais condições",
+    "dont-terms-of-use-text": "Você não está autorizado a impor mais condições sobre o uso da imagem, o que pode restringir os direitos concedidos pela licença Creative Commons (por exemplo, não é permitido proibir a distribuição de conteúdo de uma determinada página web, desde que as imagens com A licença CC não está explicitamente isenta dessa proibição)."
+    "dont-sublicences-headline": "Sublicenças não são permitidas.",
+    "dont-sublicences-text": "Você não está autorizado a sublicenciar o trabalho. Isso significa que você não está autorizado a estabelecer-se como o licenciante deste trabalho. Você só se tornou um licenciador se você modificou a imagem (e isso, apenas em relação às suas modificações, e não à imagem original). Aqueles que receberem a foto, através de você, receberão a licença Creative Commons oferecida diretamente do licenciante da imagem original e não você, como transmissor.",
+    "dont-cc-licence-headline": "Avisos jurídicos atuais",
     "dont-cc-licence-text": "Se você encontrar qualquer outro aviso de licença Creative Commons ou limitações de responsabilidade, você não está autorizado a alterá-los.",
-    "dont-technical-protection-headline": "Não imponha nenhuma medida técnica de proteção ",
-    "dont-technical-protection-text": "Você não está autorizado a impor nenhuma medida de proteção técnica na imagem, pois você pode restringir os direitos que derivam da licença Creative Commons (por exemplo, os mecanismos de proteção contra cópia restringem a impressão de um arquivo PDF). "
-    "dont-rightholder-connection-headline" : "Nenhuma conexão especial com o titular dos direitos",
+    "dont-technical-protection-headline": "Não imponha nenhuma medida técnica de proteção",
+    "dont-technical-protection-text": "Você não está autorizado a impor nenhuma medida de proteção técnica na imagem, pois você pode restringir os direitos que derivam da licença Creative Commons (por exemplo, os mecanismos de proteção contra cópia restringem a impressão de um arquivo PDF)."
+    "dont-rightholder-connection-headline": "Nenhuma conexão especial com o titular dos direitos",
     "dont-rightholder-connection-text": "Você não está autorizado a usar esta imagem de forma que possa ser percebida como um indicador de que o proprietário dos direitos ou qualquer outra pessoa reconhecida chamada, lhe concede direitos em uma transação independente ou, de qualquer outra forma, suporte seu uso específico da imagem.",
     "show-licence-text": "Veja o texto completo da licença",
     "anonymous": "anônimo",
