@@ -728,3 +728,7 @@ button .ag-spinner {
   -moz-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
+
+.float-right {
+  float: right;
+}
