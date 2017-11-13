@@ -172,6 +172,9 @@ a:hover {
 .top-wrapper {
   margin-top: 33vh;
 }
+.head-wrapper {
+  margin-top: 5vh;
+}
 
 .heading {
   height: 120px; /* should not be hardcoded? :/ */
@@ -731,4 +734,8 @@ button .ag-spinner {
 
 .float-right {
   float: right;
+}
+.language-dropdown {
+  float: right;
+  margin-right: 4rem;
 }
