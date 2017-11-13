@@ -90,7 +90,8 @@ $feedbackForm.submit( function( e ) {
 	$.post( baseUrl + '../backend/web/index.php/feedback',
 		{
 			name: $feedbackForm.find( 'input[name="name"]' ).val(),
-			feedback: $feedbackForm.find( 'textarea' ).val()
+			feedback: $feedbackForm.find( 'textarea' ).val(),
+			responseEmail: $feedbackForm.find( 'input[name="response-email"]' ).val()
 		} )
 		.done( function( response ) {
 			tracking.trackEvent( 'Feedback', 'Success' );

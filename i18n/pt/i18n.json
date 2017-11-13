@@ -11,6 +11,7 @@
     "input-placeholder": "Direção web de uma imagem da Wikimedia Commons o de um artigo da Wikipedia.",
     "go-button": "Vamos começar!",
     "feedback-name": "Nome",
+    "feedback-response-email": "Email",
     "feedback-body": "Feedback",
     "feedback-submit": "Enviar",
     "feedback-thanks": "Obrigado por seus comentários!",
@@ -103,4 +104,3 @@
     "copy-hint": "Copie o texto marcado"
   }
 }
-

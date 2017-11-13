@@ -11,6 +11,7 @@
     "input-placeholder": "Web address of a Wikimedia Commons image or a Wikipedia article.",
     "go-button": "Let’s go!",
     "feedback-name": "Name",
+    "feedback-response-email": "Name",
     "feedback-body": "Feedback",
     "feedback-submit": "Send",
     "feedback-thanks": "Thank you for your feedback!",

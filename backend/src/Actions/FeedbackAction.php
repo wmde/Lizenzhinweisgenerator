@@ -22,7 +22,8 @@ class FeedbackAction {
 		if ( $this->requestValid( $request ) ) {
 			$this->sendMail(
 				$request->get( 'name' ),
-				$request->get( 'feedback' )
+				$request->get( 'feedback' ),
+				$request->get( 'responseEmail' )
 			);
 		}
 	}
@@ -36,10 +37,13 @@ class FeedbackAction {
 		return true;
 	}
 
-	private function sendMail( $sender, $text ) {
+	private function sendMail( $sender, $text, $responseEmail ) {
+		if (!isset($responseEmail)) {
+			$responseEmail = 'noreply@attribution-generator.dev';
+		}
 		$message = \Swift_Message::newInstance()
 			->setSubject( '[AttributionGenerator] Feedback from ' . $sender )
-			->setFrom( [ 'noreply@attribution-generator.dev' ] )
+			->setFrom( [ $responseEmail ] )
 			->setTo( [ $this->app['config']['feedback_email'] ] )
 			->setBody( $text );
 
