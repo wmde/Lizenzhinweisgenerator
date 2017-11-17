@@ -18,8 +18,10 @@ $.extend( BackToTopButton.prototype, {
   	 * @param {jQuery} $screen
   	 */
   	render: function( $screen ) {
-      var $btn = $('<button class="btn-green">' +
-        Messages.t('dialogue.back-to-top') + '</button>'
+      var $btn = $('<button class="green-btn btn-back-to-top">' +
+        '<span style="width: 20px; margin-right: 8px;">&nbsp;</span>' +
+        '<span class="btn-text">' + Messages.t('dialogue.back-to-top') +
+        '</span></button>'
       )
       $btn.bind("click", function () {
         $(':input','#file-form')

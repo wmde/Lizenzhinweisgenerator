@@ -359,6 +359,8 @@ a:hover {
   top: -0.75em;
 }
 .dialogue-screen .dialogue {
+  display: flex;
+  flex-direction: column;
   margin-left: 40vw;
   width: 50vw;
   font-size: 12pt;
@@ -598,8 +600,12 @@ a:hover {
   text-decoration: underline;
 }
 .dialogue .licence-link {
-  margin: 35px 0 50px;
+  margin: auto 15px;
   text-align: center;
+  max-width: 280px;
+}
+.dialogue .licence-link a {
+  color: #97b314;
 }
 .info-box {
   background: #97b314;
@@ -815,3 +821,40 @@ button .ag-spinner {
   background-color: transparent;
   color: #97b314;
 }
+
+.btn-back-to-top {
+  display: flex;
+  height: 36px;
+  flex-direction: row;
+  background-color: #97b314;
+  margin: auto 15px;
+  max-width: 280px;
+}
+.btn-back-to-top .btn-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.licence-bottom-bar {
+  margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.has-bottom-seperator {
+  border-bottom: 2px solid #dddddd;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 24px;
+}
+
+/*.btn {
+  height: 42px;
+  border-radius: 2px;
+  padding: 5px 15px;
+}*/

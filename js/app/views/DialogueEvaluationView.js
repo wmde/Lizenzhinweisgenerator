@@ -157,19 +157,22 @@ $.extend( DialogueEvaluationView.prototype, {
 				};
 			} )
 		} ) );
-		$html.append( '<div class="clearfix"/>' );
-		$html.append( $( '<div class="licence-button-bar" />' )
+		$html.append( '<div class="clearfix has-bottom-seperator"/>' );
+		var $licenseLink = $( '<div class="licence-link"/>' )
+			.append( '<a href="' + this._evaluation.getAttributionLicence().getUrl() +
+				'" target="_blank"><img class="cc-logo" src="images/cc.svg">'
+				+ Messages.t( 'evaluation.show-licence-text' )
+				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')</a>'
+			);
+
+		$html.append( $( '<div class="licence-bottom-bar" />' )
+		  .append($licenseLink)
 			.append( new BackToTopButton().render() )
 		);
 		$html.append( '<div class="clearfix"/>' );
-		$( '<div class="licence-link"/>' )
-			.append( buttonTemplate( {
-				content: '<img class="cc-logo" src="images/cc.svg">'
-				+ Messages.t( 'evaluation.show-licence-text' )
-				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')',
-				target: this._evaluation.getAttributionLicence().getUrl()
-			} ) )
-			.appendTo( $html );
+
+
+			// .appendTo( $html );
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );
