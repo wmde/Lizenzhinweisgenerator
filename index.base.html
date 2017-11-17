@@ -59,15 +59,13 @@
 
       <div class="wrapper head-wrapper">
         <div class="dropdown language-dropdown">
-          <button class="green-btn dropdown-toggle" type="button" id="languageSelector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Change language...
-            <span class="caret"></span>
+          <button class="dropdown-toggle" type="button" id="languageSelector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span style="width: 19px"></span>
+            <span>{{i18n.lang}}</span>
+            <span class="caret caret-gray"></span>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="?lang=en">English</a></li>
-            <li><a href="?lang=de">Deutsch</a></li>
-            <li><a href="?lang=es">Espanol</a></li>
-            <li><a href="?lang=pt">Portuges</a></li>
+            {{ languageOptions }}
           </ul>
         </div>
       </div>

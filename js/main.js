@@ -71,6 +71,16 @@ $( '#file-form-input' ).on( 'input', function() {
 	fileForm.dismissError();
 } );
 
+$('.dropdown').on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown(150);
+  });
+
+  // Add slideUp animation to Bootstrap dropdown when collapsing.
+  $('.dropdown').on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp(150);
+  });
+
+
 var bootstrapAlert = function( type, message ) {
 	$( '#alert-placeholder' ).html(
 		'<div class="alert ag-alert alert-'
@@ -115,6 +125,7 @@ $feedbackForm.submit( function( e ) {
 
 	e.preventDefault();
 } );
+
 
 $( function() {
 	// Instant start if input field is filled
