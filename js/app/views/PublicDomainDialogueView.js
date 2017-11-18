@@ -7,7 +7,8 @@ var $ = require( 'jquery' ),
 	moreInfomationTemplate = require( '../templates/MoreInformation.handlebars' ),
 	BackToTopButton = require( '../BackToTopButton' );
 
-var PublicDomainDialogueView = function() {
+var PublicDomainDialogueView = function( parentDialogue ) {
+	this._parentDialogue = parentDialogue
 };
 
 $.extend( PublicDomainDialogueView.prototype, {
@@ -21,13 +22,25 @@ $.extend( PublicDomainDialogueView.prototype, {
 			content: Messages.t( 'dialogue.more-information' ),
 			target: 'https://wiki.creativecommons.org/wiki/Public_domain'
 		} ) );
-		$bottomBar.append( new BackToTopButton().render());
+		$bottomBar.append( new BackToTopButton().render() );
 
 		return $bottomBar
 	},
 	_showForceAttribution: function() {
-		return $( '<div class="arrow-box" />' )
-		   .append(Messages.t( 'dialogue.force-pd-licence' ));
+		var $forceAttributionBox = $( '<div class="arrow-box" />' );
+
+		var parentDialogue = this._parentDialogue;
+
+		$forceAttributionBox.bind( "click", function () {
+      // Remove children from current dialogue screen element
+			var $dialogueScreen = $( '.dialogue-screen' );
+			$dialogueScreen.empty();
+			// render parent dialogue again with forceAttribution set to true
+			parentDialogue.render($dialogueScreen, true);
+		});
+
+		$forceAttributionBox.append(Messages.t( 'dialogue.force-pd-licence' ));
+		return $forceAttributionBox
 	},
 
 	/**

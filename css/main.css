@@ -858,6 +858,7 @@ button .ag-spinner {
 /* Credits to http://www.cssarrowplease.com/ */
 .arrow-box {
 	position: relative;
+  cursor: pointer;
 	background: #636466;
   width: 280px;
   height: 36px;
@@ -881,6 +882,13 @@ button .ag-spinner {
 	border-left-color: #636466;
 	border-width: 18px 18px 18px 8px;
 	margin-top: -18px;
+}
+.arrow-box:hover {
+  background-color: #565759;
+}
+
+.arrow-box:hover:after {
+  border-left-color: #565759;
 }
 
 .public-domain-bottom-separator {

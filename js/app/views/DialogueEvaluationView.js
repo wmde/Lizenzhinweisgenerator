@@ -9,7 +9,8 @@ var $ = require( 'jquery' ),
 	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
 	Messages = require( '../Messages' ),
 	Tracking = require( '../../tracking.js' ),
-	BackToTopButton = require ( '../BackToTopButton' );
+	BackToTopButton = require ( '../BackToTopButton' ),
+	moreInformationTemplate = require( '../templates/MoreInformation.handlebars' );
 
 ZeroClipboard.config( { swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf' } );
 
@@ -169,7 +170,6 @@ $.extend( DialogueEvaluationView.prototype, {
 			.append( new BackToTopButton().render() )
 		);
 		$html.append( '<div class="clearfix"/>' );
-
 
 			// .appendTo( $html );
 
