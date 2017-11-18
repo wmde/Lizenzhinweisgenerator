@@ -364,8 +364,10 @@ a:hover {
   margin-left: 40vw;
   width: 50vw;
   font-size: 12pt;
+  margin-bottom: 100px;
 }
 .dialogue-bubble {
+  position: relative;
   display: table;
   width: 100%;
 }
@@ -853,8 +855,36 @@ button .ag-spinner {
   padding-bottom: 24px;
 }
 
-/*.btn {
-  height: 42px;
-  border-radius: 2px;
-  padding: 5px 15px;
-}*/
+/* Credits to http://www.cssarrowplease.com/ */
+.arrow-box {
+	position: relative;
+	background: #636466;
+  width: 280px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 0px;
+  bottom: -18px;
+  right: 60px;
+  position: absolute;
+  color: #fff;
+  padding-left: 15px;
+}
+.arrow-box:after {
+	left: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-left-color: #636466;
+	border-width: 18px 18px 18px 8px;
+	margin-top: -18px;
+}
+
+.public-domain-bottom-separator {
+  margin-top: 24px;
+  margin-left: 20px;
+  width: initial;
+}

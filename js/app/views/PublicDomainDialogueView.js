@@ -3,7 +3,9 @@
 var $ = require( 'jquery' ),
 	publicDomainTemplate = require( '../templates/PublicDomain.handlebars' ),
 	Messages = require( '../Messages' ),
-	buttonTemplate = require( '../templates/SmallButton.handlebars' );
+	// buttonTemplate = require( '../templates/SmallButton.handlebars' ),
+	moreInfomationTemplate = require( '../templates/MoreInformation.handlebars' ),
+	BackToTopButton = require( '../BackToTopButton' );
 
 var PublicDomainDialogueView = function() {
 };
@@ -14,12 +16,18 @@ $.extend( PublicDomainDialogueView.prototype, {
 	},
 
 	_showPublicDomainInformation: function() {
-		return $( '<div class="more-information"/>' )
-			.html( buttonTemplate( {
-				content: '<img class="cc-logo" src="images/cc.svg">'
-				+ Messages.t( 'dialogue.more-information' ),
-				target: 'https://wiki.creativecommons.org/wiki/Public_domain'
-			} ) );
+		var $bottomBar = $( '<div class="licence-bottom-bar"/>' );
+		$bottomBar.append( moreInfomationTemplate( {
+			content: Messages.t( 'dialogue.more-information' ),
+			target: 'https://wiki.creativecommons.org/wiki/Public_domain'
+		} ) );
+		$bottomBar.append( new BackToTopButton().render());
+
+		return $bottomBar
+	},
+	_showForceAttribution: function() {
+		return $( '<div class="arrow-box" />' )
+		   .append(Messages.t( 'dialogue.force-pd-licence' ));
 	},
 
 	/**
@@ -28,7 +36,10 @@ $.extend( PublicDomainDialogueView.prototype, {
 	 * @param {jQuery} $dialogue
 	 */
 	render: function( $dialogue ) {
-		$dialogue.html( this._renderPublicLicenceDialogue() )
+		var $publicLicenceDialogue = $(this._renderPublicLicenceDialogue());
+		$publicLicenceDialogue.append( this._showForceAttribution() );
+		$dialogue.html( $publicLicenceDialogue )
+		.append( '<div class="public-domain-bottom-separator has-bottom-seperator"></div>' )
 			.append( this._showPublicDomainInformation() );
 	}
 } );

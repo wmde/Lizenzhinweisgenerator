@@ -158,12 +158,11 @@ $.extend( DialogueEvaluationView.prototype, {
 			} )
 		} ) );
 		$html.append( '<div class="clearfix has-bottom-seperator"/>' );
-		var $licenseLink = $( '<div class="licence-link"/>' )
-			.append( '<a href="' + this._evaluation.getAttributionLicence().getUrl() +
-				'" target="_blank"><img class="cc-logo" src="images/cc.svg">'
-				+ Messages.t( 'evaluation.show-licence-text' )
-				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')</a>'
-			);
+		var $licenseLink = moreInformationTemplate ( {
+			target: this._evaluation.getAttributionLicence().getUrl(),
+			content: Messages.t( 'evaluation.show-licence-text' )
+				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')'
+		});
 
 		$html.append( $( '<div class="licence-bottom-bar" />' )
 		  .append($licenseLink)
