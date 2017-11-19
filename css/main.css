@@ -772,6 +772,10 @@ button .ag-spinner {
   width: 100%;
   letter-spacing: 1px;
 }
+.language-dropdown button img {
+  margin-top: auto;
+  margin-bottom: auto;
+}
 .language-dropdown .caret {
   border-top: 7px solid #fff;
   border-left: 5px solid transparent;
@@ -836,6 +840,12 @@ button .ag-spinner {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.btn-back-to-top .btn-icon {
+  margin-bottom: auto;
+  margin-top: auto;
+  width: 20px;
+  margin-right: 8px;
 }
 
 .licence-bottom-bar {
