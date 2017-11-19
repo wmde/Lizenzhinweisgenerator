@@ -74,7 +74,7 @@ $.extend( InputHandler.prototype, {
 		if( this._isWikiUrl( url ) ) {
 			return this._getWikipediaPageImagesFileInfo( url );
 		} else {
-			deferred.reject( new ApplicationError( 'url-invalid' ) );
+			deferred.reject( new ApplicationError( 'no-wiki-url' ) );
 		}
 
 		return deferred.promise();
@@ -337,4 +337,3 @@ $.extend( InputHandler.prototype, {
 } );
 
 module.exports = InputHandler;
-

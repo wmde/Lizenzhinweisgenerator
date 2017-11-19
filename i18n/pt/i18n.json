@@ -30,7 +30,9 @@
     "licence-not-recognized": "Infelizmente, o formato da informação de licença armazenadas para esta imagem não é suportado pela ferramenta neste momento. Sentimos muito.",
     "send-feedback": "Algo não funcionou corretamente. Tente novamente.",
     "feedback-generic": "Algo não funcionou corretamente. Tente novamente",
-    "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback."
+    "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback.",
+    "no-images-found": "Esta página da Wikipedia não contém nenhuma imagem.",
+    "no-wiki-url": "O site referenciado não é uma página da Wikimedia."
   },
   "info-box": {
     "private-use": "Para usos puramente privados, você não precisa do aviso de licença.",

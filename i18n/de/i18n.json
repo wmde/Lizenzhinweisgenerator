@@ -30,7 +30,9 @@
     "licence-not-recognized": "Leider wird das Format der Lizenzangabe zu diesem Bild derzeit noch nicht unterstützt.",
     "send-feedback": "Beim Senden ist etwas schiefgelaufen. Bitte versuchen Sie es erneut.",
     "feedback-generic": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-    "feedback-blank-fields": "Alle Felder des Feedback-Formulars müssen ausgefüllt werden."
+    "feedback-blank-fields": "Alle Felder des Feedback-Formulars müssen ausgefüllt werden.",
+    "no-images-found": "Dieser Wikipedia Artikel enthält keine Bilder.",
+    "no-wiki-url": "Bei der angegebenen Seite handelt es sich um keine Seite von Wikimedia."
   },
   "info-box": {
     "private-use": "Die Angabe eines Lizenzhinweises ist bei rein privaten Nutzungen meist nicht nötig.",

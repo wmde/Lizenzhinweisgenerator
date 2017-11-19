@@ -30,7 +30,9 @@
     "licence-not-recognized": "Unfortunately, the format of the license information stored for this image is not supported by the tool at the moment. Sorry.",
     "send-feedback": "Something did not work. Please try again.",
     "feedback-generic": "Something did not work. Please try again.",
-    "feedback-blank-fields": "Please fill in all the fields of the feedback form."
+    "feedback-blank-fields": "Please fill in all the fields of the feedback form.",
+    "no-images-found": "This Wikipedia page does not contain any images.",
+    "no-wiki-url": "The referenced site is not a Wikimedia page."
   },
   "info-box": {
     "private-use": "For most purely private uses, you do not need a license notice.",
