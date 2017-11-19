@@ -70,8 +70,11 @@ $.extend( DialogueEvaluation.prototype, {
 		return $container.html();
 	},
 
-	_makeLink: function( target, text ) {
-		return '<a href="' + target + '" rel="license" target="_blank">' + text + '</a>';
+	_makeLink: function( target, text, isLicense ) {
+		if (isLicense) {
+			return '<a href="' + target + '" rel="license" target="_blank">' + text + '</a>'
+		}
+		return '<a href="' + target + '" target="_blank">' + text + '</a>';
 	},
 
 	_getHtmlTitle: function() {
@@ -79,7 +82,12 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlLicence: function() {
-		return this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getName() );
+		var url = this.getAttributionLicence().getUrl();
+		if (url) {
+			return this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getName(), true);
+		} else {
+			return this.getAttributionLicence().getName();
+		}
 	},
 
 	getAttributionLicence: function() {
