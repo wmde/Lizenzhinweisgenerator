@@ -40,7 +40,7 @@ $.extend( DialogueView.prototype, {
 	 * @param {jQuery} $screen
 	 * @param {boolean} $forceAttribution
 	 */
-	render: function( $screen, forceAttribution = false ) {
+	render: function( $screen, forceAttribution ) {
 		var title, dialogue;
 
 		if( !forceAttribution && this._noAttributionNeeded( this._asset.getLicence() ) ) {
