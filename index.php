@@ -32,7 +32,7 @@ $langDirs = array_filter( glob( $i18nDir . '/*'), 'is_dir');
 $languageOptions = '';
 foreach ( $langDirs as $langDir ) {
   $isoLang = pathinfo($langDir)['basename'];
-  $languageOptions .= '<li><a href="?lang="' . $isoLang .'">' . $isoLang . '</a></li>';
+  $languageOptions .= '<li><a href="?lang=' . $isoLang .'">' . $isoLang . '</a></li>';
 }
 // ... and insert that string into the template
 $html = str_replace( '{{ languageOptions }}', $languageOptions, $html);
