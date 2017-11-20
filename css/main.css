@@ -744,6 +744,7 @@ button .ag-spinner {
   float: right;
 }
 .language-dropdown {
+  opacity: 0.8;
   float: right;
   margin-right: 4rem;
   width: 115px;
@@ -752,7 +753,8 @@ button .ag-spinner {
   background-color: #636466;
 }
 .language-dropdown:hover {
-  background-color: #565759;  /* darken gray by 5% */
+  /*background-color: #565759; */  /* darken gray by 5% */
+  opacity: 1;
 }
 .language-dropdown:hover .caret {
   border-top: 7px solid #97b314;
@@ -802,6 +804,7 @@ button .ag-spinner {
 .language-dropdown.open {
   border-radius: 2px 2px 0 0;
   background-color: #97b314;
+  opacity: 1;
 }
 .language-dropdown.open:hover {
   border-radius: 2px 2px 0 0;
