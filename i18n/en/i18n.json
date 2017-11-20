@@ -32,7 +32,9 @@
     "feedback-generic": "Something did not work. Please try again.",
     "feedback-blank-fields": "Please fill in all the fields of the feedback form.",
     "no-images-found": "This Wikipedia page does not contain any images.",
-    "no-wiki-url": "The referenced site is not a Wikimedia page."
+    "no-wiki-url": "The referenced site is not a Wikimedia page.",
+    "invalid-email-format": "The given email address does not match the valid format.",
+    "no-cc-licence": "This file is not under a Creative Commons license."
   },
   "info-box": {
     "private-use": "For most purely private uses, you do not need a license notice.",

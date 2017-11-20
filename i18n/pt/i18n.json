@@ -33,7 +33,8 @@
     "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback.",
     "no-images-found": "Esta página da Wikipedia não contém nenhuma imagem.",
     "no-wiki-url": "O site referenciado não é uma página da Wikimedia.",
-    "invalid-email-format": "O endereço de e-mail especificado não corresponde ao formato válido."
+    "invalid-email-format": "O endereço de e-mail especificado não corresponde ao formato válido.",
+    "no-cc-licence": "Este arquivo não está sob uma licença Creative Commons."
   },
   "info-box": {
     "private-use": "Para usos puramente privados, você não precisa do aviso de licença.",

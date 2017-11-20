@@ -152,7 +152,7 @@ $.extend( FileForm.prototype, {
 						self._displayError( new ApplicationError( 'licence-unsupported' ) );
 						return;
 					} else if( asset.getLicence() === null ) {
-						self._displayError( new ApplicationError( 'licence-not-recognized' ) );
+						self._displayError( new ApplicationError( 'no-cc-licence' ) );
 						return;
 					}
 				}
@@ -181,7 +181,7 @@ $.extend( FileForm.prototype, {
 				var $dialogueScreen = $( '<div class="dialogue-screen"/>' );
 				self._$resultsPage.after( $dialogueScreen );
 
-				new DialogueScreen( imageInfo, asset ).render( $dialogueScreen );
+				new DialogueScreen( imageInfo, asset, this ).render( $dialogueScreen );
 				self._scrollTo( $dialogueScreen.offset().top );
 			} )
 			.fail( function( error ) {
