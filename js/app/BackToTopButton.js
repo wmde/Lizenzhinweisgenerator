@@ -19,7 +19,7 @@ $.extend( BackToTopButton.prototype, {
   	 */
   	render: function( $screen ) {
       var $btn = $('<button class="green-btn btn-back-to-top">' +
-        '<div style="btn-icon glyphicon glyphicon-refresh"></div>' +
+        '<div class="btn-icon glyphicon glyphicon-refresh"></div>' +
         '<span class="btn-text">' + Messages.t('dialogue.back-to-top') +
         '</span></button>'
       )
