@@ -11,7 +11,7 @@
     "input-placeholder": "Internetadresse eines Wikimedia-Commons-Bildes oder eines Wikipedia-Artikels",
     "go-button": "Los!",
     "feedback-name": "Name",
-    "feedback-response-email": "Email",
+    "feedback-response-email": "E-Mail-Adresse",
     "feedback-body": "Feedback",
     "feedback-submit": "Abschicken",
     "feedback-thanks": "Vielen Dank für Ihr Feedback!",
@@ -32,7 +32,8 @@
     "feedback-generic": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "feedback-blank-fields": "Alle Felder des Feedback-Formulars müssen ausgefüllt werden.",
     "no-images-found": "Dieser Wikipedia Artikel enthält keine Bilder.",
-    "no-wiki-url": "Bei der angegebenen Seite handelt es sich um keine Seite von Wikimedia."
+    "no-wiki-url": "Bei der angegebenen Seite handelt es sich um keine Seite von Wikimedia.",
+    "invalid-email-format": "Die angebene Email Adresse entspricht nicht dem gültigen Format."
   },
   "info-box": {
     "private-use": "Die Angabe eines Lizenzhinweises ist bei rein privaten Nutzungen meist nicht nötig.",

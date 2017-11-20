@@ -11,7 +11,7 @@
     "input-placeholder": "Direção web de uma imagem da Wikimedia Commons o de um artigo da Wikipedia.",
     "go-button": "Vamos começar!",
     "feedback-name": "Nome",
-    "feedback-response-email": "Email",
+    "feedback-response-email": "Endereço de e-mail",
     "feedback-body": "Feedback",
     "feedback-submit": "Enviar",
     "feedback-thanks": "Obrigado por seus comentários!",
@@ -32,7 +32,8 @@
     "feedback-generic": "Algo não funcionou corretamente. Tente novamente",
     "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback.",
     "no-images-found": "Esta página da Wikipedia não contém nenhuma imagem.",
-    "no-wiki-url": "O site referenciado não é uma página da Wikimedia."
+    "no-wiki-url": "O site referenciado não é uma página da Wikimedia.",
+    "invalid-email-format": "O endereço de e-mail especificado não corresponde ao formato válido."
   },
   "info-box": {
     "private-use": "Para usos puramente privados, você não precisa do aviso de licença.",
