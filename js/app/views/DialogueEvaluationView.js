@@ -145,7 +145,7 @@ $.extend( DialogueEvaluationView.prototype, {
 
 		var title;
 		if ( this._evaluation.getAttributionLicence().isPublicDomain() ) {
-			title = Messages.t( 'evaluation.your-rights-attribution' )
+			title = Messages.t( 'evaluation.your-legal-notice' )
 		} else {
 			title = Messages.t( 'evaluation.your-attribution' )
 		}
