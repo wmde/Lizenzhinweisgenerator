@@ -55,6 +55,7 @@
     "compilation-headline": "How do you want to publish the image?",
     "editing-headline": "Do you want to use the image in a modified form?",
     "change-headline": "What did you modify?",
+    "change-pd-headline": "If you want you can clearify your changes. Which exact part of the image is being edited?",
     "creator-headline": "How do you want your modifications to be attributed to yourself?",
     "licence-headline": "Under which license do you want to publish the modified image?",
     "done-headline": "Congratulations!",

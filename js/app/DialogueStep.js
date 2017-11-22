@@ -6,6 +6,7 @@ var $ = require( 'jquery' ),
 /**
  * @param {string} name
  * @param {Handlebars} template
+ * @param {boolean} isPublicDomain
  * @constructor
  */
 var DialogueStep = function( name, template ) {
@@ -30,7 +31,7 @@ $.extend( DialogueStep.prototype, {
 	_data: null,
 
 	/**
-	 * @type {DialogueStepView
+	 * @type {DialogueStepView}
 	 */
 	_view: null,
 

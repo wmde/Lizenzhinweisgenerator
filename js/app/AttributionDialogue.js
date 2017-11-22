@@ -3,6 +3,7 @@
 var $ = require( 'jquery' ),
 	Dialogue = require( './Dialogue' ),
 	DialogueStep = require( './DialogueStep' ),
+	ChangeStep = require( './ChangeStep' ),
 	LicenceStep = require( './LicenceStep' );
 
 /**
@@ -62,9 +63,12 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 	},
 
 	_addEditingSteps: function() {
-		this.addStep( new DialogueStep( 'change', require( './templates/ChangeStep.handlebars' ) ) );
+		var licence = this._asset.getLicence();
+		this.addStep( new ChangeStep( licence ));
 		this.addStep( new DialogueStep( 'creator', require( './templates/CreatorStep.handlebars' ) ) );
-		this.addStep( new LicenceStep( this._asset.getLicence() ) );
+		if ( !licence.isPublicDomain() ) {
+			this.addStep( new LicenceStep( licence ) );
+		}
 	}
 } );
 
