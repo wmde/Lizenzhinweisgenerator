@@ -85,13 +85,15 @@
     "creator": "Creador",
     "licence": "Licencia",
     "back-to-top": "Weiteres Bild prüfen",
-    "force-pd-attribution": "Sin embargo, crea un aviso de derechos"
+    "force-pd-attribution": "Sin embargo, crea un aviso de derechos",
+    "here": "aquí"
   },
   "evaluation": {
     "by": "por",
     "edited": "modificado",
     "done-text": "Has respondido a todas las preguntas. Estás listo/a para utilizar el aviso de licencia correcto.",
     "your-attribution": "Tu aviso de licencia",
+    "your-legal-notice": "Su aviso legal",
     "copy": "Copiar",
     "do-print-text": "Deberías mostrar esta información lo más cerca, posible, razonablemente, de la imagen (p. ej. debajo de la misma). En cualquier caso, quienes vean la imagen deben ser capaces de encontrar la información fácilmente. Si tienes un libro o una revista, las atribuciones también podrían colocarse en la página de imprenta o en otra ubicación estandar, siempre que se pueda identificar fácilmente la información de atribución de cada imagen (p. ej. aportando el número de página).",
     "do-online-text": "Tenga en cuenta que el aviso de licencia incluye hipervínculos que deben incluirse siempre que hagas uso del aviso de licencia. Deberías mostrar esta información lo más cerca, posible, razonablemente, de la imagen (p. ej. debajo de la misma). En cualquier caso, quienes vean la imagen deben ser capaces de encontrar la información fácilmente. Si tienes un libro o una revista, las atribuciones también podrían colocarse en la página de imprenta o en otra ubicación estandar, siempre que se pueda identificar fácilmente la información de atribución de cada imagen (p. ej. aportando el número de página). Para que te sea más fácil, la herramienta proporciona la atribución incluyendo todos los hipervínculos en formato de texto sin formato así como un fragmento HTML. De esta forma, puedes transferirlo directamente al código fuente de su página web.",

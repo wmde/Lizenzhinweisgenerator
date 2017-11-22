@@ -85,14 +85,15 @@
     "creator": "Creator",
     "licence": "License",
     "back-to-top": "Check another image",
-    "force-pd-attribution": "Create a rights notice anyway"
+    "force-pd-attribution": "Create a rights notice anyway",
+    "here": "here"
   },
   "evaluation": {
     "by": "by",
     "edited": "modified",
     "done-text": "You have answered all questions. You are ready to use the correct license notice.",
     "your-attribution": "Your license notice",
-    "your-rights-attribution": "Your legal notice",
+    "your-legal-notice": "Your legal notice",
     "copy": "Copy",
     "do-print-text": "You should show this information as close to the image as resonably possible (e.g. directly below it). In any case, viewers must be able to find the information easily. If you have a book or magazine, the attributions could also be placed in the imprint or at another standard location, as long as one can easily identify the image each attribution info belongs to (e.g. by providing the page number).",
     "do-online-text": "Please note, that the license notice includes hyperlinks, which have to be included wherever you make use of the license notice. You should show this information as close to the image as resonably possible (e.g. directly below it). In any case, viewers must be able to find the information easily. To make it easier for you, the tool provides the attribution including all hyperlinks in plain text format and as an html snippet. This way, you can transfer it directly into the source code of your webpage.",
