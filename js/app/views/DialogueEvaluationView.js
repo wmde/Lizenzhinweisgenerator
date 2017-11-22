@@ -139,12 +139,21 @@ $.extend( DialogueEvaluationView.prototype, {
 
 	render: function() {
 		var $html = $( '<div/>' ),
-			dosAndDonts = this._evaluation.getDosAndDonts();
+			dosAndDonts = this._evaluation.getDosAndDonts(),
+			isPd = this._evaluation.getAttributionLicence().isPublicDomain(),
+			doneText,
+			title;
 
-		$html.append( doneTemplate() );
+		if ( isPd ) {
+			doneText = Messages.t('evaluation.done-text-legal-notice');
+		} else {
+			doneText = Messages.t('evaluation.done-text');
+		}
 
-		var title;
-		if ( this._evaluation.getAttributionLicence().isPublicDomain() ) {
+		$html.append( doneTemplate({
+			text: doneText
+		}) );
+		if ( isPd ) {
 			title = Messages.t( 'evaluation.your-legal-notice' )
 		} else {
 			title = Messages.t( 'evaluation.your-attribution' )

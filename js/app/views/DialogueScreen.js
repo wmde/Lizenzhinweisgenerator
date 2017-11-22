@@ -47,7 +47,11 @@ $.extend( DialogueView.prototype, {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
 			dialogue = new PublicDomainDialogueView( this );
 		} else {
-			title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
+			if ( this._asset.getLicence().isPublicDomain() ) {
+
+			} else {
+				title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
+			}
 			dialogue = new AttributionDialogueView( this._asset );
 		}
 
