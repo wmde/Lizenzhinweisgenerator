@@ -134,10 +134,19 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlAttribution: function() {
+		var attributionLink
+		var licence = this.getAttributionLicence();
+		if ( licence.isPublicDomain() ) {
+			attributionLink = Messages.t("dialogue.pd-attribution-hint") + ' '
+				+ this._makeLink( licence.getUrl(), Messages.t("dialogue.here") )
+		} else {
+			attrbutionLink = this._getHtmlLicence();
+		}
+
 		return ( this._getAuthorAttribution() || this._getHtmlAuthor() ) + ', '
 			+ this._getHtmlTitle() + ', '
 			+ this._getEditingAttribution()
-			+ this._getHtmlLicence();
+			+ attributionLink;
 	},
 
 	_getAttributionAsTextWithLinks: function() {

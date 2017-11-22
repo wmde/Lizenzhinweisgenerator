@@ -39,7 +39,7 @@ $.extend( PublicDomainDialogueView.prototype, {
 			parentDialogue.render($dialogueScreen, true);
 		});
 
-		$forceAttributionBox.append(Messages.t( 'dialogue.force-pd-licence' ));
+		$forceAttributionBox.append(Messages.t( 'dialogue.force-pd-attribution' ));
 		return $forceAttributionBox
 	},
 

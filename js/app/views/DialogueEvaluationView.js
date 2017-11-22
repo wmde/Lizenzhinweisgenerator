@@ -142,7 +142,16 @@ $.extend( DialogueEvaluationView.prototype, {
 			dosAndDonts = this._evaluation.getDosAndDonts();
 
 		$html.append( doneTemplate() );
+
+		var title;
+		if ( this._evaluation.getAttributionLicence().isPublicDomain() ) {
+			title = Messages.t( 'evaluation.your-rights-attribution' )
+		} else {
+			title = Messages.t( 'evaluation.your-attribution' )
+		}
+
 		$html.append( attributionTemplate( {
+			title: title,
 			attribution: this._evaluation.getAttribution(),
 			plainTextAttribution: this._evaluation.getPlainTextAttribution(),
 			isPrint: this._evaluation.isPrint()

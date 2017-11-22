@@ -49,7 +49,7 @@
     "more-information": "weitere Informationen",
     "adjust-attribution-for-usage": "Lizenzhinweis an die Nutzung anpassen",
     "public-domain-text": "<p>Dieses Bild ist nach den ermittelten Details frei von Urheberrechten und kann daher genutzt werden, ohne dass Lizenzpflichten einzuhalten sind, also auch ohne, dass Hinweise auf den Urheber oder eine Lizenz gemacht werden müssten.</p><p>Nach deutschem Urheberrecht behält ein Urheber allerdings immer einen nicht verzichtbaren Kern an Rechten. Wir raten deshalb davon ab, sich die Urheberschaft an dem Bild anzumaßen oder es in einer Weise zu verwenden, die den Ruf des Urhebers schädigen kann. Es ist außerdem sinnvoll und für andere Nachnutzende hilfreich, zumindest einen Hinweis auf den gemeinfreien Status des Bildes zu geben.</p><p>In einigen Ländern (darunter auch Deutschland) werden regelmäßig Ansprüche auf einen Lichtbildschutz fotografischer Reproduktionen gemeinfreier Werke erhoben, und zwar sowohl bei Abbildungen von Plastiken und anderen dreidimensionalen Werken als auch bei Abbildungen von Gemälden. Es liegt in der Verantwortung der Weiternutzenden, abzuklären, ob sie dort, wo das jeweilige Bild verwendet werden soll, von solchen Ansprüchen betroffen sein könnten.</p>",
-    "force-pd-licence": "Trotzdem Lizenzhinweis erstellen",
+    "force-pd-attribution": "Trotzdem Rechtehinweis erstellen",
     "type-of-use-headline": "Wie möchten Sie das Bild nutzen?",
     "author-headline": "Wie lautet der Name bzw. die Namen des Ursprungsautors oder der Rechteinhaber?",
     "compilation-headline": "Wie möchten Sie das Bild veröffentlichen?",
@@ -85,13 +85,16 @@
     "change": "Veränderungen",
     "creator": "Urheber",
     "licence": "Lizenz",
-    "back-to-top": "Weiteres Bild prüfen"
+    "back-to-top": "Weiteres Bild prüfen",
+    "pd-attribution-hint": "als gemeinfrei gekennzeichnet, Details siehe",
+    "here": "hier"
   },
   "evaluation": {
     "by": "von",
     "edited": "bearbeitet",
     "done-text": "Sie haben alle Fragen beantwortet und können den Lizenzhinweis jetzt verwenden.",
     "your-attribution": "Ihr Lizenzhinweis",
+    "your-rights-attribution": "Ihr Rechtehinweis",
     "copy": "Kopieren",
     "do-print-text": "Die angezeigten Informationen sollten Sie nach Möglichkeit in unmittelbarer Nähe zum Bild zeigen (z.B. unmittelbar unter dem Bild). Auf jeden Fall müssen Betrachter des Bildes die Informationen leicht finden können. Bei Büchern und Zeitschriften können die Informationen auch in einem Impressum oder anderer üblicher Stelle stehen, wenn dabei eindeutig die Zuordnung zu dem jeweiligen Bild erkennbar ist (z.B. durch Angabe der Seitenzahl).",
     "do-online-text": "Bitte beachten Sie, dass der Lizenzhinweis Verlinkungen enthält, die zwingend mit übernommen werden müssen, wenn Sie den Lizenzhinweis verwenden möchten. Die angezeigten Informationen sollten Sie nach Möglichkeit in unmittelbarer Nähe zum Bild zeigen (z.B. unmittelbar unter dem Bild). Auf jeden Fall müssen Betrachter des Bildes die Informationen leicht finden können. Zwecks unkomplizierter Übernahme wird Ihnen der Lizenzhinweis hier auch als Plaintext inklusive aller Verlinkungen und als HTML-Text zur Verfügung gestellt. So kann er unmittelbar in den Quelltext Ihrer Website übernommen werden.",
