@@ -677,7 +677,7 @@ module.exports = [
 	new Licence( 'WSM no known restrictions', ['pd'], [], 'Public Domain', /WSM no known restrictions/, 'https://commons.wikimedia.org/wiki/Template:WSM no known restrictions'),
 	new Licence( 'Library of Congress-no known copyright restrictions', ['pd'], [], 'Public Domain', /Library of Congress-no known copyright restrictions/, 'https://commons.wikimedia.org/wiki/Template:Library of Congress-no known copyright restrictions'),
 	new Licence( 'Cc-pd', ['pd'], [], 'Public Domain', /Cc-pd/, 'https://commons.wikimedia.org/wiki/Template:Cc-pd'),
-	new Licence( 'Cc-zero', ['pd'], [], 'Public Domain', /Cc-zero/, 'https://creativecommons.org/publicdomain/zero/1.0'),
+	new Licence( 'Cc-zero', ['pd', 'cc-zero'], [], 'CC-0', /Cc-zero/, 'https://creativecommons.org/publicdomain/zero/1.0'),
 	new Licence( 'PD', [ 'pd' ], [], 'Public Domain', /^(Bild-)?(PD|Public domain|Copyrighted free use)\b/i ),
 
 	new Licence( 'unknown', [ 'unknown' ], [], 'Unknown', '', '' )

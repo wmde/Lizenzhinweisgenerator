@@ -138,7 +138,7 @@ $.extend( DialogueEvaluation.prototype, {
 		var licence = this.getAttributionLicence();
 		if ( licence.isPublicDomain() ) {
 			attributionLink = Messages.t("dialogue.pd-attribution-hint") + ' '
-				+ this._makeLink( licence.getUrl(), Messages.t("dialogue.here") )
+				+ this._makeLink( licence.getUrl(), "Wikimedia Commons" )
 		} else {
 			attrbutionLink = this._getHtmlLicence();
 		}

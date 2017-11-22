@@ -87,7 +87,7 @@
     "creator": "Urheber",
     "licence": "Lizenz",
     "back-to-top": "Weiteres Bild prüfen",
-    "pd-attribution-hint": "als gemeinfrei gekennzeichnet, Details siehe",
+    "pd-attribution-hint": "als gemeinfrei gekennzeichnet, Details auf",
     "here": "hier"
   },
   "evaluation": {
@@ -112,6 +112,7 @@
     "dont-rightholder-connection-headline": "Keine Sonderverbindung zum Rechteinhaber",
     "dont-rightholder-connection-text": "Sie dürfen durch die Art und Weise, wie sie das Bild nutzen, nicht den Eindruck erwecken, dass Ihnen die Nutzung vom Rechteinhaber oder zu einem vom Rechteinhaber benannten Zuschreibungsempfänger individuell gestattet wurde und/oder dass der Rechteinhaber damit auf sonstige Weise Ihre Nutzung bewusst gutheißen wolle.",
     "show-licence-text": "Vollständigen Lizenztext ansehen",
+    "show-cc-zero-text": "Vollständigen Text der Freigaberklärung anzeigen",
     "anonymous": "anonym",
     "copy-hint": "Kopieren Sie jetzt den markierten Text"
   }

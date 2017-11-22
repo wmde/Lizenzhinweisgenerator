@@ -141,6 +141,7 @@ $.extend( DialogueEvaluationView.prototype, {
 		var $html = $( '<div/>' ),
 			dosAndDonts = this._evaluation.getDosAndDonts(),
 			isPd = this._evaluation.getAttributionLicence().isPublicDomain(),
+			licenceGroups = this._evaluation.getAttributionLicence().getGroups(),
 			doneText,
 			title;
 
@@ -163,25 +164,37 @@ $.extend( DialogueEvaluationView.prototype, {
 			title: title,
 			attribution: this._evaluation.getAttribution(),
 			plainTextAttribution: this._evaluation.getPlainTextAttribution(),
-			isPrint: this._evaluation.isPrint()
+			isPrint: this._evaluation.isPrint(),
 		} ) );
-		$html.append( dosAndDontsTemplate( {
-			dos: dosAndDonts.dos.map( function( d ) {
-				return 'evaluation.do-' + d + '-text';
-			} ),
-			donts: dosAndDonts.donts.map( function( dont ) {
-				return {
-					headline: 'evaluation.dont-' + dont + '-headline',
-					text: 'evaluation.dont-' + dont + '-text'
-				};
-			} )
-		} ) );
+
+		if ( !isPd ) {
+			$html.append( dosAndDontsTemplate( {
+				dos: dosAndDonts.dos.map( function( d ) {
+					return 'evaluation.do-' + d + '-text';
+				} ),
+				donts: dosAndDonts.donts.map( function( dont ) {
+					return {
+						headline: 'evaluation.dont-' + dont + '-headline',
+						text: 'evaluation.dont-' + dont + '-text'
+					};
+				} )
+			} ) );
+		}
 		$html.append( '<div class="clearfix has-bottom-seperator"/>' );
-		var $licenseLink = moreInformationTemplate ( {
-			target: this._evaluation.getAttributionLicence().getUrl(),
-			content: Messages.t( 'evaluation.show-licence-text' )
+
+		if ( !isPd || licenceGroups.includes('cc-zero') ) {
+			var licenceText
+			if ( licenceGroups.includes('cc-zero') ) {
+				licenceText = Messages.t( 'evaluation.show-cc-zero-text' )
+			} else {
+				licenceText = Messages.t( 'evaluation.show-licence-text' )
+			}
+			var $licenseLink = moreInformationTemplate ( {
+				target: this._evaluation.getAttributionLicence().getUrl(),
+				content: licenceText
 				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')'
-		});
+			});
+		}
 
 		$html.append( $( '<div class="licence-bottom-bar" />' )
 		  .append($licenseLink)

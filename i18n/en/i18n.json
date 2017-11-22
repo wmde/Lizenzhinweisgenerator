@@ -87,7 +87,7 @@
     "licence": "License",
     "back-to-top": "Check another image",
     "force-pd-attribution": "Create a rights notice anyway",
-    "pd-attribution-hint": "marked as public domain, for more details check",
+    "pd-attribution-hint": "marked as public domain, more details on",
     "here": "here"
   },
   "evaluation": {
@@ -112,6 +112,7 @@
     "dont-rightholder-connection-headline": "No special connection to the rightsholder",
     "dont-rightholder-connection-text": "You are not allowed to use the image in a way that could be perceived as indicating that the rightsholder or any attribution parties mentioned granted rights to you in an individual transaction or otherwise endorse your specific use of the image.",
     "show-licence-text": "See the full license text",
+    "show-cc-zero-text": "Display the full text of the release statement",
     "anonymous": "anonymous",
     "copy-hint": "Copy the marked text"
   }
