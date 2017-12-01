@@ -147,7 +147,7 @@ $.extend( DialogueEvaluation.prototype, {
 			attributionLink = Messages.t('dialogue.pd-attribution-hint') + ' '
 				+ this._makeLink( licence.getUrl(), 'Wikimedia Commons' );
 		} else {
-			attrbutionLink = this._getHtmlLicence();
+			attributionLink = this._getHtmlLicence();
 		}
 
 		return ( this._getAuthorAttribution() || this._getHtmlAuthor() ) + ', '
