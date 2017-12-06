@@ -24,7 +24,7 @@
   },
   "error": {
     "generic": "Ein unvorhergesehener Fehler ist aufgetreten.",
-    "mediatype-unsupported": "Der Medientyp der angegebenen Datei wird von dieser Anwendung momentan leider nicht unterstützt.",
+    "mediatype-unsupported": "Dieser Medientyp wird vom Lizenzhinweisgenerator momentan leider nicht unterstützt.",
     "licence-unsupported": "Leider wird die ermittelte Lizenz des Bildes von dieser Anwendung nicht unterstützt.",
     "url-invalid": "Die angegebene Internetadresse konnte nicht verarbeitet werden.",
     "licence-not-recognized": "Leider wird das Format der Lizenzangabe zu diesem Bild derzeit noch nicht unterstützt.",
@@ -32,7 +32,7 @@
     "feedback-generic": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "feedback-blank-fields": "Alle Felder des Feedback-Formulars müssen ausgefüllt werden.",
     "no-images-found": "Dieser Wikipedia Artikel enthält keine Bilder.",
-    "no-wiki-url": "Bei der angegebenen Seite handelt es sich um keine Seite von Wikimedia.",
+    "no-wiki-url": "Der Lizenzhinweisgenerator kann derzeit nur Links zu Wikipedia oder Wikimedia Commons verarbeiten.",
     "invalid-email-format": "Die angebene Email Adresse entspricht nicht dem gültigen Format.",
     "no-cc-licence": "Diese Datei steht nicht unter einer Creative-Commons-Lizenz."
   },
