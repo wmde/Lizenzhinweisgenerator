@@ -66,9 +66,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 		var licence = this._asset.getLicence();
 		this.addStep( new ChangeStep( licence ));
 		this.addStep( new DialogueStep( 'creator', require( './templates/CreatorStep.handlebars' ) ) );
-		if ( !licence.isPublicDomain() ) {
-			this.addStep( new LicenceStep( licence ) );
-		}
+		this.addStep( new LicenceStep( licence ) );
 	}
 } );
 

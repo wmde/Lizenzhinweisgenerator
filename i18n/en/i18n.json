@@ -88,8 +88,10 @@
     "licence": "License",
     "back-to-top": "Check another image",
     "force-pd-attribution": "Create a rights notice anyway",
-    "pd-attribution-hint": "marked as public domain, more details on",
-    "here": "here"
+    "pd-attribution-hint": "marked as public domain",
+    "check-details": "more details on",
+    "here": "here",
+    "mark-as-pd": "als gemeinfrei markieren"
   },
   "evaluation": {
     "by": "by",

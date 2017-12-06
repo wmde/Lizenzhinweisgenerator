@@ -88,8 +88,10 @@
     "creator": "Urheber",
     "licence": "Lizenz",
     "back-to-top": "Weiteres Bild prüfen",
-    "pd-attribution-hint": "als gemeinfrei gekennzeichnet, Details auf",
-    "here": "hier"
+    "pd-attribution-hint": "als gemeinfrei gekennzeichnet",
+    "check-details": "Details auf",
+    "here": "hier",
+    "mark-as-pd": "als gemeinfrei markieren"
   },
   "evaluation": {
     "by": "von",

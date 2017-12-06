@@ -87,8 +87,10 @@
     "licence": "Licença",
     "back-to-top": "Verifique outra foto",
     "force-pd-attribution": "No entanto, crie um aviso de direitos",
-    "pd-attribution-hint": "marcado como domínio público, para mais detalhes, veja",
-    "here": "aqui"
+    "pd-attribution-hint": "marcado como domínio público",
+    "check-details": "para mais detalhes, veja",
+    "here": "aqui",
+    "mark-as-pd": "marca como domínio público"
   },
   "evaluation": {
     "by": "por",
