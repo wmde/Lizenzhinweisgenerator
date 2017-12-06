@@ -70,7 +70,10 @@ $.extend( DialogueEvaluation.prototype, {
 		return $container.html();
 	},
 
-	_makeLink: function( target, text ) {
+	_makeLink: function( target, text, isLicense ) {
+		if (isLicense) {
+			return '<a href="' + target + '" rel="license" target="_blank">' + text + '</a>'
+		}
 		return '<a href="' + target + '" target="_blank">' + text + '</a>';
 	},
 
@@ -79,7 +82,12 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlLicence: function() {
-		return this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getName() );
+		var url = this.getAttributionLicence().getUrl();
+		if (url) {
+			return this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getName(), true);
+		} else {
+			return this.getAttributionLicence().getName();
+		}
 	},
 
 	getAttributionLicence: function() {
@@ -100,7 +108,6 @@ $.extend( DialogueEvaluation.prototype, {
 		if( creator ) {
 			attribution += ' ' + Messages.t( 'evaluation.by' ) + ' ' + creator;
 		}
-		attribution += ', ';
 		return attribution;
 	},
 
@@ -117,27 +124,56 @@ $.extend( DialogueEvaluation.prototype, {
 	_getPrintAttribution: function() {
 		var attribution = ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
 			+ '(' + this._asset.getUrl() + '), ';
-		if( !this._asset.getLicence().isInGroup( 'cc4' ) ) {
+		var licence = this._asset.getLicence();
+		if( !licence.isInGroup( 'cc4' ) ) {
 			attribution += '„' + this._asset.getTitle() + '“' + ', ';
 		}
-		attribution += this._getEditingAttribution()
-			+ this.getAttributionLicence().getUrl();
+		attribution += this._getEditingAttribution();
+
+		var url = this.getAttributionLicence().getUrl();
+		if ( url ) {
+			attribution += ', ';
+			if ( licence.isPublicDomain() ) {
+				attribution += Messages.t('dialogue.pd-attribution-hint')
+				+ ', ' + Messages.t('check-details')
+				+ ' Wikimedia Commons: ';
+			}
+			attribution	+= url;
+		}
+
 		return attribution;
 	},
 
 	_getHtmlAttribution: function() {
+		var attributionLink
+		var licence = this.getAttributionLicence();
+		if ( licence.isPublicDomain() ) {
+			attributionLink = Messages.t('dialogue.pd-attribution-hint')
+			if ( licence.getUrl() ) {
+				attributionLink += ', ' + Messages.t('dialogue.check-details') + ' '
+					+ this._makeLink( licence.getUrl(), 'Wikimedia Commons' );
+			}
+		} else {
+			attributionLink = this._getHtmlLicence();
+		}
+
 		return ( this._getAuthorAttribution() || this._getHtmlAuthor() ) + ', '
 			+ this._getHtmlTitle() + ', '
 			+ this._getEditingAttribution()
-			+ this._getHtmlLicence();
+			+ attributionLink;
 	},
 
 	_getAttributionAsTextWithLinks: function() {
+		var urlSnippet = ''
+		var url = this.getAttributionLicence().getUrl();
+		if ( url ) {
+			urlSnippet = ', ' + url
+		}
 		return ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
 			+ '(' + this._asset.getUrl() + '), '
 			+ '„' + this._asset.getTitle() + '“' + ', '
 			+ this._getEditingAttribution()
-			+ this.getAttributionLicence().getUrl();
+			+ urlSnippet;
 	},
 
 	getAttribution: function() {

@@ -302,7 +302,7 @@ $.extend( Api.prototype, {
 		this._getResultsFromApi( title, 'images', wikiUrl, params, 'imcontinue' )
 			.done( function( page ) {
 				if( page.images === undefined || page.images.length === 0  ) {
-					deferred.reject( new ApplicationError( 'url-invalid' ) );
+					deferred.reject( new ApplicationError( 'no-images-found' ) );
 					return;
 				}
 				var imageTitles = [];

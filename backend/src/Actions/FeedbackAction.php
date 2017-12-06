@@ -22,7 +22,8 @@ class FeedbackAction {
 		if ( $this->requestValid( $request ) ) {
 			$this->sendMail(
 				$request->get( 'name' ),
-				$request->get( 'feedback' )
+				$request->get( 'feedback' ),
+				$request->get( 'responseEmail' )
 			);
 		}
 	}
@@ -36,10 +37,20 @@ class FeedbackAction {
 		return true;
 	}
 
-	private function sendMail( $sender, $text ) {
+	private function sendMail( $sender, $text, $responseEmail ) {
+		if (!isset($responseEmail) || empty($responseEmail) ) {
+			$fromEmail = 'noreply@attribution-generator.dev';
+		} else {
+			if (!filter_var($responseEmail, FILTER_VALIDATE_EMAIL)) {
+				$this->errors[] = $this->i18n['error']['invalid-email-format'];
+				return;
+			}
+			$fromEmail = $responseEmail;
+		}
+
 		$message = \Swift_Message::newInstance()
 			->setSubject( '[AttributionGenerator] Feedback from ' . $sender )
-			->setFrom( [ 'noreply@attribution-generator.dev' ] )
+			->setFrom( [ $fromEmail ] )
 			->setTo( [ $this->app['config']['feedback_email'] ] )
 			->setBody( $text );
 

@@ -38,15 +38,20 @@ $.extend( DialogueView.prototype, {
 	 * if the asset has been licenced under appropriate licence, or starts the dialogue otherwise.
 	 *
 	 * @param {jQuery} $screen
+	 * @param {boolean} $forceAttribution
 	 */
-	render: function( $screen ) {
+	render: function( $screen, forceAttribution ) {
 		var title, dialogue;
 
-		if( this._noAttributionNeeded( this._asset.getLicence() ) ) {
+		if( !forceAttribution && this._noAttributionNeeded( this._asset.getLicence() ) ) {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
-			dialogue = new PublicDomainDialogueView;
+			dialogue = new PublicDomainDialogueView( this );
 		} else {
-			title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
+			if ( this._asset.getLicence().isPublicDomain() ) {
+
+			} else {
+				title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
+			}
 			dialogue = new AttributionDialogueView( this._asset );
 		}
 
