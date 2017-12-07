@@ -1,10 +1,9 @@
 'use strict';
 
-var $ = require( 'jquery' )
-var Messages = require('./Messages')
+var $ = require( 'jquery' );
+var Messages = require('./Messages');
 
 var BackToTopButton = function( content ) {
-
 };
 
 
@@ -22,7 +21,7 @@ $.extend( BackToTopButton.prototype, {
         '<img src="images/wikimedia_icon_reload.svg" class="btn-icon"/>' +
         '<span class="btn-text">' + Messages.t('dialogue.back-to-top') +
         '</span></button>'
-      )
+      );
       $btn.bind("click", function () {
         $(':input','#file-form')
         .not(':button, :submit, :reset, :hidden')
@@ -37,8 +36,8 @@ $.extend( BackToTopButton.prototype, {
                $( '#results-screen' ).hide();
                $( '.dialogue-screen' ).remove();
        }, 500);
-     })
-      $btn.addClass('float-right')
+      });
+      $btn.addClass('float-right');
       return $btn;
     }
 });

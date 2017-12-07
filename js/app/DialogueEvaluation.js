@@ -72,7 +72,7 @@ $.extend( DialogueEvaluation.prototype, {
 
 	_makeLink: function( target, text, isLicense ) {
 		if (isLicense) {
-			return '<a href="' + target + '" rel="license" target="_blank">' + text + '</a>'
+			return '<a href="' + target + '" rel="license" target="_blank">' + text + '</a>';
 		}
 		return '<a href="' + target + '" target="_blank">' + text + '</a>';
 	},
@@ -126,7 +126,7 @@ $.extend( DialogueEvaluation.prototype, {
 			+ '(' + this._asset.getUrl() + '), ';
 		var licence = this._asset.getLicence();
 		if( !licence.isInGroup( 'cc4' ) ) {
-			attribution += '„' + this._asset.getTitle() + '“' + ', ';
+			attribution += '„' + this._asset.getTitle() + '“';
 		}
 		attribution += this._getEditingAttribution();
 
@@ -145,16 +145,16 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getHtmlAttribution: function() {
-		var attributionLink
+		var attributionLink;
 		var licence = this.getAttributionLicence();
 		if ( licence.isPublicDomain() ) {
-			attributionLink = Messages.t('dialogue.pd-attribution-hint')
+			attributionLink = Messages.t('dialogue.pd-attribution-hint');
 			if ( licence.getUrl() ) {
 				attributionLink += ', ' + Messages.t('dialogue.check-details') + ' '
 					+ this._makeLink( licence.getUrl(), 'Wikimedia Commons' );
 			}
 		} else {
-			attributionLink = this._getHtmlLicence();
+			attributionLink = ', ' + this._getHtmlLicence();
 		}
 
 		return ( this._getAuthorAttribution() || this._getHtmlAuthor() ) + ', '
@@ -164,15 +164,19 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_getAttributionAsTextWithLinks: function() {
-		var urlSnippet = ''
+		var urlSnippet = '';
 		var url = this.getAttributionLicence().getUrl();
 		if ( url ) {
-			urlSnippet = ', ' + url
+			urlSnippet = ', ' + url;
+		}
+		var editingAttribution = this._getEditingAttribution();
+		if ( editingAttribution ) {
+			editingAttribution = ', ' + editingAttribution;
 		}
 		return ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
 			+ '(' + this._asset.getUrl() + '), '
-			+ '„' + this._asset.getTitle() + '“' + ', '
-			+ this._getEditingAttribution()
+			+ '„' + this._asset.getTitle() + '“'
+			+ editingAttribution
 			+ urlSnippet;
 	},
 

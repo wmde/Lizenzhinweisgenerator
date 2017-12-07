@@ -92,13 +92,13 @@ var bootstrapAlert = function( type, message ) {
 };
 
 var $languageDropdown = $( '.language-dropdown' );
-$languageDropdown.find( 'li' ).bind("click", function (e) {
-	$languageDropdown.removeClass('open');
+$languageDropdown.find( 'li' ).bind( "click", function (e) {
+	$languageDropdown.removeClass( 'open' );
 	e.preventDefault();
-	$('.language-dropdown .dropdown-toggle').dropdown('toggle');
+	$( '.language-dropdown .dropdown-toggle' ).dropdown( 'toggle' );
 	var $liElement = $(this);
 	setTimeout(function () {
-		window.location = $liElement.find(':first-child').attr('href');
+		window.location = $liElement.find( ':first-child' ).attr( 'href' );
 	}, 150);
 });
 

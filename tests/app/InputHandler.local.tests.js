@@ -289,18 +289,17 @@ QUnit.test( 'getFilename() returning ImageInfo objects', function( assert ) {
 QUnit.test( 'getFilename returns an error when given an URL that cannot be processed', function( assert ) {
 	var inputHandler = new InputHandler( api );
 
-	var testCases = [
-		'https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG',
-		'https://www.wikimedia.de/w/images.homepage/d/d6/',
-		'https://foo.bar',
-		'https://de.wikipedia.org/wiki/Lars_Kindgen',
-		'https://de.m.wikipedia.org/wiki/Lars_Kindgen'
-	];
+	var testCases = {};
+	testCases['https://www.wikimedia.de/w/images.homepage/d/d6/Pavel_Richter_WMDE.JPG'] = Messages.t( 'error.no-wiki-url' );
+	testCases['https://www.wikimedia.de/w/images.homepage/d/d6/'] =  Messages.t( 'error.no-wiki-url' );
+	testCases['https://foo.bar'] = Messages.t( 'error.no-wiki-url' );
+	testCases['https://de.wikipedia.org/wiki/Lars_Kindgen'] = Messages.t( 'error.no-images-found' );
+	testCases['https://de.m.wikipedia.org/wiki/Lars_Kindgen'] = Messages.t( 'error.no-images-found' );
 
 	/**
 	 * @param {string} input
 	 */
-	function testGetFilenameRejectsInput( input ) {
+	function testGetFilenameRejectsInput( input, message ) {
 		QUnit.stop();
 
 		inputHandler.getFilename( input )
@@ -308,14 +307,14 @@ QUnit.test( 'getFilename returns an error when given an URL that cannot be proce
 				assert.ok( false, 'Parsing "' + input + '" succeeded while error has been expected' );
 			} )
 			.fail( function( error ) {
-				assert.equal( error.getMessage(), Messages.t( 'error.url-invalid' ) );
+				assert.equal( error.getMessage(), message );
 			} )
 			.always( function() {
 				QUnit.start();
 			} );
 	}
 
-	for( var i = 0; i < testCases.length; i++ ) {
-		testGetFilenameRejectsInput( testCases[ i ] );
+	for( var url in testCases ) {
+		testGetFilenameRejectsInput( url, testCases[url] );
 	}
 } );

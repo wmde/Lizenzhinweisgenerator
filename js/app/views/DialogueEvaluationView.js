@@ -6,7 +6,6 @@ var $ = require( 'jquery' ),
 	attributionTemplate = require( '../templates/Attribution.handlebars' ),
 	ZeroClipboard = require( 'zeroclipboard' ),
 	Clipboard = require( 'clipboard' ),
-	buttonTemplate = require( '../templates/SmallButton.handlebars' ),
 	Messages = require( '../Messages' ),
 	Tracking = require( '../../tracking.js' ),
 	BackToTopButton = require ( '../BackToTopButton' ),
@@ -155,9 +154,9 @@ $.extend( DialogueEvaluationView.prototype, {
 			text: doneText
 		}) );
 		if ( isPd ) {
-			title = Messages.t( 'evaluation.your-legal-notice' )
+			title = Messages.t( 'evaluation.your-legal-notice' );
 		} else {
-			title = Messages.t( 'evaluation.your-attribution' )
+			title = Messages.t( 'evaluation.your-attribution' );
 		}
 
 		$html.append( attributionTemplate( {
@@ -182,14 +181,17 @@ $.extend( DialogueEvaluationView.prototype, {
 		}
 		$html.append( '<div class="clearfix has-bottom-seperator"/>' );
 
-		if ( !isPd || licenceGroups.includes('cc-zero') ) {
-			var licenceText
-			if ( licenceGroups.includes('cc-zero') ) {
-				licenceText = Messages.t( 'evaluation.show-cc-zero-text' )
+		var isZero = typeof licenceGroups.includes !== "undefined" &&
+			licenceGroups.includes('cc-zero');
+		var $licenseLink = '';
+		if ( !isPd || isZero ) {
+			var licenceText;
+			if ( isZero ) {
+				licenceText = Messages.t( 'evaluation.show-cc-zero-text' );
 			} else {
-				licenceText = Messages.t( 'evaluation.show-licence-text' )
+				licenceText = Messages.t( 'evaluation.show-licence-text' );
 			}
-			var $licenseLink = moreInformationTemplate ( {
+			$licenseLink = moreInformationTemplate ( {
 				target: this._evaluation.getAttributionLicence().getUrl(),
 				content: licenceText
 				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')'
@@ -197,7 +199,7 @@ $.extend( DialogueEvaluationView.prototype, {
 		}
 
 		$html.append( $( '<div class="licence-bottom-bar" />' )
-		  .append($licenseLink)
+		  .append( $licenseLink )
 			.append( new BackToTopButton().render() )
 		);
 		$html.append( '<div class="clearfix"/>' );
