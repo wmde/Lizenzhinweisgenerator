@@ -10,11 +10,11 @@ var ChangeStepView = function( licence ) {
 
 $.extend( ChangeStepView.prototype, {
 	render: function() {
-    var headline
+    var headline;
     if ( !this._licence.isPublicDomain() ) {
-      headline = Messages.t('dialogue.change-headline')
+      headline = Messages.t('dialogue.change-headline');
     } else {
-      headline = Messages.t('dialogue.change-pd-headline')
+      headline = Messages.t('dialogue.change-pd-headline');
     }
 		return $( template( {
 			headline: headline

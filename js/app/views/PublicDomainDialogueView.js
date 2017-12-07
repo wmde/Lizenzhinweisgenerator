@@ -8,7 +8,7 @@ var $ = require( 'jquery' ),
 	BackToTopButton = require( '../BackToTopButton' );
 
 var PublicDomainDialogueView = function( parentDialogue ) {
-	this._parentDialogue = parentDialogue
+	this._parentDialogue = parentDialogue;
 };
 
 $.extend( PublicDomainDialogueView.prototype, {
@@ -24,7 +24,7 @@ $.extend( PublicDomainDialogueView.prototype, {
 		} ) );
 		$bottomBar.append( new BackToTopButton().render() );
 
-		return $bottomBar
+		return $bottomBar;
 	},
 	_showForceAttribution: function() {
 		var $forceAttributionBox = $( '<div class="arrow-box" />' );
@@ -40,7 +40,7 @@ $.extend( PublicDomainDialogueView.prototype, {
 		});
 
 		$forceAttributionBox.append(Messages.t( 'dialogue.force-pd-attribution' ));
-		return $forceAttributionBox
+		return $forceAttributionBox;
 	},
 
 	/**

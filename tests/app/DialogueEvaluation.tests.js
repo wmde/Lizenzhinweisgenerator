@@ -162,7 +162,7 @@ QUnit.test( 'online attribution contains link to asset from title', function( as
 QUnit.test( 'online attribution contains link to licence', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
 		evaluation = newEvaluation( { licence: licence } );
-	assert.ok( attributionContains( evaluation, '<a href="' + licence.getUrl() + '" target="_blank">' + licence.getName() + '</a>' ) );
+	assert.ok( attributionContains( evaluation, '<a href="' + licence.getUrl() + '" rel="license" target="_blank">' + licence.getName() + '</a>' ) );
 } );
 
 QUnit.test( 'online attribution contains editing information', function( assert ) {

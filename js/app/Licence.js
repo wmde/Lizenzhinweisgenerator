@@ -202,7 +202,7 @@ $.extend( Licence.prototype, {
 	* @return {boolean}
 	*/
 	isPublicDomain: function () {
-		return this._groups.includes( 'pd' )
+		return this._groups && typeof this._groups.includes !== "undefined" && this._groups.includes( 'pd' );
 	}
 
 } );
