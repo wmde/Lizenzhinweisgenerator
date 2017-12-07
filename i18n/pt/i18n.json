@@ -66,7 +66,7 @@
     "compilation-question-mark": "Por favor, escolha esta opção se você acha que a publicação desta imagem junto com outras obras (devido à sua seleção e disposição) na forma de uma coleção de obras é uma criação intelectual em si, p. ex. O novo trabalho, devido à sua originalidade, é um trabalho digno de proteção de direitos autorais além dos trabalhos que contém. Por exemplo, poderia-se dar este caso se você criar um livro de fotos ou uma coleção de «melhores imagens». A situação é diferente se você criar um «remix¢, como uma colagem de várias imagens, o que na maioria dos casos não resultará em uma coleção, mas sim num trabalho composto ou uma adaptação das imagens usadas para ele.",
     "editing-question-mark": "Todas as mudanças na imagem que alteram seu impacto nos espectadores (como cortes, coloração, mudanças drásticas de tamanho, etc.) convertem o resultado em uma adaptação, no sentido jurídico. Por outro lado, modificar o formato da imagem ou digitalizá-la não cria uma adaptação porque a imagem e o impacto ou a impressão que ela dá ficam iguais.",
     "licence-question-mark": "A ferramenta só oferece licenças compatíveis com a licença Creative Commons que corresponde ao trabalho original.",
-		 "creator-question-mark": "Por favor indique, caso seja possível, o seu nome completo. Um pseudónimo, alcunha ou "anónimo" também é possível.",
+    "creator-question-mark": "Por favor indique, caso seja possível, o seu nome completo. Um pseudónimo, alcunha ou «anónimo» também é possível.",
     "same-licence": "A mesma licença que o trabalho original",
     "licence-text": "Texto da licença ",
     "download-image-link": "Baixe o arquivo da imagem",
