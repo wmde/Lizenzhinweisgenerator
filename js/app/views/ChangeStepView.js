@@ -2,7 +2,7 @@
 
 var $ = require( 'jquery' ),
 	template = require( '../templates/ChangeStep.handlebars' ),
-  Messages = require( '../Messages');
+	Messages = require( '../Messages' );
 
 var ChangeStepView = function( licence ) {
 	this._licence = licence;
@@ -10,12 +10,12 @@ var ChangeStepView = function( licence ) {
 
 $.extend( ChangeStepView.prototype, {
 	render: function() {
-    var headline;
-    if ( !this._licence.isPublicDomain() ) {
-      headline = Messages.t('dialogue.change-headline');
-    } else {
-      headline = Messages.t('dialogue.change-pd-headline');
-    }
+		var headline;
+		if( !this._licence.isPublicDomain() ) {
+			headline = Messages.t( 'dialogue.change-headline' );
+		} else {
+			headline = Messages.t( 'dialogue.change-pd-headline' );
+		}
 		return $( template( {
 			headline: headline
 		} ) );

@@ -8,7 +8,7 @@ var $ = require( 'jquery' ),
 	Clipboard = require( 'clipboard' ),
 	Messages = require( '../Messages' ),
 	Tracking = require( '../../tracking.js' ),
-	BackToTopButton = require ( '../BackToTopButton' ),
+	BackToTopButton = require( '../BackToTopButton' ),
 	moreInformationTemplate = require( '../templates/MoreInformation.handlebars' );
 
 ZeroClipboard.config( { swfPath: '//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf' } );
@@ -144,16 +144,16 @@ $.extend( DialogueEvaluationView.prototype, {
 			doneText,
 			title;
 
-		if ( isPd ) {
-			doneText = Messages.t('evaluation.done-text-legal-notice');
+		if( isPd ) {
+			doneText = Messages.t( 'evaluation.done-text-legal-notice' );
 		} else {
-			doneText = Messages.t('evaluation.done-text');
+			doneText = Messages.t( 'evaluation.done-text' );
 		}
 
-		$html.append( doneTemplate({
+		$html.append( doneTemplate( {
 			text: doneText
-		}) );
-		if ( isPd ) {
+		} ) );
+		if( isPd ) {
 			title = Messages.t( 'evaluation.your-legal-notice' );
 		} else {
 			title = Messages.t( 'evaluation.your-attribution' );
@@ -163,10 +163,10 @@ $.extend( DialogueEvaluationView.prototype, {
 			title: title,
 			attribution: this._evaluation.getAttribution(),
 			plainTextAttribution: this._evaluation.getPlainTextAttribution(),
-			isPrint: this._evaluation.isPrint(),
+			isPrint: this._evaluation.isPrint()
 		} ) );
 
-		if ( !isPd ) {
+		if( !isPd ) {
 			$html.append( dosAndDontsTemplate( {
 				dos: dosAndDonts.dos.map( function( d ) {
 					return 'evaluation.do-' + d + '-text';
@@ -181,30 +181,28 @@ $.extend( DialogueEvaluationView.prototype, {
 		}
 		$html.append( '<div class="clearfix has-bottom-seperator"/>' );
 
-		var isZero = typeof licenceGroups.includes !== "undefined" &&
-			licenceGroups.includes('cc-zero');
+		var isZero = typeof licenceGroups.includes !== 'undefined' &&
+			licenceGroups.includes( 'cc-zero' );
 		var $licenseLink = '';
-		if ( !isPd || isZero ) {
+		if( !isPd || isZero ) {
 			var licenceText;
-			if ( isZero ) {
+			if( isZero ) {
 				licenceText = Messages.t( 'evaluation.show-cc-zero-text' );
 			} else {
 				licenceText = Messages.t( 'evaluation.show-licence-text' );
 			}
-			$licenseLink = moreInformationTemplate ( {
+			$licenseLink = moreInformationTemplate( {
 				target: this._evaluation.getAttributionLicence().getUrl(),
 				content: licenceText
 				+ ' (' + this._evaluation.getAttributionLicence().getName() + ')'
-			});
+			} );
 		}
 
 		$html.append( $( '<div class="licence-bottom-bar" />' )
-		  .append( $licenseLink )
+			.append( $licenseLink )
 			.append( new BackToTopButton().render() )
 		);
 		$html.append( '<div class="clearfix"/>' );
-
-			// .appendTo( $html );
 
 		$html.find( '.show-attribution' ).click( this._showAttribution );
 		$html.find( '.show-dont' ).click( this._showDont );

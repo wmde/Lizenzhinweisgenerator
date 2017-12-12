@@ -71,7 +71,7 @@ $.extend( DialogueEvaluation.prototype, {
 	},
 
 	_makeLink: function( target, text, isLicense ) {
-		if (isLicense) {
+		if( isLicense ) {
 			return '<a href="' + target + '" rel="license" target="_blank">' + text + '</a>';
 		}
 		return '<a href="' + target + '" target="_blank">' + text + '</a>';
@@ -83,8 +83,8 @@ $.extend( DialogueEvaluation.prototype, {
 
 	_getHtmlLicence: function() {
 		var url = this.getAttributionLicence().getUrl();
-		if (url) {
-			return this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getName(), true);
+		if( url ) {
+			return this._makeLink( this.getAttributionLicence().getUrl(), this.getAttributionLicence().getName(), true );
 		} else {
 			return this.getAttributionLicence().getName();
 		}
@@ -131,11 +131,11 @@ $.extend( DialogueEvaluation.prototype, {
 		attribution += this._getEditingAttribution();
 
 		var url = this.getAttributionLicence().getUrl();
-		if ( url ) {
+		if( url ) {
 			attribution += ', ';
-			if ( licence.isPublicDomain() ) {
-				attribution += Messages.t('dialogue.pd-attribution-hint')
-				+ ', ' + Messages.t('check-details')
+			if( licence.isPublicDomain() ) {
+				attribution += Messages.t( 'dialogue.pd-attribution-hint' )
+				+ ', ' + Messages.t( 'check-details' )
 				+ ' Wikimedia Commons: ';
 			}
 			attribution	+= url;
@@ -147,10 +147,10 @@ $.extend( DialogueEvaluation.prototype, {
 	_getHtmlAttribution: function() {
 		var attributionLink;
 		var licence = this.getAttributionLicence();
-		if ( licence.isPublicDomain() ) {
-			attributionLink = Messages.t('dialogue.pd-attribution-hint');
-			if ( licence.getUrl() ) {
-				attributionLink += ', ' + Messages.t('dialogue.check-details') + ' '
+		if( licence.isPublicDomain() ) {
+			attributionLink = Messages.t( 'dialogue.pd-attribution-hint' );
+			if( licence.getUrl() ) {
+				attributionLink += ', ' + Messages.t( 'dialogue.check-details' ) + ' '
 					+ this._makeLink( licence.getUrl(), 'Wikimedia Commons' );
 			}
 		} else {
@@ -166,11 +166,11 @@ $.extend( DialogueEvaluation.prototype, {
 	_getAttributionAsTextWithLinks: function() {
 		var urlSnippet = '';
 		var url = this.getAttributionLicence().getUrl();
-		if ( url ) {
+		if( url ) {
 			urlSnippet = ', ' + url;
 		}
 		var editingAttribution = this._getEditingAttribution();
-		if ( editingAttribution ) {
+		if( editingAttribution ) {
 			editingAttribution = ', ' + editingAttribution;
 		}
 		return ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
