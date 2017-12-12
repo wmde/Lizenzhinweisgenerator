@@ -64,7 +64,7 @@ $.extend( AttributionDialogue.prototype, Dialogue.prototype, {
 
 	_addEditingSteps: function() {
 		var licence = this._asset.getLicence();
-		this.addStep( new ChangeStep( licence ));
+		this.addStep( new ChangeStep( licence ) );
 		this.addStep( new DialogueStep( 'creator', require( './templates/CreatorStep.handlebars' ) ) );
 		this.addStep( new LicenceStep( licence ) );
 	}

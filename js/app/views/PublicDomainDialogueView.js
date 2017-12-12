@@ -31,15 +31,15 @@ $.extend( PublicDomainDialogueView.prototype, {
 
 		var parentDialogue = this._parentDialogue;
 
-		$forceAttributionBox.bind( "click", function () {
-      // Remove children from current dialogue screen element
+		$forceAttributionBox.bind( 'click', function() {
+			// Remove children from current dialogue screen element
 			var $dialogueScreen = $( '.dialogue-screen' );
 			$dialogueScreen.empty();
 			// render parent dialogue again with forceAttribution set to true
-			parentDialogue.render($dialogueScreen, true);
-		});
+			parentDialogue.render( $dialogueScreen, true );
+		} );
 
-		$forceAttributionBox.append(Messages.t( 'dialogue.force-pd-attribution' ));
+		$forceAttributionBox.append( Messages.t( 'dialogue.force-pd-attribution' ) );
 		return $forceAttributionBox;
 	},
 
@@ -49,7 +49,7 @@ $.extend( PublicDomainDialogueView.prototype, {
 	 * @param {jQuery} $dialogue
 	 */
 	render: function( $dialogue ) {
-		var $publicLicenceDialogue = $(this._renderPublicLicenceDialogue());
+		var $publicLicenceDialogue = $( this._renderPublicLicenceDialogue() );
 		$publicLicenceDialogue.append( this._showForceAttribution() );
 		$dialogue.html( $publicLicenceDialogue )
 		.append( '<div class="public-domain-bottom-separator has-bottom-seperator"></div>' )

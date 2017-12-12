@@ -47,8 +47,8 @@ $.extend( DialogueView.prototype, {
 			title = Messages.t( 'dialogue.no-attribution-needed' );
 			dialogue = new PublicDomainDialogueView( this );
 		} else {
-			if ( this._asset.getLicence().isPublicDomain() ) {
-
+			if( this._asset.getLicence().isPublicDomain() ) {
+				title = Messages.t( 'adjust-legal-notice-for-usage' );
 			} else {
 				title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
 			}

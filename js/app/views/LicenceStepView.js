@@ -15,21 +15,21 @@ var LicenceStepView = function( original, compatibles ) {
 $.extend( LicenceStepView.prototype, {
 	render: function() {
 		var title, name, url, defaultId;
-		if (this._original.isPublicDomain()) {
-			var cc0Licence = licences.getLicence('cc-zero');
+		if( this._original.isPublicDomain() ) {
+			var cc0Licence = licences.getLicence( 'cc-zero' );
 			defaultId = cc0Licence.getId();
-			title = Messages.t('dialogue.mark-as-pd');
+			title = Messages.t( 'dialogue.mark-as-pd' );
 			name = cc0Licence.getName();
 			url = cc0Licence.getUrl();
 		} else {
 			defaultId = 'original';
-			title = Messages.t('dialogue.same-licence');
+			title = Messages.t( 'dialogue.same-licence' );
 			name = this._original.getName();
 			url = this._original.getUrl();
 		}
 
 		return $( template( {
-			defaultChoice: { title: title, name: name, url: url, id: defaultId},
+			defaultChoice: { title: title, name: name, url: url, id: defaultId },
 			compatibles: this._compatibles
 		} ) );
 	}
