@@ -157,9 +157,14 @@ $.extend( DialogueEvaluation.prototype, {
 			attributionLink = ', ' + this._getHtmlLicence();
 		}
 
+		var editingAttribution = this._getEditingAttribution();
+		if (editingAttribution) {
+			editingAttribution = ', ' + editingAttribution;
+		}
+
 		return ( this._getAuthorAttribution() || this._getHtmlAuthor() ) + ', '
-			+ this._getHtmlTitle() + ', '
-			+ this._getEditingAttribution()
+			+ this._getHtmlTitle()
+			+ editingAttribution
 			+ attributionLink;
 	},
 
