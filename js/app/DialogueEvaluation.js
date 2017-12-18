@@ -158,7 +158,7 @@ $.extend( DialogueEvaluation.prototype, {
 		}
 
 		var editingAttribution = this._getEditingAttribution();
-		if (editingAttribution) {
+		if( editingAttribution ) {
 			editingAttribution = ', ' + editingAttribution;
 		}
 

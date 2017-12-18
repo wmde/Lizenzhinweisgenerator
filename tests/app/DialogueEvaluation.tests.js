@@ -196,17 +196,17 @@ QUnit.test( 'online attribution shows the author the user entered', function( as
 	assert.ok( attributionContains( evaluation, 'Meh' ) );
 } );
 
-QUnit.test( 'online attribution has no duplicate comma', function( assert) {
+QUnit.test( 'online attribution has no duplicate comma', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-sa-3.0' ),
 		evaluation = newEvaluation(
 			{},
 			{
 				'typeOfUse': { type: 'online' },
 				editing: { edited: 'false' },
-				licence: { licence: licence.getId() },
+				licence: { licence: licence.getId() }
 			}
 		);
-		assert.ok( !attributionContains( evaluation, ', ,' ) );
+	assert.ok( !attributionContains( evaluation, ', ,' ) );
 } );
 
 QUnit.test( 'plain text attribution for online usage is generated correctly', function( assert ) {
