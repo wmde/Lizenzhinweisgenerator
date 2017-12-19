@@ -31,10 +31,10 @@
     "send-feedback": "Something did not work. Please try again.",
     "feedback-generic": "Something did not work. Please try again.",
     "feedback-blank-fields": "Please fill in all the fields of the feedback form.",
-    "no-images-found": "This Wikipedia page does not contain any images.",
-    "no-wiki-url": "The referenced site is not a Wikimedia page.",
-    "invalid-email-format": "The given email address does not match the valid format.",
-    "no-cc-licence": "This file is not under a Creative Commons license."
+    "no-images-found": "This Wikipedia article does not contain any images.",
+    "no-wiki-url": "At this moment, the Attribution Generator can only process pictures from Wikipedia or Wikimedia Commons.",
+    "invalid-email-format": "The given e-mail address does not match the valid format.",
+    "no-cc-licence": "This file is not licensed under a Creative Commons license."
   },
   "info-box": {
     "private-use": "For most purely private uses, you do not need a license notice.",
@@ -50,14 +50,15 @@
     "adjust-attribution-for-usage": "Adapt the license notice to the use case",
     "adjust-legal-notice-for-usage": "Adapt the legal notice to the use case",
     "public-domain-text": "<p>According to the details that were detected, this image is free of copyright and can be used without any license requirements, so even withouth mentioning any author or license.</p><p>However, under German copyright law, an author always retains some unwaivable rights to every work. We therefore recommend to not falsely claim the authorship of the image nor to use the image in a way that could be regarded harmful to the author’s reputation. It is, furthermore, recommendable to inform other users about the public domain status of this image.</p><p>In some countries (including Germany) there are regularly claims for the protection of photographic reproductions of works in the public domain. This applies both to pictures of sculptures and other three-dimensional works as well as photos of paintings. It is the responsibility of reusers to clarify whether they are affected when using the respective picture.</p>",
-    "type-of-use-headline": "How do you want to use the image?",
+    "force-pd-attribution": "Generate rights notice anyway",
+		"type-of-use-headline": "How do you want to use the image?",
     "author-headline": "What is the name (or the names) of the author or the copyright holder?",
     "compilation-headline": "How do you want to publish the image?",
     "editing-headline": "Do you want to use the image in a modified form?",
     "change-headline": "What did you modify?",
-    "change-pd-headline": "If you want you can clearify your changes. Which exact part of the image is being edited?",
+    "change-pd-headline": "Which part of the image will be modified?",
     "creator-headline": "How do you want your modifications to be attributed to yourself?",
-    "licence-headline": "Under which license do you want to publish the modified image?",
+    "licence-headline": "Under which license would you like to publish the modified image?",
     "done-headline": "Congratulations!",
     "answer-print": "In a context, where you cannot use hyperlinks (e. g. print products, set of slides).",
     "answer-online": "Online.",
@@ -87,17 +88,17 @@
     "creator": "Creator",
     "licence": "License",
     "back-to-top": "Check another image",
-    "force-pd-attribution": "Create a rights notice anyway",
+    "force-pd-attribution": "Create a legal notice anyway",
     "pd-attribution-hint": "marked as public domain",
     "check-details": "more details on",
     "here": "here",
-    "mark-as-pd": "als gemeinfrei markieren"
+    "mark-as-pd": "mark as public domain"
   },
   "evaluation": {
     "by": "by",
     "edited": "modified",
     "done-text": "You have answered all questions. You are ready to use the correct license notice.",
-    "done-text-legal-notice": "You have answered all questions. You are ready to use the correct legal notice.",
+    "done-text-legal-notice": "You have answered all questions. You can now use the correct legal notice.",
     "your-attribution": "Your license notice",
     "your-legal-notice": "Your legal notice",
     "copy": "Copy",
@@ -115,7 +116,7 @@
     "dont-rightholder-connection-headline": "No special connection to the rightsholder",
     "dont-rightholder-connection-text": "You are not allowed to use the image in a way that could be perceived as indicating that the rightsholder or any attribution parties mentioned granted rights to you in an individual transaction or otherwise endorse your specific use of the image.",
     "show-licence-text": "See the full license text",
-    "show-cc-zero-text": "Display the full text of the release statement",
+    "show-cc-zero-text": "See the full text of the release statement",
     "anonymous": "anonymous",
     "copy-hint": "Copy the marked text"
   }
