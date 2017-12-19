@@ -48,7 +48,7 @@ $.extend( DialogueView.prototype, {
 			dialogue = new PublicDomainDialogueView( this );
 		} else {
 			if( this._asset.getLicence().isPublicDomain() ) {
-				title = Messages.t( 'adjust-legal-notice-for-usage' );
+				title = Messages.t( 'dialogue.adjust-legal-notice-for-usage' );
 			} else {
 				title = Messages.t( 'dialogue.adjust-attribution-for-usage' );
 			}

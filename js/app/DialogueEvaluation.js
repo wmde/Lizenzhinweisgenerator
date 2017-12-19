@@ -135,7 +135,7 @@ $.extend( DialogueEvaluation.prototype, {
 			attribution += ', ';
 			if( licence.isPublicDomain() ) {
 				attribution += Messages.t( 'dialogue.pd-attribution-hint' )
-				+ ', ' + Messages.t( 'check-details' )
+				+ ', ' + Messages.t( 'dialogue.check-details' )
 				+ ' Wikimedia Commons: ';
 			}
 			attribution	+= url;
@@ -148,7 +148,7 @@ $.extend( DialogueEvaluation.prototype, {
 		var attributionLink;
 		var licence = this.getAttributionLicence();
 		if( licence.isPublicDomain() ) {
-			attributionLink = Messages.t( 'dialogue.pd-attribution-hint' );
+			attributionLink = ', ' + Messages.t( 'dialogue.pd-attribution-hint' );
 			if( licence.getUrl() ) {
 				attributionLink += ', ' + Messages.t( 'dialogue.check-details' ) + ' '
 					+ this._makeLink( licence.getUrl(), 'Wikimedia Commons' );
