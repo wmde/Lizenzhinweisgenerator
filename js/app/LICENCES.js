@@ -677,8 +677,8 @@ module.exports = [
 	new Licence( 'WSM no known restrictions', ['pd'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /WSM no known restrictions/, 'https://commons.wikimedia.org/wiki/Template:WSM no known restrictions' ),
 	new Licence( 'Library of Congress-no known copyright restrictions', ['pd'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /Library of Congress-no known copyright restrictions/, 'https://commons.wikimedia.org/wiki/Template:Library of Congress-no known copyright restrictions' ),
 	new Licence( 'Cc-pd', ['pd'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /Cc-pd/, 'https://commons.wikimedia.org/wiki/Template:Cc-pd' ),
-	new Licence( 'Cc-zero', ['pd', 'cc-zero'], [], 'CC-0', /Cc-zero/, 'https://creativecommons.org/publicdomain/zero/1.0' ),
-	new Licence( 'PD', [ 'pd' ], [], 'Public Domain', /^(Bild-)?(PD|Public domain|Copyrighted free use)\b/i ),
+	new Licence( 'Cc-zero', ['pd', 'cc-zero'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'CC-0', /Cc-zero/, 'https://creativecommons.org/publicdomain/zero/1.0' ),
+	new Licence( 'PD', [ 'pd' ], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /^(Bild-)?(PD|Public domain|Copyrighted free use)\b/i ),
 
 	new Licence( 'unknown', [ 'unknown' ], [], 'Unknown', '', '' )
 ];
