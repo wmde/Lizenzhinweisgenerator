@@ -128,7 +128,10 @@ $.extend( DialogueEvaluation.prototype, {
 		if( !licence.isInGroup( 'cc4' ) ) {
 			attribution += '„' + this._asset.getTitle() + '“';
 		}
-		attribution += this._getEditingAttribution();
+		var editingAttribution = this._getEditingAttribution();
+		if( editingAttribution ) {
+			attribution += ', ' + editingAttribution;
+		}
 
 		var url = this.getAttributionLicence().getUrl();
 		if( url ) {
