@@ -39,7 +39,7 @@ module.exports = [
 
 	new Licence( 'cc', [ 'unsupported' ], [], 'CC', /CC-BY/i ),
 
-	new Licence( 'cc-zero', [ 'cc', 'cc0' ], [], 'CC0 1.0', /^(cc-zero|Bild-CC-0)/i, 'https://creativecommons.org/publicdomain/zero/1.0/legalcode' ),
+	new Licence( 'cc-zero', [ 'cc', 'cc0' ], ['cc-by-4.0', 'cc-by-sa-4.0'], 'CC0 1.0', /^(cc-zero|Bild-CC-0)/i, 'https://creativecommons.org/publicdomain/zero/1.0/legalcode' ),
 	new Licence( 'PD-1923', ['pd'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /PD-1923/, 'https://commons.wikimedia.org/wiki/Template:PD-1923' ),
 	new Licence( 'PD-1996', ['pd'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /PD-1996/, 'https://commons.wikimedia.org/wiki/Template:PD-1996' ),
 	new Licence( 'PD-AB-exempt', ['pd'], ['cc-by-4.0', 'cc-by-sa-4.0'], 'Public Domain', /PD-AB-exempt/, 'https://commons.wikimedia.org/wiki/Template:PD-AB-exempt' ),
