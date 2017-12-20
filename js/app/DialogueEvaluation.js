@@ -123,10 +123,10 @@ $.extend( DialogueEvaluation.prototype, {
 
 	_getPrintAttribution: function() {
 		var attribution = ( this._getAuthorAttribution() || this._getAuthor() ) + ' '
-			+ '(' + this._asset.getUrl() + '), ';
+			+ '(' + this._asset.getUrl() + ')';
 		var licence = this._asset.getLicence();
 		if( !licence.isInGroup( 'cc4' ) ) {
-			attribution += '„' + this._asset.getTitle() + '“';
+			attribution += ', „' + this._asset.getTitle() + '“';
 		}
 		var editingAttribution = this._getEditingAttribution();
 		if( editingAttribution ) {
@@ -158,6 +158,7 @@ $.extend( DialogueEvaluation.prototype, {
 			}
 		} else {
 			attributionLink = ', ' + this._getHtmlLicence();
+			// attributionLink = this._getHtmlLicence();
 		}
 
 		var editingAttribution = this._getEditingAttribution();
