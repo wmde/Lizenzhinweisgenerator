@@ -20,7 +20,7 @@ module.exports = {
 	'LRO_Tycho_Central_Peak.jpg': new WikiAsset(
 		'File:LRO_Tycho_Central_Peak.jpg',
 		'bitmap',
-		licenceStore.getLicence( 'PD' ),
+		licenceStore.getLicence( 'PD-US' ),
 		'LRO Tycho Central Peak',
 		[ new Author( $( document.createTextNode( 'NASA / GSFC / Arizona State Univ. / Lunar Reconnaissance Orbiter' ) ) ) ],
 		null,
@@ -63,7 +63,7 @@ module.exports = {
 	'1871_Proclamation_of_the_German_Empire.jpg': new WikiAsset(
 		'File:1871_Proclamation_of_the_German_Empire.jpg',
 		'bitmap',
-		licenceStore.getLicence( 'PD' ),
+		licenceStore.getLicence( 'PD-old' ),
 		'1871 Proclamation of the German Empire',
 		// No detectable author:
 		null,
@@ -150,7 +150,7 @@ module.exports = {
 		'File:The_Little_Princess_(1939)_full.ogv',
 		// Video:
 		'video',
-		licenceStore.getLicence( 'PD' ),
+		licenceStore.getLicence( 'PD-US' ),
 		'The Little Princess (1939) full',
 		[ new Author( $( document.createTextNode( 'Walter Lang/20th Century Fox' ) ) ) ],
 		null,
@@ -172,7 +172,7 @@ module.exports = {
 		'File:Cox_and_box.pdf',
 		// Office:
 		'office',
-		licenceStore.getLicence( 'PD' ),
+		licenceStore.getLicence( 'PD-old' ),
 		'Cox and box',
 		[ new Author( $( document.createTextNode( 'F C Burnand' ) ) ) ],
 		null,
@@ -253,7 +253,7 @@ module.exports = {
 	'Mona_Lisa.jpg': new WikiAsset(
 		'File:Mona_Lisa.jpg',
 		'bitmap',
-		licenceStore.getLicence( 'PD' ),
+		licenceStore.getLicence( 'PD-old' ),
 		'Mona Lisa',
 		[ new Author( $( '<a href=\"https://en.wikipedia.org/wiki/Leonardo_da_Vinci\">Leonardo da Vinci</a>' ) ) ],
 		null,
@@ -319,4 +319,3 @@ module.exports = {
 	 ),
 	 */
 };
-

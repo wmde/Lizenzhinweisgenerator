@@ -162,7 +162,7 @@ QUnit.test( 'online attribution contains link to asset from title', function( as
 QUnit.test( 'online attribution contains link to licence', function( assert ) {
 	var licence = licences.getLicence( 'cc-by-3.0' ),
 		evaluation = newEvaluation( { licence: licence } );
-	assert.ok( attributionContains( evaluation, '<a href="' + licence.getUrl() + '" target="_blank">' + licence.getName() + '</a>' ) );
+	assert.ok( attributionContains( evaluation, '<a href="' + licence.getUrl() + '" rel="license" target="_blank">' + licence.getName() + '</a>' ) );
 } );
 
 QUnit.test( 'online attribution contains editing information', function( assert ) {
@@ -194,6 +194,19 @@ QUnit.test( 'attribution shows "anonymous" for unknown author', function( assert
 QUnit.test( 'online attribution shows the author the user entered', function( assert ) {
 	var evaluation = newEvaluation( {}, { author: { author: 'Meh' } } );
 	assert.ok( attributionContains( evaluation, 'Meh' ) );
+} );
+
+QUnit.test( 'online attribution has no duplicate comma', function( assert ) {
+	var licence = licences.getLicence( 'cc-by-sa-3.0' ),
+		evaluation = newEvaluation(
+			{},
+			{
+				'typeOfUse': { type: 'online' },
+				editing: { edited: 'false' },
+				licence: { licence: licence.getId() }
+			}
+		);
+	assert.ok( !attributionContains( evaluation, ', ,' ) );
 } );
 
 QUnit.test( 'plain text attribution for online usage is generated correctly', function( assert ) {

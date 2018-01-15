@@ -172,6 +172,9 @@ a:hover {
 .top-wrapper {
   margin-top: 33vh;
 }
+.head-wrapper {
+  margin-top: 5vh;
+}
 
 .heading {
   height: 120px; /* should not be hardcoded? :/ */
@@ -356,11 +359,15 @@ a:hover {
   top: -0.75em;
 }
 .dialogue-screen .dialogue {
+  display: flex;
+  flex-direction: column;
   margin-left: 40vw;
   width: 50vw;
   font-size: 12pt;
+  margin-bottom: 100px;
 }
 .dialogue-bubble {
+  position: relative;
   display: table;
   width: 100%;
 }
@@ -491,7 +498,6 @@ a:hover {
   margin-top: 20px;
 }
 .dialogue-screen .cc-logo {
-  width: 15px;
   margin-right: 5px;
 }
 
@@ -595,8 +601,12 @@ a:hover {
   text-decoration: underline;
 }
 .dialogue .licence-link {
-  margin: 35px 0 50px;
+  margin: auto 15px;
   text-align: center;
+  max-width: 280px;
+}
+.dialogue .licence-link a {
+  color: #97b314;
 }
 .info-box {
   background: #97b314;
@@ -727,4 +737,174 @@ button .ag-spinner {
   -webkit-animation: spin 2s linear infinite;
   -moz-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
+}
+
+.float-right {
+  float: right;
+}
+.language-dropdown {
+  opacity: 0.8;
+  float: right;
+  margin-right: 4rem;
+  width: 115px;
+  height: 42px;
+  border-radius: 2px;
+  background-color: #636466;
+}
+.language-dropdown:hover {
+  /*background-color: #565759; */  /* darken gray by 5% */
+  opacity: 1;
+}
+.language-dropdown:hover .caret {
+  border-top: 7px solid #97b314;
+  opacity: 1;
+}
+.language-dropdown button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: transparent;
+  border-radius: 2px;
+  border: 0;
+  padding: 5px 18px;
+  height: 42px;
+  font-size: 19px !important;
+  line-height: 23px !important;
+  width: 100%;
+  letter-spacing: 1px;
+}
+.language-dropdown button img {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.language-dropdown .caret {
+  border-top: 7px solid #fff;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  opacity: 0.3;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.language-dropdown .dropdown-menu {
+  padding-top: 27px;
+  padding-bottom: 27px;
+  min-width: inherit;
+  width: 100%;
+  margin-top: 0px !important;
+  border-radius: 0px;
+  border: none;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+  opacity: 0;
+}
+.language-dropdown.open {
+  border-radius: 2px 2px 0 0;
+  background-color: #97b314;
+  opacity: 1;
+}
+.language-dropdown.open:hover {
+  border-radius: 2px 2px 0 0;
+  background-color: #97b314;
+}
+.language-dropdown.open .dropdown-menu {
+  opacity: 1;
+}
+.language-dropdown.open .caret {
+  border-top: none !important;
+  border-bottom: 7px solid #fff;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  opacity: 1;
+}
+.language-dropdown .dropdown-menu>li>a {
+  padding: 3px 50px;
+  font-size: 19px !important;
+  line-height: 23px !important;
+  letter-spacing: 1px;
+}
+.language-dropdown .dropdown-menu>li>a:hover {
+  background-color: transparent;
+  color: #97b314;
+}
+
+.btn-back-to-top {
+  display: flex;
+  height: 36px;
+  flex-direction: row;
+  background-color: #97b314;
+  margin: auto 15px;
+  max-width: 280px;
+}
+.btn-back-to-top .btn-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.btn-back-to-top .btn-icon {
+  margin-bottom: auto;
+  margin-top: auto;
+  width: 20px;
+  margin-right: 8px;
+}
+
+.licence-bottom-bar {
+  margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.has-bottom-seperator {
+  border-bottom: 2px solid #dddddd;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 24px;
+}
+
+/* Credits to http://www.cssarrowplease.com/ */
+.arrow-box {
+	position: relative;
+  cursor: pointer;
+	background: #636466;
+  width: 280px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 0px;
+  bottom: -18px;
+  right: 60px;
+  position: absolute;
+  color: #fff;
+  padding-left: 15px;
+}
+.arrow-box:after {
+	left: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-left-color: #636466;
+	border-width: 18px 18px 18px 8px;
+	margin-top: -18px;
+}
+.arrow-box:hover {
+  background-color: #565759;
+}
+
+.arrow-box:hover:after {
+  border-left-color: #565759;
+}
+
+.public-domain-bottom-separator {
+  margin-top: 24px;
+  margin-left: 20px;
+  width: initial;
 }

@@ -196,6 +196,13 @@ $.extend( Licence.prototype, {
 	 */
 	getUnportedVersionId: function() {
 		return this.getId().slice( 0, -7 );
+	},
+
+	/**
+	* @return {boolean}
+	*/
+	isPublicDomain: function() {
+		return this._groups && typeof this._groups.includes !== 'undefined' && this._groups.includes( 'pd' );
 	}
 
 } );
