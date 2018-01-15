@@ -11,6 +11,7 @@
     "input-placeholder": "Endereço Web de uma imagem da Wikimedia Commons ou de um artigo da Wikipédia.",
     "go-button": "Vamos começar!",
     "feedback-name": "Nome",
+    "feedback-response-email": "Endereço de e-mail",
     "feedback-body": "Feedback",
     "feedback-submit": "Enviar",
     "feedback-thanks": "Obrigado pelo seu comentário!",
@@ -29,7 +30,11 @@
     "licence-not-recognized": "Infelizmente, o formato da informação da licença armazenada para esta imagem não é suportado pela ferramenta neste momento. Pedimos desculpa.",
     "send-feedback": "Algo não funcionou corretamente. Tente novamente.",
     "feedback-generic": "Algo não funcionou corretamente. Tente novamente",
-    "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback."
+    "feedback-blank-fields": "Por favor, preencha todos os campos do formulário de feedback.",
+    "no-images-found": "Esta página da Wikipedia não contém nenhuma imagem.",
+    "no-wiki-url": "O site referenciado não é uma página da Wikimedia.",
+    "invalid-email-format": "O endereço de e-mail especificado não corresponde ao formato válido.",
+    "no-cc-licence": "Este arquivo não está sob uma licença Creative Commons."
   },
   "info-box": {
     "private-use": "Para a maioria dos usos puramente privados, você não necessita de um aviso de licença.",
@@ -43,12 +48,14 @@
     "no-attribution-needed": "Não é necessário qualquer aviso de licença",
     "more-information": "mais informação",
     "adjust-attribution-for-usage": "Adapte o aviso de licença para o seu caso de utilização",
+    "adjust-legal-notice-for-usage": "Adaptar el aviso direitos para el caso de uso",
     "public-domain-text": "<p>De acordo com os detalhes que foram detectados, esta imagem está livre de direitos de autor e pode ser usada sem estar sujeita a quaisquer requisitos de licenciamento, portanto mesmo sem mencionar nenhum autor ou licença.</p><p>No entanto, de acordo com a lei de direito de autor alemã, um autor conserva sempre alguns direitos inalienáveis sobre as suas obras. Por este motivo, recomendamos que não reivindique falsamente a autoria da imagem e que não a utilize de qualquer forma que possa ser considerada prejudicial à reputação do autor. Além disso, é aconselhável informar outros utilizadores sobre o estatuto de domínio público desta imagem.</p><p>Em alguns países (incluindo a Alemanha), há reivindicações regulares para a proteção de reproduções fotográficas de obras em domínio público. Tal aplica-se tanto a fotografias de esculturas e outras obras tridimensionais, como a fotografias de pinturas. É da responsabilidade dos reutilizadores esclarecer se são afectados quando usam a respectiva imagem.</p>",
     "type-of-use-headline": "Como é que quer utilizar a imagem?",
     "author-headline": "Qual é o nome (ou nomes) do autor ou do titular dos direitos de autor?",
     "compilation-headline": "Como é que quer publicar a imagem?",
     "editing-headline": "Quer usar uma versão modificada da imagem?",
     "change-headline": "O que é que você modificou?",
+    "change-pd-headline": "Se desejar, você pode marcar suas mudanças. O que exatamente é alterado na imagem?",
     "creator-headline": "Como é que quer que lhe sejam atribuídas as suas modificações?",
     "licence-headline": "Sob que licença quer publicar a imagem modificada?",
     "done-headline": "Parabéns!",
@@ -78,13 +85,21 @@
     "editing": "Adaptação",
     "change": "Alterações",
     "creator": "Criador",
-    "licence": "Licença"
+    "licence": "Licença",
+    "back-to-top": "Verifique outra foto",
+    "force-pd-attribution": "No entanto, crie um aviso de direitos",
+    "pd-attribution-hint": "marcado como domínio público",
+    "check-details": "para mais detalhes, veja",
+    "here": "aqui",
+    "mark-as-pd": "marca como domínio público"
   },
   "evaluation": {
     "by": "por",
     "edited": "modificado",
     "done-text": "Você respondeu a todas as perguntas. Você está pronto para usar o aviso de licença correto.",
+    "done-text-legal-notice": "Você respondeu todas as perguntas. Você está pronto para usar o aviso direitos correto.",
     "your-attribution": "O seu aviso de licença",
+    "your-legal-notice": "Seu aviso legal",
     "copy": "Copiar",
     "do-print-text": "Você deve mostrar esta informação tão perto quanto razoavelmente possível da imagem (p. ex., diretamente abaixo da mesma). De qualquer modo, aqueles que visualizam a imagem devem poder encontrar a informação com facilidade. Se você tem um livro ou uma revista, as atribuições também podem ser colocadas na página de impressão ou noutra localização standard, desde que se possa facilmente identificar a imagem a que cada informação de atribuição pertence (p. ex., fornecendo o número da página).",
     "do-online-text": "Por favor note que o aviso de licença inclui hiperligações, os quais têm de ser incluídos sempre que você faça uso do aviso de licença. Você deve mostrar essa informação tão perto quanto razoavelmente possível da imagem (p. ex., diretamente abaixo da mesma). De qualquer modo, aqueles que visualizam a imagem devem poder encontrar a informação com facilidade. Para tornar este processo mais fácil para você, a ferramenta fornece-lhe a atribuição, incluindo todos os hiperligações em formato de texto simples e como um fragmento HTML. Desta forma, você pode transferi-lo diretamente para o código-fonte da sua página Web.",
@@ -100,8 +115,8 @@
     "dont-rightholder-connection-headline": "Nenhuma conexão especial com o titular dos direitos",
     "dont-rightholder-connection-text": "Você não está autorizado a usar esta imagem de um modo que possa ser entendido como indicando que o titular dos direitos ou qualquer outra pessoa mencionada na atribuição lhe concedeu direitos numa transação independente ou, de outra forma, suporta o seu uso específico da imagem.",
     "show-licence-text": "Veja o texto completo da licença",
+    "show-cc-zero-text": "Exibir o texto completo da declaração de lançamento",
     "anonymous": "anónimo",
     "copy-hint": "Copie o texto marcado"
   }
 }
-

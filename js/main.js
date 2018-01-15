@@ -67,9 +67,18 @@ $( '#how-it-works-screen .close' ).click( function() {
 } );
 
 $( '#file-form-input' ).on( 'input', function() {
-	// TODO only dismiss if error is present
-	fileForm.dismissError();
-} );
+		// TODO only dismiss if error is present
+		fileForm.dismissError();
+	} );
+
+$( '.dropdown' ).on( 'show.bs.dropdown', function() {
+				$( this ).find( '.dropdown-menu' ).first().stop( true, true ).slideDown( 150 );
+			} );
+
+// Add slideUp animation to Bootstrap dropdown when collapsing.
+$( '.dropdown' ).on( 'hide.bs.dropdown', function() {
+		$( this ).find( '.dropdown-menu' ).first().stop( true, true ).slideUp( 150 );
+	} );
 
 var bootstrapAlert = function( type, message ) {
 	$( '#alert-placeholder' ).html(
@@ -81,6 +90,17 @@ var bootstrapAlert = function( type, message ) {
 	);
 };
 
+var $languageDropdown = $( '.language-dropdown' );
+$languageDropdown.find( 'li' ).bind( 'click', function( e ) {
+	$languageDropdown.removeClass( 'open' );
+	e.preventDefault();
+	$( '.language-dropdown .dropdown-toggle' ).dropdown( 'toggle' );
+	var $liElement = $( this );
+	setTimeout( function() {
+		window.location = $liElement.find( ':first-child' ).attr( 'href' );
+	}, 150 );
+} );
+
 var $feedbackForm = $( '#feedback-form' ),
 	baseUrl = '//' + location.host + location.pathname,
 	loadingSpinner = new Spinner( $feedbackForm.find( 'button[type="submit"]' ) );
@@ -90,7 +110,8 @@ $feedbackForm.submit( function( e ) {
 	$.post( baseUrl + '../backend/web/index.php/feedback',
 		{
 			name: $feedbackForm.find( 'input[name="name"]' ).val(),
-			feedback: $feedbackForm.find( 'textarea' ).val()
+			feedback: $feedbackForm.find( 'textarea' ).val(),
+			responseEmail: $feedbackForm.find( 'input[name="response-email"]' ).val()
 		} )
 		.done( function( response ) {
 			tracking.trackEvent( 'Feedback', 'Success' );

@@ -7,7 +7,8 @@ $lang = isset( $_GET['lang'] ) ? $_GET['lang'] : 'de';
 if( !file_exists( __DIR__ . '/i18n/' . $lang . '/i18n.json' ) ) {
     $lang = 'de';
 }
-$i18nData = file_get_contents( __DIR__ . '/i18n/' . $lang . '/i18n.json' );
+$i18nDir = __DIR__ . '/i18n';
+$i18nData = file_get_contents( $i18nDir . '/' . $lang . '/i18n.json' );
 $i18nData = json_decode($i18nData, true);
 
 // Get the url if passed
@@ -24,6 +25,17 @@ if ( $i18nData && isset( $i18nData['index'] ) ) {
         $html = str_replace( '{{i18n.index.' . $key . '}}', $string, $html );
     }
 }
+
+// Iterate over the i18n subdirectories (ISO 639-1 codes) to construct a
+// <li> element representation for the dropdown options
+$langDirs = array_filter( glob( $i18nDir . '/*'), 'is_dir');
+$languageOptions = '';
+foreach ( $langDirs as $langDir ) {
+  $isoLang = pathinfo($langDir)['basename'];
+  $languageOptions .= '<li><a href="?lang=' . $isoLang .'">' . $isoLang . '</a></li>';
+}
+// ... and insert that string into the template
+$html = str_replace( '{{ languageOptions }}', $languageOptions, $html);
 
 // Also replace html snippets
 $htmlFiles = [
