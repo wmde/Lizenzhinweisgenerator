@@ -136,7 +136,7 @@ $.extend( DialogueEvaluation.prototype, {
 		var url = this.getAttributionLicence().getUrl();
 		if( url ) {
 			attribution += ', ';
-			if( licence.isPublicDomain() ) {
+			if( !editingAttribution && licence.isPublicDomain() ) {
 				attribution += Messages.t( 'dialogue.pd-attribution-hint' )
 				+ ', ' + Messages.t( 'dialogue.check-details' )
 				+ ' Wikimedia Commons: ';
@@ -150,7 +150,9 @@ $.extend( DialogueEvaluation.prototype, {
 	_getHtmlAttribution: function() {
 		var attributionLink;
 		var licence = this.getAttributionLicence();
-		if( licence.isPublicDomain() ) {
+		var editingAttribution = this._getEditingAttribution();
+
+		if( !editingAttribution && licence.isPublicDomain() ) {
 			attributionLink = ', ' + Messages.t( 'dialogue.pd-attribution-hint' );
 			if( licence.getUrl() ) {
 				attributionLink += ', ' + Messages.t( 'dialogue.check-details' ) + ' '
@@ -158,10 +160,8 @@ $.extend( DialogueEvaluation.prototype, {
 			}
 		} else {
 			attributionLink = ', ' + this._getHtmlLicence();
-			// attributionLink = this._getHtmlLicence();
 		}
 
-		var editingAttribution = this._getEditingAttribution();
 		if( editingAttribution ) {
 			editingAttribution = ', ' + editingAttribution;
 		}
