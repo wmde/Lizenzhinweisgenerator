@@ -28,7 +28,10 @@ if ( $i18nData && isset( $i18nData['index'] ) ) {
 
 // Iterate over the i18n subdirectories (ISO 639-1 codes) to construct a
 // <li> element representation for the dropdown options
-$langDirs = array_filter( glob( $i18nDir . '/*'), 'is_dir');
+$langDirs = array_filter(
+    array_filter( glob( $i18nDir . '/*'), 'is_dir'),
+    function ( $langDir ) { return pathinfo($langDir)['basename'] !== 'uk'; }
+);
 $languageOptions = '';
 foreach ( $langDirs as $langDir ) {
   $isoLang = pathinfo($langDir)['basename'];
