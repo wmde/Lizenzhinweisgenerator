@@ -4,10 +4,10 @@
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "build": "browserify -t hbsfy -t require-globify js/main.js | uglifyjs -c > js/bundle.min.js",
-    "build-test": "browserify -t hbsfy -t require-globify tests/tests.js > tests/tests.bundle.js",
-    "watch": "watchify -t hbsfy -t require-globify js/main.js -o js/bundle.min.js",
-    "watch-test": "node_modules/.bin/watchify -t hbsfy -t require-globify tests/tests.js -o tests/tests.bundle.js"
+    "build": "browserify -t [ babelify ] -t hbsfy -t require-globify js/main.js | uglifyjs -c > js/bundle.min.js",
+    "build-test": "browserify -t [ babelify ] -t hbsfy -t require-globify tests/tests.js > tests/tests.bundle.js",
+    "watch": "watchify -t [ babelify ] -t hbsfy -t require-globify js/main.js -o js/bundle.min.js",
+    "watch-test": "watchify -t [ babelify ] -t hbsfy -t require-globify tests/tests.js -o tests/tests.bundle.js"
   },
   "author": "",
   "license": "GPL-2.0",
@@ -15,6 +15,9 @@
     "scrollmagic-gsap": "scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^8.0.0",
     "browserify": "^11.2.0",
     "hbsfy": "^2.4.1",
     "qunitjs": "^1.19.0",
