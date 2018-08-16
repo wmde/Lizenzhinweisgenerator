@@ -10,7 +10,7 @@
     "watch-test": "node_modules/.bin/watchify -t hbsfy -t require-globify tests/tests.js -o tests/tests.bundle.js"
   },
   "author": "",
-  "license": "GPL-2.0",
+  "license": "GPL-3.0",
   "browser": {
     "scrollmagic-gsap": "scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap"
   },
