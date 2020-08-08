@@ -19,7 +19,7 @@
     "about": "Über diese Anwendung",
     "legal": "Impressum und Datenschutz",
     "legal-tracking-switch": "Entfernen Sie das Häkchen, damit Ihr Besuch nicht erfasst wird.",
-    "legal-hosting": "Diese Anwendung wird auf Wikimedia Labs betrieben. Die Nutzungsbedingungen können Sie unter <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use</a> abrufen.",
+    "legal-hosting": "Diese Anwendung wird auf Wikimedia Cloud Services betrieben. Die Nutzungsbedingungen können Sie unter <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Cloud_Services_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Cloud_Services_Terms_of_use</a> abrufen.",
     "private-use": "Rein private Nutzung (ohne Veröffentlichung) und andere Ausnahmen"
   },
   "error": {

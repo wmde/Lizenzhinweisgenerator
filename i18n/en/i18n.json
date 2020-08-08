@@ -19,7 +19,7 @@
     "about": "About",
     "legal": "Imprint and Privacy Policy",
     "legal-tracking-switch": "Remove the checkmark to stop tracking your visit.",
-    "legal-hosting": "This tool is hosted on Wikimedia Labs. Read the Terms of Use on <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use</a>.",
+    "legal-hosting": "This tool is hosted on Wikimedia Cloud Services. Read the Terms of Use on <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Cloud_Services_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Cloud_Services_Terms_of_use</a>.",
     "private-use": "Purely private use (without publication) and other exceptions and limitations of copyright"
   },
   "error": {

@@ -19,7 +19,7 @@
     "about": "Sobre",
     "legal": "Política de privacidade",
     "legal-tracking-switch": "Remova a marca de verificação para parar o rastreamento da sua visita.",
-    "legal-hosting": "Esta ferramenta está hospedada no Wikimedia Labs. Leia os Termos de Uso em <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Labs_Terms_of_use</a>.",
+    "legal-hosting": "Esta ferramenta está hospedada no Wikimedia Cloud Services. Leia os Termos de Uso em <a href=\"https://wikitech.wikimedia.org/wiki/Wikitech:Cloud_Services_Terms_of_use\" target=\"_blank\">https://wikitech.wikimedia.org/wiki/Wikitech:Cloud_Services_Terms_of_use</a>.",
     "private-use": "Uso puramente privado (sem publicação) e outras exceções e limitações ao direito de autor"
   },
   "error": {
