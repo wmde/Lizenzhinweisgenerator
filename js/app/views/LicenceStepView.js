@@ -31,6 +31,12 @@ $.extend( LicenceStepView.prototype, {
 		return $( template( {
 			defaultChoice: { title: title, name: name, url: url, id: defaultId },
 			compatibles: this._compatibles
+		}, {
+			allowedProtoMethods: {
+				getName: true,
+				getUrl: true,
+				getId: true
+			}
 		} ) );
 	}
 } );
